@@ -1,11 +1,25 @@
 import { AppProps } from "next/app";
 import Head from "next/head";
-import { MantineProvider } from "@mantine/core";
-import { HeaderResponsive } from "../components/Header";
+import {
+	MantineProvider,
+	ColorSchemeProvider,
+	ColorScheme,
+	AppShell,
+} from "@mantine/core";
+import { IHeader, IFooter } from "../components";
+import React from "react";
 
-export default function App(props: AppProps) {
+export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 	const { Component, pageProps } = props;
+	const [colorScheme, setColorScheme] = React.useState<ColorScheme>(
+		props.colorScheme
+	);
 
+	const toggleColorScheme = (value?: ColorScheme) => {
+		const color = value || (colorScheme === "dark" ? "light" : "dark");
+		setColorScheme(value || color);
+		console.log(color);
+	};
 	return (
 		<>
 			<Head>
@@ -16,26 +30,52 @@ export default function App(props: AppProps) {
 				/>
 			</Head>
 
-			<MantineProvider
-				withGlobalStyles
-				withNormalizeCSS
-				theme={{
-					/** Put your mantine theme override here */
-					colorScheme: "dark",
-					primaryColor: "orange",
-					defaultRadius: "md",
-				}}
+			<ColorSchemeProvider
+				colorScheme={colorScheme}
+				toggleColorScheme={toggleColorScheme}
 			>
-				<HeaderResponsive
-					links={[
-						{ link: "/", label: "Home" },
-						{ link: "/explore", label: "Explore" },
-						{ link: "/notification", label: "Notification" },
-						{ link: "/profile/[:id]", label: "Profile" },
-					]}
-				/>
-				<Component {...pageProps} />
-			</MantineProvider>
+				<MantineProvider
+					withGlobalStyles
+					withNormalizeCSS
+					theme={{
+						/** Put your mantine theme override here */
+						colorScheme: colorScheme,
+						primaryColor: "orange",
+						defaultRadius: "md",
+					}}
+				>
+					<AppShell
+						header={
+							<IHeader
+								links={[
+									{ link: "/", label: "Home" },
+									{ link: "/explore", label: "Explore" },
+									{
+										link: "/notification",
+										label: "Notification",
+									},
+									{
+										link: "/profile/[:id]",
+										label: "Profile",
+									},
+								]}
+							/>
+						}
+						footer={<IFooter />}
+						styles={(theme) => ({
+							main: {
+								backgroundColor:
+									theme.colorScheme === "dark"
+										? theme.colors.dark[8]
+										: theme.colors.orange[0],
+								padding: "1.5em",
+							},
+						})}
+					>
+						<Component {...pageProps} />
+					</AppShell>
+				</MantineProvider>
+			</ColorSchemeProvider>
 		</>
 	);
 }

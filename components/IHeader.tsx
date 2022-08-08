@@ -10,9 +10,12 @@ import {
 	Paper,
 	Transition,
 	Button,
-	Title,
+	Menu,
+	Divider,
 } from "@mantine/core";
+import { IAuth, ThemeToggler } from "./index";
 import { useDisclosure } from "@mantine/hooks";
+import React from "react";
 
 const HEADER_HEIGHT = 60;
 
@@ -35,7 +38,7 @@ const useStyles = createStyles((theme) => ({
 		top: HEADER_HEIGHT,
 		left: 0,
 		right: 0,
-		zIndex: 999999,
+		zIndex: 99,
 		borderTopRightRadius: 0,
 		borderTopLeftRadius: 0,
 		borderTopWidth: 0,
@@ -65,7 +68,7 @@ const useStyles = createStyles((theme) => ({
 			display: "none",
 		},
 		position: "absolute",
-		right: 20,
+		left: 20,
 	},
 
 	link: {
@@ -90,7 +93,7 @@ const useStyles = createStyles((theme) => ({
 		[theme.fn.smallerThan("sm")]: {
 			borderRadius: 0,
 			padding: theme.spacing.md,
-			height: "auto",
+			height: "100%",
 			width: "100%",
 		},
 	},
@@ -107,16 +110,29 @@ const useStyles = createStyles((theme) => ({
 			}).color,
 		},
 	},
+
+	toggler: {
+		[theme.fn.largerThan("sm")]: {
+			display: "none",
+		},
+		position: "absolute",
+		right: 20,
+	},
 }));
 
 interface HeaderResponsiveProps {
 	links: { link: string; label: string }[];
 }
 
-export function HeaderResponsive({ links }: HeaderResponsiveProps) {
+const IHeader = ({ links }: HeaderResponsiveProps) => {
 	const [opened, { toggle, close }] = useDisclosure(false);
 	const [active, setActive] = useState(links[0].link);
+	const [modalOpened, setModalOpened] = useState(false);
 	const { classes, cx } = useStyles();
+
+	const closeModal = () => {
+		setModalOpened(false);
+	};
 
 	const items = links.map((link) => (
 		<Link key={link.label} href={link.link} passHref>
@@ -138,23 +154,37 @@ export function HeaderResponsive({ links }: HeaderResponsiveProps) {
 	));
 
 	return (
-		<Header height={HEADER_HEIGHT} className={classes.root}>
+		<Header className={classes.root} height={HEADER_HEIGHT}>
 			<Container className={classes.header}>
+				{/* Modal */}
+				<IAuth opened={modalOpened} onClose={closeModal}></IAuth>
 				<Link href="/" passHref>
-					<Image
-						src="/logo.png"
-						alt="Logo"
-						width={50}
-						height={50}
-						className={classes.logo}
-						onClick={(event: { preventDefault: () => void }) => {
-							setActive("/");
-							close();
-						}}
-					/>
+					<Paper className={classes.logo}>
+						<Image
+							src="/logo.png"
+							alt="Logo"
+							width={50}
+							height={50}
+							onClick={(event: {
+								preventDefault: () => void;
+							}) => {
+								setActive("/");
+								close();
+							}}
+						/>
+					</Paper>
 				</Link>
+
 				<Group spacing={5} className={classes.links}>
 					{items}
+					<ThemeToggler />
+					<Button
+						onClick={() => {
+							setModalOpened(true);
+						}}
+					>
+						Get Started
+					</Button>
 				</Group>
 
 				<Burger
@@ -164,8 +194,10 @@ export function HeaderResponsive({ links }: HeaderResponsiveProps) {
 					size="sm"
 				/>
 
+				<ThemeToggler className={classes.toggler} />
+
 				<Transition
-					transition="pop-top-right"
+					transition="slide-down"
 					duration={200}
 					mounted={opened}
 				>
@@ -176,10 +208,49 @@ export function HeaderResponsive({ links }: HeaderResponsiveProps) {
 							style={styles}
 						>
 							{items}
+							<Divider m="xs" />
+							<Link href="/login" passHref>
+								<Button
+									component="a"
+									variant="subtle"
+									className={cx(classes.link, {
+										[classes.linkActive]:
+											active === "/login",
+									})}
+									onClick={(event: {
+										preventDefault: () => void;
+									}) => {
+										setActive("/login");
+										close();
+									}}
+								>
+									Login
+								</Button>
+							</Link>
+							<Link href="/register" passHref>
+								<Button
+									component="a"
+									variant="subtle"
+									className={cx(classes.link, {
+										[classes.linkActive]:
+											active === "/register",
+									})}
+									onClick={(event: {
+										preventDefault: () => void;
+									}) => {
+										setActive("/register");
+										close();
+									}}
+								>
+									Register
+								</Button>
+							</Link>
 						</Paper>
 					)}
 				</Transition>
 			</Container>
 		</Header>
 	);
-}
+};
+
+export default IHeader;
