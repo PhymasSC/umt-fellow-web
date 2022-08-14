@@ -7,11 +7,11 @@ import {
 import { IconSun, IconMoonStars } from "@tabler/icons";
 import React from "react";
 
-type Props = {
+interface IProps {
 	className?: string;
-};
+}
 
-const ThemeToggler: React.FC<Props> = (props) => {
+const ThemeToggler: React.FC<IProps> = (props) => {
 	const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
 	return (

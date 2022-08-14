@@ -1,40 +1,14 @@
-import { createStyles, Container, Group, ActionIcon } from "@mantine/core";
+import { Container, Group, ActionIcon } from "@mantine/core";
 import {
 	IconBrandTwitter,
 	IconBrandYoutube,
 	IconBrandInstagram,
 } from "@tabler/icons";
 import Image from "next/image";
+import { useStyles } from "./Footer.style";
 
-const useStyles = createStyles((theme) => ({
-	footer: {
-		borderTop: `1px solid ${
-			theme.colorScheme === "dark"
-				? theme.colors.dark[5]
-				: theme.colors.gray[2]
-		}`,
-	},
 
-	inner: {
-		display: "flex",
-		justifyContent: "space-between",
-		alignItems: "center",
-		paddingTop: theme.spacing.xl,
-		paddingBottom: theme.spacing.xl,
-
-		[theme.fn.smallerThan("xs")]: {
-			flexDirection: "column",
-		},
-	},
-
-	links: {
-		[theme.fn.smallerThan("xs")]: {
-			marginTop: theme.spacing.md,
-		},
-	},
-}));
-
-const IFooter = () => {
+const Footer = () => {
 	const { classes } = useStyles();
 
 	return (
@@ -62,4 +36,4 @@ const IFooter = () => {
 	);
 };
 
-export default IFooter;
+export default Footer;

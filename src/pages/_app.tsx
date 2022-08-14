@@ -6,7 +6,9 @@ import {
 	ColorScheme,
 	AppShell,
 } from "@mantine/core";
-import { IHeader, IFooter } from "../components";
+import { getCookie, setCookies } from "cookies-next";
+import { GetServerSidePropsContext } from "next";
+import { Header, Footer } from "./../components";
 import React from "react";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
@@ -18,7 +20,9 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 	const toggleColorScheme = (value?: ColorScheme) => {
 		const color = value || (colorScheme === "dark" ? "light" : "dark");
 		setColorScheme(value || color);
-		console.log(color);
+		setCookies("color-scheme", color, {
+			maxAge: 60 * 60 * 24 * 30,
+		});
 	};
 	return (
 		<>
@@ -38,15 +42,15 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 					withGlobalStyles
 					withNormalizeCSS
 					theme={{
-						/** Put your mantine theme override here */
 						colorScheme: colorScheme,
 						primaryColor: "orange",
 						defaultRadius: "md",
 					}}
 				>
 					<AppShell
+						fixed
 						header={
-							<IHeader
+							<Header
 								links={[
 									{ link: "/", label: "Home" },
 									{ link: "/explore", label: "Explore" },
@@ -61,7 +65,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 								]}
 							/>
 						}
-						footer={<IFooter />}
+						footer={<Footer />}
 						styles={(theme) => ({
 							main: {
 								backgroundColor:
@@ -79,3 +83,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 		</>
 	);
 }
+
+App.getInitialProps = async ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
+	colorScheme: getCookie("color-scheme", ctx) || "light",
+});
