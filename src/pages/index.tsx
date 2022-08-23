@@ -1,10 +1,13 @@
+import { Feed } from "@components/index";
+import { Container } from "@mantine/core";
 import type { NextPage } from "next";
-import { Text } from "@mantine/core";
 
 const Home: NextPage = () => {
 	return (
 		<>
-			<div>Hello World</div>
+			<Container size="sm">
+				<Feed />
+			</Container>
 		</>
 	);
 };

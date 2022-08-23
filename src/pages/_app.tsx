@@ -8,10 +8,10 @@ import {
 } from "@mantine/core";
 import { getCookie, setCookies } from "cookies-next";
 import { GetServerSidePropsContext } from "next";
-import { Header, Footer } from "./../components";
+import { Header, Footer } from "@components/index";
 import React from "react";
 
-export default function App(props: AppProps & { colorScheme: ColorScheme }) {
+export default function App(props: AppProps & { colorScheme: ColorScheme } ) {
 	const { Component, pageProps } = props;
 	const [colorScheme, setColorScheme] = React.useState<ColorScheme>(
 		props.colorScheme
