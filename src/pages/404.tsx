@@ -10,7 +10,7 @@ import {
 import Link from "next/link";
 import Head from "next/head";
 import { NextPage } from "next";
-import { AppName } from "src/constants/metadata";
+import { APP_NAME } from "@constants/metadata";
 
 const useStyles = createStyles((theme) => ({
 	root: {
@@ -68,7 +68,7 @@ const _404: NextPage = () => {
 	return (
 		<>
 			<Head>
-				<title>{`Page not found | ${AppName}`}</title>
+				<title>{`Page not found | ${APP_NAME}`}</title>
 			</Head>
 			<Container className={classes.root}>
 				<div className={classes.inner}>

@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
-import { APP_NAME } from "src/constants/metadata";
+import { APP_NAME } from "@constants/metadata";
 
 const explore: NextPage = () => {
 	return (

@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import { APP_NAME } from "src/constants/metadata";
+import { APP_NAME } from "@constants/metadata";
 
 const notification: NextPage = () => {
 	return (
