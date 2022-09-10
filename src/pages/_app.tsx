@@ -9,15 +9,19 @@ import {
 import { getCookie, setCookies } from "cookies-next";
 import { GetServerSidePropsContext } from "next";
 import { Header, Footer } from "@components/index";
-import React from "react";
+import { useState } from "react";
+import { APP_NAME } from "@constants/metadata";
+import { PRIMARY_COLOR, PRIMARY_COLOR_SHADE } from "@constants/colors";
+import { LINKS } from "@constants/pages";
 
-export default function App(props: AppProps & { colorScheme: ColorScheme } ) {
+export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 	const { Component, pageProps } = props;
-	const [colorScheme, setColorScheme] = React.useState<ColorScheme>(
+	const [colorScheme, setColorScheme] = useState<ColorScheme>(
 		props.colorScheme
 	);
 
 	const toggleColorScheme = (value?: ColorScheme) => {
+		console.log(colorScheme);
 		const color = value || (colorScheme === "dark" ? "light" : "dark");
 		setColorScheme(value || color);
 		setCookies("color-scheme", color, {
@@ -27,7 +31,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme } ) {
 	return (
 		<>
 			<Head>
-				<title>UMT Fellow</title>
+				<title>{APP_NAME}</title>
 				<meta
 					name="viewport"
 					content="minimum-scale=1, initial-scale=1, width=device-width"
@@ -43,36 +47,32 @@ export default function App(props: AppProps & { colorScheme: ColorScheme } ) {
 					withNormalizeCSS
 					theme={{
 						colorScheme: colorScheme,
-						primaryColor: "orange",
+						primaryColor: PRIMARY_COLOR,
+						headings: {
+							fontFamily: "Montserrat, sans-serif",
+						},
+						colors: {
+							// @ts-ignore
+							[PRIMARY_COLOR]: PRIMARY_COLOR_SHADE,
+						},
 						defaultRadius: "md",
 					}}
 				>
 					<AppShell
 						fixed
-						header={
-							<Header
-								links={[
-									{ link: "/", label: "Home" },
-									{ link: "/explore", label: "Explore" },
-									{
-										link: "/notification",
-										label: "Notification",
-									},
-									{
-										link: "/profile/[:id]",
-										label: "Profile",
-									},
-								]}
-							/>
-						}
+						header={<Header links={LINKS} />}
 						footer={<Footer />}
-						styles={(theme) => ({
+						sx={(theme) => ({
 							main: {
 								backgroundColor:
 									theme.colorScheme === "dark"
 										? theme.colors.dark[8]
-										: theme.colors.orange[0],
+										: theme.colors[PRIMARY_COLOR][0],
 								padding: "1.5em",
+								[theme.fn.smallerThan("sm")]: {
+									paddingLeft: "0",
+									paddingRight: "0",
+								},
 							},
 						})}
 					>

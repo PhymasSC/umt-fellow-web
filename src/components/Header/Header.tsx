@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import {
 	Header,
+	Image,
 	Container,
 	Group,
 	Burger,
@@ -12,10 +12,13 @@ import {
 	Divider,
 	Modal,
 	useMantineTheme,
+	Title,
+	MediaQuery,
 } from "@mantine/core";
 import { Authentication, ThemeToggler } from "./../index";
 import { useDisclosure } from "@mantine/hooks";
 import { useStyles, HEADER_HEIGHT } from "./Header.style";
+import { APP_LOGO } from "@constants/metadata";
 
 interface HeaderResponsiveProps {
 	links: { link: string; label: string }[];
@@ -41,7 +44,7 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 				className={cx(classes.link, {
 					[classes.linkActive]: active === link.link,
 				})}
-				onClick={(event: { preventDefault: () => void }) => {
+				onClick={() => {
 					setActive(link.link);
 					close();
 				}}
@@ -73,19 +76,28 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 				</Modal>
 
 				<Link href="/" passHref>
-					<Paper className={classes.logo}>
-						<Image
-							src="/logo.png"
-							alt="Logo"
-							width={50}
-							height={50}
-							onClick={(event: {
-								preventDefault: () => void;
-							}) => {
-								setActive("/");
-								close();
-							}}
-						/>
+					<Paper component="a" className={classes.logo}>
+						<MediaQuery
+							largerThan="sm"
+							styles={{ display: "none" }}
+						>
+							<Image
+								src={APP_LOGO}
+								alt="Logo"
+								width={32}
+								height={32}
+								onClick={() => {
+									setActive("/");
+									close();
+								}}
+							/>
+						</MediaQuery>
+						<MediaQuery
+							smallerThan="sm"
+							styles={{ display: "none" }}
+						>
+							<Title size="h3">UMT Fellow</Title>
+						</MediaQuery>
 					</Paper>
 				</Link>
 
@@ -131,9 +143,7 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 										[classes.linkActive]:
 											active === "/login",
 									})}
-									onClick={(event: {
-										preventDefault: () => void;
-									}) => {
+									onClick={() => {
 										setActive("/login");
 										close();
 									}}
@@ -149,9 +159,7 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 										[classes.linkActive]:
 											active === "/register",
 									})}
-									onClick={(event: {
-										preventDefault: () => void;
-									}) => {
+									onClick={() => {
 										setActive("/register");
 										close();
 									}}

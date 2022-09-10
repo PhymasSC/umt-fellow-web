@@ -9,13 +9,14 @@ import {
 	PaperProps,
 	Button,
 	Divider,
-	Checkbox,
 	Anchor,
 	Stack,
 	Image,
 	Tooltip,
 	ActionIcon,
 	Grid,
+	Space,
+	Center,
 } from "@mantine/core";
 import {
 	IconIdBadge,
@@ -25,11 +26,18 @@ import {
 	IconKey,
 } from "@tabler/icons";
 import { useState } from "react";
+import Link from "next/link";
+import {
+	EMAIL_PATTERN,
+	PASSWORD_PATTERN,
+	USERNAME_PATTERN,
+} from "@constants/regex";
 
 const Authentication = (props: PaperProps) => {
 	const [screen, setScreen] = useState("login");
 	const form = useForm({
 		initialValues: {
+			username: "",
 			email: "",
 			name: "",
 			password: "",
@@ -37,11 +45,12 @@ const Authentication = (props: PaperProps) => {
 		},
 
 		validate: {
-			email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
+			username: (value) =>
+				!USERNAME_PATTERN.test(value) && "Invalid username",
+			email: (val) => !EMAIL_PATTERN.test(val) && "Invalid email",
 			password: (val) =>
-				val.length <= 6
-					? "Password should include at least 6 characters"
-					: null,
+				!PASSWORD_PATTERN.test(val) &&
+				"Password should include at least 6 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character",
 		},
 	});
 
@@ -49,13 +58,38 @@ const Authentication = (props: PaperProps) => {
 		<Paper radius="md" p="xl" withBorder {...props}>
 			{screen === "forgot password" ? (
 				<>
-					<Grid justify="center">
-						<ActionIcon onClick={() => setScreen("login")}>
+					<Group position="center">
+						<Paper
+							sx={{
+								position: "absolute",
+								left: "2.75em",
+								top: "2.75em",
+								cursor: "pointer",
+							}}
+							onClick={() => setScreen("login")}
+						>
 							<IconArrowLeft />
-						</ActionIcon>
-						<IconKey />
-					</Grid>
-					<Button>Return to Login</Button>
+						</Paper>
+						<Text>Reset password</Text>
+					</Group>
+					<Space h="md" />
+					<TextInput
+						required
+						label="Email"
+						icon={<IconAt size={14} />}
+						placeholder="Your email"
+						value={form.values.email}
+						onChange={(event) =>
+							form.setFieldValue(
+								"email",
+								event.currentTarget.value
+							)
+						}
+						{...form.getInputProps("email")}
+					/>
+					<Stack mt="xl">
+						<Button type="submit">Send </Button>
+					</Stack>
 				</>
 			) : (
 				<>
@@ -78,6 +112,7 @@ const Authentication = (props: PaperProps) => {
 											event.currentTarget.value
 										)
 									}
+									{...form.getInputProps("username")}
 								/>
 							)}
 
@@ -93,7 +128,7 @@ const Authentication = (props: PaperProps) => {
 										event.currentTarget.value
 									)
 								}
-								error={form.errors.email && "Invalid email"}
+								{...form.getInputProps("email")}
 							/>
 
 							<PasswordInput
@@ -108,31 +143,17 @@ const Authentication = (props: PaperProps) => {
 										event.currentTarget.value
 									)
 								}
-								error={
-									form.errors.password &&
-									"Password should include at least 6 characters"
-								}
+								{...form.getInputProps("password")}
 							/>
 
-							{screen === "register" ? (
-								<Checkbox
-									required
-									label="I accept terms and conditions"
-									checked={form.values.terms}
-									onChange={(event) =>
-										form.setFieldValue(
-											"terms",
-											event.currentTarget.checked
-										)
-									}
-								/>
-							) : (
+							{screen === "login" && (
 								<Anchor
 									component="button"
 									type="button"
 									color="dimmed"
 									onClick={() => setScreen("forgot password")}
 									size="xs"
+									sx={{ alignSelf: "flex-start" }}
 								>
 									Forgot password?
 								</Anchor>
@@ -142,6 +163,23 @@ const Authentication = (props: PaperProps) => {
 						<Stack mt="xl">
 							<Button type="submit">{upperFirst(screen)}</Button>
 						</Stack>
+
+						{screen === "register" && (
+							<>
+								<Space h="md" />
+								<Text size="xs" color="dimmed">
+									By clicking Register, you agree to our{" "}
+									<Link href="/terms-and-conditions" passHref>
+										<Anchor>Terms and Condition</Anchor>
+									</Link>{" "}
+									and{" "}
+									<Link href="/privacy-policy" passHref>
+										<Anchor>Privacy Policy</Anchor>
+									</Link>
+									.
+								</Text>
+							</>
+						)}
 					</form>
 
 					<Divider

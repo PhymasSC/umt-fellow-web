@@ -4,14 +4,15 @@ import {
 	Group,
 	MantineTheme,
 } from "@mantine/core";
-import { IconSun, IconMoonStars } from "@tabler/icons";
-import React from "react";
+import { PRIMARY_COLOR } from "@constants/colors";
+import { IconSun, IconMoon } from "@tabler/icons";
+import { FC } from "react";
 
-interface IProps {
+interface ThemeTogglerProps {
 	className?: string;
 }
 
-const ThemeToggler: React.FC<IProps> = (props) => {
+const ThemeToggler: FC<ThemeTogglerProps> = (props) => {
 	const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
 	return (
@@ -26,14 +27,14 @@ const ThemeToggler: React.FC<IProps> = (props) => {
 							: theme.colors.gray[0],
 					color:
 						theme.colorScheme === "dark"
-							? theme.colors.orange[4]
-							: theme.colors.orange[6],
+							? theme.colors[PRIMARY_COLOR][4]
+							: theme.colors[PRIMARY_COLOR][6],
 				})}
 			>
 				{colorScheme === "dark" ? (
 					<IconSun size={18} />
 				) : (
-					<IconMoonStars size={18} />
+					<IconMoon size={18} />
 				)}
 			</ActionIcon>
 		</Group>

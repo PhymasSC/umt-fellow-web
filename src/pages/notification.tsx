@@ -1,17 +1,16 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import React from "react";
 import { APP_NAME } from "src/constants/metadata";
 
-const explore: NextPage = () => {
+const notification: NextPage = () => {
 	return (
 		<>
 			<Head>
-				<title>{`Explore | ${APP_NAME}`}</title>
+				<title>{`Notification | ${APP_NAME}`}</title>
 			</Head>
-			<div>explore</div>
+			<div>notification</div>
 		</>
 	);
 };
 
-export default explore;
+export default notification;

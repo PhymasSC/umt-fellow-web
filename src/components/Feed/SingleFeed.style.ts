@@ -5,11 +5,11 @@ export const useStyles = createStyles((theme) => ({
 		padding: "2rem",
 		"&:hover": {
 			cursor: "pointer",
-			backgroundColor: `${
+			boxShadow: `0px 0px 0px 1px ${
 				theme.colorScheme === "light"
-					? theme.colors.gray[0]
-					: theme.colors.dark[5]
-			}`,
+					? theme.colors.dark[5]
+					: theme.colors.gray[0]
+			} inset`,
 		},
 	},
 }));

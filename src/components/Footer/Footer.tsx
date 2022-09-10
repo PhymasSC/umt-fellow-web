@@ -1,36 +1,22 @@
-import { Container, Group, ActionIcon } from "@mantine/core";
+import { Container, Group, ActionIcon, Title, Image } from "@mantine/core";
 import {
 	IconBrandTwitter,
 	IconBrandYoutube,
 	IconBrandInstagram,
 } from "@tabler/icons";
-import Image from "next/image";
 import { useStyles } from "./Footer.style";
-
 
 const Footer = () => {
 	const { classes } = useStyles();
 
 	return (
 		<div className={classes.footer}>
-			<Container className={classes.inner}>
-				<Image src="/logo.png" alt="Logo" width={50} height={50} />
-				<Group
-					spacing={0}
-					className={classes.links}
-					position="right"
-					noWrap
-				>
-					<ActionIcon size="lg">
-						<IconBrandTwitter size={18} stroke={1.5} />
-					</ActionIcon>
-					<ActionIcon size="lg">
-						<IconBrandYoutube size={18} stroke={1.5} />
-					</ActionIcon>
-					<ActionIcon size="lg">
-						<IconBrandInstagram size={18} stroke={1.5} />
-					</ActionIcon>
+			<Container className={classes.inner} fluid>
+				<Group className={classes.logo}>
+					<Image src="/logo.png" alt="Logo" width={50} height={50} />
+					<Title size="h3">UMT Fellow</Title>
 				</Group>
+				
 			</Container>
 		</div>
 	);

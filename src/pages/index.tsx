@@ -5,9 +5,7 @@ import type { NextPage } from "next";
 const Home: NextPage = () => {
 	return (
 		<>
-			<Container size="sm">
-				<Feed />
-			</Container>
+			<Feed />
 		</>
 	);
 };

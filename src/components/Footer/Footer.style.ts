@@ -13,17 +13,23 @@ export const useStyles = createStyles((theme) => ({
 		display: "flex",
 		justifyContent: "space-between",
 		alignItems: "center",
-		paddingTop: theme.spacing.xl,
-		paddingBottom: theme.spacing.xl,
+		padding: theme.spacing.xl,
 
-		[theme.fn.smallerThan("xs")]: {
+		[theme.fn.smallerThan("sm")]: {
 			flexDirection: "column",
 		},
 	},
 
 	links: {
-		[theme.fn.smallerThan("xs")]: {
+		[theme.fn.smallerThan("sm")]: {
 			marginTop: theme.spacing.md,
+		},
+	},
+
+	logo: {
+		display: "flex",
+		[theme.fn.smallerThan("sm")]: {
+			flexDirection: "column",
 		},
 	},
 }));

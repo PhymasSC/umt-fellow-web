@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 import Head from "next/head";
 import { NextPage } from "next";
+import { AppName } from "src/constants/metadata";
 
 const useStyles = createStyles((theme) => ({
 	root: {
@@ -61,13 +62,13 @@ const useStyles = createStyles((theme) => ({
 	},
 }));
 
-const NothingFoundBackground: NextPage = () => {
+const _404: NextPage = () => {
 	const { classes } = useStyles();
 
 	return (
 		<>
 			<Head>
-				<title>Page not found | UMT Fellow</title>
+				<title>{`Page not found | ${AppName}`}</title>
 			</Head>
 			<Container className={classes.root}>
 				<div className={classes.inner}>
@@ -105,4 +106,4 @@ const NothingFoundBackground: NextPage = () => {
 	);
 };
 
-export default NothingFoundBackground;
+export default _404;

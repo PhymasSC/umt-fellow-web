@@ -1,4 +1,6 @@
-import { createStyles } from '@mantine/core'
+import { PRIMARY_COLOR } from "@constants/colors";
+import { createStyles } from "@mantine/core";
+import { NodeNextRequest } from "next/dist/server/base-http/node";
 
 export const HEADER_HEIGHT = 60;
 
@@ -9,11 +11,25 @@ export const useStyles = createStyles((theme) => ({
 	},
 
 	logo: {
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
 		cursor: "pointer",
 		[theme.fn.smallerThan("sm")]: {
 			marginLeft: "auto",
 			marginRight: "auto",
 		},
+		color:
+			theme.colorScheme === "dark"
+				? theme.colors.gray[0]
+				: theme.colors[PRIMARY_COLOR][6],
+
+		"&:hover": {
+			color:
+				theme.colorScheme === "dark"
+					? theme.colors[PRIMARY_COLOR][4]
+					: theme.colors[PRIMARY_COLOR][7],
+		}
 	},
 
 	dropdown: {
@@ -37,6 +53,8 @@ export const useStyles = createStyles((theme) => ({
 		justifyContent: "space-between",
 		alignItems: "center",
 		height: "100%",
+		paddingLeft: theme.spacing.xl,
+		paddingRight: theme.spacing.xl,
 	},
 
 	links: {
