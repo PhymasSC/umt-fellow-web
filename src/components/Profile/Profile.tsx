@@ -23,7 +23,7 @@ interface ProfileProps {
 	image?: string;
 	avatar?: string;
 	name: string;
-	nickname: string;
+	nickname?: string | string[];
 	stats: { label: string; value: string }[];
 }
 
@@ -64,9 +64,7 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 			</Card.Section>
 
 			<Card>
-				<Card.Section>
-					
-				</Card.Section>
+				<Card.Section></Card.Section>
 			</Card>
 		</Card>
 	);

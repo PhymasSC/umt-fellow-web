@@ -12,13 +12,10 @@ const Profile: NextPage = () => {
 		nickname,
 		stats: [{ label: "string;", value: "string" }],
 	};
-	
-
 
 	return (
 		<>
 			<ProfileComponent {...mockData}></ProfileComponent>
-			
 		</>
 	);
 };
