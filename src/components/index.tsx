@@ -4,3 +4,4 @@ export { default as ThemeToggler } from "@components/ThemeToggler";
 export { default as Authentication } from "@components/Authentication";
 export { default as Feed } from "@components/Feed";
 export { default as Profile } from "@components/Profile";
+export { default as Typography } from "@components/Typography";

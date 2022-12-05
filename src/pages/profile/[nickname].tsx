@@ -10,7 +10,7 @@ const Profile: NextPage = () => {
 		avatar: "https://picsum.photos/200/200",
 		name: "Lau Sheng Cher",
 		nickname,
-		stats: [{ label: "string;", value: "string" }],
+		stats: [{ label: "A", value: "string" }],
 	};
 
 	return (

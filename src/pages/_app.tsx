@@ -65,8 +65,9 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 									theme.colorScheme === "dark"
 										? theme.colors.dark[8]
 										: theme.colors[PRIMARY_COLOR][0],
-								padding: "0",
-								// padding: "1.5em",
+								padding: "1.5em",
+								// padding: "0",
+
 								// [theme.fn.smallerThan("sm")]: {
 								// 	paddingLeft: "0",
 								// 	paddingRight: "0",
