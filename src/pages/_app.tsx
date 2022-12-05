@@ -58,7 +58,14 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 				>
 					<AppShell
 						fixed
-						header={<Header links={LINKS} />}
+						header={
+							router.pathname === "/register" ||
+							router.pathname === "/login" ? (
+								<></>
+							) : (
+								<Header links={LINKS} />
+							)
+						}
 						footer={<Footer />}
 						sx={(theme) => ({
 							main: {

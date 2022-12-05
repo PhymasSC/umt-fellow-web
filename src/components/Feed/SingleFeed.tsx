@@ -24,7 +24,7 @@ type Props = {
 	profilePic?: string;
 	createdTime: string;
 	content: string;
-	voteCount: string;
+	voteCount: number;
 	badges: {
 		value: string;
 		color: string;
@@ -33,6 +33,8 @@ type Props = {
 };
 
 const SingleFeed: React.FC<Props> = (data: Props) => {
+	let formatter = Intl.NumberFormat("en", { notation: "compact" });
+
 	const {
 		username,
 		profilePic,
@@ -73,7 +75,7 @@ const SingleFeed: React.FC<Props> = (data: Props) => {
 							<ActionIcon>
 								<IconChevronUp />
 							</ActionIcon>
-							<Text>{voteCount}</Text>
+							<Text>{formatter.format(voteCount)}</Text>
 							<ActionIcon>
 								<IconChevronDown />
 							</ActionIcon>
