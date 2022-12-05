@@ -5,6 +5,7 @@ import {
 	ColorSchemeProvider,
 	ColorScheme,
 	AppShell,
+	Global,
 } from "@mantine/core";
 import { getCookie, setCookies } from "cookies-next";
 import { GetServerSidePropsContext } from "next";
@@ -32,10 +33,6 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 		<>
 			<Head>
 				<title>{APP_NAME}</title>
-				<meta
-					name="viewport"
-					content="minimum-scale=1, initial-scale=1, width=device-width"
-				/>
 			</Head>
 
 			<ColorSchemeProvider
@@ -68,14 +65,43 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 									theme.colorScheme === "dark"
 										? theme.colors.dark[8]
 										: theme.colors[PRIMARY_COLOR][0],
-								padding: "1.5em",
-								[theme.fn.smallerThan("sm")]: {
-									paddingLeft: "0",
-									paddingRight: "0",
-								},
+								padding: "0",
+								// padding: "1.5em",
+								// [theme.fn.smallerThan("sm")]: {
+								// 	paddingLeft: "0",
+								// 	paddingRight: "0",
+								// },
 							},
 						})}
 					>
+						<Global
+							styles={() => ({
+								html: {
+									scrollBehavior: "smooth",
+								},
+								"::selection": {
+									background: PRIMARY_COLOR_SHADE[1],
+									color: PRIMARY_COLOR_SHADE[7],
+								},
+								"::-webkit-scrollbar": {
+									width: 7,
+									height: 5,
+								},
+								"::-webkit-scrollbar-thumb": {
+									background: PRIMARY_COLOR_SHADE[6],
+									transition: "0.25s",
+									borderRadius: 2,
+								},
+								"::-webkit-scrollbar-track": {
+									background: "0 0",
+								},
+								"input:-webkit-autofill, input:-webkit-autofill:focus":
+									{
+										transition:
+											"background-color 600000s 0s, color 600000s 0s",
+									},
+							})}
+						/>
 						<Component {...pageProps} />
 					</AppShell>
 				</MantineProvider>

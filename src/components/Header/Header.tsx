@@ -72,7 +72,7 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 					closeOnEscape
 					withCloseButton={false}
 				>
-					<Authentication />
+					<Authentication isModal />
 				</Modal>
 
 				<Link href="/" passHref>

@@ -13,18 +13,9 @@ import {
 	Stack,
 	Image,
 	Tooltip,
-	ActionIcon,
-	Grid,
 	Space,
-	Center,
 } from "@mantine/core";
-import {
-	IconIdBadge,
-	IconAt,
-	IconLock,
-	IconArrowLeft,
-	IconKey,
-} from "@tabler/icons";
+import { IconIdBadge, IconAt, IconLock, IconArrowLeft } from "@tabler/icons";
 import { useState } from "react";
 import Link from "next/link";
 import {
@@ -32,9 +23,16 @@ import {
 	PASSWORD_PATTERN,
 	USERNAME_PATTERN,
 } from "@constants/regex";
+import router from "next/router";
 
-const Authentication = (props: PaperProps) => {
-	const [screen, setScreen] = useState("login");
+interface AuthProps extends PaperProps {
+	isModal?: boolean;
+	defaultPage?: string;
+}
+
+const Authentication = (props: AuthProps) => {
+	const { isModal = false, defaultPage = "login" } = props;
+	const [screen, setScreen] = useState(defaultPage);
 	const form = useForm({
 		initialValues: {
 			username: "",
@@ -232,9 +230,13 @@ const Authentication = (props: PaperProps) => {
 						type="button"
 						color="dimmed"
 						onClick={() =>
-							screen === "register"
+							screen === "register" && isModal
 								? setScreen("login")
-								: setScreen("register")
+								: screen === "login" && isModal
+								? setScreen("register")
+								: screen === "register" && !isModal
+								? router.push("/login")
+								: router.push("/register")
 						}
 						size="xs"
 					>
