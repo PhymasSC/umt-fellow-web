@@ -7,6 +7,7 @@ import {
 	AppShell,
 	Global,
 } from "@mantine/core";
+import { useRouter } from "next/router";
 import { getCookie, setCookies } from "cookies-next";
 import { GetServerSidePropsContext } from "next";
 import { Header, Footer } from "@components/index";
@@ -16,11 +17,11 @@ import { PRIMARY_COLOR, PRIMARY_COLOR_SHADE } from "@constants/colors";
 import { LINKS } from "@constants/pages";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
+	const router = useRouter();
 	const { Component, pageProps } = props;
 	const [colorScheme, setColorScheme] = useState<ColorScheme>(
 		props.colorScheme
 	);
-
 	const toggleColorScheme = (value?: ColorScheme) => {
 		console.log(colorScheme);
 		const color = value || (colorScheme === "dark" ? "light" : "dark");
@@ -65,13 +66,15 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 									theme.colorScheme === "dark"
 										? theme.colors.dark[8]
 										: theme.colors[PRIMARY_COLOR][0],
-								padding: "1.5em",
-								// padding: "0",
+								padding:
+									router.pathname === "/register" ||
+									router.pathname === "/login"
+										? "0em"
+										: "1.5em",
 
-								// [theme.fn.smallerThan("sm")]: {
-								// 	paddingLeft: "0",
-								// 	paddingRight: "0",
-								// },
+								[theme.fn.smallerThan("sm")]: {
+									padding: "0",
+								},
 							},
 						})}
 					>
