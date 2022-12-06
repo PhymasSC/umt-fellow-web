@@ -1,16 +1,30 @@
+import Footer from "@components/Footer";
 import {
 	createStyles,
 	Card,
 	Avatar,
 	Text,
 	Grid,
-	SimpleGrid,
-	Skeleton,
 	Container,
 	Title,
+	Stack,
+	Button,
+	Space,
 } from "@mantine/core";
-
-const PRIMARY_COL_HEIGHT = 300;
+import { useViewportSize } from "@mantine/hooks";
+import {
+	IconBrandTwitter,
+	IconBrandFacebook,
+	IconBrandGithub,
+	IconBrandTiktok,
+	IconBrandInstagram,
+	IconBrandSnapchat,
+	IconUserPlus,
+	IconBrandTelegram,
+	IconBrandDribbble,
+	IconBrandReddit,
+	IconBrandYoutube,
+} from "@tabler/icons";
 
 const useStyles = createStyles((theme) => ({
 	card: {
@@ -49,18 +63,7 @@ interface ProfileProps {
 const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 	const { image, avatar, name, nickname, stats } = props;
 	const { classes, theme } = useStyles();
-	const SECONDARY_COL_HEIGHT = PRIMARY_COL_HEIGHT / 2 - theme.spacing.md / 2;
-
-	const items = stats.map((stat) => (
-		<div key={stat.label}>
-			<Text align="center" size="lg" weight={500}>
-				{stat.value}
-			</Text>
-			<Text align="center" size="sm" color="dimmed">
-				{stat.label}
-			</Text>
-		</div>
-	));
+	const { height, width } = useViewportSize();
 
 	return (
 		<Container fluid>
@@ -76,25 +79,39 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 					className={classes.cover}
 				/>
 				<Avatar src={avatar} className={classes.avatar} />
-				<Card.Section mt="lg">
-					<Title align="center" order={1}>
-						{name}
-					</Title>
+				<Card.Section
+					mt="lg"
+					sx={{
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+					}}
+				>
+					<Stack spacing={10}>
+						<Title align="center" order={1}>
+							{name}
+						</Title>
 
-					<Text align="center" size="sm" color="dimmed">
-						@{nickname}
-					</Text>
+						<Text align="center" size="sm" color="dimmed">
+							@{nickname}
+						</Text>
+
+						<Button
+							variant="light"
+							color="cyan"
+							leftIcon={<IconUserPlus size={15} />}
+						>
+							Follow
+						</Button>
+					</Stack>
 				</Card.Section>
 
 				<Container m="xl" fluid>
-					<SimpleGrid
-						cols={2}
-						spacing="md"
-						breakpoints={[{ maxWidth: "sm", cols: 1 }]}
-					>
-						<Grid gutter="md">
-							<Grid.Col>
-								<Card radius="md">
+					<Grid>
+						<Grid.Col md={12} lg={4}>
+							<Stack>
+								<Card sx={{ padding: "2em !important" }}>
+									<Title size={20}>Biography</Title>
 									{stats.map((stat) => (
 										<div
 											key={stat.label}
@@ -122,33 +139,38 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 										</div>
 									))}
 								</Card>
-							</Grid.Col>
-							<Grid.Col span={6}>
-								<Card radius="md">3</Card>
-							</Grid.Col>
-							<Grid.Col span={6}>
-								<Card radius="md">4</Card>
-							</Grid.Col>
-						</Grid>
-						<Card radius="md">123</Card>
-					</SimpleGrid>
+								<Card sx={{ padding: "2em !important" }}>
+									<Title size={20}>Follow me on</Title>
+									<Space h={30} />
+									<Container>
+										<Stack spacing={30}>
+											<IconBrandFacebook />
+											<IconBrandInstagram />
+											<IconBrandTwitter />
+											<IconBrandSnapchat />
+											<IconBrandTiktok />
+											<IconBrandTelegram />
+											<IconBrandReddit />
+											<IconBrandYoutube />
+											<IconBrandGithub />
+											<IconBrandDribbble />
+										</Stack>
+									</Container>
+								</Card>
+								{width >= 1200 && <Footer />}
+							</Stack>
+						</Grid.Col>
+						<Grid.Col md={12} lg={8}>
+							<Card radius="md">POSTS</Card>
+							{width < 1200 && (
+								<>
+									<Space h={20}></Space>
+									<Footer />
+								</>
+							)}
+						</Grid.Col>
+					</Grid>
 				</Container>
-				<Card className={classes.stats}>
-					<Card.Section>
-						{items.map((item) => (
-							<div
-								key={item.key}
-								style={{
-									display: "flex",
-									justifyContent: "space-between",
-									marginBottom: theme.spacing.md,
-								}}
-							>
-								{item}
-							</div>
-						))}
-					</Card.Section>
-				</Card>
 			</Card>
 		</Container>
 	);

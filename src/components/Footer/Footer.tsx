@@ -6,7 +6,7 @@ import Typography from "@components/Typography";
 const Footer = () => {
 	return (
 		<Typography>
-			<Group>
+			<Group sx={{ lineHeight: ".5em" }}>
 				<Text weight={700}>
 					<Group
 						spacing="xs"
