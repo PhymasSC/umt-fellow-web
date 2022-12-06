@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { Card, Container, Title } from "@mantine/core";
 import { Typography } from "@components/index";
 import Link from "next/link";
-const termsAndConditions: NextPage = () => {
+const TermsAndConditions: NextPage = () => {
 	return (
 		<Container>
 			<Card
@@ -391,4 +391,4 @@ const termsAndConditions: NextPage = () => {
 	);
 };
 
-export default termsAndConditions;
+export default TermsAndConditions;

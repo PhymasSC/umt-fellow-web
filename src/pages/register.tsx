@@ -1,13 +1,6 @@
 import {
 	Paper,
 	createStyles,
-	TextInput,
-	PasswordInput,
-	Checkbox,
-	Button,
-	Title,
-	Text,
-	Anchor,
 } from "@mantine/core";
 import { Authentication } from "@components/index";
 import { NextPage } from "next";

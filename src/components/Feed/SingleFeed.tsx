@@ -11,12 +11,9 @@ import {
 	Badge,
 	Title,
 	Image,
-	AspectRatio,
-	Box,
 } from "@mantine/core";
 import { useStyles } from "./SingleFeed.style";
 import { IconChevronUp, IconChevronDown } from "@tabler/icons";
-import { useFullscreen } from "@mantine/hooks";
 
 type Props = {
 	title: string;
@@ -30,6 +27,7 @@ type Props = {
 		color: string;
 	}[];
 	image?: string;
+	slug: string;
 };
 
 const SingleFeed: React.FC<Props> = (data: Props) => {

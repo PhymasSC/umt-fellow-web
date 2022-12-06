@@ -1,7 +1,7 @@
 import { Typography } from "@components/index";
 import { Container, Card } from "@mantine/core";
 import { NextPage } from "next";
-const privacyPolicy: NextPage = () => {
+const PrivacyPolicy: NextPage = () => {
 	return (
 		<Container>
 			<Card
@@ -658,4 +658,4 @@ const privacyPolicy: NextPage = () => {
 	);
 };
 
-export default privacyPolicy;
+export default PrivacyPolicy;

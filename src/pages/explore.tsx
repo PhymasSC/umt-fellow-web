@@ -17,6 +17,7 @@ const data = [
 			{ value: "Founder", color: "teal" },
 		],
 		image: "https://placeimg.com/192/192/people",
+		slug: "5",
 	},
 ];
 
@@ -26,7 +27,7 @@ const explore: NextPage = () => {
 			<Head>
 				<title>{`Explore | ${APP_NAME}`}</title>
 			</Head>
-			<Feed feeds={data}/>
+			<Feed feeds={data} />
 		</>
 	);
 };

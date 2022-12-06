@@ -1,5 +1,18 @@
-import { Feed } from "@components/index";
+import { Feed, Typography } from "@components/index";
+import { ThemeContext, useTheme } from "@emotion/react";
+import {
+	Card,
+	Container,
+	Grid,
+	Group,
+	SimpleGrid,
+	Space,
+	Text,
+	Title,
+} from "@mantine/core";
+import { IconAlertCircle } from "@tabler/icons";
 import type { NextPage } from "next";
+import Link from "next/link";
 
 const data = [
 	{
@@ -14,6 +27,7 @@ const data = [
 			{ value: "Founder", color: "teal" },
 		],
 		image: "https://placeimg.com/192/192/people",
+		slug: "0",
 	},
 	{
 		title: "test",
@@ -24,6 +38,7 @@ const data = [
 		voteCount: 500,
 		image: "https://placeimg.com/192/192/people",
 		badges: [],
+		slug: "1",
 	},
 	{
 		title: "test",
@@ -34,6 +49,7 @@ const data = [
 		voteCount: 1470,
 		image: "https://placeimg.com/192/192/people",
 		badges: [],
+		slug: "2",
 	},
 	{
 		title: "test",
@@ -45,6 +61,7 @@ const data = [
 		voteCount: 1150,
 		image: "https://placeimg.com/192/192/people",
 		badges: [],
+		slug: "3",
 	},
 	{
 		title: "test",
@@ -56,13 +73,67 @@ const data = [
 		voteCount: 2974891,
 		image: "https://placeimg.com/192/192/people",
 		badges: [],
+		slug: "4",
 	},
 ];
 
 const Home: NextPage = () => {
 	return (
 		<>
-			<Feed feeds={data}/>
+			<Container
+				m="xl"
+				sx={{
+					display: "flex",
+					justifyContent: "center",
+				}}
+				fluid
+			>
+				<Grid>
+					<Grid.Col md={12} lg={8}>
+						<Feed feeds={data} />
+					</Grid.Col>
+					<Grid.Col md={12} lg={4}>
+						<Container>
+							<Card
+								sx={(theme) => ({
+									display: "flex",
+									alignItems: "center",
+									backgroundColor: theme.colors.yellow[1],
+									border: `1px solid`,
+									borderColor: theme.colors.yellow[5],
+									minHeight: "8em",
+									paddingLeft: "2em !important",
+								})}
+							>
+								<Text
+									sx={(theme) => ({
+										color: theme.colors.yellow[9],
+									})}
+								>
+									<Group>
+										<IconAlertCircle></IconAlertCircle>
+										<Title order={3}>Beta</Title>
+									</Group>
+									<Space h={5} />
+									<Typography>
+										<Text
+											sx={(theme) => ({
+												color: theme.colors.yellow[9],
+											})}
+											weight={500}
+										>
+											We are currently in beta. If you
+											find any bugs, please report them{" "}
+											<Link href="/contact-us">here</Link>
+											.
+										</Text>
+									</Typography>
+								</Text>
+							</Card>
+						</Container>
+					</Grid.Col>
+				</Grid>
+			</Container>
 		</>
 	);
 };
