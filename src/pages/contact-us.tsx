@@ -9,12 +9,14 @@ import {
 	Group,
 	ActionIcon,
 	Container,
+	Stack,
 } from "@mantine/core";
 import {
 	IconBrandTwitter,
 	IconBrandYoutube,
 	IconBrandInstagram,
 } from "@tabler/icons";
+import { Footer } from "@components/index";
 import { NextPage } from "next";
 
 const useStyles = createStyles((theme) => ({
@@ -98,11 +100,12 @@ const ContactUs: NextPage = () => {
 	));
 
 	return (
-		<Container className={classes.wrapper} fluid>
+		<Stack>
 			<SimpleGrid
 				cols={2}
 				spacing={50}
 				breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+				className={classes.wrapper}
 			>
 				<div>
 					<Title className={classes.title}>Contact us</Title>
@@ -153,7 +156,10 @@ const ContactUs: NextPage = () => {
 					</Group>
 				</div>
 			</SimpleGrid>
-		</Container>
+			<Container fluid>
+				<Footer />
+			</Container>
+		</Stack>
 	);
 };
 

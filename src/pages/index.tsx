@@ -1,15 +1,14 @@
 import { Feed, Typography } from "@components/index";
-import { ThemeContext, useTheme } from "@emotion/react";
 import {
 	Card,
 	Container,
 	Grid,
 	Group,
-	SimpleGrid,
 	Space,
 	Text,
 	Title,
 } from "@mantine/core";
+import { Footer } from "@components/index";
 import { IconAlertCircle } from "@tabler/icons";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -130,6 +129,8 @@ const Home: NextPage = () => {
 									</Typography>
 								</Text>
 							</Card>
+							<Space h={30} />
+							<Footer />
 						</Container>
 					</Grid.Col>
 				</Grid>

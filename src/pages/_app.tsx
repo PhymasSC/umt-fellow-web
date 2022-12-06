@@ -66,7 +66,6 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 								<Header links={LINKS} />
 							)
 						}
-						footer={<Footer />}
 						sx={(theme) => ({
 							main: {
 								backgroundColor:

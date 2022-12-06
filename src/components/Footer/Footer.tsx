@@ -1,24 +1,26 @@
-import { Container, Group, ActionIcon, Title, Image } from "@mantine/core";
-import {
-	IconBrandTwitter,
-	IconBrandYoutube,
-	IconBrandInstagram,
-} from "@tabler/icons";
-import { useStyles } from "./Footer.style";
+import { Group, Text } from "@mantine/core";
+import Link from "next/link";
+import { IconCopyright } from "@tabler/icons";
+import Typography from "@components/Typography";
 
 const Footer = () => {
-	const { classes } = useStyles();
-
 	return (
-		<div className={classes.footer}>
-			<Container className={classes.inner} fluid>
-				<Group className={classes.logo}>
-					<Image src="/logo.png" alt="Logo" width={50} height={50} />
-					<Title size="h3">UMT Fellow</Title>
-				</Group>
-				
-			</Container>
-		</div>
+		<Typography>
+			<Group>
+				<Text weight={700}>
+					<Group
+						spacing="xs"
+						sx={{ display: "flex", alignItems: "center" }}
+					>
+						<IconCopyright size="20" /> 2022 UMT Fellow
+					</Group>
+				</Text>
+				<Link href="/privacy-policy">Privacy Policy</Link>
+				<Link href="/terms-and-conditions">Terms and Conditions</Link>
+				<Link href="/contact-us">Contact Us</Link>
+				<a href="https://vercel.com/">▲ Powered by Vercel</a>
+			</Group>
+		</Typography>
 	);
 };
 
