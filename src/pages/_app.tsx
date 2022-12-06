@@ -34,7 +34,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 	return (
 		<SessionProvider
 			//@ts-ignore
-			session={pageProps.session}
+			session={pageProps?.session}
 		>
 			<Head>
 				<title>{APP_NAME}</title>
