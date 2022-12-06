@@ -56,7 +56,7 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 
 	return (
 		<Header className={classes.root} height={HEADER_HEIGHT} fixed>
-			<Container className={classes.header} fluid>
+			<Container px="xs" size="xl" className={classes.header}>
 				{/* Modal */}
 				<Modal
 					centered

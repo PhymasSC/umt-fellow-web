@@ -15,6 +15,7 @@ import { useState } from "react";
 import { APP_NAME } from "@constants/metadata";
 import { PRIMARY_COLOR, PRIMARY_COLOR_SHADE } from "@constants/colors";
 import { LINKS } from "@constants/pages";
+import { SessionProvider } from "next-auth/react";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 	const router = useRouter();
@@ -31,7 +32,10 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 		});
 	};
 	return (
-		<>
+		<SessionProvider
+			//@ts-ignore
+			session={pageProps.session}
+		>
 			<Head>
 				<title>{APP_NAME}</title>
 			</Head>
@@ -71,7 +75,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 								backgroundColor:
 									theme.colorScheme === "dark"
 										? theme.colors.dark[8]
-										: theme.colors[PRIMARY_COLOR][0],
+										: theme.colors.gray[0],
 								padding:
 									router.pathname === "/register" ||
 									router.pathname === "/login"
@@ -116,7 +120,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 					</AppShell>
 				</MantineProvider>
 			</ColorSchemeProvider>
-		</>
+		</SessionProvider>
 	);
 }
 

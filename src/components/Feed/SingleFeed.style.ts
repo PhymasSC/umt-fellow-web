@@ -8,7 +8,7 @@ export const useStyles = createStyles((theme) => ({
 			backgroundColor:
 				theme.colorScheme === "dark"
 					? theme.colors.dark[7]
-					: theme.colors.blue[1],
+					: theme.colors.gray[0],
 		},
 	},
 }));

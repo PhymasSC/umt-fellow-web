@@ -9,7 +9,7 @@ import {
 	Title,
 } from "@mantine/core";
 import { Footer } from "@components/index";
-import { IconAlertCircle } from "@tabler/icons";
+import { IconAlertCircle, IconTestPipe2 } from "@tabler/icons";
 import type { NextPage } from "next";
 import Link from "next/link";
 
@@ -110,7 +110,7 @@ const Home: NextPage = () => {
 									})}
 								>
 									<Group>
-										<IconAlertCircle></IconAlertCircle>
+										<IconTestPipe2 />
 										<Title order={3}>Beta</Title>
 									</Group>
 									<Space h={5} />
