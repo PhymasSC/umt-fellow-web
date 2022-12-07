@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { getProviders, useSession, signIn, signOut } from "next-auth/react";
 
 interface Provider {
@@ -9,8 +8,10 @@ interface Provider {
 	callbackUrl: string;
 }
 
-export default function SignIn({ providers }) {
+export default function SignIn({ providers }: { providers: Provider[] }) {
 	const { data: session } = useSession();
+	console.log(providers);
+
 	console.log(session);
 	if (session)
 		return (
@@ -34,7 +35,7 @@ export default function SignIn({ providers }) {
 		);
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
 	const providers = await getProviders();
 	return {
 		props: { providers },

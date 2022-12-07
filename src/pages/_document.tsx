@@ -14,10 +14,6 @@ export default class _Document extends Document {
 						href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap"
 						rel="stylesheet"
 					/>
-					<meta
-						name="viewport"
-						content="minimum-scale=1, initial-scale=1, width=device-width"
-					/>
 					<link
 						rel="apple-touch-icon"
 						sizes="76x76"

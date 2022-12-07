@@ -1,5 +1,5 @@
-import { useState } from "react";
 import Link from "next/link";
+import { useState } from "react";
 import {
 	Header,
 	Image,
@@ -14,11 +14,15 @@ import {
 	useMantineTheme,
 	Title,
 	MediaQuery,
+	Space,
+	Menu,
 } from "@mantine/core";
 import { Authentication, ThemeToggler } from "./../index";
 import { useDisclosure } from "@mantine/hooks";
 import { useStyles, HEADER_HEIGHT } from "./Header.style";
 import { APP_LOGO } from "@constants/metadata";
+import { signOut, useSession } from "next-auth/react";
+import { IconLogout, IconSettings, IconUser } from "@tabler/icons";
 
 interface HeaderResponsiveProps {
 	links: { link: string; label: string }[];
@@ -26,6 +30,7 @@ interface HeaderResponsiveProps {
 
 const UFHeader = ({ links }: HeaderResponsiveProps) => {
 	const theme = useMantineTheme();
+	const { data: session, status } = useSession();
 	const [opened, { toggle, close }] = useDisclosure(false);
 	const [active, setActive] = useState(links[0].link);
 	const [modalOpened, setModalOpened] = useState(false);
@@ -102,17 +107,71 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 				</Link>
 
 				<Group spacing={5} className={classes.links}>
-					{items}
-					<ThemeToggler />
-					<Button
-						onClick={() => {
-							setModalOpened(true);
-						}}
-					>
-						Get Started
-					</Button>
+					{session && (
+						<>
+							{items}
+							<ThemeToggler />
+							<Space w="xs" />
+							<Menu trigger="hover" position="bottom-end">
+								<Menu.Target>
+									{/* <Link
+										href={`/profile/${session.user?.name}`}
+									> */}
+									<Image
+										src={session.user?.image}
+										alt={session.user?.name || "User"}
+										width={32}
+										height={32}
+										radius="xl"
+										sx={{
+											"&:hover": {
+												cursor: "pointer",
+											},
+										}}
+									/>
+									{/* </Link> */}
+								</Menu.Target>
+								<Menu.Dropdown>
+									<Menu.Item
+										icon={<IconUser size={14} />}
+										component="a"
+										href={`/profile/${session.user?.name}`}
+									>
+										Profile
+									</Menu.Item>
+									<Menu.Item
+										icon={<IconSettings size={14} />}
+										component="a"
+										href={`/setting/${session.user?.name}`}
+									>
+										Settings
+									</Menu.Item>
+									<Menu.Item
+										icon={<IconLogout size={14} />}
+										onClick={() => {
+											signOut({ callbackUrl: '/login' });
+										}}
+									>
+										Log Out
+									</Menu.Item>
+								</Menu.Dropdown>
+							</Menu>
+						</>
+					)}
+					{!session && (
+						<>
+							<ThemeToggler />
+							<Space w="xs" />
+							<Button
+								onClick={() => {
+									setModalOpened(true);
+								}}
+							>
+								Get Started
+							</Button>
+						</>
+					)}
 				</Group>
-
 				<Burger
 					opened={opened}
 					onClick={toggle}

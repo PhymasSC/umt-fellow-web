@@ -1,4 +1,3 @@
-
 export const LINKS = [
 	{ link: "/", label: "Home" },
 	{ link: "/explore", label: "Explore" },
@@ -6,8 +5,8 @@ export const LINKS = [
 		link: "/notification",
 		label: "Notification",
 	},
-	{
-		link: "/profile/[:id]",
-		label: "Profile",
-	},
+	// {
+	// 	link: "/profile/[:id]",
+	// 	label: "Profile",
+	// },
 ];

@@ -15,6 +15,7 @@ import {
 	Tooltip,
 	Space,
 } from "@mantine/core";
+import { signIn } from "next-auth/react";
 import { IconIdBadge, IconAt, IconLock, IconArrowLeft } from "@tabler/icons";
 import { useState } from "react";
 import Link from "next/link";
@@ -51,6 +52,35 @@ const Authentication = (props: AuthProps) => {
 				"Password should include at least 6 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character",
 		},
 	});
+	const submitHandler = (e: { preventDefault: () => void }) => {
+		e.preventDefault();
+		console.log("Test");
+		const { hasErrors, errors } = form.validate();
+
+		if (screen === "login") {
+			console.log("Login");
+
+			// Ignore username validation
+			if (hasErrors && (errors.email || errors.password)) {
+				console.log("Invalid credentials");
+				return;
+			}
+
+			// Perform login with graphql query
+			signIn("credentials", {
+				email: form.values.email,
+				password: form.values.password,
+				callbackUrl: "/",
+				// redirect: false,
+			});
+		} else if (screen === "register") {
+			console.log("Register");
+			if (hasErrors) {
+				console.log(errors);
+				return;
+			}
+		}
+	};
 
 	return (
 		<Paper radius="md" p="xl" withBorder {...props}>
@@ -95,7 +125,8 @@ const Authentication = (props: AuthProps) => {
 						{upperFirst(screen)} with
 					</Text>
 
-					<form onSubmit={form.onSubmit(() => {})}>
+					{/* <form onSubmit={form.onSubmit(submitHandler)}> */}
+					<form onSubmit={submitHandler}>
 						<Stack>
 							{screen === "register" && (
 								<TextInput
@@ -196,6 +227,9 @@ const Authentication = (props: AuthProps) => {
 							<Button
 								sx={{ width: 80, height: 80 }}
 								variant="default"
+								onClick={() => {
+									signIn("facebook", { callbackUrl: "/" });
+								}}
 							>
 								<Image
 									src="/Facebook.svg"
@@ -214,6 +248,9 @@ const Authentication = (props: AuthProps) => {
 							<Button
 								sx={{ width: 80, height: 80 }}
 								variant="default"
+								onClick={() => {
+									signIn("google", { callbackUrl: "/" });
+								}}
 							>
 								<Image
 									src="/Google.svg"

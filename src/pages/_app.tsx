@@ -32,95 +32,104 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 		});
 	};
 	return (
-		<SessionProvider
-			//@ts-ignore
-			session={pageProps?.session}
-		>
+		<>
 			<Head>
-				<title>{APP_NAME}</title>
+				<meta
+					name="viewport"
+					content="minimum-scale=1, initial-scale=1, width=device-width"
+				/>
 			</Head>
-
-			<ColorSchemeProvider
-				colorScheme={colorScheme}
-				toggleColorScheme={toggleColorScheme}
+			<SessionProvider
+				//@ts-ignore
+				session={pageProps?.session}
 			>
-				<MantineProvider
-					withGlobalStyles
-					withNormalizeCSS
-					theme={{
-						colorScheme: colorScheme,
-						primaryColor: PRIMARY_COLOR,
-						headings: {
-							fontFamily: "Montserrat, sans-serif",
-						},
-						colors: {
-							// @ts-ignore
-							[PRIMARY_COLOR]: PRIMARY_COLOR_SHADE,
-						},
-						defaultRadius: "md",
-					}}
-				>
-					<AppShell
-						fixed
-						header={
-							router.pathname === "/register" ||
-							router.pathname === "/login" ? (
-								<></>
-							) : (
-								<Header links={LINKS} />
-							)
-						}
-						sx={(theme) => ({
-							main: {
-								backgroundColor:
-									theme.colorScheme === "dark"
-										? theme.colors.dark[8]
-										: theme.colors.gray[0],
-								padding:
-									router.pathname === "/register" ||
-									router.pathname === "/login"
-										? "0em"
-										: "1.5em",
+				<Head>
+					<title>{APP_NAME}</title>
+				</Head>
 
-								[theme.fn.smallerThan("sm")]: {
-									padding: "0",
-								},
+				<ColorSchemeProvider
+					colorScheme={colorScheme}
+					toggleColorScheme={toggleColorScheme}
+				>
+					<MantineProvider
+						withGlobalStyles
+						withNormalizeCSS
+						theme={{
+							colorScheme: colorScheme,
+							primaryColor: PRIMARY_COLOR,
+							headings: {
+								fontFamily: "Montserrat, sans-serif",
 							},
-						})}
+							colors: {
+								// @ts-ignore
+								[PRIMARY_COLOR]: PRIMARY_COLOR_SHADE,
+							},
+							defaultRadius: "md",
+						}}
 					>
-						<Global
-							styles={() => ({
-								html: {
-									scrollBehavior: "smooth",
-								},
-								"::selection": {
-									background: PRIMARY_COLOR_SHADE[1],
-									color: PRIMARY_COLOR_SHADE[7],
-								},
-								"::-webkit-scrollbar": {
-									width: 7,
-									height: 5,
-								},
-								"::-webkit-scrollbar-thumb": {
-									background: PRIMARY_COLOR_SHADE[6],
-									transition: "0.25s",
-									borderRadius: 2,
-								},
-								"::-webkit-scrollbar-track": {
-									background: "0 0",
-								},
-								"input:-webkit-autofill, input:-webkit-autofill:focus":
-									{
-										transition:
-											"background-color 600000s 0s, color 600000s 0s",
+						<AppShell
+							fixed
+							header={<Header links={LINKS} />}
+							// header={
+							// 	router.pathname === "/register" ||
+							// 	router.pathname === "/login" ? (
+							// 		<></>
+							// 	) : (
+							// 		<Header links={LINKS} />
+							// 	)
+							// }
+							sx={(theme) => ({
+								main: {
+									backgroundColor:
+										theme.colorScheme === "dark"
+											? theme.colors.dark[8]
+											: theme.colors.gray[0],
+									padding:
+										router.pathname === "/register" ||
+										router.pathname === "/login"
+											? "0em"
+											: "1.5em",
+
+									[theme.fn.smallerThan("sm")]: {
+										padding: "0",
 									},
+								},
 							})}
-						/>
-						<Component {...pageProps} />
-					</AppShell>
-				</MantineProvider>
-			</ColorSchemeProvider>
-		</SessionProvider>
+						>
+							<Global
+								styles={() => ({
+									html: {
+										scrollBehavior: "smooth",
+									},
+									"::selection": {
+										background: PRIMARY_COLOR_SHADE[1],
+										color: PRIMARY_COLOR_SHADE[7],
+									},
+									"::-webkit-scrollbar": {
+										width: 7,
+										height: 5,
+									},
+									"::-webkit-scrollbar-thumb": {
+										background: PRIMARY_COLOR_SHADE[6],
+										transition: "0.25s",
+										borderRadius: 2,
+									},
+									"::-webkit-scrollbar-track": {
+										background: "0 0",
+									},
+									"input:-webkit-autofill, input:-webkit-autofill:focus":
+										{
+											transition:
+												"background-color 600000s 0s, color 600000s 0s",
+										},
+								})}
+							/>
+							<Component {...pageProps} />
+						</AppShell>
+					</MantineProvider>
+				</ColorSchemeProvider>
+			</SessionProvider>
+		</>
 	);
 }
 
