@@ -15,7 +15,7 @@ Table Account {
   scope String
   id_token String
   session_state String
-  user User [not null]
+  user users [not null]
 
   indexes {
     (provider, providerAccountId) [unique]
@@ -27,15 +27,43 @@ Table Session {
   sessionToken String [unique, not null]
   userId String [not null]
   expires DateTime [not null]
-  user User [not null]
+  user users [not null]
 }
 
-Table User {
+Table users {
   id String [pk]
-  name String
-  email String [unique]
+  name String [not null]
+  email String [unique, not null]
   emailVerified DateTime
+  password String
+  isUMTMembership Boolean [default: false]
+  sex String
+  age Int
   image String
+  facebookLink String
+  twitterLink String
+  instagramLink String
+  githubLink String
+  dribbbleLink String
+  youtubeLink String
+  telegramLink String
+  tiktokLink String
+  redditLink String
+  snapchatLink String
+  about String
+  faculty String
+  major String
+  year String
+  cgpa Float
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  Thread Thread [not null]
+  Comment comments [not null]
+  Follower follows [not null]
+  Following follows [not null]
+  Vote votes [not null]
+  Community communities [not null]
+  CommunityMember community_members [not null]
   accounts Account [not null]
   sessions Session [not null]
 }
@@ -50,6 +78,114 @@ Table VerificationToken {
   }
 }
 
-Ref: Account.userId > User.id [delete: Cascade]
+Table Thread {
+  id String [pk]
+  title String [not null]
+  content String
+  author users
+  authorId String
+  flag Flag [not null, default: 'PUBLIC']
+  Vote votes [not null]
+  Comment comments [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  Community communities
+  communityId String
+}
 
-Ref: Session.userId > User.id [delete: Cascade]
+Table follows {
+  id String [pk]
+  follower users [not null]
+  followerId String [not null]
+  following users [not null]
+  followingId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table votes {
+  id String [pk]
+  user users [not null]
+  userId String [not null]
+  thread Thread
+  threadId String
+  comment comments
+  commentId String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table comments {
+  id String [pk]
+  content String [not null]
+  user users [not null]
+  userId String [not null]
+  thread Thread [not null]
+  threadId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  Vote votes [not null]
+}
+
+Table communities {
+  id String [pk]
+  name String [not null]
+  image String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  creator users [not null]
+  creatorId String [not null]
+  Thread Thread [not null]
+  CommunityMember community_members [not null]
+}
+
+Table community_members {
+  id String [pk]
+  community communities [not null]
+  communityId String [not null]
+  user users [not null]
+  userId String [not null]
+  role Role [not null, default: 'USER']
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Enum Flag {
+  PUBLIC
+  PRIVATE
+  REPORTED
+}
+
+Enum Role {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+Ref: Account.userId > users.id [delete: Cascade]
+
+Ref: Session.userId > users.id [delete: Cascade]
+
+Ref: Thread.authorId > users.id
+
+Ref: Thread.communityId > communities.id
+
+Ref: follows.followerId > users.id
+
+Ref: follows.followingId > users.id
+
+Ref: votes.userId > users.id
+
+Ref: votes.threadId > Thread.id
+
+Ref: votes.commentId > comments.id
+
+Ref: comments.userId > users.id
+
+Ref: comments.threadId > Thread.id
+
+Ref: communities.creatorId > users.id
+
+Ref: community_members.communityId > communities.id
+
+Ref: community_members.userId > users.id

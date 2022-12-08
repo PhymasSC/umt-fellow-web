@@ -40,13 +40,43 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  id              String            @id @default(cuid())
+  name            String
+  email           String            @unique
+  emailVerified   DateTime?
+  password        String?
+  isUMTMembership Boolean?          @default(false)
+  sex             String?
+  age             Int?
+  image           String?
+  facebookLink    String?
+  twitterLink     String?
+  instagramLink   String?
+  githubLink      String?
+  dribbbleLink    String?
+  youtubeLink     String?
+  telegramLink    String?
+  tiktokLink      String?
+  redditLink      String?
+  snapchatLink    String?
+  about           String?
+  faculty         String?
+  major           String?
+  year            String?
+  cgpa            Float?
+  createdAt       DateTime          @default(now()) @map(name: "created_at")
+  updatedAt       DateTime          @updatedAt @map(name: "updated_at")
+  Thread          Thread[]
+  Comment         Comment[]
+  Follower        Follow[]          @relation("follower")
+  Following       Follow[]          @relation("following")
+  Vote            Vote[]
+  Community       Community[]
+  CommunityMember CommunityMember[]
+  accounts        Account[]
+  sessions        Session[]
+
+  @@map(name: "users")
 }
 
 model VerificationToken {
@@ -55,4 +85,111 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Thread {
+  id          String     @id @default(uuid())
+  title       String
+  content     String?
+  author      User?      @relation(fields: [authorId], references: [id])
+  authorId    String?
+  flag        Flag       @default(PUBLIC)
+  Vote        Vote[]
+  Comment     Comment[]
+  createdAt   DateTime   @default(now()) @map(name: "created_at")
+  updatedAt   DateTime   @updatedAt @map(name: "updated_at")
+  Community   Community? @relation(fields: [communityId], references: [id])
+  communityId String?
+
+  @@index([authorId])
+  @@index([communityId])
+}
+
+enum Flag {
+  PUBLIC
+  PRIVATE
+  REPORTED
+}
+
+enum Role {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+model Follow {
+  id          String   @id @default(uuid())
+  follower    User     @relation("follower", fields: [followerId], references: [id])
+  followerId  String   @map(name: "follower_id")
+  following   User     @relation("following", fields: [followingId], references: [id])
+  followingId String   @map(name: "following_id")
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+  updatedAt   DateTime @updatedAt @map(name: "updated_at")
+
+  @@index([followerId])
+  @@index([followingId])
+  @@map(name: "follows")
+}
+
+model Vote {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map(name: "user_id")
+  thread    Thread?  @relation(fields: [threadId], references: [id])
+  threadId  String?  @map(name: "thread_id")
+  comment   Comment? @relation(fields: [commentId], references: [id])
+  commentId String?  @map(name: "comment_id")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  @@index([threadId])
+  @@index([userId])
+  @@index([commentId])
+  @@map(name: "votes")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map(name: "user_id")
+  thread    Thread   @relation(fields: [threadId], references: [id])
+  threadId  String   @map(name: "thread_id")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  Vote      Vote[]
+
+  @@index([threadId])
+  @@index([userId])
+  @@map(name: "comments")
+}
+
+model Community {
+  id              String            @id @default(uuid())
+  name            String
+  image           String?
+  createdAt       DateTime          @default(now()) @map(name: "created_at")
+  updatedAt       DateTime          @updatedAt @map(name: "updated_at")
+  creator         User              @relation(fields: [creatorId], references: [id])
+  creatorId       String            @map(name: "creator_id")
+  Thread          Thread[]
+  CommunityMember CommunityMember[]
+
+  @@index([creatorId])
+  @@map(name: "communities")
+}
+
+model CommunityMember {
+  id          String    @id @default(uuid())
+  community   Community @relation(fields: [communityId], references: [id])
+  communityId String    @map(name: "community_id")
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    @map(name: "user_id")
+  role        Role      @default(USER)
+  createdAt   DateTime  @default(now()) @map(name: "created_at")
+  updatedAt   DateTime  @updatedAt @map(name: "updated_at")
+
+  @@index([communityId])
+  @@index([userId])
+  @@map(name: "community_members")
 }

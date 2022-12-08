@@ -6,7 +6,6 @@ export const APP_DESCRIPTION: string =
 	"UMT Fellow is a web application that helps fellow students to find their fellow students.";
 export const APP_KEYWORD: string =
 	"UMT Fellow, fellow, students, university, Universiti Malaysia Terengganu";
-export const APP_URL: string = "https://umt-fellow.vercel.com";
+export const APP_URL: string = "https://umtfellow.social";
 export const APP_LOGO: string = "/logo.png";
 export const APP_IMAGE_ALT: string = "UMT Fellow";
-

@@ -16,7 +16,7 @@ export const resolvers = {
 		addUser: async (_: any, { name, email, password }) => {
 			const user = await prisma.user.create({
 				data: {
-					username: name,
+					name: name,
 					email: email,
 					password: password,
 				},
