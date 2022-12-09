@@ -64,7 +64,6 @@ model User {
   major           String?
   year            String?
   cgpa            Float?
-  lastLogin       DateTime?
   createdAt       DateTime          @default(now()) @map(name: "created_at")
   updatedAt       DateTime          @updatedAt @map(name: "updated_at")
   Thread          Thread[]
