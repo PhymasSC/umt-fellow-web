@@ -53,7 +53,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface ProfileProps {
-	image?: string;
+	id: string;
+	image: string;
 	avatar?: string;
 	name: string;
 	nickname?: string | string[];
@@ -61,16 +62,16 @@ interface ProfileProps {
 }
 
 const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
-	const { image, avatar, name, nickname, stats } = props;
-	const { classes, theme } = useStyles();
-	const { height, width } = useViewportSize();
+	const { id, image, name } = props;
+	const { classes } = useStyles();
+	const { width } = useViewportSize();
 
 	return (
 		<Container fluid>
 			<Card className={classes.card}>
 				<Card.Section
 					sx={{
-						backgroundImage: `url(${image})`,
+						backgroundImage: `url(${image?.toString()})`,
 						backgroundRepeat: "no-repeat",
 						backgroundSize: "cover",
 						backgroundPosition: "center",
@@ -78,7 +79,7 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 					}}
 					className={classes.cover}
 				/>
-				<Avatar src={avatar} className={classes.avatar} />
+				<Avatar src={image?.toString()} className={classes.avatar} />
 				<Card.Section
 					mt="lg"
 					sx={{
@@ -93,7 +94,7 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 						</Title>
 
 						<Text align="center" size="sm" color="dimmed">
-							@{nickname}
+							@{id}
 						</Text>
 
 						<Button
@@ -112,7 +113,7 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 							<Stack>
 								<Card sx={{ padding: "2em !important" }}>
 									<Title size={20}>Biography</Title>
-									{stats.map((stat) => (
+									{/* {stats.map((stat) => (
 										<div
 											key={stat.label}
 											style={{
@@ -137,7 +138,7 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 												{stat.value}
 											</Text>
 										</div>
-									))}
+									))} */}
 								</Card>
 								<Card sx={{ padding: "2em !important" }}>
 									<Title size={20}>Follow me on</Title>

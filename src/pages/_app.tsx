@@ -17,7 +17,7 @@ import { PRIMARY_COLOR, PRIMARY_COLOR_SHADE } from "@constants/colors";
 import { LINKS } from "@constants/pages";
 import { SessionProvider } from "next-auth/react";
 import { ApolloProvider } from "@apollo/client";
-import { client } from "@lib/apollo";
+import { client } from "@lib/apollo-client";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 	const router = useRouter();

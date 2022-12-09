@@ -5,14 +5,10 @@ export const resolvers = {
 	DateTime: GraphQLDateTime,
 
 	Query: {
-		getUser: async (
-			_: any,
-			{ email, password }: { email: string; password: string }
-		) => {
+		getUser: async (_: any, { id }: { id: string }) => {
 			const user = await prisma.user.findFirst({
 				where: {
-					email: email,
-					password: password,
+					id,
 				},
 			});
 			return user;
@@ -43,22 +39,6 @@ export const resolvers = {
 			console.log("TEST");
 			return user;
 		},
-		// login: async (
-		// 	_: any,
-		// 	{ email, password }: { email: string; password: string }
-		// ) => {
-		// 	const user = await prisma.user.update({
-		// 		where: {
-		// 			email: email,
-		// 			password: password,
-		// 		},
-		// 		data: {
-		// 			lastLogin: new Date(),
-		// 		},
-		// 	})
-
-		// 	return user;
-		// },
 	},
 };
 
