@@ -28,7 +28,6 @@ export const typeDefs = gql`
 		major: String
 		year: String
 		cgpa: Float
-		lastLogin: DateTime
 		createdAt: DateTime
 		updatedAt: DateTime
 	}
