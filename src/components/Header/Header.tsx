@@ -30,12 +30,11 @@ interface HeaderResponsiveProps {
 
 const UFHeader = ({ links }: HeaderResponsiveProps) => {
 	const theme = useMantineTheme();
-	const { data: session, status } = useSession();
+	const { data: session } = useSession();
 	const [opened, { toggle, close }] = useDisclosure(false);
 	const [active, setActive] = useState(links[0].link);
 	const [modalOpened, setModalOpened] = useState(false);
 	const { classes, cx } = useStyles();
-
 	const closeModal = () => {
 		setModalOpened(false);
 	};
@@ -135,7 +134,8 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 									<Menu.Item
 										icon={<IconUser size={14} />}
 										component="a"
-										href={`/profile/${session.user?.name}`}
+										//@ts-ignore
+										href={`/profile/${session.user?.id}`}
 									>
 										Profile
 									</Menu.Item>
@@ -149,7 +149,7 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 									<Menu.Item
 										icon={<IconLogout size={14} />}
 										onClick={() => {
-											signOut({ callbackUrl: '/login' });
+											signOut({ callbackUrl: "/login" });
 										}}
 									>
 										Log Out

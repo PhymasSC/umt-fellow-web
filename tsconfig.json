@@ -21,7 +21,8 @@
 			"@lib*": ["src/lib*"],
 			"@gql*": ["src/graphql*"],
 			"@generated*": ["src/generated*"],
-			"@constants*": ["src/constants*"]
+			"@constants*": ["src/constants*"],
+			"@operations*": ["src/operations*"]
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

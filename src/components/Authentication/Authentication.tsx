@@ -18,6 +18,9 @@ import {
 import { signIn } from "next-auth/react";
 import { IconIdBadge, IconAt, IconLock, IconArrowLeft } from "@tabler/icons";
 import { useState } from "react";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_USER } from "@operations/queries";
+import { ADD_USER } from "@operations/mutations";
 import Link from "next/link";
 import {
 	EMAIL_PATTERN,
@@ -34,17 +37,17 @@ interface AuthProps extends PaperProps {
 const Authentication = (props: AuthProps) => {
 	const { isModal = false, defaultPage = "login" } = props;
 	const [screen, setScreen] = useState(defaultPage);
+	const [newUser] = useMutation(ADD_USER);
 	const form = useForm({
 		initialValues: {
-			username: "",
-			email: "",
 			name: "",
+			email: "",
 			password: "",
 			terms: true,
 		},
 
 		validate: {
-			username: (value) =>
+			name: (value) =>
 				!USERNAME_PATTERN.test(value) && "Invalid username",
 			email: (val) => !EMAIL_PATTERN.test(val) && "Invalid email",
 			password: (val) =>
@@ -54,7 +57,6 @@ const Authentication = (props: AuthProps) => {
 	});
 	const submitHandler = (e: { preventDefault: () => void }) => {
 		e.preventDefault();
-		console.log("Test");
 		const { hasErrors, errors } = form.validate();
 
 		if (screen === "login") {
@@ -67,19 +69,27 @@ const Authentication = (props: AuthProps) => {
 			}
 
 			// Perform login with graphql query
-			signIn("credentials", {
-				email: form.values.email,
-				password: form.values.password,
-				callbackUrl: "/",
-				// redirect: false,
-			});
 		} else if (screen === "register") {
-			console.log("Register");
 			if (hasErrors) {
 				console.log(errors);
 				return;
 			}
+			console.log("TEST 2");
+			newUser({
+				variables: {
+					name: form.values.name,
+					email: form.values.email,
+					password: form.values.password,
+				},
+			});
 		}
+
+		signIn("credentials", {
+			email: form.values.email,
+			password: form.values.password,
+			callbackUrl: "/",
+			// redirect: false,
+		});
 	};
 
 	return (
@@ -131,7 +141,7 @@ const Authentication = (props: AuthProps) => {
 							{screen === "register" && (
 								<TextInput
 									required
-									label="Username"
+									label="name"
 									icon={<IconIdBadge size={14} />}
 									placeholder="Your username"
 									value={form.values.name}
@@ -141,7 +151,7 @@ const Authentication = (props: AuthProps) => {
 											event.currentTarget.value
 										)
 									}
-									{...form.getInputProps("username")}
+									{...form.getInputProps("name")}
 								/>
 							)}
 

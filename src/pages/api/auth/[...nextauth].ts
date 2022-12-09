@@ -1,13 +1,22 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { DefaultSession, NextAuthOptions } from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@lib/prisma";
+import { JWT } from "next-auth/jwt";
+
+interface Session extends DefaultSession {
+	user?: {
+		id?: string | null | undefined | unknown;
+		name?: string | null | undefined;
+		email?: string | null | undefined;
+		image?: string | null | undefined;
+	};
+}
 
 export const authOptions: NextAuthOptions = {
 	adapter: PrismaAdapter(prisma),
-	session: { strategy: "jwt" },
 	providers: [
 		GoogleProvider({
 			clientId: process.env.GOOGLE_ID || "",
@@ -27,20 +36,23 @@ export const authOptions: NextAuthOptions = {
 				password: { label: "Password", type: "password" },
 			},
 			//@ts-ignore
-			authorize: (credentials, req) => {
+			authorize: async (credentials, req) => {
 				// database look up
 				const { email, password } = credentials as {
 					email: string;
 					password: string;
 				};
 
-				if (email === "johndoe@test.com" && password === "AbcTest123") {
-					console.log("Success");
-					return {
-						id: 2,
-						name: "John",
-						email: "johndoe@test.com",
-					};
+				const user = await prisma.user.findUnique({
+					where: {
+						email: email,
+					},
+				});
+
+				if (!user) return null;
+
+				if (user.password === password) {
+					return user;
 				}
 
 				console.log("Failed");
@@ -49,6 +61,27 @@ export const authOptions: NextAuthOptions = {
 			},
 		}),
 	],
+	callbacks: {
+		session: async ({
+			session,
+			token,
+		}: {
+			session: Session;
+			token: JWT;
+		}) => {
+			if (session?.user) {
+				session.user.id = token.uid;
+			}
+			return session;
+		},
+		jwt: async ({ user, token }) => {
+			if (user) {
+				token.uid = user.id;
+			}
+			return token;
+		},
+	},
+	session: { strategy: "jwt" },
 	pages: {
 		signIn: "/login",
 	},
