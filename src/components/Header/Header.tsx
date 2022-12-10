@@ -142,7 +142,8 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 									<Menu.Item
 										icon={<IconSettings size={14} />}
 										component="a"
-										href={`/setting/${session.user?.name}`}
+										//@ts-ignore
+										href={`/setting/${session.user?.id}`}
 									>
 										Settings
 									</Menu.Item>
