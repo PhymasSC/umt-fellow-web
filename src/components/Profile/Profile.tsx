@@ -10,6 +10,8 @@ import {
 	Stack,
 	Button,
 	Space,
+	Group,
+	Badge,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import {
@@ -24,6 +26,7 @@ import {
 	IconBrandDribbble,
 	IconBrandReddit,
 	IconBrandYoutube,
+	IconCircleCheck,
 } from "@tabler/icons";
 
 const useStyles = createStyles((theme) => ({
@@ -58,14 +61,15 @@ interface ProfileProps {
 	avatar?: string;
 	name: string;
 	nickname?: string | string[];
+	isUMTMembership: boolean;
 	stats: { label: string; value: string }[];
 }
 
 const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
-	const { id, image, name } = props;
+	const { id, image, name, isUMTMembership } = props;
 	const { classes } = useStyles();
 	const { width } = useViewportSize();
-
+	console.log(isUMTMembership);
 	return (
 		<Container fluid>
 			<Card className={classes.card}>
@@ -89,9 +93,24 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 					}}
 				>
 					<Stack spacing={10}>
-						<Title align="center" order={1}>
-							{name}
-						</Title>
+						<Group spacing={10}>
+							<Title order={1}>{name}</Title>
+							{isUMTMembership && (
+								<Badge color="blue" size="xl">
+									<Group
+										spacing={6}
+										sx={{
+											display: "flex",
+											justifyContent: "center",
+											alignItems: "center",
+										}}
+									>
+										<IconCircleCheck size={18} />
+										Verified
+									</Group>
+								</Badge>
+							)}
+						</Group>
 
 						<Text align="center" size="sm" color="dimmed">
 							@{id}

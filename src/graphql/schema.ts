@@ -9,7 +9,7 @@ export const typeDefs = gql`
 		email: String!
 		emailVerified: DateTime
 		password: String
-		isUMTMember: Boolean
+		isUMTMembership: Boolean
 		sex: Sex
 		age: Int
 		image: String
@@ -28,6 +28,8 @@ export const typeDefs = gql`
 		major: String
 		year: String
 		cgpa: Float
+		failedAttempts: Int
+		nextAvailableLogin: DateTime
 		createdAt: DateTime
 		updatedAt: DateTime
 	}

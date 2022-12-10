@@ -1,6 +1,5 @@
 export const EMAIL_PATTERN = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 export const PASSWORD_PATTERN = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
-export const USERNAME_PATTERN = /^[a-zA-Z0-9]+(?:[_-][a-zA-Z0-9]+)*$/;
 export const URL_PATTERN =
 	/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
 export const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;

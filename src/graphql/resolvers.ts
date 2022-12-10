@@ -1,5 +1,8 @@
 import prisma from "@lib/prisma";
 import { GraphQLDateTime } from "graphql-iso-date";
+import bcrypt from "bcrypt";
+
+const saltRounds = 10;
 
 export const resolvers = {
 	DateTime: GraphQLDateTime,
@@ -28,15 +31,18 @@ export const resolvers = {
 				password,
 			}: { name: string; email: string; password: string }
 		) => {
+			const hashedPassword = await bcrypt.hash(password, saltRounds);
 			const user = await prisma.user.create({
 				data: {
 					name: name,
 					email: email,
-					password: password,
+					password: hashedPassword,
 					image: `https://ui-avatars.com/api/?name=${name}&background=random&size=96&bold=true`,
+					isUMTMembership: email.match(/\@ocean.umt.edu.my/g)
+						? true
+						: false,
 				},
 			});
-			console.log("TEST");
 			return user;
 		},
 	},

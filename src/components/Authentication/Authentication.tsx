@@ -22,11 +22,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import { GET_USER } from "@operations/queries";
 import { ADD_USER } from "@operations/mutations";
 import Link from "next/link";
-import {
-	EMAIL_PATTERN,
-	PASSWORD_PATTERN,
-	USERNAME_PATTERN,
-} from "@constants/regex";
+import { EMAIL_PATTERN, PASSWORD_PATTERN } from "@constants/regex";
 import router from "next/router";
 
 interface AuthProps extends PaperProps {
@@ -37,7 +33,7 @@ interface AuthProps extends PaperProps {
 const Authentication = (props: AuthProps) => {
 	const { isModal = false, defaultPage = "login" } = props;
 	const [screen, setScreen] = useState(defaultPage);
-	const [newUser] = useMutation(ADD_USER);
+	const [register] = useMutation(ADD_USER);
 	const form = useForm({
 		initialValues: {
 			name: "",
@@ -48,34 +44,31 @@ const Authentication = (props: AuthProps) => {
 
 		validate: {
 			name: (value) =>
-				!USERNAME_PATTERN.test(value) && "Invalid username",
+				(value.trim().length < 3 || value.trim().length > 190) &&
+				"Invalid username",
 			email: (val) => !EMAIL_PATTERN.test(val) && "Invalid email",
 			password: (val) =>
 				!PASSWORD_PATTERN.test(val) &&
 				"Password should include at least 6 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character",
 		},
 	});
-	const submitHandler = (e: { preventDefault: () => void }) => {
+	const submitHandler = async (e: { preventDefault: () => void }) => {
 		e.preventDefault();
 		const { hasErrors, errors } = form.validate();
 
 		if (screen === "login") {
-			console.log("Login");
-
 			// Ignore username validation
 			if (hasErrors && (errors.email || errors.password)) {
-				console.log("Invalid credentials");
 				return;
 			}
 
 			// Perform login with graphql query
 		} else if (screen === "register") {
 			if (hasErrors) {
-				console.log(errors);
 				return;
 			}
-			console.log("TEST 2");
-			newUser({
+
+			await register({
 				variables: {
 					name: form.values.name,
 					email: form.values.email,

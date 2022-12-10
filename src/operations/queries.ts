@@ -19,7 +19,7 @@ export const GET_USER = gql`
 			email
 			emailVerified
 			password
-			isUMTMember
+			isUMTMembership
 			sex
 			age
 			image

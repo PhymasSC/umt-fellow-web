@@ -5,6 +5,7 @@ import CredentialProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@lib/prisma";
 import { JWT } from "next-auth/jwt";
+import bcrypt from "bcrypt";
 
 interface Session extends DefaultSession {
 	user?: {
@@ -48,14 +49,10 @@ export const authOptions: NextAuthOptions = {
 						email: email,
 					},
 				});
-
 				if (!user) return null;
-
-				if (user.password === password) {
+				if (await bcrypt.compare(password, user.password || "")) {
 					return user;
 				}
-
-				console.log("Failed");
 				// login failed
 				return null;
 			},
