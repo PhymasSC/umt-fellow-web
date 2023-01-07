@@ -6,3 +6,7 @@ export { default as Feed } from "@components/Feed";
 export { default as Profile } from "@components/Profile";
 export { default as Typography } from "@components/Typography";
 export { default as Setting } from "@components/Setting";
+export { comment as Comment } from "@components/Comment";
+export { editor as Editor } from "@components/Comment";
+
+// Path: src\components\index.tsx

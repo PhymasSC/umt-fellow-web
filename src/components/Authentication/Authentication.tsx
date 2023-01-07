@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { upperFirst } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import {
@@ -33,7 +34,9 @@ interface AuthProps extends PaperProps {
 const Authentication = (props: AuthProps) => {
 	const { isModal = false, defaultPage = "login" } = props;
 	const [screen, setScreen] = useState(defaultPage);
+	const [error, setError] = useState("");
 	const [register] = useMutation(ADD_USER);
+
 	const form = useForm({
 		initialValues: {
 			name: "",
@@ -63,26 +66,37 @@ const Authentication = (props: AuthProps) => {
 			}
 
 			// Perform login with graphql query
+			signIn("credentials", {
+				email: form.values.email,
+				password: form.values.password,
+				callbackUrl: "/",
+				// redirect: false,
+			});
 		} else if (screen === "register") {
 			if (hasErrors) {
 				return;
 			}
 
-			await register({
+			const response = await register({
 				variables: {
 					name: form.values.name,
 					email: form.values.email,
 					password: form.values.password,
 				},
 			});
-		}
 
-		signIn("credentials", {
-			email: form.values.email,
-			password: form.values.password,
-			callbackUrl: "/",
-			// redirect: false,
-		});
+			if (response.data.addUser.code == 200) {
+				signIn("credentials", {
+					email: form.values.email,
+					password: form.values.password,
+					callbackUrl: "/",
+					// redirect: false,
+				});
+			} else {
+				setError(response.data.addUser.code);
+				form.setErrors({ email: "Email has been registered" });
+			}
+		}
 	};
 
 	return (

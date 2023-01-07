@@ -25,22 +25,20 @@ const Feed = (props: FeedProps) => {
 	const { feeds } = props;
 	const { classes } = useStyles();
 	return (
-		<Container className={classes.container}>
-			<Card p={0} radius="md" withBorder>
-				{feeds &&
-					feeds.map((item, index) => (
-						<Link
-							key={`${index}_${item.slug}`}
-							href={`/feed/${item.slug}`}
-							passHref
-						>
-							<Card.Section key={index} withBorder>
-								<SingleFeed key={index} {...item} />
-							</Card.Section>
-						</Link>
-					))}
-			</Card>
-		</Container>
+		<Card p={0} radius="md" withBorder>
+			{feeds &&
+				feeds.map((item, index) => (
+					<Link
+						key={`${index}_${item.slug}`}
+						href={`/thread/${item.slug}`}
+						passHref
+					>
+						<Card.Section key={index} withBorder>
+							<SingleFeed key={index} {...item} />
+						</Card.Section>
+					</Link>
+				))}
+		</Card>
 	);
 };
 

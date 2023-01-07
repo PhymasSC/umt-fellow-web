@@ -41,7 +41,7 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 
 	const items = links.map((link) => (
 		<Link key={link.label} href={link.link} passHref>
-			<Button<"a">
+			<Button
 				key={link.label}
 				variant="subtle"
 				component="a"
@@ -117,7 +117,7 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 										href={`/profile/${session.user?.name}`}
 									> */}
 									<Image
-										src={session.user?.image}
+										src={session.user?.image.toString()}
 										alt={session.user?.name || "User"}
 										width={32}
 										height={32}

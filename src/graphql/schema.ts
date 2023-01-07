@@ -52,6 +52,13 @@ export const typeDefs = gql`
 
 	type Mutation {
 		login(email: String!, password: String!): User!
-		addUser(name: String!, email: String!, password: String!): User!
+		addUser(name: String!, email: String!, password: String!): UserResponse!
+	}
+
+	type UserResponse {
+		code: Int!
+		success: Boolean!
+		message: String!
+		user: User
 	}
 `;
