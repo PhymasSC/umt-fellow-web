@@ -1,14 +1,6 @@
 import { FileWithPath } from "@mantine/dropzone";
-import {
-	ActionIcon,
-	Box,
-	Image,
-	Modal,
-	Title,
-	useMantineTheme,
-} from "@mantine/core";
+import { Image, Modal, Title, useMantineTheme } from "@mantine/core";
 import { useState } from "react";
-import { IconX } from "@tabler/icons";
 
 interface ImagePreviewInterface {
 	file: FileWithPath;
@@ -46,8 +38,8 @@ const ImagePreview = (props: ImagePreviewInterface) => {
 			<Image
 				src={imageUrl}
 				alt="preview image"
-				width={200}
-				height={200}
+				width={250}
+				height={250}
 				radius="lg"
 				imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
 				onClick={() => setOpened(true)}

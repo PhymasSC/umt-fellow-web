@@ -45,14 +45,40 @@ export const typeDefs = gql`
 		FEMALE
 	}
 
+	enum Flag {
+		PUBLIC
+		PRIVATE
+		REPORTED
+	}
+
 	type Query {
 		getUser(id: String!): User!
 		getUsers: [User]!
+		threads: [Thread]
+	}
+
+	type Thread {
+		id: String!
+		title: String!
+		description: String!
+		images: [String]
+		tags: [String]
+		author: User
+		flag: Flag
+		createdAt: DateTime
+		updatedAt: DateTime
 	}
 
 	type Mutation {
 		login(email: String!, password: String!): User!
 		addUser(name: String!, email: String!, password: String!): UserResponse!
+		addThread(
+			title: String!
+			description: String!
+			images: [String]
+			tags: [String]
+			author: String!
+		): ThreadResponse!
 	}
 
 	type UserResponse {
@@ -60,5 +86,12 @@ export const typeDefs = gql`
 		success: Boolean!
 		message: String!
 		user: User
+	}
+
+	type ThreadResponse {
+		code: Int!
+		success: Boolean!
+		message: String!
+		thread: Thread
 	}
 `;

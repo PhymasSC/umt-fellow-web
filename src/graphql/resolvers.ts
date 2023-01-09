@@ -20,6 +20,21 @@ export const resolvers = {
 			const users = await prisma.user.findMany();
 			return users;
 		},
+		threads: async () => {
+			const threads = await prisma.thread.findMany();
+			return threads;
+		},
+	},
+
+	Thread: {
+		author: async (parent: any) => {
+			const user = await prisma.user.findFirst({
+				where: {
+					id: parent.authorId,
+				},
+			});
+			return user;
+		},
 	},
 
 	Mutation: {
@@ -56,6 +71,46 @@ export const resolvers = {
 					success: false,
 					message: error.message || "User creation failed",
 					user: null,
+				};
+			}
+		},
+
+		addThread: async (
+			_: any,
+			{
+				title,
+				description,
+				images,
+				tags,
+				author,
+			}: {
+				title: string;
+				description: string;
+				images: string[];
+				tags: string[];
+				author: string;
+			}
+		) => {
+			try {
+				const thread = await prisma.thread.create({
+					data: {
+						title,
+						description,
+						authorId: author,
+					},
+				});
+				return {
+					code: 200,
+					success: true,
+					message: "Thread created successfully",
+					thread,
+				};
+			} catch (error: any) {
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "Thread creation failed",
+					thread: null,
 				};
 			}
 		},

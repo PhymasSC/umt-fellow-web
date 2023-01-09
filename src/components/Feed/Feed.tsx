@@ -2,6 +2,7 @@ import { Card, Container, Box } from "@mantine/core";
 import SingleFeed from "./SingleFeed";
 import { useStyles } from "./Feed.style";
 import Link from "next/link";
+import { PRIMARY_COLOR } from "@constants/colors";
 interface FeedProps {
 	feeds?: feed[];
 }
@@ -33,7 +34,18 @@ const Feed = (props: FeedProps) => {
 						href={`/thread/${item.slug}`}
 						passHref
 					>
-						<Card.Section key={index} withBorder>
+						<Card.Section
+							sx={(theme) => ({
+								textDecoration: "none",
+								color:
+									theme.colorScheme === "dark"
+										? theme.colors.gray[0]
+										: theme.colors.dark[9],
+							})}
+							component="a"
+							key={index}
+							withBorder
+						>
 							<SingleFeed key={index} {...item} />
 						</Card.Section>
 					</Link>

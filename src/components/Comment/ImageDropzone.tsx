@@ -15,14 +15,20 @@ import {
 	FileWithPath,
 } from "@mantine/dropzone";
 import { useState } from "react";
+import { toBase64 } from "@utils/base64";
 import ImagePreview from "./ImagePreview";
+
 const ImageDropzone = (props: Partial<DropzoneProps>) => {
 	const theme = useMantineTheme();
 	const [files, setFiles] = useState<FileWithPath[]>([]);
 
+	console.log(files);
+	console.log(files[0]);
+	console.log(typeof files[0]);
+	// console.log(await toBase64(files[0]));
 	return (
 		<>
-			<ScrollArea style={{ height: 250 }}>
+			<ScrollArea style={{ height: 300 }}>
 				<Flex gap="md" sx={{ maxWidth: 99999 }}>
 					<Dropzone
 						onDrop={(file) => setFiles([...files, file[0]])}
@@ -32,9 +38,9 @@ const ImageDropzone = (props: Partial<DropzoneProps>) => {
 						maxSize={3 * 1024 ** 2}
 						accept={IMAGE_MIME_TYPE}
 						sx={{
-							minWidth: 430,
-							width: 430,
-							cursor: files.length >= 5 ? "not-allowed" : "pointer",
+							width: 400,
+							cursor:
+								files.length >= 5 ? "not-allowed" : "pointer",
 						}}
 						disabled={files.length >= 5}
 						multiple={true}
@@ -43,7 +49,7 @@ const ImageDropzone = (props: Partial<DropzoneProps>) => {
 						<Group
 							position="center"
 							spacing="xl"
-							style={{ minHeight: 200, pointerEvents: "none" }}
+							style={{ height: 225, pointerEvents: "none" }}
 						>
 							<Dropzone.Accept>
 								<IconUpload
@@ -68,12 +74,13 @@ const ImageDropzone = (props: Partial<DropzoneProps>) => {
 								/>
 							</Dropzone.Reject>
 							<Dropzone.Idle>
-								<IconPhoto size={50} stroke={1.5} />
+								<IconPhoto size={75} stroke={1} />
 							</Dropzone.Idle>
 
 							<div>
 								<Text size="xl" inline align="center">
 									Drag images here or click to select files
+									(Optional)
 								</Text>
 								<Text
 									size="sm"
@@ -82,8 +89,7 @@ const ImageDropzone = (props: Partial<DropzoneProps>) => {
 									align="center"
 									mt={7}
 								>
-									Attach as many files as you like, each file
-									should not exceed 5mb
+									Each file should not exceed 5mb
 								</Text>
 								<Text
 									size="sm"

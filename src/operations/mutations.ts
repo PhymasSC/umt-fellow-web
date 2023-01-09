@@ -17,3 +17,21 @@ export const ADD_USER = gql`
 		}
 	}
 `;
+
+export const ADD_THREAD = gql`
+	mutation AddThread(
+		$title: String!
+		$description: String!
+		$author: String!
+	) {
+		addThread(title: $title, description: $description, author: $author) {
+			code
+			success
+			message
+			thread {
+				id
+				description
+			}
+		}
+	}
+`;

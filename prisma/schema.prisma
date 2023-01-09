@@ -90,7 +90,7 @@ model VerificationToken {
 model Thread {
   id          String     @id @default(uuid())
   title       String
-  content     String?
+  description String?
   author      User?      @relation(fields: [authorId], references: [id])
   authorId    String?
   flag        Flag       @default(PUBLIC)
@@ -100,6 +100,7 @@ model Thread {
   updatedAt   DateTime   @updatedAt @map(name: "updated_at")
   Community   Community? @relation(fields: [communityId], references: [id])
   communityId String?
+  Images      Images[]
 
   @@index([authorId])
   @@index([communityId])
@@ -192,4 +193,14 @@ model CommunityMember {
   @@index([communityId])
   @@index([userId])
   @@map(name: "community_members")
+}
+
+model Images {
+  id       String @id
+  imageUrl String
+  Thread   Thread @relation(fields: [threadId], references: [id])
+  threadId String @map(name: "thread_id")
+
+  @@index([threadId])
+  @@map(name: "images")
 }

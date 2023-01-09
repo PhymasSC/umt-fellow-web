@@ -81,7 +81,7 @@ Table VerificationToken {
 Table Thread {
   id String [pk]
   title String [not null]
-  content String
+  description String
   author users
   authorId String
   flag Flag [not null, default: 'PUBLIC']
@@ -91,6 +91,7 @@ Table Thread {
   updatedAt DateTime [not null]
   Community communities
   communityId String
+  Images images [not null]
 }
 
 Table follows {
@@ -150,6 +151,13 @@ Table community_members {
   updatedAt DateTime [not null]
 }
 
+Table images {
+  id String [pk]
+  imageUrl String [not null]
+  Thread Thread [not null]
+  threadId String [not null]
+}
+
 Enum Flag {
   PUBLIC
   PRIVATE
@@ -189,3 +197,5 @@ Ref: communities.creatorId > users.id
 Ref: community_members.communityId > communities.id
 
 Ref: community_members.userId > users.id
+
+Ref: images.threadId > Thread.id

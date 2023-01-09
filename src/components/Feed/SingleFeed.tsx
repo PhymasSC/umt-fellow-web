@@ -80,13 +80,15 @@ const SingleFeed: React.FC<Props> = (data: Props) => {
 						</Stack>
 					</Grid.Col>
 					<Grid.Col span={11}>
-						<Title size="h3">{title}</Title>
+						<Title size="h3" weight="600">
+							{title}
+						</Title>
 						<Spoiler
 							maxHeight={120}
 							showLabel="Show more"
 							hideLabel="Hide"
 						>
-							<Text weight="500">{content}</Text>
+							<Text>{content}</Text>
 						</Spoiler>
 						{(image !== "undefined" && image !== null) ?? (
 							<>
