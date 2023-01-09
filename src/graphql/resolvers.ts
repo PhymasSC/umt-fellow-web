@@ -95,6 +95,7 @@ export const resolvers = {
 				const thread = await prisma.thread.create({
 					data: {
 						title,
+						//@ts-ignore
 						description,
 						authorId: author,
 					},
