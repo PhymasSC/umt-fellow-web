@@ -10,7 +10,8 @@ import {
 	Title,
 } from "@mantine/core";
 import { Footer, Comment } from "@components/index";
-import { IconAlertCircle, IconTestPipe2 } from "@tabler/icons";
+import { IconTestPipe2 } from "@tabler/icons";
+import { useSession } from "next-auth/react";
 import type { NextPage } from "next";
 import Link from "next/link";
 
@@ -86,6 +87,7 @@ const comment_data = {
 	},
 };
 const Home: NextPage = () => {
+	const { data: session } = useSession();
 	return (
 		<>
 			<Container
@@ -99,11 +101,16 @@ const Home: NextPage = () => {
 				<Grid>
 					<Container>
 						<Flex mih={50} gap="md" direction="column" wrap="wrap">
-							<Comment
-								postedAt={comment_data.postedAt}
-								body={comment_data.body}
-								author={comment_data.author}
-							/>
+							{session && (
+								<Comment
+									postedAt={comment_data.postedAt}
+									body={comment_data.body}
+									author={{
+										name: session?.user?.name || "",
+										image: session?.user?.image || "",
+									}}
+								/>
+							)}
 							<Feed feeds={data} />
 						</Flex>
 					</Container>
