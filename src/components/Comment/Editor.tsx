@@ -13,7 +13,7 @@ import ImageDropzone from "./ImageDropzone";
 import { ADD_THREAD } from "@operations/mutations";
 import { useMutation } from "@apollo/client";
 import { useForm } from "@mantine/form";
-import { IconHash, IconLetterT } from "@tabler/icons";
+import { IconHash, IconLetterT, IconAlertTriangle } from "@tabler/icons";
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { FileWithPath } from "@mantine/dropzone";
@@ -105,12 +105,12 @@ const Editor = () => {
 				router.push(`/thread/${res?.data?.addThread.thread.id}`);
 			} else {
 				showNotification({
-					title: "Something wrong :(",
+					title: "Oops, something wrong happened",
 					message:
 						"There's some issue with the connection to the server, please try again.",
 					autoClose: 3000,
-					style: { backgroundColor: "red" },
-					sx: { backgroundColor: "red" },
+					color: "orange",
+					icon: <IconAlertTriangle />,
 				});
 			}
 		};

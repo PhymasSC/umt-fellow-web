@@ -249,7 +249,9 @@ const Authentication = (props: AuthProps) => {
 								}}
 							>
 								<Image
-									src="/Facebook.svg"
+									src={
+										"https://ik.imagekit.io/umtfellow/Facebook.svg?ik-sdk-version=javascript-1.4.3&updatedAt=1673374698792"
+									}
 									alt="Facebook"
 									width={40}
 									height={40}
@@ -270,7 +272,9 @@ const Authentication = (props: AuthProps) => {
 								}}
 							>
 								<Image
-									src="/Google.svg"
+									src={
+										"https://ik.imagekit.io/umtfellow/Google.svg?ik-sdk-version=javascript-1.4.3&updatedAt=1673374698849"
+									}
 									alt="Google"
 									width={40}
 									height={40}
