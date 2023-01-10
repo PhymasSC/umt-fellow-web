@@ -75,12 +75,16 @@ export const typeDefs = gql`
 		addThread(
 			title: String!
 			description: String!
-			images: [String]
+			images: [Image]
 			tags: [String]
 			author: String!
 		): ThreadResponse!
 	}
 
+	input Image {
+		name: String!
+		blob: String!
+	}
 	type UserResponse {
 		code: Int!
 		success: Boolean!

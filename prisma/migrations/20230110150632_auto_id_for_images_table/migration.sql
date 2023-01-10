@@ -155,3 +155,13 @@ CREATE TABLE `community_members` (
     INDEX `community_members_user_id_idx`(`user_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `images` (
+    `id` VARCHAR(191) NOT NULL,
+    `imageUrl` VARCHAR(191) NOT NULL,
+    `thread_id` VARCHAR(191) NOT NULL,
+
+    INDEX `images_thread_id_idx`(`thread_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

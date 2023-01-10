@@ -1,8 +1,14 @@
 import prisma from "@lib/prisma";
 import { GraphQLDateTime } from "graphql-iso-date";
 import bcrypt from "bcrypt";
-
+import ImageKit from "imagekit";
 const saltRounds = 10;
+
+const imagekit = new ImageKit({
+	publicKey: process.env.IMAGE_KIT_PUBLIC_KEY || "",
+	privateKey: process.env.IMAGE_KIT_PRIVATE_KEY || "",
+	urlEndpoint: process.env.IMAGE_KIT_URL_ENDPOINT || "",
+});
 
 export const resolvers = {
 	DateTime: GraphQLDateTime,
@@ -86,7 +92,7 @@ export const resolvers = {
 			}: {
 				title: string;
 				description: string;
-				images: string[];
+				images: { name: string; blob: string }[];
 				tags: string[];
 				author: string;
 			}
@@ -100,6 +106,27 @@ export const resolvers = {
 						authorId: author,
 					},
 				});
+
+				const promises = images.map(async (image) => {
+					const upload = await imagekit.upload({
+						file: image.blob,
+						fileName: image.name,
+						folder: `/threads/${thread.id}`,
+						useUniqueFileName: true,
+					});
+
+					await prisma.images.create({
+						data: {
+							imageUrl: upload.filePath,
+							threadId: thread.id,
+						},
+					});
+
+					return upload;
+				});
+
+				await Promise.all(promises);
+
 				return {
 					code: 200,
 					success: true,
@@ -107,6 +134,7 @@ export const resolvers = {
 					thread,
 				};
 			} catch (error: any) {
+				console.log(error);
 				return {
 					code: 1,
 					success: false,
@@ -117,23 +145,3 @@ export const resolvers = {
 		},
 	},
 };
-
-// export const resolvers = {
-//     Query: {
-//         user: async () => {
-//             const users = await prisma.user.findMany();
-//             return users;
-//         }
-//     },
-//     Mutation: {
-//         createUser: async (parent, args, context, info) => {
-//             const user = await prisma.user.create({
-//                 data: {
-//                     name: args.name,
-//                     email: args.email,
-//                 }
-//             });
-//             return user;
-//         }
-//     }
-// };

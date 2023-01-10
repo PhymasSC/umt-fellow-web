@@ -65,7 +65,7 @@ model User {
   year            String?
   cgpa            Float?
   createdAt       DateTime          @default(now()) @map(name: "created_at")
-  updatedAt       DateTime          @updatedAt @map(name: "updated_at")
+  updatedAt       DateTime          @default(now()) @updatedAt @map(name: "updated_at")
   Thread          Thread[]
   Comment         Comment[]
   Follower        Follow[]          @relation("follower")
@@ -97,7 +97,7 @@ model Thread {
   Vote        Vote[]
   Comment     Comment[]
   createdAt   DateTime   @default(now()) @map(name: "created_at")
-  updatedAt   DateTime   @updatedAt @map(name: "updated_at")
+  updatedAt   DateTime   @default(now()) @updatedAt @map(name: "updated_at")
   Community   Community? @relation(fields: [communityId], references: [id])
   communityId String?
   Images      Images[]
@@ -125,7 +125,7 @@ model Follow {
   following   User     @relation("following", fields: [followingId], references: [id])
   followingId String   @map(name: "following_id")
   createdAt   DateTime @default(now()) @map(name: "created_at")
-  updatedAt   DateTime @updatedAt @map(name: "updated_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map(name: "updated_at")
 
   @@index([followerId])
   @@index([followingId])
@@ -141,7 +141,7 @@ model Vote {
   comment   Comment? @relation(fields: [commentId], references: [id])
   commentId String?  @map(name: "comment_id")
   createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  updatedAt DateTime @default(now()) @updatedAt @map(name: "updated_at")
 
   @@index([threadId])
   @@index([userId])
@@ -157,7 +157,7 @@ model Comment {
   thread    Thread   @relation(fields: [threadId], references: [id])
   threadId  String   @map(name: "thread_id")
   createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  updatedAt DateTime @default(now()) @updatedAt @map(name: "updated_at")
   Vote      Vote[]
 
   @@index([threadId])
@@ -170,7 +170,7 @@ model Community {
   name            String
   image           String?
   createdAt       DateTime          @default(now()) @map(name: "created_at")
-  updatedAt       DateTime          @updatedAt @map(name: "updated_at")
+  updatedAt       DateTime          @default(now()) @updatedAt @map(name: "updated_at")
   creator         User              @relation(fields: [creatorId], references: [id])
   creatorId       String            @map(name: "creator_id")
   Thread          Thread[]
@@ -188,7 +188,7 @@ model CommunityMember {
   userId      String    @map(name: "user_id")
   role        Role      @default(USER)
   createdAt   DateTime  @default(now()) @map(name: "created_at")
-  updatedAt   DateTime  @updatedAt @map(name: "updated_at")
+  updatedAt   DateTime  @default(now()) @updatedAt @map(name: "updated_at")
 
   @@index([communityId])
   @@index([userId])
@@ -196,10 +196,12 @@ model CommunityMember {
 }
 
 model Images {
-  id       String @id
-  imageUrl String
-  Thread   Thread @relation(fields: [threadId], references: [id])
-  threadId String @map(name: "thread_id")
+  id        String   @id @default(uuid())
+  imageUrl  String   @db.Text
+  Thread    Thread   @relation(fields: [threadId], references: [id])
+  threadId  String   @map(name: "thread_id")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map(name: "updated_at")
 
   @@index([threadId])
   @@map(name: "images")

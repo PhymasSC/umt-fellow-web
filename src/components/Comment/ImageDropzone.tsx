@@ -14,24 +14,25 @@ import {
 	IMAGE_MIME_TYPE,
 	FileWithPath,
 } from "@mantine/dropzone";
-import { useState } from "react";
+import { Dispatch, Key, SetStateAction, useState } from "react";
 import { toBase64 } from "@utils/base64";
 import ImagePreview from "./ImagePreview";
 
-const ImageDropzone = (props: Partial<DropzoneProps>) => {
+const ImageDropzone = (
+	props: Partial<DropzoneProps> & {
+		files: FileWithPath[];
+		setfiles: Dispatch<SetStateAction<FileWithPath[]>>;
+	}
+) => {
 	const theme = useMantineTheme();
-	const [files, setFiles] = useState<FileWithPath[]>([]);
+	const { files, setfiles } = props;
 
-	console.log(files);
-	console.log(files[0]);
-	console.log(typeof files[0]);
-	// console.log(await toBase64(files[0]));
 	return (
 		<>
 			<ScrollArea style={{ height: 300 }}>
 				<Flex gap="md" sx={{ maxWidth: 99999 }}>
 					<Dropzone
-						onDrop={(file) => setFiles([...files, file[0]])}
+						onDrop={(file) => setfiles([...files, file[0]])}
 						onReject={(files) =>
 							console.log("rejected files", files)
 						}
@@ -103,30 +104,34 @@ const ImageDropzone = (props: Partial<DropzoneProps>) => {
 							</div>
 						</Group>
 					</Dropzone>
-					{files.map((file, index) => {
-						return (
-							<Box key={index} sx={{ position: "relative" }}>
-								<ActionIcon
-									variant="subtle"
-									color="blue"
-									sx={{
-										position: "absolute",
-										top: "0.3em",
-										right: "0.3em",
-										zIndex: 99,
-									}}
-									onClick={() => {
-										setFiles(
-											files.filter((f) => f !== file)
-										);
-									}}
-								>
-									<IconX size={20} color="gray" />
-								</ActionIcon>
-								<ImagePreview file={file} key={index} />
-							</Box>
-						);
-					})}
+					{files.map(
+						(file: FileWithPath, index: Key | null | undefined) => {
+							return (
+								<Box key={index} sx={{ position: "relative" }}>
+									<ActionIcon
+										variant="subtle"
+										color="blue"
+										sx={{
+											position: "absolute",
+											top: "0.3em",
+											right: "0.3em",
+											zIndex: 99,
+										}}
+										onClick={() => {
+											setfiles(
+												files.filter(
+													(f: any) => f !== file
+												)
+											);
+										}}
+									>
+										<IconX size={20} color="gray" />
+									</ActionIcon>
+									<ImagePreview file={file} key={index} />
+								</Box>
+							);
+						}
+					)}
 				</Flex>
 			</ScrollArea>
 		</>

@@ -16,12 +16,17 @@ import { useForm } from "@mantine/form";
 import { IconHash, IconLetterT } from "@tabler/icons";
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
+import { FileWithPath } from "@mantine/dropzone";
+import { useRouter } from "next/router";
 
 const Editor = () => {
 	const [titleLength, setTitleLength] = useState(0);
+	const [isLoading, setIsLoading] = useState(false);
+	const [files, setFiles] = useState<FileWithPath[]>([]);
 	const titleRef = useRef<HTMLTextAreaElement>(null);
 	const [submitThread] = useMutation(ADD_THREAD);
 	const { data: session } = useSession();
+	const router = useRouter();
 
 	const form = useForm({
 		initialValues: {
@@ -42,7 +47,7 @@ const Editor = () => {
 
 	useEffect(() => {
 		setTitleLength(titleRef.current?.value.length || 0);
-	}, [titleRef.current?.value.length]);
+	}, [titleRef.current?.value]);
 
 	const submitHandler = (e: { preventDefault: () => void }) => {
 		e.preventDefault();
@@ -51,16 +56,54 @@ const Editor = () => {
 		if (hasErrors) {
 			return;
 		}
+		setIsLoading(true);
+		const getBase64 = (file: File): Promise<string> => {
+			return new Promise<string>((resolve) => {
+				let fileInfo;
+				let baseURL = "";
+				// Make new FileReader
+				let reader = new FileReader();
 
-		submitThread({
-			variables: {
-				title: form.values.title,
-				// tags: form.values.tags,
-				description: form.values.description,
-				//@ts-ignore
-				author: session?.user?.id || "",
-			},
+				// Convert the file to base64 text
+				reader.readAsDataURL(file);
+
+				// on reader load somthing...
+				reader.onload = () => {
+					// Make a fileInfo Object
+					baseURL = reader?.result?.toString() || "";
+					resolve(baseURL);
+				};
+			});
+		};
+
+		const filesBase64 = files.map(async (file) => {
+			return await {
+				name: file.name,
+				blob: await getBase64(file).then((res) => res),
+			};
 		});
+
+		const getFilesInBase64 = async () => {
+			const resolvedValues = [];
+			for await (const fileBase64 of filesBase64) {
+				resolvedValues.push(fileBase64);
+			}
+			const res = await submitThread({
+				variables: {
+					title: form.values.title,
+					// tags: form.values.tags,
+					description: form.values.description,
+					//@ts-ignore
+					author: session?.user?.id || "",
+					images: resolvedValues,
+				},
+			});
+			setIsLoading(false);
+			console.log(res);
+			//@ts-ignore
+			router.push(`/thread/${res?.data?.addThread.thread.id}`);
+		};
+		getFilesInBase64();
 	};
 	return (
 		<>
@@ -119,11 +162,19 @@ const Editor = () => {
 							minRows={4}
 							{...form.getInputProps("description")}
 						/>
-						<ImageDropzone></ImageDropzone>
+						<ImageDropzone
+							files={files}
+							setfiles={setFiles}
+						></ImageDropzone>
 					</Stack>
 					<Space h="md" />
 					<Flex direction="row-reverse">
-						<Button type="submit" variant="filled" color="blue">
+						<Button
+							type="submit"
+							variant="filled"
+							color="blue"
+							loading={isLoading}
+						>
 							Post
 						</Button>
 						<Button variant="subtle" color="red">
