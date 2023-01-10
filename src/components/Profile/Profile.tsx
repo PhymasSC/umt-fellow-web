@@ -12,6 +12,8 @@ import {
 	Space,
 	Group,
 	Badge,
+	Image,
+	BackgroundImage,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import {
@@ -69,21 +71,21 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 	const { id, image, name, isUMTMembership } = props;
 	const { classes } = useStyles();
 	const { width } = useViewportSize();
-	console.log(isUMTMembership);
 	return (
 		<Container fluid>
 			<Card className={classes.card}>
-				<Card.Section
-					sx={{
-						backgroundImage: `url(${image?.toString()})`,
-						backgroundRepeat: "no-repeat",
-						backgroundSize: "cover",
-						backgroundPosition: "center",
-						height: "40vh",
-					}}
-					className={classes.cover}
+				<BackgroundImage src={image.replace(/\s+/g, "%20")} radius="sm">
+					<Card.Section
+						sx={{
+							height: "40vh",
+						}}
+						className={classes.cover}
+					></Card.Section>
+				</BackgroundImage>
+				<Avatar
+					src={image.replace(/\s+/g, "%20")}
+					className={classes.avatar}
 				/>
-				<Avatar src={image?.toString()} className={classes.avatar} />
 				<Card.Section
 					mt="lg"
 					sx={{

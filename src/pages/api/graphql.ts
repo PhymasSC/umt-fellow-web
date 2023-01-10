@@ -2,8 +2,13 @@ import { ApolloServer } from "apollo-server-express";
 import { Router } from "express";
 import { typeDefs } from "@gql/schema";
 import { resolvers } from "@gql/resolvers";
-import Cors from "cors";
 import { NextApiRequest, NextApiResponse } from "next";
+import Cors from "micro-cors";
+
+const cors = Cors({
+	allowMethods: ["GET", "POST", "OPTIONS"],
+	origin: "*",
+});
 
 function runMiddleware(
 	req: NextApiRequest,
@@ -29,7 +34,7 @@ export const config = {
 	},
 };
 
-export default async function handler(req: any, res: any) {
+export default cors(async function handler(req: any, res: any) {
 	const apolloServer = new ApolloServer({ typeDefs, resolvers });
 	await apolloServer.start();
 
@@ -40,7 +45,7 @@ export default async function handler(req: any, res: any) {
 		},
 	});
 	await runMiddleware(req, res, apolloMiddleware);
-}
+});
 // import { ApolloServer } from "apollo-server-micro";
 // import { typeDefs } from "@gql/schema";
 // import { resolvers } from "@gql/resolvers";

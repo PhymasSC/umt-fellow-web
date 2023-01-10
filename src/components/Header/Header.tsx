@@ -31,6 +31,7 @@ interface HeaderResponsiveProps {
 const UFHeader = ({ links }: HeaderResponsiveProps) => {
 	const theme = useMantineTheme();
 	const { data: session } = useSession();
+	console.log(session);
 	const [opened, { toggle, close }] = useDisclosure(false);
 	const [active, setActive] = useState(links[0].link);
 	const [modalOpened, setModalOpened] = useState(false);

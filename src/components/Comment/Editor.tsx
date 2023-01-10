@@ -18,6 +18,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { FileWithPath } from "@mantine/dropzone";
 import { useRouter } from "next/router";
+import { showNotification } from "@mantine/notifications";
 
 const Editor = () => {
 	const [titleLength, setTitleLength] = useState(0);
@@ -100,8 +101,18 @@ const Editor = () => {
 			});
 			setIsLoading(false);
 			console.log(res);
-			//@ts-ignore
-			router.push(`/thread/${res?.data?.addThread.thread.id}`);
+			if (res?.data?.addThread.code === 200) {
+				router.push(`/thread/${res?.data?.addThread.thread.id}`);
+			} else {
+				showNotification({
+					title: "Something wrong :(",
+					message:
+						"There's some issue with the connection to the server, please try again.",
+					autoClose: 3000,
+					style: { backgroundColor: "red" },
+					sx: { backgroundColor: "red" },
+				});
+			}
 		};
 		getFilesInBase64();
 	};
