@@ -30,8 +30,6 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface CommentHtmlProps {
-	postedAt: string;
-	body: string;
 	author: {
 		name: string;
 		image: string;
@@ -39,7 +37,7 @@ interface CommentHtmlProps {
 }
 
 const Comment = (props: CommentHtmlProps) => {
-	const { postedAt, body, author } = props;
+	const { author } = props;
 	const { classes } = useStyles();
 	return (
 		<Paper withBorder radius="md" className={classes.comment}>

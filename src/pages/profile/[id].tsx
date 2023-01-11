@@ -5,7 +5,6 @@ import { GET_USER } from "@operations/queries";
 import { client } from "@lib/apollo-client";
 
 const Profile: NextPage = (props) => {
-	console.log(props);
 	return (
 		<>
 			<ProfileComponent {...props?.getUser}></ProfileComponent>

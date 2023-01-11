@@ -43,3 +43,43 @@ export const GET_USER = gql`
 		}
 	}
 `;
+
+export const GET_THREADS = gql`
+	{
+		threads {
+			id
+			title
+			description
+			images
+			tags
+			author {
+				id
+				name
+				image
+			}
+			flag
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const GET_THREAD = gql`
+	query Thread($id: String!) {
+		thread(id: $id) {
+			id
+			title
+			description
+			images
+			tags
+			author {
+				id
+				image
+				name
+			}
+			flag
+			createdAt
+			updatedAt
+		}
+	}
+`;

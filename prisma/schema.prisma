@@ -90,7 +90,7 @@ model VerificationToken {
 model Thread {
   id          String     @id @default(uuid())
   title       String
-  description String?
+  description String?    @db.LongText
   author      User?      @relation(fields: [authorId], references: [id])
   authorId    String?
   flag        Flag       @default(PUBLIC)

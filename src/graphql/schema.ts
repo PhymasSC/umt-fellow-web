@@ -55,6 +55,7 @@ export const typeDefs = gql`
 		getUser(id: String!): User!
 		getUsers: [User]!
 		threads: [Thread]
+		thread(id: String!): Thread
 	}
 
 	type Thread {

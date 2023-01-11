@@ -27,8 +27,20 @@ export const resolvers = {
 			return users;
 		},
 		threads: async () => {
-			const threads = await prisma.thread.findMany();
+			const threads = await prisma.thread.findMany({
+				orderBy: {
+					createdAt: "desc",
+				},
+			});
 			return threads;
+		},
+		thread: async (_: any, { id }: { id: string }) => {
+			const thread = await prisma.thread.findFirst({
+				where: {
+					id,
+				},
+			});
+			return thread;
 		},
 	},
 
@@ -40,6 +52,21 @@ export const resolvers = {
 				},
 			});
 			return user;
+		},
+		images: async (parent: any) => {
+			const res: string[] = [];
+			const images = await prisma.images.findMany({
+				where: {
+					threadId: parent.id,
+				},
+				select: {
+					imageUrl: true,
+				},
+			});
+			images.forEach((image) => {
+				res.push(image.imageUrl);
+			});
+			return res;
 		},
 	},
 
