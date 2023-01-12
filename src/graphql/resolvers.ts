@@ -36,7 +36,7 @@ export const resolvers = {
 		},
 		getThreadsByAuthor: async (
 			_: any,
-			{ authorId }: { authordId: string }
+			{ authorId }: { authorId: string }
 		) => {
 			const threads = await prisma.thread.findMany({
 				where: {
