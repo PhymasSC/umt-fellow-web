@@ -18,18 +18,17 @@ import {
 } from "@mantine/core";
 import Link from "next/link";
 import { Comment } from "@components/index";
+import { useQuery } from "@apollo/client";
 const ThreadPage: NextPage = (props) => {
-	const router = useRouter();
 	//@ts-ignore
-	const { thread } = props;
-	console.log(props);
+	const { getThreadById: data } = props;
 	return (
 		<>
 			<Container size="xl">
 				<Grid>
 					<Grid.Col span={8}>
 						<Card withBorder>
-							<SingleFeed {...thread}></SingleFeed>
+							<SingleFeed {...data}></SingleFeed>
 						</Card>
 
 						<Space h="xl" />
@@ -41,8 +40,8 @@ const ThreadPage: NextPage = (props) => {
 						<Space h="xl" />
 						<Comment
 							author={{
-								name: thread?.author?.name,
-								image: thread?.author?.image,
+								name: data?.author?.name,
+								image: data?.author?.image,
 							}}
 						></Comment>
 					</Grid.Col>
@@ -61,19 +60,16 @@ const ThreadPage: NextPage = (props) => {
 							<Title order={4}>Thread Starter</Title>
 							<Space h="md"></Space>
 							<Avatar
-								src={thread.author.image}
+								src={data.author.image}
 								size={120}
 								radius={120}
 								mx="auto"
 							/>
 							<Text align="center" size="lg" weight={500} mt="md">
-								{thread.author.name}
+								{data.author.name}
 							</Text>
 
-							<Link
-								href={`/profile/${thread.author.id}`}
-								passHref
-							>
+							<Link href={`/profile/${data.author.id}`} passHref>
 								<Button
 									component="a"
 									variant="light"
@@ -110,7 +106,6 @@ export async function getServerSideProps(context: { params: { id: string } }) {
 			query: GET_THREAD,
 			variables: { id },
 		});
-		console.log(data);
 		return {
 			props: data,
 		};

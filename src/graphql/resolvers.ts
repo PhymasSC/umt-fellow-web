@@ -26,7 +26,7 @@ export const resolvers = {
 			const users = await prisma.user.findMany();
 			return users;
 		},
-		threads: async () => {
+		getThreads: async () => {
 			const threads = await prisma.thread.findMany({
 				orderBy: {
 					createdAt: "desc",
@@ -34,7 +34,18 @@ export const resolvers = {
 			});
 			return threads;
 		},
-		thread: async (_: any, { id }: { id: string }) => {
+		getThreadsByAuthor: async (
+			_: any,
+			{ authorId }: { authordId: string }
+		) => {
+			const threads = await prisma.thread.findMany({
+				where: {
+					authorId,
+				},
+			});
+			return threads;
+		},
+		getThreadById: async (_: any, { id }: { id: string }) => {
 			const thread = await prisma.thread.findFirst({
 				where: {
 					id,

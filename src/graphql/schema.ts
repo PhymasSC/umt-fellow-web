@@ -30,6 +30,7 @@ export const typeDefs = gql`
 		cgpa: Float
 		failedAttempts: Int
 		nextAvailableLogin: DateTime
+		threads: [Thread]
 		createdAt: DateTime
 		updatedAt: DateTime
 	}
@@ -54,8 +55,9 @@ export const typeDefs = gql`
 	type Query {
 		getUser(id: String!): User!
 		getUsers: [User]!
-		threads: [Thread]
-		thread(id: String!): Thread
+		getThreads: [Thread]
+		getThreadsByAuthor(authorId: String!): [Thread]
+		getThreadById(id: String!): Thread
 	}
 
 	type Thread {

@@ -1,3 +1,4 @@
+import { Feed } from "@components/index";
 import Footer from "@components/Footer";
 import {
 	createStyles,
@@ -58,23 +59,27 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface ProfileProps {
-	id: string;
-	image: string;
-	avatar?: string;
-	name: string;
-	nickname?: string | string[];
-	isUMTMembership: boolean;
-	stats: { label: string; value: string }[];
+	user: {
+		id: string;
+		image: string;
+		avatar?: string;
+		name: string;
+		nickname?: string | string[];
+		isUMTMembership: boolean;
+		stats: { label: string; value: string }[];
+	};
+	threads: any;
 }
 
 const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
-	const { id, image, name, isUMTMembership } = props;
+	const { user, threads } = props;
+	console.log(threads);
 	const { classes } = useStyles();
 	const { width } = useViewportSize();
 	return (
 		<Container fluid>
 			<Card className={classes.card}>
-				<BackgroundImage src={image.replace(/\s+/g, "%20")} radius="sm">
+				<BackgroundImage src={user.image.replace(/\s+/g, "%20")} radius="sm">
 					<Card.Section
 						sx={{
 							height: "40vh",
@@ -83,7 +88,7 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 					></Card.Section>
 				</BackgroundImage>
 				<Avatar
-					src={image.replace(/\s+/g, "%20")}
+					src={user.image.replace(/\s+/g, "%20")}
 					className={classes.avatar}
 				/>
 				<Card.Section
@@ -96,8 +101,8 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 				>
 					<Stack spacing={10}>
 						<Group spacing={10}>
-							<Title order={1}>{name}</Title>
-							{isUMTMembership && (
+							<Title order={1}>{user.name}</Title>
+							{user.isUMTMembership && (
 								<Badge color="blue" size="xl">
 									<Group
 										spacing={6}
@@ -115,7 +120,7 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 						</Group>
 
 						<Text align="center" size="sm" color="dimmed">
-							@{id}
+							@{user.id}
 						</Text>
 
 						<Button
@@ -159,7 +164,7 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 												{stat.value}
 											</Text>
 										</div>
-									))} */}
+										))} */}
 								</Card>
 								<Card sx={{ padding: "2em !important" }}>
 									<Title size={20}>Follow me on</Title>
@@ -183,7 +188,9 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 							</Stack>
 						</Grid.Col>
 						<Grid.Col md={12} lg={8}>
-							<Card radius="md">POSTS</Card>
+							<Card radius="md">
+								<Feed feeds={threads}></Feed>
+							</Card>
 							{width < 1200 && (
 								<>
 									<Space h={20}></Space>

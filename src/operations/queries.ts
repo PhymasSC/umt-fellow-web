@@ -46,7 +46,7 @@ export const GET_USER = gql`
 
 export const GET_THREADS = gql`
 	{
-		threads {
+		getThreads {
 			id
 			title
 			description
@@ -65,8 +65,8 @@ export const GET_THREADS = gql`
 `;
 
 export const GET_THREAD = gql`
-	query Thread($id: String!) {
-		thread(id: $id) {
+	query GetThreadById($id: String!) {
+		getThreadById(id: $id) {
 			id
 			title
 			description

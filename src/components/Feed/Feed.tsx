@@ -19,29 +19,18 @@ interface feed {
 	description: string;
 	id: string;
 }
-// interface feed {
-// 	title: string;
-// 	username: string;
-// 	profilePic: string;
-// 	createdTime: string;
-// 	content: string;
-// 	voteCount: number;
-// 	badges: {
-// 		value: string;
-// 		color: string;
-// 	}[];
-// 	image: string;
-// 	slug: string;
-// }
 
 const Feed = (props: FeedProps) => {
 	const { feeds } = props;
+	console.log("FEEDS:", feeds);
 	const { classes } = useStyles();
+
 	Object.entries(feeds || {}).map(([key, value]) => {
 		value?.map((item) => {
 			console.log(item);
 		});
 	});
+
 	return (
 		<Card p={0} radius="md" withBorder>
 			{Object.entries(feeds || {}).map(([key, value]) =>
