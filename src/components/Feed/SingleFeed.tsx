@@ -11,6 +11,7 @@ import {
 	Badge,
 	Title,
 	Image,
+	TypographyStylesProvider,
 } from "@mantine/core";
 import { useStyles } from "./SingleFeed.style";
 import { IconChevronUp, IconChevronDown } from "@tabler/icons";
@@ -96,7 +97,13 @@ const SingleFeed: React.FC<Props> = (data: Props) => {
 							showLabel="Show more"
 							hideLabel="Hide"
 						>
-							<Text>{description}</Text>
+							<TypographyStylesProvider>
+								<div
+									dangerouslySetInnerHTML={{
+										__html: description,
+									}}
+								/>
+							</TypographyStylesProvider>
 						</Spoiler>
 						{(author.image !== "undefined" &&
 							author.image !== null) ?? (

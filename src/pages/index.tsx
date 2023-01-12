@@ -5,84 +5,23 @@ import {
 	Flex,
 	Grid,
 	Group,
+	Skeleton,
 	Space,
 	Text,
 	Title,
 } from "@mantine/core";
 import { Footer, Comment } from "@components/index";
 import { IconTestPipe2 } from "@tabler/icons";
-import { useSession } from "next-auth/react";
-import type { NextPage } from "next";
-import { useQuery } from "@apollo/client";
 import Link from "next/link";
+import type { NextPage } from "next";
+import { useSession } from "next-auth/react";
+import { useQuery } from "@apollo/client";
 import { GET_THREADS } from "@operations/queries";
-
-// const data = [
-// 	{
-// 		title: "test",
-// 		username: "Lau Sheng Cher",
-// 		profilePic: "https://placeimg.com/192/192/people",
-// 		createdTime: "3 Minutes ago",
-// 		content: "Test",
-// 		voteCount: 738,
-// 		badges: [
-// 			{ value: "Moderator", color: "yellow" },
-// 			{ value: "Founder", color: "teal" },
-// 		],
-// 		image: "https://placeimg.com/192/192/people",
-// 		slug: "0",
-// 	},
-// 	{
-// 		title: "test",
-// 		username: "James",
-// 		profilePic: "https://placeimg.com/195/192/people",
-// 		createdTime: "1 Hour ago",
-// 		content: "blah blah blah",
-// 		voteCount: 500,
-// 		image: "https://placeimg.com/192/192/people",
-// 		badges: [],
-// 		slug: "1",
-// 	},
-// 	{
-// 		title: "test",
-// 		username: "Tom",
-// 		profilePic: "https://placeimg.com/194/192/people",
-// 		createdTime: "1 Hour ago",
-// 		content: "love this",
-// 		voteCount: 1470,
-// 		image: "https://placeimg.com/192/192/people",
-// 		badges: [],
-// 		slug: "2",
-// 	},
-// 	{
-// 		title: "test",
-// 		username: "Alice",
-// 		profilePic: "https://placeimg.com/193/192/people",
-// 		createdTime: "2 Hour ago",
-// 		content:
-// 			"This is a really really long string that is going to be truncated and then it will be truncated again and again non stop until it is truncated to the point where it is not truncated anymore. This string is long enough to be truncated at some point, but not now, still making it long enough to be truncated! Almost to be truncated, its time to be truncated",
-// 		voteCount: 1150,
-// 		image: "https://placeimg.com/192/192/people",
-// 		badges: [],
-// 		slug: "3",
-// 	},
-// 	{
-// 		title: "test",
-// 		username: "Kobe",
-// 		profilePic: "https://placeimg.com/300/192/people",
-// 		createdTime: "2 hour ago",
-// 		content:
-// 			"lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.",
-// 		voteCount: 2974891,
-// 		image: "https://placeimg.com/192/192/people",
-// 		badges: [],
-// 		slug: "4",
-// 	},
-// ];
 
 const Home: NextPage = () => {
 	const { data: session } = useSession();
 	const { loading, error, data } = useQuery(GET_THREADS);
+
 	return (
 		<>
 			<Container
@@ -104,7 +43,13 @@ const Home: NextPage = () => {
 									}}
 								/>
 							)}
-							<Feed feeds={data} />
+							{loading ? (
+								<Skeleton sx={(theme) => ({ width: "100%" })}>
+									Page is loading
+								</Skeleton>
+							) : (
+								<Feed feeds={data} />
+							)}
 						</Flex>
 					</Container>
 					<Grid.Col md={12} lg={4}>
