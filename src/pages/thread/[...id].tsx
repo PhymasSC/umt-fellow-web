@@ -19,6 +19,7 @@ import {
 import Link from "next/link";
 import { Comment } from "@components/index";
 import { useQuery } from "@apollo/client";
+
 const ThreadPage: NextPage = (props) => {
 	//@ts-ignore
 	const { getThreadById: data } = props;
