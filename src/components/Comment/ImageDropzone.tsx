@@ -107,28 +107,16 @@ const ImageDropzone = (
 					{files.map(
 						(file: FileWithPath, index: Key | null | undefined) => {
 							return (
-								<Box key={index} sx={{ position: "relative" }}>
-									<ActionIcon
-										variant="subtle"
-										color="blue"
-										sx={{
-											position: "absolute",
-											top: "0.3em",
-											right: "0.3em",
-											zIndex: 99,
-										}}
-										onClick={() => {
-											setfiles(
-												files.filter(
-													(f: any) => f !== file
-												)
-											);
-										}}
-									>
-										<IconX size={20} color="gray" />
-									</ActionIcon>
-									<ImagePreview file={file} key={index} />
-								</Box>
+								<ImagePreview
+									file={file}
+									key={index}
+									isUpload={true}
+									cancelCallback={() => {
+										setfiles(
+											files.filter((f: any) => f !== file)
+										);
+									}}
+								/>
 							);
 						}
 					)}

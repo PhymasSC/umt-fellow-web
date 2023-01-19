@@ -22,7 +22,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { useStyles, HEADER_HEIGHT } from "./Header.style";
 import { APP_LOGO } from "@constants/metadata";
 import { signOut, useSession } from "next-auth/react";
-import { IconLogout, IconSettings, IconUser } from "@tabler/icons";
+import { IconLogout, IconSettings, IconTrash, IconUser } from "@tabler/icons";
 
 interface HeaderResponsiveProps {
 	links: { link: string; label: string }[];
@@ -112,11 +112,12 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 							{items}
 							<ThemeToggler />
 							<Space w="xs" />
-							<Menu trigger="hover" position="bottom-end">
+							<Menu
+								shadow="md"
+								transitionDuration={200}
+								trigger="hover"
+							>
 								<Menu.Target>
-									{/* <Link
-										href={`/profile/${session.user?.name}`}
-									> */}
 									<Image
 										src={session.user?.image?.toString()}
 										alt={session.user?.name || "User"}
@@ -129,9 +130,9 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 											},
 										}}
 									/>
-									{/* </Link> */}
 								</Menu.Target>
 								<Menu.Dropdown>
+									<Menu.Label>Application</Menu.Label>
 									<Menu.Item
 										icon={<IconUser size={14} />}
 										component="a"
@@ -155,6 +156,16 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 										}}
 									>
 										Log Out
+									</Menu.Item>
+									<Menu.Divider />
+									<Menu.Label>Danger Zone</Menu.Label>
+									<Menu.Item
+										color="red"
+										icon={
+											<IconTrash size={14} stroke={1.5} />
+										}
+									>
+										Delete Account
 									</Menu.Item>
 								</Menu.Dropdown>
 							</Menu>

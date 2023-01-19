@@ -40,7 +40,7 @@ export const resolvers = {
 		) => {
 			const threads = await prisma.thread.findMany({
 				where: {
-					authorId,
+					authorId: authorId,
 				},
 			});
 			return threads;

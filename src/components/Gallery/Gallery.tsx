@@ -1,11 +1,5 @@
-import {
-	Container,
-	Grid,
-	SimpleGrid,
-	Skeleton,
-	useMantineTheme,
-	Image,
-} from "@mantine/core";
+import ImagePreview from "@components/Comment/ImagePreview";
+import { Grid, SimpleGrid, useMantineTheme, Image } from "@mantine/core";
 
 const PRIMARY_COL_HEIGHT = 700;
 
@@ -20,56 +14,58 @@ const Gallery: React.FC<Props> = ({ images }) => {
 
 	if (images.length == 5) {
 		return (
-			<SimpleGrid
-				cols={2}
-				spacing="md"
-				breakpoints={[{ maxWidth: "sm", cols: 1 }]}
-			>
-				<Grid>
-					<Grid.Col>
-						<Image
-							height={SECONDARY_COL_HEIGHT}
-							src={images[0]}
-							alt="123"
-							radius="md"
-						/>
-					</Grid.Col>
-					<Grid.Col>
-						<Image
-							height={SECONDARY_COL_HEIGHT}
-							src={images[1]}
-							alt="123"
-							radius="md"
-						/>
-					</Grid.Col>
-				</Grid>
-				<Grid gutter="xs">
-					<Grid.Col>
-						<Image
-							height={TERTIARY_COL_HEIGHT}
-							src={images[2]}
-							alt="123"
-							radius="md"
-						/>
-					</Grid.Col>
-					<Grid.Col>
-						<Image
-							height={TERTIARY_COL_HEIGHT}
-							src={images[3]}
-							alt="123"
-							radius="md"
-						/>
-					</Grid.Col>
-					<Grid.Col>
-						<Image
-							height={TERTIARY_COL_HEIGHT}
-							src={images[4]}
-							alt="123"
-							radius="md"
-						/>
-					</Grid.Col>
-				</Grid>
-			</SimpleGrid>
+			<>
+				<SimpleGrid
+					cols={2}
+					spacing="md"
+					breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+				>
+					<Grid>
+						<Grid.Col>
+							<ImagePreview
+								src={images[0]}
+								title={"TEST"}
+								width="100%"
+								height={SECONDARY_COL_HEIGHT}
+							/>
+						</Grid.Col>
+						<Grid.Col>
+							<ImagePreview
+								src={images[1]}
+								title={"TEST"}
+								width="100%"
+								height={SECONDARY_COL_HEIGHT}
+							/>
+						</Grid.Col>
+					</Grid>
+					<Grid gutter="xs">
+						<Grid.Col>
+							<ImagePreview
+								src={images[2]}
+								title={"TEST"}
+								width="100%"
+								height={TERTIARY_COL_HEIGHT}
+							/>
+						</Grid.Col>
+						<Grid.Col>
+							<ImagePreview
+								src={images[3]}
+								title={"TEST"}
+								width="100%"
+								height={TERTIARY_COL_HEIGHT}
+							/>
+						</Grid.Col>
+						<Grid.Col>
+							<ImagePreview
+								src={images[4]}
+								title={"TEST"}
+								width="100%"
+								height={TERTIARY_COL_HEIGHT}
+							/>
+						</Grid.Col>
+					</Grid>
+				</SimpleGrid>
+			</>
 		);
 	} else if (images.length == 4) {
 		return (
@@ -78,11 +74,11 @@ const Gallery: React.FC<Props> = ({ images }) => {
 				spacing="md"
 				breakpoints={[{ maxWidth: "sm", cols: 1 }]}
 			>
-				<Image
-					height={PRIMARY_COL_HEIGHT}
+				<ImagePreview
 					src={images[0]}
-					alt="123"
-					radius="md"
+					title={"TEST"}
+					width="100%"
+					height={PRIMARY_COL_HEIGHT}
 				/>
 				<Grid gutter="md">
 					<Grid.Col>

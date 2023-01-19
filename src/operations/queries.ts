@@ -83,3 +83,23 @@ export const GET_THREAD = gql`
 		}
 	}
 `;
+
+export const GET_THREADS_BY_AUTHOR = gql`
+	query GetThreadsByAuthor($authorId: String!) {
+		getThreadsByAuthor(authorId: $authorId) {
+			id
+			title
+			description
+			images
+			tags
+			author {
+				id
+				image
+				name
+			}
+			flag
+			createdAt
+			updatedAt
+		}
+	}
+`;

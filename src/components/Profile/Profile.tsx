@@ -31,6 +31,7 @@ import {
 	IconBrandYoutube,
 	IconCircleCheck,
 } from "@tabler/icons";
+import { useSession } from "next-auth/react";
 
 const useStyles = createStyles((theme) => ({
 	card: {
@@ -73,13 +74,18 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 	const { user, threads } = props;
+	const { data: session } = useSession();
+	console.log(session);
 	console.log(threads);
 	const { classes } = useStyles();
 	const { width } = useViewportSize();
 	return (
 		<Container fluid>
 			<Card className={classes.card}>
-				<BackgroundImage src={user.image.replace(/\s+/g, "%20")} radius="sm">
+				<BackgroundImage
+					src={user.image.replace(/\s+/g, "%20")}
+					radius="sm"
+				>
 					<Card.Section
 						sx={{
 							height: "40vh",
@@ -123,13 +129,18 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 							@{user.id}
 						</Text>
 
-						<Button
-							variant="light"
-							color="cyan"
-							leftIcon={<IconUserPlus size={15} />}
-						>
-							Follow
-						</Button>
+						{
+							//@ts-ignore
+							session?.user?.id != user.id && (
+								<Button
+									variant="light"
+									color="cyan"
+									leftIcon={<IconUserPlus size={15} />}
+								>
+									Follow
+								</Button>
+							)
+						}
 					</Stack>
 				</Card.Section>
 
@@ -139,32 +150,6 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 							<Stack>
 								<Card sx={{ padding: "2em !important" }}>
 									<Title size={20}>Biography</Title>
-									{/* {stats.map((stat) => (
-										<div
-											key={stat.label}
-											style={{
-												display: "flex",
-												alignItems: "center",
-												gap: "1em",
-												marginBottom: theme.spacing.md,
-											}}
-										>
-											<Text
-												size="xl"
-												weight={500}
-												mt="md"
-											>
-												{stat.label}
-											</Text>
-											<Text
-												size="md"
-												color="dimmed"
-												mt="sm"
-											>
-												{stat.value}
-											</Text>
-										</div>
-										))} */}
 								</Card>
 								<Card sx={{ padding: "2em !important" }}>
 									<Title size={20}>Follow me on</Title>
@@ -189,7 +174,27 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 						</Grid.Col>
 						<Grid.Col md={12} lg={8}>
 							<Card radius="md">
-								<Feed feeds={threads}></Feed>
+								{threads.getThreadsByAuthor.length > 0 ? (
+									<>
+										<Feed feeds={threads}></Feed>
+										<Container p={20}>
+											<Title order={2} align={"center"}>
+												You have finished reading all
+												the threads from {user.name}!
+											</Title>
+										</Container>
+									</>
+								) : (
+									<Container p={20}>
+										<Title order={1} align={"center"}>
+											No threads yet
+											<Image
+												src="/No_threads.svg"
+												alt="No threads yet"
+											/>
+										</Title>
+									</Container>
+								)}
 							</Card>
 							{width < 1200 && (
 								<>
