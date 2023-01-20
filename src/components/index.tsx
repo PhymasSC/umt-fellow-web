@@ -9,4 +9,6 @@ export { default as Setting } from "@components/Setting";
 export { comment as Comment } from "@components/Comment";
 export { editor as Editor } from "@components/Comment";
 export { default as Gallery } from "@components/Gallery";
+export { default as MessageList } from "@components/Message/MessageList";
+
 // Path: src\components\index.tsx
