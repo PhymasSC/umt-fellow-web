@@ -19,6 +19,7 @@ import { useSession } from "next-auth/react";
 import { FileWithPath } from "@mantine/dropzone";
 import { useRouter } from "next/router";
 import { showNotification } from "@mantine/notifications";
+import RTE from "./RichTextEditor";
 
 const Editor = () => {
 	const [titleLength, setTitleLength] = useState(0);
@@ -53,7 +54,6 @@ const Editor = () => {
 	const submitHandler = (e: { preventDefault: () => void }) => {
 		e.preventDefault();
 		const { hasErrors, errors } = form.validate();
-
 		if (hasErrors) {
 			return;
 		}
@@ -116,6 +116,7 @@ const Editor = () => {
 		};
 		getFilesInBase64();
 	};
+
 	return (
 		<>
 			<Card
@@ -167,12 +168,7 @@ const Editor = () => {
 							// }}
 							{...form.getInputProps("tags")}
 						/>
-						<Textarea
-							placeholder="Describe your problems in details"
-							required
-							minRows={4}
-							{...form.getInputProps("description")}
-						/>
+						<RTE form={form} />
 						<ImageDropzone
 							files={files}
 							setfiles={setFiles}
