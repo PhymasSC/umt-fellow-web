@@ -13,13 +13,6 @@ const Typography = (props: TypographyProps) => {
 	return (
 		<Box
 			sx={(theme) => ({
-				"& pre": {
-					backgroundColor:
-						theme.colorScheme === "dark"
-							? theme.colors.primaryColor
-							: "rgba(240, 241, 244, 0.6)",
-					borderRadius: 8,
-				},
 				"& > h2:nth-of-type(1)": {
 					marginTop: 0,
 				},
@@ -61,28 +54,6 @@ const Typography = (props: TypographyProps) => {
 					"&:hover": {
 						borderBottomColor: theme.colors.blue[5],
 					},
-				},
-				"& span[data-rehype-pretty-code-fragment] code, code:not([data-theme])":
-					{
-						lineHeight: "1.45rem",
-						fontFamily: "Fira Code, Noto Sans TC, Inter",
-						borderRadius: 8,
-						backgroundColor: dark
-							? theme.colors.blue[3]
-							: theme.colors.blue[7],
-						padding: "2px 8px",
-						fontSize: 14,
-						border: `1px solid ${
-							dark ? "#2b303b" : "rgba(249, 6, 6, 0.05)"
-						}`,
-						boxShadow: `0.5px 1px 1px ${
-							dark
-								? "rgba(2, 2, 3, 0.33)"
-								: "rgba(201, 203, 207, 0.33)"
-						}`,
-					},
-				"& code:not([data-theme])": {
-					color: dark ? "#fb6a6a" : "#f90606",
 				},
 				"& > p": {
 					color: dark ? "#a1a1aa" : "#374151",
@@ -146,6 +117,30 @@ const Typography = (props: TypographyProps) => {
 				},
 				"& figure": {
 					margin: "24px 0",
+				},
+				"& figcaption": {
+					color: dark ? "#a1a1aa" : "#374151",
+					fontSize: "0.875rem",
+					lineHeight: "1.25rem",
+					marginTop: "0.7142857em",
+					marginBottom: "0.7142857em",
+					letterSpacing: 0.3,
+					textAlign: "center",
+				},
+				"& img": {
+					maxWidth: "100%",
+					height: "auto",
+				},
+				"& hr": {
+					border: "none",
+					borderBottom: "1px solid #e2e8f0",
+					marginTop: "2.1428571em",
+					marginBottom: "2.1428571em",
+				},
+				"& iframe": {
+					width: "100%",
+					border: "none",
+					borderRadius: ".3em",
 				},
 			})}
 		>

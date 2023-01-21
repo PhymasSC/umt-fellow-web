@@ -17,7 +17,7 @@ import { useStyles } from "./SingleFeed.style";
 import { IconChevronUp, IconChevronDown } from "@tabler/icons";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { Gallery } from "@components/index";
+import { Gallery, Typography } from "@components/index";
 
 type Props = {
 	title: string;
@@ -98,11 +98,13 @@ const SingleFeed: React.FC<Props> = (data: Props) => {
 							hideLabel="Hide"
 						>
 							<TypographyStylesProvider>
-								<div
-									dangerouslySetInnerHTML={{
-										__html: description,
-									}}
-								/>
+								<Typography>
+									<div
+										dangerouslySetInnerHTML={{
+											__html: description,
+										}}
+									/>
+								</Typography>
 							</TypographyStylesProvider>
 						</Spoiler>
 						{(author.image !== "undefined" &&
