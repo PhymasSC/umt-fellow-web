@@ -1,12 +1,4 @@
-import {
-	Group,
-	Text,
-	useMantineTheme,
-	Flex,
-	Box,
-	ActionIcon,
-	ScrollArea,
-} from "@mantine/core";
+import { Group, Text, useMantineTheme, Flex, ScrollArea } from "@mantine/core";
 import { IconUpload, IconPhoto, IconX } from "@tabler/icons";
 import {
 	Dropzone,
@@ -14,8 +6,7 @@ import {
 	IMAGE_MIME_TYPE,
 	FileWithPath,
 } from "@mantine/dropzone";
-import { Dispatch, Key, SetStateAction, useState } from "react";
-import { toBase64 } from "@utils/base64";
+import { Dispatch, Key, SetStateAction } from "react";
 import ImagePreview from "./ImagePreview";
 
 const ImageDropzone = (
@@ -32,11 +23,16 @@ const ImageDropzone = (
 			<ScrollArea style={{ height: 300 }}>
 				<Flex gap="md" sx={{ maxWidth: 99999 }}>
 					<Dropzone
-						onDrop={(file) => setfiles([...files, file[0]])}
+						onDrop={(file) =>
+							setfiles([
+								...files,
+								...file.slice(0, 5 - files.length),
+							])
+						}
 						onReject={(files) =>
 							console.log("rejected files", files)
 						}
-						maxSize={3 * 1024 ** 2}
+						maxSize={5 * 1024 ** 2}
 						accept={IMAGE_MIME_TYPE}
 						sx={{
 							width: 400,

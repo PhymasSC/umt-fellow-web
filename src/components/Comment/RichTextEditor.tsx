@@ -18,6 +18,7 @@ import html from "highlight.js/lib/languages/xml";
 import java from "highlight.js/lib/languages/java";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { UseFormReturnType } from "@mantine/form";
+import Placeholder from "@tiptap/extension-placeholder";
 
 lowlight.registerLanguage("css", css);
 lowlight.registerLanguage("js", js);
@@ -48,6 +49,9 @@ const RTE: React.FC<RTEProps> = ({ form }) => {
 			Youtube,
 			CodeBlockLowlight.configure({
 				lowlight,
+			}),
+			Placeholder.configure({
+				placeholder: "Write your description here...",
 			}),
 		],
 		content: "",
