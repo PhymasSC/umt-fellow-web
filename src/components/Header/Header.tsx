@@ -22,7 +22,14 @@ import { useDisclosure } from "@mantine/hooks";
 import { useStyles, HEADER_HEIGHT } from "./Header.style";
 import { APP_LOGO } from "@constants/metadata";
 import { signOut, useSession } from "next-auth/react";
-import { IconLogout, IconSettings, IconTrash, IconUser } from "@tabler/icons";
+import {
+	IconLogout,
+	IconMoon,
+	IconSettings,
+	IconSun,
+	IconTrash,
+	IconUser,
+} from "@tabler/icons";
 
 interface HeaderResponsiveProps {
 	links: { link: string; label: string }[];
@@ -110,7 +117,6 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 					{session && (
 						<>
 							{items}
-							<ThemeToggler />
 							<Space w="xs" />
 							<Menu
 								shadow="md"
@@ -156,6 +162,19 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 										}}
 									>
 										Log Out
+									</Menu.Item>
+									<Menu.Divider />
+									<Menu.Label>Personalize</Menu.Label>
+									<Menu.Item
+										icon={
+											theme.colorScheme === "dark" ? (
+												<IconMoon size={14} />
+											) : (
+												<IconSun size={14} />
+											)
+										}
+									>
+										<ThemeToggler compact />
 									</Menu.Item>
 									<Menu.Divider />
 									<Menu.Label>Danger Zone</Menu.Label>

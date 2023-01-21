@@ -1,44 +1,43 @@
 import {
 	useMantineColorScheme,
-	ActionIcon,
 	Group,
-	MantineTheme,
+	Switch,
+	useMantineTheme,
 } from "@mantine/core";
-import { PRIMARY_COLOR } from "@constants/colors";
-import { IconSun, IconMoon } from "@tabler/icons";
+import { IconSun, IconMoonStars } from "@tabler/icons";
 import { FC } from "react";
 
 interface ThemeTogglerProps {
 	className?: string;
+	compact?: boolean;
 }
 
 const ThemeToggler: FC<ThemeTogglerProps> = (props) => {
 	const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-
-	return (
-		<Group position="center" my="xl" {...props}>
-			<ActionIcon
-				onClick={() => toggleColorScheme()}
-				size="lg"
-				sx={(theme: MantineTheme) => ({
-					backgroundColor:
-						theme.colorScheme === "dark"
-							? theme.colors.dark[6]
-							: theme.colors.gray[0],
-					color:
-						theme.colorScheme === "dark"
-							? theme.colors[PRIMARY_COLOR][4]
-							: theme.colors[PRIMARY_COLOR][6],
-				})}
-			>
-				{colorScheme === "dark" ? (
-					<IconSun size={18} />
-				) : (
-					<IconMoon size={18} />
-				)}
-			</ActionIcon>
-		</Group>
-	);
+	const theme = useMantineTheme();
+	if (!props.compact) {
+		return (
+			<Group position="center" my={30} {...props}>
+				<Switch
+					checked={colorScheme === "dark"}
+					onChange={() => toggleColorScheme()}
+					size="lg"
+					onLabel={
+						<IconSun color={theme.white} size={20} stroke={1.5} />
+					}
+					offLabel={
+						<IconMoonStars
+							color={theme.colors.gray[6]}
+							size={20}
+							stroke={1.5}
+						/>
+					}
+				/>
+			</Group>
+		);
+	} else {
+		return <div onClick={() => toggleColorScheme()}>Switch Theme</div>;
+	}
 };
 
 export default ThemeToggler;
