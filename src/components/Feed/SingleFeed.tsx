@@ -12,6 +12,7 @@ import {
 	Title,
 	Image,
 	TypographyStylesProvider,
+	Skeleton,
 } from "@mantine/core";
 import { useStyles } from "./SingleFeed.style";
 import { IconChevronUp, IconChevronDown } from "@tabler/icons";
@@ -19,7 +20,12 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Gallery, Typography } from "@components/index";
 
-type Props = {
+interface SingleFeedProps {
+	feed?: feed;
+	loading?: boolean;
+}
+
+type feed = {
 	title: string;
 	author: {
 		id: string;
@@ -31,26 +37,68 @@ type Props = {
 	description: string;
 	id: string;
 };
-// type Props = {
-// 	title: string;
-// 	username: string;
-// 	profilePic?: string;
-// 	createdTime: string;
-// 	content: string;
-// 	voteCount: number;
-// 	badges: {
-// 		value: string;
-// 		color: string;
-// 	}[];
-// 	image?: string;
-// 	slug: string;
-// };
 
-const SingleFeed: React.FC<Props> = (data: Props) => {
+const SingleFeed: React.FC<SingleFeedProps> = (props) => {
 	let formatter = Intl.NumberFormat("en", { notation: "compact" });
-	dayjs.extend(relativeTime);
-	const { title, author, createdAt, description, id, images } = data;
 	const { classes } = useStyles();
+	dayjs.extend(relativeTime);
+	if (!props.feed || props.loading)
+		return (
+			<Container className={classes.container} fluid>
+				<Stack>
+					<Group position="apart">
+						<Group>
+							<Skeleton width={50} height={50} radius="xl" />
+							<Skeleton width={200} height={30} radius="md" />
+							<Space w="xs" />
+						</Group>
+						<Skeleton width={100} height={30} radius="md" />
+					</Group>
+					<Grid align="flex-start">
+						<Grid.Col span={1}>
+							<Stack align="center" spacing="xs">
+								<ActionIcon>
+									<IconChevronUp />
+								</ActionIcon>
+								<Skeleton width={30} height={30} radius="md" />
+								<ActionIcon>
+									<IconChevronDown />
+								</ActionIcon>
+							</Stack>
+						</Grid.Col>
+						<Grid.Col span={11}>
+							<Title size="h3" weight="600">
+								<Skeleton width={400} height={30} radius="md" />
+							</Title>
+							<Spoiler
+								maxHeight={120}
+								showLabel="Show more"
+								hideLabel="Hide"
+							>
+								<Skeleton width={650} />
+							</Spoiler>
+							<Skeleton width={650} />
+
+							<Space h="md" />
+							<Stack>
+								<Skeleton
+									width="100%"
+									height={30}
+									radius="md"
+								/>
+								<Skeleton
+									width="100%"
+									height={30}
+									radius="md"
+								/>
+								<Skeleton width="70%" height={30} radius="md" />
+							</Stack>
+						</Grid.Col>
+					</Grid>
+				</Stack>
+			</Container>
+		);
+	const { title, author, createdAt, description, id, images } = props?.feed;
 
 	return (
 		<Container className={classes.container} fluid>

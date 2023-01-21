@@ -1,10 +1,11 @@
-import { Card, Container, Box } from "@mantine/core";
+import { Card, Container } from "@mantine/core";
 import SingleFeed from "./SingleFeed";
 import { useStyles } from "./Feed.style";
 import Link from "next/link";
-import { PRIMARY_COLOR } from "@constants/colors";
+
 interface FeedProps {
 	feeds: { threads: feed[] };
+	loading?: boolean;
 }
 
 interface feed {
@@ -22,15 +23,37 @@ interface feed {
 
 const Feed = (props: FeedProps) => {
 	const { feeds } = props;
-	console.log("FEEDS:", feeds);
-	const { classes } = useStyles();
-
+	const dummy = [1, 2, 3, 4, 5];
 	Object.entries(feeds || {}).map(([key, value]) => {
 		value?.map((item) => {
 			console.log(item);
 		});
 	});
 
+	if (props.loading)
+		return (
+			<Card p={0} radius="md" withBorder>
+				{dummy.map((item, index) => (
+					<Card.Section withBorder key={index}>
+						<SingleFeed
+							feed={{
+								title: "",
+								author: {
+									id: "",
+									name: "",
+									image: "",
+								},
+								images: [],
+								createdAt: "",
+								description: "",
+								id: "",
+							}}
+							loading={props.loading}
+						/>
+					</Card.Section>
+				))}
+			</Card>
+		);
 	return (
 		<Card p={0} radius="md" withBorder>
 			{Object.entries(feeds || {}).map(([key, value]) =>
@@ -55,7 +78,7 @@ const Feed = (props: FeedProps) => {
 								})}
 								component="a"
 							>
-								<SingleFeed key={index} {...item} />
+								<SingleFeed key={index} feed={item} />
 							</Card.Section>
 						) : (
 							<Card.Section
@@ -78,7 +101,7 @@ const Feed = (props: FeedProps) => {
 								key={index}
 								withBorder
 							>
-								<SingleFeed key={index} {...item} />
+								<SingleFeed key={index} feed={item} />
 							</Card.Section>
 						)}
 					</Link>

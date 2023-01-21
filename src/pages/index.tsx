@@ -5,7 +5,6 @@ import {
 	Flex,
 	Grid,
 	Group,
-	Skeleton,
 	Space,
 	Text,
 	Title,
@@ -33,26 +32,27 @@ const Home: NextPage = () => {
 				fluid
 			>
 				<Grid>
-					<Container>
-						<Flex mih={50} gap="md" direction="column" wrap="wrap">
-							{session && (
-								<Comment
-									author={{
-										name: session?.user?.name || "",
-										image: session?.user?.image || "",
-									}}
-								/>
-							)}
-							{loading ? (
-								<Skeleton sx={(theme) => ({ width: "100%" })}>
-									Page is loading
-								</Skeleton>
-							) : (
-								<Feed feeds={data} />
-							)}
-						</Flex>
-					</Container>
-					<Grid.Col md={12} lg={4}>
+					<Grid.Col xs={8}>
+						<Container>
+							<Flex
+								mih={50}
+								gap="md"
+								direction="column"
+								wrap="wrap"
+							>
+								{session && (
+									<Comment
+										author={{
+											name: session?.user?.name || "",
+											image: session?.user?.image || "",
+										}}
+									/>
+								)}
+								<Feed feeds={data} loading={loading} />
+							</Flex>
+						</Container>
+					</Grid.Col>
+					<Grid.Col xs={12} xl={4}>
 						<Container>
 							<Card
 								sx={(theme) => ({
