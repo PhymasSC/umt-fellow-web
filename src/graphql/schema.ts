@@ -89,6 +89,7 @@ export const typeDefs = gql`
 			images: [Image]
 			tags: [String]
 		): ThreadResponse!
+		deleteThread(id: String!): ThreadResponse!
 	}
 
 	input Image {

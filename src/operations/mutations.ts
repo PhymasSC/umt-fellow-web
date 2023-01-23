@@ -65,3 +65,17 @@ export const UPDATE_THREAD = gql`
 		}
 	}
 `;
+
+export const DELETE_THREAD = gql`
+	mutation DeleteThread($id: String!) {
+		deleteThread(id: $id) {
+			code
+			success
+			message
+			thread {
+				id
+				description
+			}
+		}
+	}
+`;

@@ -1,3 +1,4 @@
+import { useMutation } from "@apollo/client";
 import {
 	ActionIcon,
 	Button,
@@ -6,6 +7,7 @@ import {
 	GroupProps,
 	Menu,
 } from "@mantine/core";
+import { DELETE_THREAD } from "@operations/mutations";
 import {
 	IconCheck,
 	IconCopy,
@@ -28,7 +30,17 @@ interface FeedSettingProps {
 }
 const FeedSetting: React.FC<FeedSettingProps> = ({ author }) => {
 	const router = useRouter();
+	const [deleteThread] = useMutation(DELETE_THREAD);
 	const { data: session } = useSession();
+
+	const removeThread = async () => {
+		await deleteThread({
+			variables: {
+				id: router.query?.id?.[0] || "",
+			},
+		});
+		router.push("/");
+	};
 
 	return (
 		<Group position="center">
@@ -55,7 +67,10 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author }) => {
 									Edit thread
 								</Menu.Item>
 							</Link>
-							<Menu.Item icon={<IconTrash size={16} />}>
+							<Menu.Item
+								icon={<IconTrash size={16} />}
+								onClick={removeThread}
+							>
 								Delete thread
 							</Menu.Item>
 							<Menu.Divider />

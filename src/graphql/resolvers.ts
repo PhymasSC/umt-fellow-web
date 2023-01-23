@@ -250,5 +250,29 @@ export const resolvers = {
 				};
 			}
 		},
+
+		deleteThread: async (_: any, { id }: { id: string }) => {
+			try {
+				const thread = await prisma.thread.delete({
+					where: {
+						id,
+					},
+				});
+
+				return {
+					code: 200,
+					success: true,
+					message: "Thread deleted successfully",
+					thread,
+				};
+			} catch (error: any) {
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "Thread deletion failed",
+					thread: null,
+				};
+			}
+		},
 	},
 };
