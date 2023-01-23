@@ -29,9 +29,9 @@ lowlight.registerLanguage("java", java);
 interface RTEProps {
 	form: UseFormReturnType<{
 		title: string;
-		tags: never[];
+		tags: string[];
 		description: string;
-		images: never[];
+		images: string[];
 	}>;
 }
 
@@ -54,7 +54,7 @@ const RTE: React.FC<RTEProps> = ({ form }) => {
 				placeholder: "Write your description here...",
 			}),
 		],
-		content: "",
+		content: form.values.description || "",
 		onUpdate: ({ editor }) => {
 			form.setFieldValue("description", editor.getHTML());
 		},

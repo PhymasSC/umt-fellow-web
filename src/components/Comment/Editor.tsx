@@ -10,7 +10,7 @@ import {
 	MultiSelect,
 } from "@mantine/core";
 import ImageDropzone from "./ImageDropzone";
-import { ADD_THREAD } from "@operations/mutations";
+import { ADD_THREAD, UPDATE_THREAD } from "@operations/mutations";
 import { useMutation } from "@apollo/client";
 import { useForm } from "@mantine/form";
 import { IconHash, IconLetterT, IconAlertTriangle } from "@tabler/icons";
@@ -21,21 +21,41 @@ import { useRouter } from "next/router";
 import { showNotification } from "@mantine/notifications";
 import RTE from "./RichTextEditor";
 
-const Editor = () => {
+interface Props {
+	data?: DATA_TYPE;
+}
+
+type DATA_TYPE = {
+	author: {
+		id: string;
+		image: string;
+		name: string;
+	};
+	description: string;
+	id: string;
+	images: string[];
+	tags: string[];
+	flag: string;
+	title: string;
+	createdAt: string;
+	updatedAt: string;
+};
+
+const Editor: React.FC<Props> = ({ data }) => {
 	const [titleLength, setTitleLength] = useState(0);
 	const [isLoading, setIsLoading] = useState(false);
 	const [files, setFiles] = useState<FileWithPath[]>([]);
 	const titleRef = useRef<HTMLTextAreaElement>(null);
 	const [submitThread] = useMutation(ADD_THREAD);
+	const [updateThread] = useMutation(UPDATE_THREAD);
 	const { data: session } = useSession();
 	const router = useRouter();
-
 	const form = useForm({
 		initialValues: {
-			title: "",
-			tags: [],
-			description: "",
-			images: [],
+			title: data?.title || "",
+			tags: [""],
+			description: data?.description || "",
+			images: data?.images || [],
 		},
 
 		validate: {
@@ -64,7 +84,6 @@ const Editor = () => {
 				let baseURL = "";
 				// Make new FileReader
 				let reader = new FileReader();
-
 				// Convert the file to base64 text
 				reader.readAsDataURL(file);
 
@@ -89,20 +108,41 @@ const Editor = () => {
 			for await (const fileBase64 of filesBase64) {
 				resolvedValues.push(fileBase64);
 			}
-			const res = await submitThread({
-				variables: {
-					title: form.values.title,
-					// tags: form.values.tags,
-					description: form.values.description,
-					//@ts-ignore
-					author: session?.user?.id || "",
-					images: resolvedValues,
-				},
-			});
+			let res;
+			if (router.query.edit !== undefined) {
+				res = await updateThread({
+					variables: {
+						id: data?.id || "",
+						title: form.values.title,
+						// tags: form.values.tags,
+						description: form.values.description,
+						images: resolvedValues,
+					},
+				});
+			} else {
+				res = await submitThread({
+					variables: {
+						title: form.values.title,
+						// tags: form.values.tags,
+						description: form.values.description,
+						author: session?.user?.id || "",
+						images: resolvedValues,
+					},
+				});
+			}
+
 			setIsLoading(false);
 			console.log(res);
-			if (res?.data?.addThread.code === 200) {
-				router.push(`/thread/${res?.data?.addThread.thread.id}`);
+			if (
+				res?.data?.addThread?.code === 200 ||
+				res?.data?.updateThread?.code === 200
+			) {
+				router.push(
+					`/thread/${
+						res?.data?.addThread?.thread?.id ||
+						res?.data?.updateThread?.thread?.id
+					}`
+				);
 			} else {
 				showNotification({
 					title: "Oops, something wrong happened",
@@ -126,7 +166,9 @@ const Editor = () => {
 				sx={{ padding: "2em !important" }}
 			>
 				<form onSubmit={submitHandler}>
-					<Title order={3}>Create a thread</Title>
+					<Title order={3}>
+						{data ? "Edit thread" : "New thread"}
+					</Title>
 					<Space h="md" />
 					<Stack>
 						<Box sx={{ position: "relative" }}>
@@ -172,6 +214,7 @@ const Editor = () => {
 						<ImageDropzone
 							files={files}
 							setfiles={setFiles}
+							existingImages={form.values.images}
 						></ImageDropzone>
 					</Stack>
 					<Space h="md" />
@@ -182,7 +225,7 @@ const Editor = () => {
 							color="blue"
 							loading={isLoading}
 						>
-							Post
+							{data ? "Update" : "Post"}
 						</Button>
 						<Button variant="subtle" color="red">
 							Discard

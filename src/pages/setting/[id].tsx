@@ -6,26 +6,30 @@ import { client } from "@lib/apollo-client";
 import { Container } from "@mantine/core";
 
 const mock_data = {
-	title: "Configure notifications",
-	description: "Choose what notifications you want to receive",
-	data: [
-		{
-			title: "Messages",
-			description: "Direct messages you have received from other users",
-		},
-		{
-			title: "Review requests",
-			description: "Code review requests from your team members",
-		},
-		{
-			title: "Comments",
-			description: "Daily digest with comments on your posts",
-		},
-		{
-			title: "Recommendations",
-			description: "Digest with best community posts from previous week",
-		},
-	],
+	accountSettings: {
+		label: "Configure notifications",
+		description: "Choose what notifications you want to receive",
+		data: [
+			{
+				label: "Messages",
+				description:
+					"Direct messages you have received from other users",
+			},
+			{
+				label: "Review requests",
+				description: "Code review requests from your team members",
+			},
+			{
+				label: "Comments",
+				description: "Daily digest with comments on your posts",
+			},
+			{
+				label: "Recommendations",
+				description:
+					"Digest with best community posts from previous week",
+			},
+		],
+	},
 };
 const Setting: NextPage = (props) => {
 	return (

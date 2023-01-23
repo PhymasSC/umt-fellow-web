@@ -13,12 +13,15 @@ import {
 	Image,
 	TypographyStylesProvider,
 	Skeleton,
+	Tooltip,
 } from "@mantine/core";
 import { useStyles } from "./SingleFeed.style";
 import { IconChevronUp, IconChevronDown } from "@tabler/icons";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Gallery, Typography } from "@components/index";
+import FeedSetting from "./FeedSetting";
+import { useSession } from "next-auth/react";
 
 interface SingleFeedProps {
 	feed?: feed;
@@ -34,6 +37,7 @@ type feed = {
 	};
 	images: string[];
 	createdAt: string;
+	updatedAt: string;
 	description: string;
 	id: string;
 };
@@ -98,31 +102,38 @@ const SingleFeed: React.FC<SingleFeedProps> = (props) => {
 				</Stack>
 			</Container>
 		);
-	const { title, author, createdAt, description, id, images } = props?.feed;
+	const { title, author, createdAt, updatedAt, description, id, images } =
+		props?.feed;
 
 	return (
-		<Container className={classes.container} fluid>
+		<Container
+			className={classes.container}
+			sx={{ overflow: "visible" }}
+			fluid
+		>
 			<Stack>
 				<Group position="apart">
 					<Group>
 						<Avatar src={author.image} radius="xl" alt="Avatar" />
 						<Text weight="700">{author.name}</Text>
 						<Space w="xs" />
-						{/* {badges?.length > 0 &&
-							badges.map((badge, index) => (
-								<Badge
-									color={badge.color}
-									size="lg"
-									radius="sm"
-									key={index}
-								>
-									{badge.value}
-								</Badge>
-							))} */}
 					</Group>
-					<Text color="dimmed">
-						{dayjs(new Date(createdAt)).fromNow()}
-					</Text>
+					<Group>
+						<Tooltip
+							multiline
+							label={`Created at ${dayjs(
+								new Date(createdAt)
+							).toDate()}`}
+							withArrow
+							position="top"
+						>
+							<Text color="dimmed">
+								{createdAt !== updatedAt && "Edited "}
+								{dayjs(new Date(updatedAt)).fromNow()}
+							</Text>
+						</Tooltip>
+						<FeedSetting author={author} />
+					</Group>
 				</Group>
 				<Grid align="flex-start">
 					<Grid.Col span={1}>

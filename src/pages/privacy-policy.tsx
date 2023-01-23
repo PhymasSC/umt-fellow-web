@@ -1,5 +1,5 @@
-import { Typography } from "@components/index";
-import { Container, Card } from "@mantine/core";
+import { Footer, Typography } from "@components/index";
+import { Container, Card, Space } from "@mantine/core";
 import { NextPage } from "next";
 const PrivacyPolicy: NextPage = () => {
 	return (
@@ -654,6 +654,8 @@ const PrivacyPolicy: NextPage = () => {
 					</ul>
 				</Typography>
 			</Card>
+			<Space h="xl" />
+			<Footer />
 		</Container>
 	);
 };

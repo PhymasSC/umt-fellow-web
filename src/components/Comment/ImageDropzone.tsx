@@ -6,18 +6,22 @@ import {
 	IMAGE_MIME_TYPE,
 	FileWithPath,
 } from "@mantine/dropzone";
-import { Dispatch, Key, SetStateAction } from "react";
+import { Dispatch, Key, SetStateAction, useEffect } from "react";
 import ImagePreview from "./ImagePreview";
 
 const ImageDropzone = (
 	props: Partial<DropzoneProps> & {
-		files: FileWithPath[];
-		setfiles: Dispatch<SetStateAction<FileWithPath[]>>;
+		files: any[];
+		setfiles: Dispatch<SetStateAction<any[]>>;
+		existingImages?: string[];
 	}
 ) => {
 	const theme = useMantineTheme();
-	const { files, setfiles } = props;
+	const { files, setfiles, existingImages } = props;
 
+	useEffect(() => {
+		if (existingImages) setfiles([...existingImages]);
+	}, []);
 	return (
 		<>
 			<ScrollArea style={{ height: 300 }}>
@@ -101,12 +105,37 @@ const ImageDropzone = (
 						</Group>
 					</Dropzone>
 					{files.map(
-						(file: FileWithPath, index: Key | null | undefined) => {
+						(
+							file: FileWithPath | string,
+							index: Key | null | undefined
+						) => {
+							console.log(index, file);
+							if (typeof file === "string")
+								return (
+									<ImagePreview
+										src={`https://ik.imagekit.io/umtfellow/tr:h-300/${file}`}
+										key={index}
+										isUpload={true}
+										setFiles={setfiles}
+										cancelCallback={() => {
+											setfiles(
+												files.filter((f: any) => {
+													console.log(
+														`Files:`,
+														files
+													);
+													return f !== file;
+												})
+											);
+										}}
+									/>
+								);
 							return (
 								<ImagePreview
 									file={file}
 									key={index}
 									isUpload={true}
+									setFiles={setfiles}
 									cancelCallback={() => {
 										setfiles(
 											files.filter((f: any) => f !== file)

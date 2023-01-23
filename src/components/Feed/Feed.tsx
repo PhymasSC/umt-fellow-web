@@ -17,6 +17,7 @@ interface feed {
 	};
 	images: string[];
 	createdAt: string;
+	updatedAt: string;
 	description: string;
 	id: string;
 }
@@ -45,6 +46,7 @@ const Feed = (props: FeedProps) => {
 								},
 								images: [],
 								createdAt: "",
+								updatedAt: "",
 								description: "",
 								id: "",
 							}}
@@ -107,30 +109,6 @@ const Feed = (props: FeedProps) => {
 					</Link>
 				))
 			)}
-			{/* {Object.entries(feeds || {}).map((key: string, value: feed[]) =>
-				value?.map((item) => {
-					<Link
-						key={`${index}_${item.id}`}
-						href={`/thread/${item.id}`}
-						passHref
-					>
-						<Card.Section
-							sx={(theme) => ({
-								textDecoration: "none",
-								color:
-									theme.colorScheme === "dark"
-										? theme.colors.gray[0]
-										: theme.colors.dark[9],
-							})}
-							component="a"
-							key={index}
-							withBorder
-						>
-							<SingleFeed key={index} {...item} />
-						</Card.Section>
-					</Link>;
-				})
-			)} */}
 		</Card>
 	);
 };

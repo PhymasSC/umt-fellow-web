@@ -41,3 +41,27 @@ export const ADD_THREAD = gql`
 		}
 	}
 `;
+
+export const UPDATE_THREAD = gql`
+	mutation UpdateThread(
+		$id: String!
+		$title: String!
+		$description: String!
+		$images: [Image]
+	) {
+		updateThread(
+			id: $id
+			title: $title
+			description: $description
+			images: $images
+		) {
+			code
+			success
+			message
+			thread {
+				id
+				description
+			}
+		}
+	}
+`;

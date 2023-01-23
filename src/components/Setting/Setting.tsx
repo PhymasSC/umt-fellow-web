@@ -1,79 +1,117 @@
-import { createStyles, Card, Group, Switch, Text } from "@mantine/core";
+import {
+	Card,
+	Container,
+	Flex,
+	Stack,
+	Switch,
+	Tabs,
+	Text,
+} from "@mantine/core";
+import { createStyles } from "@mantine/core";
 
-const useStyles = createStyles((theme) => ({
-	card: {
-		backgroundColor:
-			theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
-	},
+interface Setting {
+	accountSettings: SettingProps;
+	securitySettings: SettingProps;
+	notificationSettings: SettingProps;
+	communitySettings: SettingProps;
+	chatSettings: SettingProps;
+}
 
-	item: {
-		"& + &": {
-			paddingTop: theme.spacing.sm,
-			marginTop: theme.spacing.sm,
-			borderTop: `1px solid ${
-				theme.colorScheme === "dark"
-					? theme.colors.dark[4]
-					: theme.colors.gray[2]
-			}`,
-		},
-	},
-
-	switch: {
-		"& *": {
-			cursor: "pointer",
-		},
-	},
-
-	title: {
-		lineHeight: 1,
-	},
-}));
-
-interface SwitchesCardProps {
-	title: string;
+interface SettingProps {
+	label: string;
 	description: string;
 	data: {
-		title: string;
+		label: string;
 		description: string;
 	}[];
 }
 
-const Setting = ({ title, description, data }: SwitchesCardProps) => {
-	const { classes } = useStyles();
+const tabs = [
+	"Account",
+	"Security & Privacy",
+	"Notification",
+	"Community",
+	"Chat & Messaging",
+];
 
-	const items = data.map((item) => (
-		<Group
-			key="1"
-			position="apart"
-			className={classes.item}
-			noWrap
-			spacing="xl"
-		>
-			<div>
-				<Text>{item.title}</Text>
-				<Text size="xs" color="dimmed">
-					{item.description}
-				</Text>
-			</div>
-			<Switch
-				onLabel="ON"
-				offLabel="OFF"
-				className={classes.switch}
-				size="lg"
-			/>
-		</Group>
+const Setting: React.FC<Setting> = (props) => {
+	const {
+		accountSettings,
+		securitySettings,
+		notificationSettings,
+		communitySettings,
+		chatSettings,
+	} = props;
+
+	const items = tabs.map((tab) => (
+		<Tabs.Tab value={tab} key={tab}>
+			{tab}
+		</Tabs.Tab>
 	));
 
-	return (
-		<Card withBorder radius="md" p="xl" className={classes.card}>
-			<Text size="lg" className={classes.title} weight={500}>
-				{title}
+	console.log(accountSettings);
+	const accountItems = (
+		<Tabs.Panel value="Account" pt="xs">
+			<Text size="md" weight={700}>
+				{accountSettings.label}
 			</Text>
 			<Text size="xs" color="dimmed" mt={3} mb="xl">
-				{description}
+				{accountSettings.description}
 			</Text>
-			{items}
-		</Card>
+			{accountSettings.data.map((item, index) => (
+				<Stack key={index}>
+					<Flex w="100%" justify="space-between">
+						<Stack spacing={0}>
+							<Text size="sm" weight={500}>
+								{item.label}
+							</Text>
+							<Text size="xs" color="dimmed" mt={3} mb="xl">
+								{item.description}
+							</Text>
+						</Stack>
+						<Switch value="1" label="Enable" />
+					</Flex>
+				</Stack>
+			))}
+		</Tabs.Panel>
+	);
+
+	return (
+		<>
+			<Card
+				sx={(theme) => ({
+					backgroundColor:
+						theme.colorScheme === "dark"
+							? theme.colors.dark[7]
+							: theme.white,
+				})}
+			>
+				<Tabs defaultValue="Account">
+					<Tabs.List>{items}</Tabs.List>
+					<Container p={10}>
+						<Tabs.Panel value="Account" pt="xs">
+							{accountItems}
+						</Tabs.Panel>
+
+						<Tabs.Panel value="Security & Privacy" pt="xs">
+							Messages tab content
+						</Tabs.Panel>
+
+						<Tabs.Panel value="Notification" pt="xs">
+							Settings tab content
+						</Tabs.Panel>
+
+						<Tabs.Panel value="Community" pt="xs">
+							Settings tab content
+						</Tabs.Panel>
+
+						<Tabs.Panel value="Chat & Messaging" pt="xs">
+							Settings tab content
+						</Tabs.Panel>
+					</Container>
+				</Tabs>
+			</Card>
+		</>
 	);
 };
 

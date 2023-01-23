@@ -49,7 +49,7 @@ const Comment = (props: CommentHtmlProps) => {
 					}}
 					fluid
 				>
-					<Link href="thread/create">
+					<Link href="/thread">
 						<Textarea
 							radius="xl"
 							placeholder="What's in your mind?"
@@ -59,12 +59,6 @@ const Comment = (props: CommentHtmlProps) => {
 					</Link>
 				</Container>
 			</Flex>
-			{/* <TypographyStylesProvider className={classes.body}>
-				<div
-					className={classes.content}
-					dangerouslySetInnerHTML={{ __html: body }}
-				/>
-			</TypographyStylesProvider> */}
 		</Paper>
 	);
 };

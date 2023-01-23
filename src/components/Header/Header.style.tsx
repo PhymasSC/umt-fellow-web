@@ -1,6 +1,5 @@
 import { PRIMARY_COLOR } from "@constants/colors";
 import { createStyles } from "@mantine/core";
-import { NodeNextRequest } from "next/dist/server/base-http/node";
 
 export const HEADER_HEIGHT = 60;
 

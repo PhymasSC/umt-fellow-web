@@ -173,6 +173,7 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 												<IconSun size={14} />
 											)
 										}
+										closeMenuOnClick={false}
 									>
 										<ThemeToggler compact />
 									</Menu.Item>

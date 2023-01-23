@@ -29,7 +29,7 @@ export const resolvers = {
 		getThreads: async () => {
 			const threads = await prisma.thread.findMany({
 				orderBy: {
-					createdAt: "desc",
+					updatedAt: "desc",
 				},
 			});
 			return threads;
@@ -177,6 +177,75 @@ export const resolvers = {
 					code: 1,
 					success: false,
 					message: error.message || "Thread creation failed",
+					thread: null,
+				};
+			}
+		},
+
+		updateThread: async (
+			_: any,
+			{
+				id,
+				title,
+				description,
+				images,
+				tags,
+			}: {
+				id: string;
+				title: string;
+				description: string;
+				images: { name: string; blob: string }[];
+				tags: string[];
+			}
+		) => {
+			try {
+				const thread = await prisma.thread.update({
+					where: {
+						id,
+					},
+					data: {
+						title,
+						//@ts-ignore
+						description,
+						updatedAt: new Date(),
+					},
+				});
+
+				if (images.length > 0) {
+					const promises = images.map(async (image) => {
+						await imagekit.deleteFolder(`/threads/${thread.id}`);
+						const upload = await imagekit.upload({
+							file: image.blob,
+							fileName: image.name,
+							folder: `/threads/${thread.id}`,
+							useUniqueFileName: true,
+						});
+
+						await prisma.images.create({
+							data: {
+								imageUrl: upload.filePath,
+								threadId: thread.id,
+							},
+						});
+
+						return upload;
+					});
+
+					await Promise.all(promises);
+				}
+
+				return {
+					code: 200,
+					success: true,
+					message: "Thread updated successfully",
+					thread,
+				};
+			} catch (error: any) {
+				console.log(error);
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "Thread update failed",
 					thread: null,
 				};
 			}

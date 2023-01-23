@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { useRouter } from "next/router";
+import { Editor } from "@components/index";
 import { GET_THREAD } from "@operations/queries";
 import { client } from "@lib/apollo-client";
 import SingleFeed from "@components/Feed/SingleFeed";
@@ -18,18 +18,45 @@ import {
 } from "@mantine/core";
 import Link from "next/link";
 import { Comment } from "@components/index";
-import { useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 const ThreadPage: NextPage = (props) => {
+	const router = useRouter();
+	const { data: session } = useSession();
+	// Create mode
+	//@ts-ignore
+	if (props.getThreadById === undefined) {
+		return (
+			<Container>
+				<Editor />
+			</Container>
+		);
+	}
 	//@ts-ignore
 	const { getThreadById: data } = props;
+
+	// Edit mode
+	if (
+		router.query.edit != undefined &&
+		//@ts-ignore
+		session?.user.id === props.getThreadById?.author?.id
+	) {
+		return (
+			<Container>
+				<Editor data={data} />
+			</Container>
+		);
+	}
+
+	// View mode
 	return (
 		<>
 			<Container size="xl">
 				<Grid>
 					<Grid.Col span={8}>
 						<Card withBorder>
-							<SingleFeed {...data}></SingleFeed>
+							<SingleFeed feed={data}></SingleFeed>
 						</Card>
 
 						<Space h="xl" />
@@ -102,6 +129,10 @@ export async function getServerSideProps(context: { params: { id: string } }) {
 	const id = Array.isArray(context.params.id)
 		? context.params.id[0]
 		: context.params.id;
+	if (!id)
+		return {
+			props: {},
+		};
 	try {
 		const { data } = await client.query({
 			query: GET_THREAD,

@@ -82,6 +82,13 @@ export const typeDefs = gql`
 			tags: [String]
 			author: String!
 		): ThreadResponse!
+		updateThread(
+			id: String!
+			title: String!
+			description: String!
+			images: [Image]
+			tags: [String]
+		): ThreadResponse!
 	}
 
 	input Image {
