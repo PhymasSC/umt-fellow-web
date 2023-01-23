@@ -14,6 +14,8 @@ import {
 	TypographyStylesProvider,
 	Skeleton,
 	Tooltip,
+	Box,
+	Button,
 } from "@mantine/core";
 import { useStyles } from "./SingleFeed.style";
 import { IconChevronUp, IconChevronDown } from "@tabler/icons";
@@ -22,6 +24,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { Gallery, Typography } from "@components/index";
 import FeedSetting from "./FeedSetting";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 interface SingleFeedProps {
 	feed?: feed;
@@ -113,11 +116,25 @@ const SingleFeed: React.FC<SingleFeedProps> = (props) => {
 		>
 			<Stack>
 				<Group position="apart">
-					<Group>
-						<Avatar src={author.image} radius="xl" alt="Avatar" />
-						<Text weight="700">{author.name}</Text>
-						<Space w="xs" />
-					</Group>
+					<Link href={`/profile/${author.id}`} passHref>
+						<Button
+							component="a"
+							variant="subtle"
+							h={50}
+							color="gray"
+							sx={{ color: "inherit", textDecoration: "none" }}
+						>
+							<Group>
+								<Avatar
+									src={author.image}
+									radius="xl"
+									alt="Avatar"
+								/>
+								<Text weight="700">{author.name}</Text>
+								<Space w="xs" />
+							</Group>
+						</Button>
+					</Link>
 					<Group>
 						<Tooltip
 							multiline

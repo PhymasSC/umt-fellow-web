@@ -253,12 +253,18 @@ export const resolvers = {
 
 		deleteThread: async (_: any, { id }: { id: string }) => {
 			try {
+				const images = await prisma.images.deleteMany({
+					where: {
+						threadId: id,
+					},
+				});
+				if (images.count > 0)
+					await imagekit.deleteFolder(`/threads/${id}`);
 				const thread = await prisma.thread.delete({
 					where: {
 						id,
 					},
 				});
-
 				return {
 					code: 200,
 					success: true,

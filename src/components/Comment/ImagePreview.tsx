@@ -12,7 +12,7 @@ import { IconArrowsDiagonal2, IconX } from "@tabler/icons";
 
 interface ImagePreviewInterface {
 	file?: FileWithPath;
-	setFiles: Dispatch<SetStateAction<any[]>>;
+	setFiles?: Dispatch<SetStateAction<any[]>>;
 	isUpload?: boolean;
 	cancelCallback?: () => void;
 	src?: string;
@@ -40,7 +40,7 @@ const ImagePreview = (props: ImagePreviewInterface) => {
 
 	useEffect(() => {
 		const getBlob = async () => {
-			if (src) {
+			if (src && setFiles) {
 				try {
 					const response = await fetch(imageUrl || "");
 					const blob = await response.blob();

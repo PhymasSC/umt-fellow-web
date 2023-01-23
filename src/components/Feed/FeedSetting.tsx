@@ -34,11 +34,13 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author }) => {
 	const { data: session } = useSession();
 
 	const removeThread = async () => {
-		await deleteThread({
+		console.log(router.query?.id?.[0]);
+		const res = await deleteThread({
 			variables: {
 				id: router.query?.id?.[0] || "",
 			},
 		});
+		console.log("Res:", res);
 		router.push("/");
 	};
 
@@ -97,17 +99,6 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author }) => {
 								{copied ? "Copied" : "Copy"}
 							</Menu.Item>
 						)}
-						{/* {({ copied, copy }) =>
-							copied ? (
-								<Menu.Item icon={<IconCopy size={16} />}>
-									Copied
-								</Menu.Item>
-							) : (
-								<Menu.Item icon={<IconCopy size={16} />}>
-									Copy
-								</Menu.Item>
-							)
-						} */}
 					</CopyButton>
 					<Menu.Item color="red" icon={<IconFlag size={16} />}>
 						Report
