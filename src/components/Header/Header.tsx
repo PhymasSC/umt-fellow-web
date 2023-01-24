@@ -16,6 +16,7 @@ import {
 	MediaQuery,
 	Space,
 	Menu,
+	Avatar,
 } from "@mantine/core";
 import { Authentication, ThemeToggler } from "./../index";
 import { useDisclosure } from "@mantine/hooks";
@@ -124,11 +125,9 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 								trigger="hover"
 							>
 								<Menu.Target>
-									<Image
+									<Avatar
 										src={session.user?.image?.toString()}
 										alt={session.user?.name || "User"}
-										width={32}
-										height={32}
 										radius="xl"
 										sx={{
 											"&:hover": {

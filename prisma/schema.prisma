@@ -44,6 +44,8 @@ model User {
   Following       Follow[]          @relation("following")
   Community       Community[]
   CommunityMember CommunityMember[]
+  account         Account[]
+  session         Session[]
 
   @@map("users")
 }
@@ -116,8 +118,8 @@ model Images {
   @@map("images")
 }
 
-model account {
-  id                String  @id
+model Account {
+  id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
@@ -130,7 +132,9 @@ model account {
   id_token          String? @db.Text
   session_state     String?
 
-  @@unique([provider, providerAccountId], map: "Account_provider_providerAccountId_key")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
 }
 
 model commentvotes {
@@ -146,11 +150,12 @@ model commentvotes {
   @@index([user_id], map: "commentVotes_user_id_idx")
 }
 
-model session {
-  id           String   @id
-  sessionToken String   @unique(map: "Session_sessionToken_key")
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
   userId       String
   expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model thread {
@@ -179,12 +184,12 @@ model threadvotes {
   @@index([user_id], map: "threadVotes_user_id_idx")
 }
 
-model verificationtoken {
+model VerificationToken {
   identifier String
-  token      String   @unique(map: "VerificationToken_token_key")
+  token      String   @unique
   expires    DateTime
 
-  @@unique([identifier, token], map: "VerificationToken_identifier_token_key")
+  @@unique([identifier, token])
 }
 
 enum Role {

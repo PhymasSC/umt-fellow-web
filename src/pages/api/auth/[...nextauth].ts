@@ -1,4 +1,4 @@
-import NextAuth, { DefaultSession, NextAuthOptions } from "next-auth";
+import NextAuth, { DefaultSession, NextAuthOptions, User } from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialProvider from "next-auth/providers/credentials";
@@ -6,6 +6,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@lib/prisma";
 import { JWT } from "next-auth/jwt";
 import bcrypt from "bcrypt";
+import { AdapterUser } from "next-auth/adapters";
 
 interface Session extends DefaultSession {
 	user?: {
@@ -59,18 +60,14 @@ export const authOptions: NextAuthOptions = {
 		}),
 	],
 	callbacks: {
-		session: async ({
-			session,
-			token,
-		}: {
-			session: Session;
-			token: JWT;
-		}) => {
+		session({ session, token, user }) {
 			if (session?.user) {
+				//@ts-ignore
 				session.user.id = token.uid;
 			}
-			return session;
+			return session; // The return type will match the one returned in `useSession()`
 		},
+
 		jwt: async ({ user, token }) => {
 			if (user) {
 				token.uid = user.id;

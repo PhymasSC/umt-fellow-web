@@ -5,7 +5,6 @@ import { GET_THREADS_BY_AUTHOR, GET_USER } from "@operations/queries";
 import { client } from "@lib/apollo-client";
 
 const Profile: NextPage = (props) => {
-	console.log(props);
 	const { userdata, threadData } = props;
 	return (
 		<>

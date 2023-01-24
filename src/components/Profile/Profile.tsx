@@ -15,6 +15,7 @@ import {
 	Badge,
 	Image,
 	BackgroundImage,
+	Flex,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import {
@@ -106,7 +107,7 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 					}}
 				>
 					<Stack spacing={10}>
-						<Group spacing={10}>
+						<Flex justify="center" align="center" gap={10}>
 							<Title order={1}>{user.name}</Title>
 							{user.isUMTMembership && (
 								<Badge color="blue" size="xl">
@@ -123,7 +124,7 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 									</Group>
 								</Badge>
 							)}
-						</Group>
+						</Flex>
 
 						<Text align="center" size="sm" color="dimmed">
 							@{user.id}

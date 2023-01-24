@@ -34,6 +34,8 @@ Table users {
   Following follows [not null]
   Community communities [not null]
   CommunityMember community_members [not null]
+  account Account [not null]
+  session Session [not null]
 }
 
 Table follows {
@@ -86,7 +88,7 @@ Table images {
   updated_at DateTime [default: `now()`, not null]
 }
 
-Table account {
+Table Account {
   id String [pk]
   userId String [not null]
   type String [not null]
@@ -99,6 +101,7 @@ Table account {
   scope String
   id_token String
   session_state String
+  user users [not null]
 
   indexes {
     (provider, providerAccountId) [unique]
@@ -118,11 +121,12 @@ Table commentvotes {
   }
 }
 
-Table session {
+Table Session {
   id String [pk]
   sessionToken String [unique, not null]
   userId String [not null]
   expires DateTime [not null]
+  user users [not null]
 }
 
 Table thread {
@@ -148,7 +152,7 @@ Table threadvotes {
   }
 }
 
-Table verificationtoken {
+Table VerificationToken {
   identifier String [not null]
   token String [unique, not null]
   expires DateTime [not null]
@@ -191,3 +195,7 @@ Ref: communities.creatorId > users.id
 Ref: community_members.communityId > communities.id
 
 Ref: community_members.userId > users.id
+
+Ref: Account.userId > users.id [delete: Cascade]
+
+Ref: Session.userId > users.id [delete: Cascade]
