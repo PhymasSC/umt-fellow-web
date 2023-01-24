@@ -34,13 +34,47 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 		});
 	};
 
-	console.log("Apollo clent: ", client)
 	return (
 		<>
 			<Head>
 				<meta
 					name="viewport"
 					content="minimum-scale=1, initial-scale=1, width=device-width"
+				/>
+				<meta
+					name="description"
+					content="UMT Fellow is a social forum built for University Malaysia Terengganu. "
+				/>
+
+				<meta
+					property="og:url"
+					content="https://www.umtfellow.social/"
+				/>
+				<meta property="og:type" content="website" />
+				<meta property="og:title" content="UMT Fellow" />
+				<meta
+					property="og:description"
+					content="UMT Fellow is a social forum built for University Malaysia Terengganu. "
+				/>
+				<meta
+					property="og:image"
+					content="https://www.umtfellow.social/logo.png"
+				/>
+
+				<meta name="twitter:card" content="summary_large_image" />
+				<meta property="twitter:domain" content="umtfellow.social" />
+				<meta
+					property="twitter:url"
+					content="https://www.umtfellow.social/"
+				/>
+				<meta name="twitter:title" content="UMT Fellow" />
+				<meta
+					name="twitter:description"
+					content="UMT Fellow is a social forum built for University Malaysia Terengganu. "
+				/>
+				<meta
+					name="twitter:image"
+					content="https://www.umtfellow.social/logo.png"
 				/>
 			</Head>
 

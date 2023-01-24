@@ -3,6 +3,7 @@ import { Editor } from "@components/index";
 import { GET_THREAD } from "@operations/queries";
 import { client } from "@lib/apollo-client";
 import SingleFeed from "@components/Feed/SingleFeed";
+import Head from "next/head";
 import {
 	Avatar,
 	Card,
@@ -52,6 +53,39 @@ const ThreadPage: NextPage = (props) => {
 	// View mode
 	return (
 		<>
+			<Head>
+				<title>{data?.title} | UMT Fellow</title>
+				<meta
+					property="og:url"
+					content={`https://www.umtfellow.social${router.asPath}`}
+				/>
+				<meta property="og:type" content="website" />
+				<meta property="og:title" content="UMT Fellow" />
+				<meta
+					property="og:description"
+					content={`${data?.title} | UMT Fellow is a social forum built for University Malaysia Terengganu.`}
+				/>
+				<meta
+					property="og:image"
+					content="https://www.umtfellow.social/logo.png"
+				/>
+
+				<meta name="twitter:card" content="summary_large_image" />
+				<meta property="twitter:domain" content="umtfellow.social" />
+				<meta
+					property="twitter:url"
+					content={`https://www.umtfellow.social${router.asPath}`}
+				/>
+				<meta name="twitter:title" content="UMT Fellow" />
+				<meta
+					name="twitter:description"
+					content={`${data?.title} | UMT Fellow is a social forum built for University Malaysia Terengganu.`}
+				/>
+				<meta
+					name="twitter:image"
+					content="https://www.umtfellow.social/logo.png"
+				/>
+			</Head>
 			<Container size="xl">
 				<Grid>
 					<Grid.Col span={8}>
