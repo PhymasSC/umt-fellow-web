@@ -12,7 +12,7 @@ const Footer = () => {
 						spacing="xs"
 						sx={{ display: "flex", alignItems: "center" }}
 					>
-						<IconCopyright size="20" /> 2022 UMT Fellow
+						<IconCopyright size="20" /> 2023 UMT Fellow
 					</Group>
 				</Text>
 				<Link href="/privacy-policy">Privacy Policy</Link>
