@@ -3,12 +3,11 @@ import { Router } from "express";
 import { typeDefs } from "@gql/schema";
 import { resolvers } from "@gql/resolvers";
 import { NextApiRequest, NextApiResponse } from "next";
-import Cors from "micro-cors";
 
-const cors = Cors({
-	allowMethods: ["GET", "POST", "OPTIONS"],
-	origin: "*",
-});
+const corsOptions = {
+	origin: "http://localhost:3000",
+	credentials: true,
+};
 
 function runMiddleware(
 	req: NextApiRequest,
@@ -34,8 +33,12 @@ export const config = {
 	},
 };
 
-export default cors(async function handler(req: any, res: any) {
-	const apolloServer = new ApolloServer({ typeDefs, resolvers });
+export default (async function handler(req: any, res: any) {
+	const apolloServer = new ApolloServer({
+		typeDefs,
+		resolvers,
+		cors: corsOptions,
+	});
 	await apolloServer.start();
 
 	const apolloMiddleware = apolloServer.getMiddleware({
