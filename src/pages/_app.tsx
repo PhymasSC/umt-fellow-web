@@ -33,6 +33,8 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 			maxAge: 60 * 60 * 24 * 30,
 		});
 	};
+
+	console.log("Apollo clent: ", client)
 	return (
 		<>
 			<Head>

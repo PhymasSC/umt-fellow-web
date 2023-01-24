@@ -6,6 +6,9 @@ const nextConfig = {
 		formats: ["image/avif", "image/webp"],
 		domains: ["images.unsplash.com", "lh3.googleusercontent.com"],
 	},
+	env: {
+		APOLLO_SERVER: process.env.APOLLO_SERVER,
+	},
 };
 
 module.exports = nextConfig;
