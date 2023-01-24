@@ -25,6 +25,13 @@ import { Gallery, Typography } from "@components/index";
 import FeedSetting from "./FeedSetting";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useMutation, useQuery } from "@apollo/client";
+import { VOTE_THREAD } from "@operations/mutations";
+import {
+	GET_THREAD_UPVOTES_AND_DOWNVOTES,
+	GET_THREAD_VOTES,
+} from "@operations/queries";
+import { useEffect, useState } from "react";
 
 interface SingleFeedProps {
 	feed?: feed;
@@ -39,17 +46,41 @@ type feed = {
 		image: string;
 	};
 	images: string[];
-	createdAt: string;
-	updatedAt: string;
+	created_at: string;
+	updated_at: string;
 	description: string;
 	id: string;
 };
 
 const SingleFeed: React.FC<SingleFeedProps> = (props) => {
 	let formatter = Intl.NumberFormat("en", { notation: "compact" });
+	const [voteThread] = useMutation(VOTE_THREAD);
+	const { loading: votesLoading, data: votesData } = useQuery(
+		GET_THREAD_UPVOTES_AND_DOWNVOTES,
+		{
+			variables: { threadId: props.feed?.id },
+		}
+	);
+	const { loading, data } = useQuery(GET_THREAD_VOTES, {
+		variables: { threadId: props.feed?.id },
+	});
+	const [votes, setVotes] = useState("0");
+	const { data: session } = useSession();
 	const { classes } = useStyles();
 	dayjs.extend(relativeTime);
-	if (!props.feed || props.loading)
+
+	useEffect(() => {
+		if (!votesLoading) {
+			setVotes(
+				formatter.format(
+					votesData?.getThreadUpvotesAndDownvotes[0] -
+						votesData?.getThreadUpvotesAndDownvotes[1]
+				)
+			);
+		}
+	}, [votesLoading]);
+	// Skeleton loading
+	if (!props.feed || props.loading) {
 		return (
 			<Container className={classes.container} fluid>
 				<Stack>
@@ -105,15 +136,29 @@ const SingleFeed: React.FC<SingleFeedProps> = (props) => {
 				</Stack>
 			</Container>
 		);
-	const { title, author, createdAt, updatedAt, description, id, images } =
+	}
+
+	const { title, author, created_at, updated_at, description, id, images } =
 		props?.feed;
 
+	const voteHandler = async (vote: string) => {
+		const res = await voteThread({
+			variables: {
+				threadId: id,
+				userId: session?.user?.id,
+				type: vote,
+			},
+		});
+
+		setVotes(
+			formatter.format(
+				res?.data?.voteThread.upvotes - res?.data?.voteThread.downvotes
+			)
+		);
+	};
+
 	return (
-		<Container
-			className={classes.container}
-			sx={{ overflow: "visible" }}
-			fluid
-		>
+		<Container className={classes.container} fluid>
 			<Stack>
 				<Group position="apart">
 					<Link href={`/profile/${author.id}`} passHref>
@@ -139,14 +184,14 @@ const SingleFeed: React.FC<SingleFeedProps> = (props) => {
 						<Tooltip
 							multiline
 							label={`Created at ${dayjs(
-								new Date(createdAt)
+								new Date(created_at)
 							).toDate()}`}
 							withArrow
 							position="top"
 						>
 							<Text color="dimmed">
-								{createdAt !== updatedAt && "Edited "}
-								{dayjs(new Date(updatedAt)).fromNow()}
+								{created_at !== updated_at && "Edited "}
+								{dayjs(new Date(updated_at)).fromNow()}
 							</Text>
 						</Tooltip>
 						<FeedSetting author={author} />
@@ -155,11 +200,11 @@ const SingleFeed: React.FC<SingleFeedProps> = (props) => {
 				<Grid align="flex-start">
 					<Grid.Col span={1}>
 						<Stack align="center" spacing="xs">
-							<ActionIcon>
+							<ActionIcon onClick={() => voteHandler("UPVOTE")}>
 								<IconChevronUp />
 							</ActionIcon>
-							{/* <Text>{formatter.format(voteCount)}</Text> */}
-							<ActionIcon>
+							<Text>{votes}</Text>
+							<ActionIcon onClick={() => voteHandler("DOWNVOTE")}>
 								<IconChevronDown />
 							</ActionIcon>
 						</Stack>

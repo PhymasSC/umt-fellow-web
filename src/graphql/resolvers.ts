@@ -10,6 +10,11 @@ const imagekit = new ImageKit({
 	urlEndpoint: process.env.IMAGE_KIT_URL_ENDPOINT || "",
 });
 
+enum VoteType {
+	UPVOTE = "UPVOTE",
+	DOWNVOTE = "DOWNVOTE",
+}
+
 export const resolvers = {
 	DateTime: GraphQLDateTime,
 
@@ -29,7 +34,7 @@ export const resolvers = {
 		getThreads: async () => {
 			const threads = await prisma.thread.findMany({
 				orderBy: {
-					updatedAt: "desc",
+					updated_at: "desc",
 				},
 			});
 			return threads;
@@ -52,6 +57,56 @@ export const resolvers = {
 				},
 			});
 			return thread;
+		},
+
+		getThreadVotes: async (_: any, { threadId }: { threadId: string }) => {
+			const votes = await prisma.threadvotes.findMany({
+				where: {
+					thread_id: threadId,
+				},
+			});
+			return votes;
+		},
+
+		getThreadUpvotesAndDownvotes: async (
+			_: any,
+			{ threadId }: { threadId: string }
+		) => {
+			const upvotes = await prisma.threadvotes.count({
+				where: {
+					thread_id: threadId,
+					vote: VoteType.UPVOTE,
+				},
+			});
+
+			const downvotes = await prisma.threadvotes.count({
+				where: {
+					thread_id: threadId,
+					vote: VoteType.DOWNVOTE,
+				},
+			});
+
+			return [upvotes, downvotes];
+		},
+	},
+
+	Vote: {
+		thread: async (parent: any) => {
+			const thread = await prisma.thread.findFirst({
+				where: {
+					id: parent.thread_id,
+				},
+			});
+			return thread;
+		},
+
+		user: async (parent: any) => {
+			const user = await prisma.user.findFirst({
+				where: {
+					id: parent.user_id,
+				},
+			});
+			return user;
 		},
 	},
 
@@ -207,7 +262,7 @@ export const resolvers = {
 						title,
 						//@ts-ignore
 						description,
-						updatedAt: new Date(),
+						updated_at: new Date(),
 					},
 				});
 
@@ -277,6 +332,66 @@ export const resolvers = {
 					success: false,
 					message: error.message || "Thread deletion failed",
 					thread: null,
+				};
+			}
+		},
+
+		voteThread: async (
+			_: any,
+			{
+				threadId,
+				userId,
+				voteType,
+			}: { threadId: string; userId: string; voteType: VoteType }
+		) => {
+			try {
+				const vote = await prisma.threadvotes.upsert({
+					where: {
+						user_id_thread_id: {
+							thread_id: threadId,
+							user_id: userId,
+						},
+					},
+					update: {
+						vote: voteType,
+						updated_at: new Date(),
+					},
+					create: {
+						thread_id: threadId,
+						user_id: userId,
+						vote: voteType,
+					},
+				});
+				const data = await prisma.threadvotes.groupBy({
+					by: ["vote"],
+					where: {
+						thread_id: threadId,
+					},
+					_count: {
+						_all: true,
+					},
+				});
+				return {
+					code: 200,
+					success: true,
+					message: "Vote successful",
+					vote,
+					upvotes:
+						data[0]?.vote === "UPVOTE"
+							? data[0]?._count._all
+							: data[1]?._count._all || 0,
+					downvotes:
+						data[0]?.vote === "DOWNVOTE"
+							? data[0]?._count._all
+							: data[1]?._count._all || 0,
+				};
+			} catch (error: any) {
+				console.log("FAILED");
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "Vote failed",
+					vote: null,
 				};
 			}
 		},

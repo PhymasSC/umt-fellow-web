@@ -1,6 +1,5 @@
-import { Card, Container } from "@mantine/core";
+import { Card } from "@mantine/core";
 import SingleFeed from "./SingleFeed";
-import { useStyles } from "./Feed.style";
 import Link from "next/link";
 
 interface FeedProps {
@@ -16,8 +15,8 @@ interface feed {
 		image: string;
 	};
 	images: string[];
-	createdAt: string;
-	updatedAt: string;
+	created_at: string;
+	updated_at: string;
 	description: string;
 	id: string;
 }
@@ -45,8 +44,8 @@ const Feed = (props: FeedProps) => {
 									image: "",
 								},
 								images: [],
-								createdAt: "",
-								updatedAt: "",
+								created_at: "",
+								updated_at: "",
 								description: "",
 								id: "",
 							}}

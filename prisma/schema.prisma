@@ -12,33 +12,6 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
 model User {
   id              String            @id @default(cuid())
   name            String
@@ -64,52 +37,154 @@ model User {
   major           String?
   year            String?
   cgpa            Float?
-  createdAt       DateTime          @default(now()) @map(name: "created_at")
-  updatedAt       DateTime          @default(now()) @updatedAt @map(name: "updated_at")
-  Thread          Thread[]
+  created_at      DateTime          @default(now()) @map("created_at")
+  updated_at      DateTime          @default(now()) @updatedAt @map("updated_at")
   Comment         Comment[]
   Follower        Follow[]          @relation("follower")
   Following       Follow[]          @relation("following")
-  Vote            Vote[]
   Community       Community[]
   CommunityMember CommunityMember[]
-  accounts        Account[]
-  sessions        Session[]
 
-  @@map(name: "users")
+  @@map("users")
 }
 
-model VerificationToken {
+model Follow {
+  id          String   @id @default(uuid())
+  followerId  String   @map("follower_id")
+  followingId String   @map("following_id")
+  created_at  DateTime @default(now()) @map("created_at")
+  updated_at  DateTime @default(now()) @updatedAt @map("updated_at")
+  follower    User     @relation("follower", fields: [followerId], references: [id])
+  following   User     @relation("following", fields: [followingId], references: [id])
+
+  @@index([followerId])
+  @@index([followingId])
+  @@map("follows")
+}
+
+model Comment {
+  id         String   @id @default(uuid())
+  content    String
+  userId     String   @map("user_id")
+  threadId   String   @map("thread_id")
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @default(now()) @updatedAt @map("updated_at")
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@index([threadId])
+  @@index([userId])
+  @@map("comments")
+}
+
+model Community {
+  id              String            @id @default(uuid())
+  name            String
+  image           String?
+  created_at      DateTime          @default(now()) @map("created_at")
+  updated_at      DateTime          @default(now()) @updatedAt @map("updated_at")
+  creatorId       String            @map("creator_id")
+  creator         User              @relation(fields: [creatorId], references: [id])
+  CommunityMember CommunityMember[]
+
+  @@index([creatorId])
+  @@map("communities")
+}
+
+model CommunityMember {
+  id          String    @id @default(uuid())
+  communityId String    @map("community_id")
+  userId      String    @map("user_id")
+  role        Role      @default(USER)
+  created_at  DateTime  @default(now()) @map("created_at")
+  updated_at  DateTime  @default(now()) @updatedAt @map("updated_at")
+  community   Community @relation(fields: [communityId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
+
+  @@index([communityId])
+  @@index([userId])
+  @@map("community_members")
+}
+
+model Images {
+  id         String   @id @default(uuid())
+  imageUrl   String   @db.Text
+  threadId   String   @map("thread_id")
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@index([threadId])
+  @@map("images")
+}
+
+model account {
+  id                String  @id
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  @@unique([provider, providerAccountId], map: "Account_provider_providerAccountId_key")
+}
+
+model commentvotes {
+  user_id    String
+  thread_id  String
+  vote       commentvotes_vote
+  created_at DateTime          @default(now())
+  updated_at DateTime          @default(now())
+
+  @@id([user_id, thread_id])
+  @@unique([user_id, thread_id], map: "commentVotes_user_id_thread_id_key")
+  @@index([thread_id], map: "commentVotes_thread_id_idx")
+  @@index([user_id], map: "commentVotes_user_id_idx")
+}
+
+model session {
+  id           String   @id
+  sessionToken String   @unique(map: "Session_sessionToken_key")
+  userId       String
+  expires      DateTime
+}
+
+model thread {
+  id          String      @id @default(uuid())
+  title       String
+  description String?     @db.LongText
+  authorId    String?
+  flag        thread_flag @default(PUBLIC)
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @default(now())
+  communityId String?
+
+  @@index([authorId], map: "Thread_authorId_idx")
+  @@index([communityId], map: "Thread_communityId_idx")
+}
+
+model threadvotes {
+  user_id    String
+  thread_id  String
+  vote       threadvotes_vote
+  created_at DateTime         @default(now())
+  updated_at DateTime         @default(now())
+
+  @@id([user_id, thread_id])
+  @@index([thread_id], map: "threadVotes_thread_id_idx")
+  @@index([user_id], map: "threadVotes_user_id_idx")
+}
+
+model verificationtoken {
   identifier String
-  token      String   @unique
+  token      String   @unique(map: "VerificationToken_token_key")
   expires    DateTime
 
-  @@unique([identifier, token])
-}
-
-model Thread {
-  id          String     @id @default(uuid())
-  title       String
-  description String?    @db.LongText
-  author      User?      @relation(fields: [authorId], references: [id])
-  authorId    String?
-  flag        Flag       @default(PUBLIC)
-  Vote        Vote[]
-  Comment     Comment[]
-  createdAt   DateTime   @default(now()) @map(name: "created_at")
-  updatedAt   DateTime   @default(now()) @updatedAt @map(name: "updated_at")
-  Community   Community? @relation(fields: [communityId], references: [id])
-  communityId String?
-  Images      Images[]
-
-  @@index([authorId])
-  @@index([communityId])
-}
-
-enum Flag {
-  PUBLIC
-  PRIVATE
-  REPORTED
+  @@unique([identifier, token], map: "VerificationToken_identifier_token_key")
 }
 
 enum Role {
@@ -118,91 +193,18 @@ enum Role {
   ADMIN
 }
 
-model Follow {
-  id          String   @id @default(uuid())
-  follower    User     @relation("follower", fields: [followerId], references: [id])
-  followerId  String   @map(name: "follower_id")
-  following   User     @relation("following", fields: [followingId], references: [id])
-  followingId String   @map(name: "following_id")
-  createdAt   DateTime @default(now()) @map(name: "created_at")
-  updatedAt   DateTime @default(now()) @updatedAt @map(name: "updated_at")
-
-  @@index([followerId])
-  @@index([followingId])
-  @@map(name: "follows")
+enum threadvotes_vote {
+  UPVOTE
+  DOWNVOTE
 }
 
-model Vote {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @map(name: "user_id")
-  thread    Thread?  @relation(fields: [threadId], references: [id])
-  threadId  String?  @map(name: "thread_id")
-  comment   Comment? @relation(fields: [commentId], references: [id])
-  commentId String?  @map(name: "comment_id")
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map(name: "updated_at")
-
-  @@index([threadId])
-  @@index([userId])
-  @@index([commentId])
-  @@map(name: "votes")
+enum commentvotes_vote {
+  UPVOTE
+  DOWNVOTE
 }
 
-model Comment {
-  id        String   @id @default(uuid())
-  content   String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @map(name: "user_id")
-  thread    Thread   @relation(fields: [threadId], references: [id])
-  threadId  String   @map(name: "thread_id")
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map(name: "updated_at")
-  Vote      Vote[]
-
-  @@index([threadId])
-  @@index([userId])
-  @@map(name: "comments")
-}
-
-model Community {
-  id              String            @id @default(uuid())
-  name            String
-  image           String?
-  createdAt       DateTime          @default(now()) @map(name: "created_at")
-  updatedAt       DateTime          @default(now()) @updatedAt @map(name: "updated_at")
-  creator         User              @relation(fields: [creatorId], references: [id])
-  creatorId       String            @map(name: "creator_id")
-  Thread          Thread[]
-  CommunityMember CommunityMember[]
-
-  @@index([creatorId])
-  @@map(name: "communities")
-}
-
-model CommunityMember {
-  id          String    @id @default(uuid())
-  community   Community @relation(fields: [communityId], references: [id])
-  communityId String    @map(name: "community_id")
-  user        User      @relation(fields: [userId], references: [id])
-  userId      String    @map(name: "user_id")
-  role        Role      @default(USER)
-  createdAt   DateTime  @default(now()) @map(name: "created_at")
-  updatedAt   DateTime  @default(now()) @updatedAt @map(name: "updated_at")
-
-  @@index([communityId])
-  @@index([userId])
-  @@map(name: "community_members")
-}
-
-model Images {
-  id        String   @id @default(uuid())
-  imageUrl  String   @db.Text
-  Thread    Thread   @relation(fields: [threadId], references: [id])
-  threadId  String   @map(name: "thread_id")
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map(name: "updated_at")
-
-  @@index([threadId])
-  @@map(name: "images")
+enum thread_flag {
+  PUBLIC
+  PRIVATE
+  REPORTED
 }

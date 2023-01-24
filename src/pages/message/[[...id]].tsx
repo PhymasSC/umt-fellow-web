@@ -13,7 +13,6 @@ import {
 	Stack,
 	ActionIcon,
 	Textarea,
-	Tooltip,
 } from "@mantine/core";
 import { IconSearch, IconSend } from "@tabler/icons";
 import { useRouter } from "next/router";

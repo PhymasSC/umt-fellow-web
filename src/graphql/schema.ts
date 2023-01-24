@@ -31,8 +31,8 @@ export const typeDefs = gql`
 		failedAttempts: Int
 		nextAvailableLogin: DateTime
 		threads: [Thread]
-		createdAt: DateTime
-		updatedAt: DateTime
+		created_at: DateTime
+		updated_at: DateTime
 	}
 
 	enum Role {
@@ -58,6 +58,8 @@ export const typeDefs = gql`
 		getThreads: [Thread]
 		getThreadsByAuthor(authorId: String!): [Thread]
 		getThreadById(id: String!): Thread
+		getThreadVotes(threadId: String!): [Vote]
+		getThreadUpvotesAndDownvotes(threadId: String!): [Int]!
 	}
 
 	type Thread {
@@ -68,8 +70,21 @@ export const typeDefs = gql`
 		tags: [String]
 		author: User
 		flag: Flag
-		createdAt: DateTime
-		updatedAt: DateTime
+		created_at: DateTime
+		updated_at: DateTime
+	}
+
+	type Vote {
+		thread: Thread!
+		user: User!
+		vote: VoteType
+		created_at: DateTime
+		updated_at: DateTime
+	}
+
+	enum VoteType {
+		UPVOTE
+		DOWNVOTE
 	}
 
 	type Mutation {
@@ -90,6 +105,11 @@ export const typeDefs = gql`
 			tags: [String]
 		): ThreadResponse!
 		deleteThread(id: String!): ThreadResponse!
+		voteThread(
+			threadId: String!
+			userId: String!
+			voteType: VoteType!
+		): VoteResponse!
 	}
 
 	input Image {
@@ -108,5 +128,14 @@ export const typeDefs = gql`
 		success: Boolean!
 		message: String!
 		thread: Thread
+	}
+
+	type VoteResponse {
+		code: Int!
+		success: Boolean!
+		message: String!
+		vote: Vote
+		upvotes: Int!
+		downvotes: Int!
 	}
 `;

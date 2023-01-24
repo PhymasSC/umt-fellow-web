@@ -2,34 +2,6 @@
 //// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 //// ------------------------------------------------------
 
-Table Account {
-  id String [pk]
-  userId String [not null]
-  type String [not null]
-  provider String [not null]
-  providerAccountId String [not null]
-  refresh_token String
-  access_token String
-  expires_at Int
-  token_type String
-  scope String
-  id_token String
-  session_state String
-  user users [not null]
-
-  indexes {
-    (provider, providerAccountId) [unique]
-  }
-}
-
-Table Session {
-  id String [pk]
-  sessionToken String [unique, not null]
-  userId String [not null]
-  expires DateTime [not null]
-  user users [not null]
-}
-
 Table users {
   id String [pk]
   name String [not null]
@@ -55,20 +27,128 @@ Table users {
   major String
   year String
   cgpa Float
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
-  Thread Thread [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
   Comment comments [not null]
   Follower follows [not null]
   Following follows [not null]
-  Vote votes [not null]
   Community communities [not null]
   CommunityMember community_members [not null]
-  accounts Account [not null]
-  sessions Session [not null]
 }
 
-Table VerificationToken {
+Table follows {
+  id String [pk]
+  followerId String [not null]
+  followingId String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+  follower users [not null]
+  following users [not null]
+}
+
+Table comments {
+  id String [pk]
+  content String [not null]
+  userId String [not null]
+  threadId String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+  user users [not null]
+}
+
+Table communities {
+  id String [pk]
+  name String [not null]
+  image String
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+  creatorId String [not null]
+  creator users [not null]
+  CommunityMember community_members [not null]
+}
+
+Table community_members {
+  id String [pk]
+  communityId String [not null]
+  userId String [not null]
+  role Role [not null, default: 'USER']
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+  community communities [not null]
+  user users [not null]
+}
+
+Table images {
+  id String [pk]
+  imageUrl String [not null]
+  threadId String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+}
+
+Table account {
+  id String [pk]
+  userId String [not null]
+  type String [not null]
+  provider String [not null]
+  providerAccountId String [not null]
+  refresh_token String
+  access_token String
+  expires_at Int
+  token_type String
+  scope String
+  id_token String
+  session_state String
+
+  indexes {
+    (provider, providerAccountId) [unique]
+  }
+}
+
+Table commentvotes {
+  user_id String [not null]
+  thread_id String [not null]
+  vote commentvotes_vote [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+
+  indexes {
+    (user_id, thread_id) [pk]
+    (user_id, thread_id) [unique]
+  }
+}
+
+Table session {
+  id String [pk]
+  sessionToken String [unique, not null]
+  userId String [not null]
+  expires DateTime [not null]
+}
+
+Table thread {
+  id String [pk]
+  title String [not null]
+  description String
+  authorId String
+  flag thread_flag [not null, default: 'PUBLIC']
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+  communityId String
+}
+
+Table threadvotes {
+  user_id String [not null]
+  thread_id String [not null]
+  vote threadvotes_vote [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+
+  indexes {
+    (user_id, thread_id) [pk]
+  }
+}
+
+Table verificationtoken {
   identifier String [not null]
   token String [unique, not null]
   expires DateTime [not null]
@@ -78,126 +158,36 @@ Table VerificationToken {
   }
 }
 
-Table Thread {
-  id String [pk]
-  title String [not null]
-  description String
-  author users
-  authorId String
-  flag Flag [not null, default: 'PUBLIC']
-  Vote votes [not null]
-  Comment comments [not null]
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
-  Community communities
-  communityId String
-  Images images [not null]
-}
-
-Table follows {
-  id String [pk]
-  follower users [not null]
-  followerId String [not null]
-  following users [not null]
-  followingId String [not null]
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
-}
-
-Table votes {
-  id String [pk]
-  user users [not null]
-  userId String [not null]
-  thread Thread
-  threadId String
-  comment comments
-  commentId String
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
-}
-
-Table comments {
-  id String [pk]
-  content String [not null]
-  user users [not null]
-  userId String [not null]
-  thread Thread [not null]
-  threadId String [not null]
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
-  Vote votes [not null]
-}
-
-Table communities {
-  id String [pk]
-  name String [not null]
-  image String
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
-  creator users [not null]
-  creatorId String [not null]
-  Thread Thread [not null]
-  CommunityMember community_members [not null]
-}
-
-Table community_members {
-  id String [pk]
-  community communities [not null]
-  communityId String [not null]
-  user users [not null]
-  userId String [not null]
-  role Role [not null, default: 'USER']
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
-}
-
-Table images {
-  id String [pk]
-  imageUrl String [not null]
-  Thread Thread [not null]
-  threadId String [not null]
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
-}
-
-Enum Flag {
-  PUBLIC
-  PRIVATE
-  REPORTED
-}
-
 Enum Role {
   USER
   MODERATOR
   ADMIN
 }
 
-Ref: Account.userId > users.id [delete: Cascade]
+Enum threadvotes_vote {
+  UPVOTE
+  DOWNVOTE
+}
 
-Ref: Session.userId > users.id [delete: Cascade]
+Enum commentvotes_vote {
+  UPVOTE
+  DOWNVOTE
+}
 
-Ref: Thread.authorId > users.id
-
-Ref: Thread.communityId > communities.id
+Enum thread_flag {
+  PUBLIC
+  PRIVATE
+  REPORTED
+}
 
 Ref: follows.followerId > users.id
 
 Ref: follows.followingId > users.id
 
-Ref: votes.userId > users.id
-
-Ref: votes.threadId > Thread.id
-
-Ref: votes.commentId > comments.id
-
 Ref: comments.userId > users.id
-
-Ref: comments.threadId > Thread.id
 
 Ref: communities.creatorId > users.id
 
 Ref: community_members.communityId > communities.id
 
 Ref: community_members.userId > users.id
-
-Ref: images.threadId > Thread.id

@@ -38,8 +38,8 @@ export const GET_USER = gql`
 			major
 			year
 			cgpa
-			createdAt
-			updatedAt
+			created_at
+			updated_at
 		}
 	}
 `;
@@ -58,8 +58,8 @@ export const GET_THREADS = gql`
 				image
 			}
 			flag
-			createdAt
-			updatedAt
+			created_at
+			updated_at
 		}
 	}
 `;
@@ -78,8 +78,8 @@ export const GET_THREAD = gql`
 				name
 			}
 			flag
-			createdAt
-			updatedAt
+			created_at
+			updated_at
 		}
 	}
 `;
@@ -98,8 +98,30 @@ export const GET_THREADS_BY_AUTHOR = gql`
 				name
 			}
 			flag
-			createdAt
-			updatedAt
+			created_at
+			updated_at
 		}
+	}
+`;
+
+export const GET_THREAD_VOTES = gql`
+	query GetThreadVotes($threadId: String!) {
+		getThreadVotes(threadId: $threadId) {
+			updated_at
+			user {
+				id
+				image
+				name
+			}
+			thread {
+				id
+			}
+		}
+	}
+`;
+
+export const GET_THREAD_UPVOTES_AND_DOWNVOTES = gql`
+	query GetThreadUpvotesAndDownvotes($threadId: String!) {
+		getThreadUpvotesAndDownvotes(threadId: $threadId)
 	}
 `;

@@ -79,3 +79,30 @@ export const DELETE_THREAD = gql`
 		}
 	}
 `;
+
+export const VOTE_THREAD = gql`
+	mutation VoteThread(
+		$threadId: String!
+		$userId: String!
+		$type: VoteType!
+	) {
+		voteThread(threadId: $threadId, userId: $userId, voteType: $type) {
+			code
+			message
+			success
+			upvotes
+			downvotes
+			vote {
+				updated_at
+				created_at
+				vote
+				user {
+					id
+				}
+				thread {
+					id
+				}
+			}
+		}
+	}
+`;

@@ -35,7 +35,7 @@ const ThreadPage: NextPage = (props) => {
 	}
 	//@ts-ignore
 	const { getThreadById: data } = props;
-
+	console.log("THREAD DATA:", data);
 	// Edit mode
 	if (
 		router.query.edit != undefined &&
@@ -55,7 +55,7 @@ const ThreadPage: NextPage = (props) => {
 			<Container size="xl">
 				<Grid>
 					<Grid.Col span={8}>
-						<Card withBorder>
+						<Card sx={{ overflow: "visible" }} withBorder>
 							<SingleFeed feed={data}></SingleFeed>
 						</Card>
 
