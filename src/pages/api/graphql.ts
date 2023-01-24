@@ -5,7 +5,7 @@ import { resolvers } from "@gql/resolvers";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const corsOptions = {
-	origin: "http://localhost:3000",
+	origin: process.env.APOLLO_SERVER || "http://localhost:3000",
 	credentials: true,
 };
 
@@ -37,6 +37,7 @@ export default (async function handler(req: any, res: any) {
 	const apolloServer = new ApolloServer({
 		typeDefs,
 		resolvers,
+		//@ts-ignore
 		cors: corsOptions,
 	});
 	await apolloServer.start();
