@@ -1,7 +1,6 @@
 import { NextPage } from "next";
 import { Editor } from "@components/index";
 import { GET_THREAD } from "@operations/queries";
-import { client } from "@lib/apollo-client";
 import SingleFeed from "@components/Feed/SingleFeed";
 import Head from "next/head";
 import {
@@ -22,19 +21,28 @@ import { Comment } from "@components/index";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
+import { useQuery } from "@apollo/client";
 
 const ThreadPage: NextPage = (props) => {
 	const router = useRouter();
+	const { id, edit } = router.query;
 	const { data: session } = useSession();
-	//@ts-ignore
-	const { getThreadById: data } = props;
+	const { loading, data } = useQuery(GET_THREAD, {
+		variables: { id: id?.[0] },
+	});
+	useEffect(() => {
+		console.log("updated");
+		console.log(data);
+	}, [data, loading]);
+	// //@ts-ignore
+	// const { getThreadById: data } = props;
 	useEffect(() => {
 		console.log("updated");
 		console.log(data);
 	}, [data]);
 	// Create mode
 	//@ts-ignore
-	if (props.getThreadById === undefined) {
+	if (id === undefined) {
 		return (
 			<Container>
 				<Editor />
@@ -43,13 +51,13 @@ const ThreadPage: NextPage = (props) => {
 	}
 	// Edit mode
 	if (
-		router.query.edit != undefined &&
+		edit != undefined &&
 		//@ts-ignore
-		session?.user.id === props.getThreadById?.author?.id
+		session?.user.id === data.getThreadById?.author?.id
 	) {
 		return (
 			<Container>
-				<Editor data={data} />
+				<Editor data={data?.getThreadById} />
 			</Container>
 		);
 	}
@@ -94,7 +102,10 @@ const ThreadPage: NextPage = (props) => {
 				<Grid>
 					<Grid.Col span={8}>
 						<Card sx={{ overflow: "visible" }} withBorder>
-							<SingleFeed feed={data}></SingleFeed>
+							<SingleFeed
+								feed={data?.getThreadById}
+								loading={loading}
+							></SingleFeed>
 						</Card>
 
 						<Space h="xl" />
@@ -104,12 +115,14 @@ const ThreadPage: NextPage = (props) => {
 							<Title>No Replies yet</Title>
 						</Center>
 						<Space h="xl" />
-						<Comment
-							author={{
-								name: data?.author?.name,
-								image: data?.author?.image,
-							}}
-						></Comment>
+						{!loading && (
+							<Comment
+								author={{
+									name: data?.getThreadById?.author?.name,
+									image: data?.getThreadById?.author?.image,
+								}}
+							></Comment>
+						)}
 					</Grid.Col>
 					<Grid.Col span={4}>
 						<Paper
@@ -125,26 +138,38 @@ const ThreadPage: NextPage = (props) => {
 						>
 							<Title order={4}>Thread Starter</Title>
 							<Space h="md"></Space>
-							<Avatar
-								src={data.author.image}
-								size={120}
-								radius={120}
-								mx="auto"
-							/>
-							<Text align="center" size="lg" weight={500} mt="md">
-								{data.author.name}
-							</Text>
+							{!loading && (
+								<>
+									<Avatar
+										src={data?.getThreadById?.author.image}
+										size={120}
+										radius={120}
+										mx="auto"
+									/>
+									<Text
+										align="center"
+										size="lg"
+										weight={500}
+										mt="md"
+									>
+										{data?.getThreadById?.author.name}
+									</Text>
 
-							<Link href={`/profile/${data.author.id}`} passHref>
-								<Button
-									component="a"
-									variant="light"
-									fullWidth
-									mt="md"
-								>
-									View profile
-								</Button>
-							</Link>
+									<Link
+										href={`/profile/${data?.getThreadById?.author.id}`}
+										passHref
+									>
+										<Button
+											component="a"
+											variant="light"
+											fullWidth
+											mt="md"
+										>
+											View profile
+										</Button>
+									</Link>
+								</>
+							)}
 							<Link href={`/message`} passHref>
 								<Button
 									component="a"
@@ -163,29 +188,29 @@ const ThreadPage: NextPage = (props) => {
 	);
 };
 
-export async function getServerSideProps(context: { params: { id: string } }) {
-	const id = Array.isArray(context.params.id)
-		? context.params.id[0]
-		: context.params.id;
-	if (!id)
-		return {
-			props: {},
-		};
-	try {
-		const { data } = await client.query({
-			query: GET_THREAD,
-			variables: { id },
-		});
-		return {
-			props: data,
-		};
-	} catch (error) {
-		console.log(error);
-	}
+// export async function getServerSideProps(context: { params: { id: string } }) {
+// 	const id = Array.isArray(context.params.id)
+// 		? context.params.id[0]
+// 		: context.params.id;
+// 	if (!id)
+// 		return {
+// 			props: {},
+// 		};
+// 	try {
+// 		const { data } = await client.query({
+// 			query: GET_THREAD,
+// 			variables: { id },
+// 		});
+// 		return {
+// 			props: data,
+// 		};
+// 	} catch (error) {
+// 		console.log(error);
+// 	}
 
-	return {
-		notFound: true,
-	};
-}
+// 	return {
+// 		notFound: true,
+// 	};
+// }
 
 export default ThreadPage;
