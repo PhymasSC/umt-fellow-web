@@ -26,7 +26,7 @@ import { useStyles, HEADER_HEIGHT } from "./Header.style";
 import { APP_LOGO } from "@constants/metadata";
 import { signOut, useSession } from "next-auth/react";
 import {
-	IconCaretDown,
+	IconChevronDown,
 	IconLogout,
 	IconMoon,
 	IconSettings,
@@ -117,7 +117,15 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 							smallerThan="sm"
 							styles={{ display: "none" }}
 						>
-							<Title size="h3">UMT Fellow</Title>
+							<Title
+								size="h3"
+								onClick={() => {
+									setActive("/");
+									close();
+								}}
+							>
+								UMT Fellow
+							</Title>
 						</MediaQuery>
 					</Paper>
 				</Link>
@@ -145,6 +153,11 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 														? theme.colors.dark[5]
 														: theme.colors.gray[1],
 											},
+											border: "1px solid gray",
+										})}
+										className={cx({
+											[classes.linkActive]:
+												active === "/profile",
 										})}
 									>
 										<Avatar
@@ -159,7 +172,7 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 											}}
 										/>
 										{session.user?.name}
-										<IconCaretDown size={15} />
+										<IconChevronDown size={15} />
 									</Group>
 								</Menu.Target>
 								<Menu.Dropdown>
@@ -171,7 +184,10 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 										<Menu.Item
 											icon={<IconUser size={14} />}
 											component="a"
-											//@ts-ignore
+											onClick={() => {
+												setActive("/profile");
+												close();
+											}}
 										>
 											Profile
 										</Menu.Item>
@@ -183,6 +199,10 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 										<Menu.Item
 											icon={<IconSettings size={14} />}
 											component="a"
+											onClick={() => {
+												setActive("/profile");
+												close();
+											}}
 										>
 											Settings
 										</Menu.Item>

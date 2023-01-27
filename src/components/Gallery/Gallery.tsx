@@ -24,7 +24,7 @@ const Gallery: React.FC<Props> = ({ images }) => {
 						<Grid.Col>
 							<ImagePreview
 								src={images[0]}
-								title={"TEST"}
+								title={""}
 								width="100%"
 								height={SECONDARY_COL_HEIGHT}
 							/>
@@ -32,7 +32,7 @@ const Gallery: React.FC<Props> = ({ images }) => {
 						<Grid.Col>
 							<ImagePreview
 								src={images[1]}
-								title={"TEST"}
+								title={""}
 								width="100%"
 								height={SECONDARY_COL_HEIGHT}
 							/>
@@ -42,7 +42,7 @@ const Gallery: React.FC<Props> = ({ images }) => {
 						<Grid.Col>
 							<ImagePreview
 								src={images[2]}
-								title={"TEST"}
+								title={""}
 								width="100%"
 								height={TERTIARY_COL_HEIGHT}
 							/>
@@ -50,7 +50,7 @@ const Gallery: React.FC<Props> = ({ images }) => {
 						<Grid.Col>
 							<ImagePreview
 								src={images[3]}
-								title={"TEST"}
+								title={""}
 								width="100%"
 								height={TERTIARY_COL_HEIGHT}
 							/>
@@ -58,7 +58,7 @@ const Gallery: React.FC<Props> = ({ images }) => {
 						<Grid.Col>
 							<ImagePreview
 								src={images[4]}
-								title={"TEST"}
+								title={""}
 								width="100%"
 								height={TERTIARY_COL_HEIGHT}
 							/>
@@ -76,33 +76,33 @@ const Gallery: React.FC<Props> = ({ images }) => {
 			>
 				<ImagePreview
 					src={images[0]}
-					title={"TEST"}
+					title={""}
 					width="100%"
 					height={PRIMARY_COL_HEIGHT}
 				/>
 				<Grid gutter="md">
 					<Grid.Col>
-						<Image
-							height={SECONDARY_COL_HEIGHT}
+						<ImagePreview
 							src={images[1]}
-							alt="123"
-							radius="md"
+							title={""}
+							width="100%"
+							height={SECONDARY_COL_HEIGHT}
 						/>
 					</Grid.Col>
 					<Grid.Col span={6}>
-						<Image
-							height={SECONDARY_COL_HEIGHT}
+						<ImagePreview
 							src={images[2]}
-							alt="123"
-							radius="md"
+							title={""}
+							width="100%"
+							height={SECONDARY_COL_HEIGHT}
 						/>
 					</Grid.Col>
 					<Grid.Col span={6}>
-						<Image
-							height={SECONDARY_COL_HEIGHT}
+						<ImagePreview
 							src={images[3]}
-							alt="123"
-							radius="md"
+							title={""}
+							width="100%"
+							height={SECONDARY_COL_HEIGHT}
 						/>
 					</Grid.Col>
 				</Grid>
@@ -115,27 +115,27 @@ const Gallery: React.FC<Props> = ({ images }) => {
 				spacing="md"
 				breakpoints={[{ maxWidth: "sm", cols: 1 }]}
 			>
-				<Image
-					height={PRIMARY_COL_HEIGHT}
+				<ImagePreview
 					src={images[0]}
-					alt="123"
-					radius="md"
+					title={""}
+					width="100%"
+					height={PRIMARY_COL_HEIGHT}
 				/>
 				<Grid gutter="md">
 					<Grid.Col>
-						<Image
-							height={SECONDARY_COL_HEIGHT}
+						<ImagePreview
 							src={images[1]}
-							alt="123"
-							radius="md"
+							title={""}
+							width="100%"
+							height={SECONDARY_COL_HEIGHT}
 						/>
 					</Grid.Col>
 					<Grid.Col>
-						<Image
-							height={SECONDARY_COL_HEIGHT}
+						<ImagePreview
 							src={images[2]}
-							alt="123"
-							radius="md"
+							title={""}
+							width="100%"
+							height={SECONDARY_COL_HEIGHT}
 						/>
 					</Grid.Col>
 				</Grid>
@@ -148,17 +148,17 @@ const Gallery: React.FC<Props> = ({ images }) => {
 				spacing="md"
 				breakpoints={[{ maxWidth: "sm", cols: 1 }]}
 			>
-				<Image
-					height={PRIMARY_COL_HEIGHT}
+				<ImagePreview
 					src={images[0]}
-					alt="123"
-					radius="md"
-				/>
-				<Image
+					title={""}
+					width="100%"
 					height={PRIMARY_COL_HEIGHT}
+				/>
+				<ImagePreview
 					src={images[1]}
-					alt="123"
-					radius="md"
+					title={""}
+					width="100%"
+					height={PRIMARY_COL_HEIGHT}
 				/>
 			</SimpleGrid>
 		);
@@ -169,11 +169,11 @@ const Gallery: React.FC<Props> = ({ images }) => {
 				spacing="md"
 				breakpoints={[{ maxWidth: "sm", cols: 1 }]}
 			>
-				<Image
-					height={PRIMARY_COL_HEIGHT}
+				<ImagePreview
 					src={images[0]}
-					radius="md"
-					alt={""}
+					title={""}
+					width="100%"
+					height={PRIMARY_COL_HEIGHT}
 				/>
 			</SimpleGrid>
 		);
