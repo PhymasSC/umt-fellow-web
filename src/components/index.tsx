@@ -10,5 +10,5 @@ export { comment as Comment } from "@components/Comment";
 export { editor as Editor } from "@components/Comment";
 export { default as Gallery } from "@components/Gallery";
 export { default as MessageList } from "@components/Message/MessageList";
-
+export { default as Notification } from "@components/Notification";
 // Path: src\components\index.tsx

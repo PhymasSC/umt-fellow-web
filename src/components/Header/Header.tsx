@@ -17,6 +17,8 @@ import {
 	Space,
 	Menu,
 	Avatar,
+	Tooltip,
+	Box,
 } from "@mantine/core";
 import { Authentication, ThemeToggler } from "./../index";
 import { useDisclosure } from "@mantine/hooks";
@@ -24,6 +26,7 @@ import { useStyles, HEADER_HEIGHT } from "./Header.style";
 import { APP_LOGO } from "@constants/metadata";
 import { signOut, useSession } from "next-auth/react";
 import {
+	IconCaretDown,
 	IconLogout,
 	IconMoon,
 	IconSettings,
@@ -33,7 +36,7 @@ import {
 } from "@tabler/icons";
 
 interface HeaderResponsiveProps {
-	links: { link: string; label: string }[];
+	links: { link: string; label: string; icon: any }[];
 }
 
 const UFHeader = ({ links }: HeaderResponsiveProps) => {
@@ -49,22 +52,25 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 	};
 
 	const items = links.map((link) => (
-		<Link key={link.label} href={link.link} passHref>
-			<Button
-				key={link.label}
-				variant="subtle"
-				component="a"
-				className={cx(classes.link, {
-					[classes.linkActive]: active === link.link,
-				})}
-				onClick={() => {
-					setActive(link.link);
-					close();
-				}}
-			>
-				{link.label}
-			</Button>
-		</Link>
+		<Tooltip key={link.label} label={link.label} withArrow>
+			<Box>
+				<Link key={link.label} href={link.link} passHref>
+					<Button
+						variant="subtle"
+						component="a"
+						className={cx(classes.link, {
+							[classes.linkActive]: active === link.link,
+						})}
+						onClick={() => {
+							setActive(link.link);
+							close();
+						}}
+					>
+						{link?.icon}
+					</Button>
+				</Link>
+			</Box>
+		</Tooltip>
 	));
 
 	return (
@@ -125,35 +131,60 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 								trigger="hover"
 							>
 								<Menu.Target>
-									<Avatar
-										src={session.user?.image?.toString()}
-										alt={session.user?.name || "User"}
-										radius="xl"
-										sx={{
+									<Group
+										spacing={10}
+										sx={(theme) => ({
+											padding: ".5em 1em",
+											borderRadius: ".5em",
 											"&:hover": {
 												cursor: "pointer",
+												backgroundColor:
+													theme.colorScheme === "dark"
+														? theme.colors.dark[5]
+														: theme.colors.gray[1],
 											},
-										}}
-									/>
+										})}
+									>
+										<Avatar
+											src={session.user?.image?.toString()}
+											alt={session.user?.name || "User"}
+											radius="xl"
+											size="sm"
+											sx={{
+												"&:hover": {
+													cursor: "pointer",
+												},
+											}}
+										/>
+										{session.user?.name}
+										<IconCaretDown size={15} />
+									</Group>
 								</Menu.Target>
 								<Menu.Dropdown>
 									<Menu.Label>Application</Menu.Label>
-									<Menu.Item
-										icon={<IconUser size={14} />}
-										component="a"
-										//@ts-ignore
+									<Link
 										href={`/profile/${session.user?.id}`}
+										passHref
 									>
-										Profile
-									</Menu.Item>
-									<Menu.Item
-										icon={<IconSettings size={14} />}
-										component="a"
-										//@ts-ignore
+										<Menu.Item
+											icon={<IconUser size={14} />}
+											component="a"
+											//@ts-ignore
+										>
+											Profile
+										</Menu.Item>
+									</Link>
+									<Link
 										href={`/setting/${session.user?.id}`}
+										passHref
 									>
-										Settings
-									</Menu.Item>
+										<Menu.Item
+											icon={<IconSettings size={14} />}
+											component="a"
+										>
+											Settings
+										</Menu.Item>
+									</Link>
 									<Menu.Item
 										icon={<IconLogout size={14} />}
 										onClick={() => {

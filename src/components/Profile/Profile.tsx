@@ -151,22 +151,62 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 							<Stack>
 								<Card sx={{ padding: "2em !important" }}>
 									<Title size={20}>Biography</Title>
+									<Space h={30} />
+									<Text size="sm">
+										I am a year 3 student from University
+										Malaysia Terengganu!
+									</Text>
+								</Card>
+								<Card sx={{ padding: "2em !important" }}>
+									<Title size={20}>Followers</Title>
+									<Space h={30} />
+									<Avatar.Group>
+										<Avatar
+											src="https://picsum.photos/100"
+											radius="xl"
+										/>
+										<Avatar
+											src="https://picsum.photos/101"
+											radius="xl"
+										/>
+										<Avatar
+											src="https://picsum.photos/102"
+											radius="xl"
+										/>
+										<Avatar
+											src="https://picsum.photos/103"
+											radius="xl"
+										/>
+										<Avatar radius="xl">+2</Avatar>
+									</Avatar.Group>
 								</Card>
 								<Card sx={{ padding: "2em !important" }}>
 									<Title size={20}>Follow me on</Title>
 									<Space h={30} />
 									<Container>
 										<Stack spacing={30}>
-											<IconBrandFacebook />
-											<IconBrandInstagram />
-											<IconBrandTwitter />
-											<IconBrandSnapchat />
-											<IconBrandTiktok />
+											<Group>
+												<IconBrandFacebook />
+												<Text weight={500}>Phymas</Text>
+											</Group>
+											<Group>
+												<IconBrandInstagram />
+												<Text weight={500}>Phymas</Text>
+											</Group>
+											<Group>
+												<IconBrandTwitter />
+												<Text weight={500}>Phymas</Text>
+											</Group>
+											<Group>
+												<IconBrandSnapchat />
+												<Text weight={500}>Phymas</Text>
+											</Group>
+											{/* <IconBrandTiktok />
 											<IconBrandTelegram />
 											<IconBrandReddit />
 											<IconBrandYoutube />
 											<IconBrandGithub />
-											<IconBrandDribbble />
+											<IconBrandDribbble /> */}
 										</Stack>
 									</Container>
 								</Card>

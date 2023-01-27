@@ -1,12 +1,12 @@
-import {
-	Paper,
-	createStyles,
-} from "@mantine/core";
+import { Paper, createStyles } from "@mantine/core";
 import { Authentication } from "@components/index";
 import { NextPage } from "next";
+import Head from "next/head";
 
 const useStyles = createStyles((theme) => ({
 	wrapper: {
+		display: "flex",
+		alignItems: "center",
 		height: "100vh",
 		padding: "3em",
 		backgroundSize: "cover",
@@ -26,8 +26,8 @@ const useStyles = createStyles((theme) => ({
 				? theme.colors.dark[7]
 				: theme.colors.gray[3]
 		}`,
-		height: "90%",
-		maxWidth: "450px",
+		minWidth: "450px",
+		width: "10em",
 		paddingTop: 80,
 		borderRadius: ".5em",
 		[`@media (max-width: ${theme.breakpoints.sm}px)`]: {
@@ -54,11 +54,16 @@ const useStyles = createStyles((theme) => ({
 const Register: NextPage = () => {
 	const { classes } = useStyles();
 	return (
-		<div className={classes.wrapper}>
-			<Paper className={classes.form} radius={0} p={30}>
-				<Authentication defaultPage="register" />
-			</Paper>
-		</div>
+		<>
+			<Head>
+				<title>Register | UMT Fellow</title>
+			</Head>
+			<div className={classes.wrapper}>
+				<Paper className={classes.form} radius={0} p={30}>
+					<Authentication defaultPage="register" />
+				</Paper>
+			</div>
+		</>
 	);
 };
 

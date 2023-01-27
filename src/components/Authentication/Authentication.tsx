@@ -15,6 +15,9 @@ import {
 	Image,
 	Tooltip,
 	Space,
+	ActionIcon,
+	Box,
+	Center,
 } from "@mantine/core";
 import { signIn } from "next-auth/react";
 import { IconIdBadge, IconAt, IconLock, IconArrowLeft } from "@tabler/icons";
@@ -102,22 +105,13 @@ const Authentication = (props: AuthProps) => {
 	return (
 		<Paper radius="md" p="xl" withBorder {...props}>
 			{screen === "forgot password" ? (
-				<>
-					<Group position="center">
-						<Paper
-							sx={{
-								position: "absolute",
-								left: "2.75em",
-								top: "2.75em",
-								cursor: "pointer",
-							}}
-							onClick={() => setScreen("login")}
-						>
-							<IconArrowLeft />
-						</Paper>
-						<Text>Reset password</Text>
-					</Group>
-					<Space h="md" />
+				<Stack>
+					<Text mx="auto" weight={500}>
+						Reset password
+					</Text>
+					<Text color="dimmed" size="sm" align="center">
+						Enter your email to get a reset link
+					</Text>
 					<TextInput
 						required
 						label="Email"
@@ -132,10 +126,26 @@ const Authentication = (props: AuthProps) => {
 						}
 						{...form.getInputProps("email")}
 					/>
-					<Stack mt="xl">
+					<Group position="apart">
+						<Center inline>
+							<Anchor
+								component="button"
+								onClick={() => {
+									setScreen("login");
+								}}
+								p="sm"
+								size="sm"
+								color="dimmed"
+							>
+								<Group>
+									<IconArrowLeft size={16} stroke={1.5} />
+									<Text>Back to login page</Text>
+								</Group>
+							</Anchor>
+						</Center>
 						<Button type="submit">Send </Button>
-					</Stack>
-				</>
+					</Group>
+				</Stack>
 			) : (
 				<>
 					<Text size="lg" weight={500}>
@@ -148,7 +158,7 @@ const Authentication = (props: AuthProps) => {
 							{screen === "register" && (
 								<TextInput
 									required
-									label="name"
+									label="Name"
 									icon={<IconIdBadge size={14} />}
 									placeholder="Your username"
 									value={form.values.name}
@@ -237,29 +247,6 @@ const Authentication = (props: AuthProps) => {
 					<Group grow mb="md" mt="md" spacing="xl">
 						<Tooltip
 							transition="pop"
-							label="Facebook"
-							position="bottom"
-							withArrow
-						>
-							<Button
-								sx={{ width: 80, height: 80 }}
-								variant="default"
-								onClick={() => {
-									signIn("facebook", { callbackUrl: "/" });
-								}}
-							>
-								<Image
-									src={
-										"https://ik.imagekit.io/umtfellow/Facebook.svg?ik-sdk-version=javascript-1.4.3&updatedAt=1673374698792"
-									}
-									alt="Facebook"
-									width={40}
-									height={40}
-								/>
-							</Button>
-						</Tooltip>
-						<Tooltip
-							transition="pop"
 							label="Google"
 							position="bottom"
 							withArrow
@@ -276,9 +263,10 @@ const Authentication = (props: AuthProps) => {
 										"https://ik.imagekit.io/umtfellow/Google.svg?ik-sdk-version=javascript-1.4.3&updatedAt=1673374698849"
 									}
 									alt="Google"
-									width={40}
-									height={40}
+									width={20}
+									height={20}
 								/>
+								<Text ml={10}>Continue with Google</Text>
 							</Button>
 						</Tooltip>
 					</Group>
