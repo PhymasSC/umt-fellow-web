@@ -47,7 +47,9 @@ const Editor: React.FC<Props> = ({ data }) => {
 	const [files, setFiles] = useState<FileWithPath[]>([]);
 	const titleRef = useRef<HTMLTextAreaElement>(null);
 	const [submitThread] = useMutation(ADD_THREAD);
-	const [updateThread] = useMutation(UPDATE_THREAD);
+	const [updateThread] = useMutation(UPDATE_THREAD, {
+		refetchQueries: ["GET_THREAD"],
+	});
 	const { data: session } = useSession();
 	const router = useRouter();
 	const form = useForm({
@@ -137,7 +139,7 @@ const Editor: React.FC<Props> = ({ data }) => {
 				res?.data?.addThread?.code === 200 ||
 				res?.data?.updateThread?.code === 200
 			) {
-				router.push(
+				router.replace(
 					`/thread/${
 						res?.data?.addThread?.thread?.id ||
 						res?.data?.updateThread?.thread?.id

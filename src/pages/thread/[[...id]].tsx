@@ -21,10 +21,17 @@ import Link from "next/link";
 import { Comment } from "@components/index";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 const ThreadPage: NextPage = (props) => {
 	const router = useRouter();
 	const { data: session } = useSession();
+	//@ts-ignore
+	const { getThreadById: data } = props;
+	useEffect(() => {
+		console.log("updated");
+		console.log(data);
+	}, [data]);
 	// Create mode
 	//@ts-ignore
 	if (props.getThreadById === undefined) {
@@ -34,9 +41,6 @@ const ThreadPage: NextPage = (props) => {
 			</Container>
 		);
 	}
-	//@ts-ignore
-	const { getThreadById: data } = props;
-	console.log("THREAD DATA:", data);
 	// Edit mode
 	if (
 		router.query.edit != undefined &&
