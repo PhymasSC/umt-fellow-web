@@ -30,18 +30,6 @@ const ThreadPage: NextPage = (props) => {
 	const { loading, data } = useQuery(GET_THREAD, {
 		variables: { id: id?.[0] },
 	});
-	useEffect(() => {
-		console.log("updated");
-		console.log(data);
-	}, [data, loading]);
-	// //@ts-ignore
-	// const { getThreadById: data } = props;
-	useEffect(() => {
-		console.log("updated");
-		console.log(data);
-	}, [data]);
-	// Create mode
-	//@ts-ignore
 	if (id === undefined) {
 		return (
 			<Container>
