@@ -52,25 +52,27 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 	};
 
 	const items = links.map((link) => (
-		<Tooltip key={link.label} label={link.label} withArrow>
-			<Box>
-				<Link key={link.label} href={link.link} passHref>
-					<Button
-						variant="subtle"
-						component="a"
-						className={cx(classes.link, {
-							[classes.linkActive]: active === link.link,
-						})}
-						onClick={() => {
-							setActive(link.link);
-							close();
-						}}
-					>
-						{link?.icon}
-					</Button>
-				</Link>
-			</Box>
-		</Tooltip>
+		<>
+			<Tooltip key={link.label} label={link.label} withArrow>
+				<Box>
+					<Link key={link.label} href={link.link} passHref>
+						<Button
+							variant="subtle"
+							component="a"
+							className={cx(classes.link, {
+								[classes.linkActive]: active === link.link,
+							})}
+							onClick={() => {
+								setActive(link.link);
+								close();
+							}}
+						>
+							{link?.icon}
+						</Button>
+					</Link>
+				</Box>
+			</Tooltip>
+		</>
 	));
 
 	return (
@@ -257,38 +259,92 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 						>
 							{items}
 							<Divider m="xs" />
-							<Link href="/login" passHref>
-								<Button
-									component="a"
-									variant="subtle"
-									className={cx(classes.link, {
-										[classes.linkActive]:
-											active === "/login",
-									})}
-									onClick={() => {
-										setActive("/login");
-										close();
-									}}
-								>
-									Login
-								</Button>
-							</Link>
-							<Link href="/register" passHref>
-								<Button
-									component="a"
-									variant="subtle"
-									className={cx(classes.link, {
-										[classes.linkActive]:
-											active === "/register",
-									})}
-									onClick={() => {
-										setActive("/register");
-										close();
-									}}
-								>
-									Register
-								</Button>
-							</Link>
+							{(!session && (
+								<>
+									<Link href="/login" passHref>
+										<Button
+											component="a"
+											variant="subtle"
+											className={cx(classes.link, {
+												[classes.linkActive]:
+													active === "/login",
+											})}
+											onClick={() => {
+												setActive("/login");
+												close();
+											}}
+										>
+											Login
+										</Button>
+									</Link>
+									<Link href="/register" passHref>
+										<Button
+											component="a"
+											variant="subtle"
+											className={cx(classes.link, {
+												[classes.linkActive]:
+													active === "/register",
+											})}
+											onClick={() => {
+												setActive("/register");
+												close();
+											}}
+										>
+											Register
+										</Button>
+									</Link>
+								</>
+							)) || (
+								<>
+									<Link
+										href={`/profile/${session?.user?.id}`}
+										passHref
+									>
+										<Button
+											component="a"
+											variant="subtle"
+											className={cx(classes.link, {
+												[classes.linkActive]:
+													active === "/profile",
+											})}
+											onClick={() => {
+												setActive("/profile");
+												close();
+											}}
+										>
+											Profile
+										</Button>
+									</Link>
+									<Link
+										href={`/setting/${session?.user?.id}`}
+										passHref
+									>
+										<Button
+											component="a"
+											variant="subtle"
+											className={cx(classes.link, {
+												[classes.linkActive]:
+													active === "/setting",
+											})}
+											onClick={() => {
+												setActive("/setting");
+												close();
+											}}
+										>
+											Settings
+										</Button>
+									</Link>
+									<Button
+										variant="subtle"
+										className={classes.link}
+										onClick={() => {
+											signOut({ callbackUrl: "/login" });
+										}}
+									>
+										Log Out
+									</Button>
+								</>
+							)}
 						</Paper>
 					)}
 				</Transition>
