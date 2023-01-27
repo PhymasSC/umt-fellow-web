@@ -1,8 +1,11 @@
-import { Container, Tabs, Text } from "@mantine/core";
+import { Button, Container, Stack, Tabs, Text } from "@mantine/core";
 import { IconChecks, IconSettings } from "@tabler/icons";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 import NotificationCard from "./NotifcationCard";
 
 const Notification = () => {
+	const { data: session } = useSession();
 	return (
 		<Tabs
 			defaultValue="all"
@@ -19,12 +22,25 @@ const Notification = () => {
 				<Tabs.Tab value="threads">Threads</Tabs.Tab>
 				<Tabs.Tab value="comments">Comments</Tabs.Tab>
 				<Tabs.Tab value="messages">Messages</Tabs.Tab>
-				<Tabs.Tab value="read" mt="auto" icon={<IconChecks />}>
-					Mark all as read
-				</Tabs.Tab>
-				<Tabs.Tab value="setting" icon={<IconSettings />}>
-					Setting
-				</Tabs.Tab>
+				<Stack mt="auto" justify="flex-start" align="flex-start">
+					<Button
+						color="green"
+						variant="subtle"
+						leftIcon={<IconChecks />}
+					>
+						Mark all as read
+					</Button>
+					<Link href={`/setting/${session?.user.id}`} passHref>
+						<Button
+							component="a"
+							variant="subtle"
+							leftIcon={<IconSettings />}
+							w="100%"
+						>
+							Setting
+						</Button>
+					</Link>
+				</Stack>
 			</Tabs.List>
 
 			<Tabs.Panel value="all">

@@ -6,8 +6,15 @@ import {
 	Switch,
 	Tabs,
 	Text,
+	TextInput,
 } from "@mantine/core";
 import { createStyles } from "@mantine/core";
+import { useSession } from "next-auth/react";
+import AccountSetting from "./AccountSetting";
+import ChatSetting from "./ChatSetting";
+import CommunitySetting from "./CommunitySetting";
+import NotificationSetting from "./NotificationSetting";
+import SecuritySetting from "./SecuritySetting";
 
 interface Setting {
 	setting: {
@@ -25,6 +32,7 @@ interface SettingProps {
 	description: string;
 	data: {
 		label: string;
+		type: string;
 		description: string;
 	}[];
 }
@@ -33,12 +41,13 @@ const tabs = [
 	"Account",
 	"Security & Privacy",
 	"Notification",
+	"Community",
 	"Chat & Messaging",
 ];
 
 const Setting: React.FC<Setting> = (props) => {
 	const { setting } = props;
-
+	const { data: session } = useSession();
 	const items = tabs.map((tab) => (
 		<Tabs.Tab value={tab} key={tab}>
 			{tab}
@@ -76,39 +85,19 @@ const Setting: React.FC<Setting> = (props) => {
 									>
 										{value.description}
 									</Text>
-									{value.data.map((item, index) => {
-										console.log(`Item:`, item);
-
-										return (
-											<Stack key={index}>
-												<Flex
-													w="100%"
-													justify="space-between"
-												>
-													<Stack spacing={0}>
-														<Text
-															size="sm"
-															weight={500}
-														>
-															{item.label}
-														</Text>
-														<Text
-															size="xs"
-															color="dimmed"
-															mt={3}
-															mb="xl"
-														>
-															{item.description}
-														</Text>
-													</Stack>
-													<Switch
-														checked
-														label="Enable"
-													/>
-												</Flex>
-											</Stack>
-										);
-									})}
+									{key === "accountSettings" && (
+										<AccountSetting />
+									)}
+									{key === "securitySettings" && (
+										<SecuritySetting />
+									)}
+									{key === "notificationSettings" && (
+										<NotificationSetting />
+									)}
+									{key === "communitySettings" && (
+										<CommunitySetting />
+									)}
+									{key === "chatSettings" && <ChatSetting />}
 								</Tabs.Panel>
 							);
 						})}
