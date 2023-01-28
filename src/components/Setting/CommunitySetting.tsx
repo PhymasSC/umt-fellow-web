@@ -12,6 +12,7 @@ import {
 	Textarea,
 } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons";
+import KeyValueInput from "./KeyValueInput";
 import SettingLayout from "./SettingLayout";
 
 const CommunitySetting = () => {
@@ -54,7 +55,12 @@ const CommunitySetting = () => {
 							layout={"vertical"}
 							label={"Community Rules"}
 							description={"The rules of the community"}
-							input={<Textarea mt="-1em" mb="1em"></Textarea>}
+							input={
+								<KeyValueInput
+									_key="Name"
+									value="Description"
+								/>
+							}
 						/>
 
 						<SettingLayout
@@ -109,7 +115,12 @@ const CommunitySetting = () => {
 							layout={"vertical"}
 							label={"Community Rules"}
 							description={"The rules of the community"}
-							input={<Textarea mt="-1em" mb="1em"></Textarea>}
+							input={
+								<KeyValueInput
+									_key="Name"
+									value="Description"
+								/>
+							}
 						/>
 
 						<SettingLayout
@@ -164,7 +175,12 @@ const CommunitySetting = () => {
 							layout={"vertical"}
 							label={"Community Rules"}
 							description={"The rules of the community"}
-							input={<Textarea mt="-1em" mb="1em"></Textarea>}
+							input={
+								<KeyValueInput
+									_key="Name"
+									value="Description"
+								/>
+							}
 						/>
 
 						<SettingLayout
