@@ -64,19 +64,16 @@ const SingleFeed: React.FC<SingleFeedProps> = (props) => {
 	const { loading, data } = useQuery(GET_THREAD_VOTES, {
 		variables: { threadId: props.feed?.id },
 	});
-	const [votes, setVotes] = useState("0");
+	const [votes, setVotes] = useState(0);
 	const { data: session } = useSession();
 	const { classes } = useStyles();
 	dayjs.extend(relativeTime);
 
 	useEffect(() => {
-		if (!votesLoading) {
-			setVotes(
-				formatter.format(
-					votesData?.getThreadUpvotesAndDownvotes[0] -
-						votesData?.getThreadUpvotesAndDownvotes[1]
-				)
-			);
+		if (!votesLoading && votesData?.getThreadUpvotesAndDownvotes) {
+			const upvotes = votesData.getThreadUpvotesAndDownvotes[0];
+			const downvotes = votesData.getThreadUpvotesAndDownvotes[1];
+			setVotes(upvotes - downvotes);
 		}
 	}, [votesLoading]);
 	// Skeleton loading
