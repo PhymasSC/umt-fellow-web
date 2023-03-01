@@ -8,13 +8,11 @@ import {
 	Grid,
 	Spoiler,
 	Space,
-	Badge,
 	Title,
 	Image,
 	TypographyStylesProvider,
 	Skeleton,
 	Tooltip,
-	Box,
 	Button,
 } from "@mantine/core";
 import { useStyles } from "./SingleFeed.style";
@@ -64,7 +62,7 @@ const SingleFeed: React.FC<SingleFeedProps> = (props) => {
 	const { loading, data } = useQuery(GET_THREAD_VOTES, {
 		variables: { threadId: props.feed?.id },
 	});
-	const [votes, setVotes] = useState(0);
+	const [votes, setVotes] = useState("0");
 	const { data: session } = useSession();
 	const { classes } = useStyles();
 	dayjs.extend(relativeTime);
@@ -73,7 +71,7 @@ const SingleFeed: React.FC<SingleFeedProps> = (props) => {
 		if (!votesLoading && votesData?.getThreadUpvotesAndDownvotes) {
 			const upvotes = votesData.getThreadUpvotesAndDownvotes[0];
 			const downvotes = votesData.getThreadUpvotesAndDownvotes[1];
-			setVotes(upvotes - downvotes);
+			setVotes(formatter.format(upvotes - downvotes));
 		}
 	}, [votesLoading]);
 	// Skeleton loading
