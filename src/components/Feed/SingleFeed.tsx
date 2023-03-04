@@ -62,7 +62,7 @@ const SingleFeed: React.FC<SingleFeedProps> = (props) => {
 	const { loading, data } = useQuery(GET_THREAD_VOTES, {
 		variables: { threadId: props.feed?.id },
 	});
-	const [votes, setVotes] = useState("0");
+	const [votes, setVotes] = useState(0);
 	const { data: session } = useSession();
 	const { classes } = useStyles();
 	dayjs.extend(relativeTime);
@@ -71,7 +71,7 @@ const SingleFeed: React.FC<SingleFeedProps> = (props) => {
 		if (!votesLoading && votesData?.getThreadUpvotesAndDownvotes) {
 			const upvotes = votesData.getThreadUpvotesAndDownvotes[0];
 			const downvotes = votesData.getThreadUpvotesAndDownvotes[1];
-			setVotes(formatter.format(upvotes - downvotes));
+			setVotes(upvotes - downvotes);
 		}
 	}, [votesLoading]);
 	// Skeleton loading
@@ -145,11 +145,10 @@ const SingleFeed: React.FC<SingleFeedProps> = (props) => {
 			},
 		});
 
-		setVotes(
-			formatter.format(
-				res?.data?.voteThread.upvotes - res?.data?.voteThread.downvotes
-			)
-		);
+		if (res?.data?.voteThread) {
+			const { upvotes, downvotes } = res.data.voteThread;
+			setVotes(upvotes - downvotes);
+		}
 	};
 
 	return (
@@ -198,7 +197,7 @@ const SingleFeed: React.FC<SingleFeedProps> = (props) => {
 							<ActionIcon onClick={() => voteHandler("UPVOTE")}>
 								<IconChevronUp />
 							</ActionIcon>
-							<Text>{votes}</Text>
+							<Text>{formatter.format(votes)}</Text>
 							<ActionIcon onClick={() => voteHandler("DOWNVOTE")}>
 								<IconChevronDown />
 							</ActionIcon>
