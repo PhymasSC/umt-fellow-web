@@ -1,42 +1,25 @@
-// @ts-nocheck
-import { upperFirst } from "@mantine/hooks";
+import { useState } from "react";
 import { useForm } from "@mantine/form";
 import {
-	TextInput,
-	PasswordInput,
-	Text,
 	Paper,
-	Group,
 	PaperProps,
-	Button,
-	Divider,
-	Anchor,
-	Stack,
-	Image,
-	Tooltip,
-	Space,
-	ActionIcon,
-	Box,
-	Center,
 } from "@mantine/core";
 import { signIn } from "next-auth/react";
-import { IconIdBadge, IconAt, IconLock, IconArrowLeft } from "@tabler/icons";
-import { useState } from "react";
-import { useQuery, useMutation } from "@apollo/client";
-import { GET_USER } from "@operations/queries";
+import { useMutation } from "@apollo/client";
 import { ADD_USER } from "@operations/mutations";
-import Link from "next/link";
 import { EMAIL_PATTERN, PASSWORD_PATTERN } from "@constants/regex";
-import router from "next/router";
+import AuthenticationScreen from "./AuthenticationScreen";
+import ResetPasswordScreen from "./ResetPasswordScreen";
+
+type AuthScreens = 'login' | 'register' | 'forgotPassword';
 
 interface AuthProps extends PaperProps {
 	isModal?: boolean;
 	defaultPage?: string;
 }
 
-const Authentication = (props: AuthProps) => {
-	const { isModal = false, defaultPage = "login" } = props;
-	const [screen, setScreen] = useState(defaultPage);
+const Authentication = ({ isModal = false, defaultPage = "login", ...props }: AuthProps) => {
+	const [screen, setScreen] = useState<AuthScreens>('login');
 	const [error, setError] = useState("");
 	const [register] = useMutation(ADD_USER);
 
@@ -58,7 +41,8 @@ const Authentication = (props: AuthProps) => {
 				"Password should include at least 6 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character",
 		},
 	});
-	const submitHandler = async (e: { preventDefault: () => void }) => {
+
+	const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const { hasErrors, errors } = form.validate();
 
@@ -88,7 +72,7 @@ const Authentication = (props: AuthProps) => {
 				},
 			});
 
-			if (response.data.addUser.code == 200) {
+			if (response.data.addUser.code === 200) {
 				signIn("credentials", {
 					email: form.values.email,
 					password: form.values.password,
@@ -102,198 +86,28 @@ const Authentication = (props: AuthProps) => {
 		}
 	};
 
+	const resetPasswordScreen = (
+		<ResetPasswordScreen form={form} setScreen={setScreen} />
+	);
+
+	const authenticationScreen = (
+		<AuthenticationScreen
+			form={form}
+			screen={screen}
+			setScreen={setScreen}
+			submitHandler={submitHandler}
+			error={error}
+		/>
+	);
+
 	return (
 		<Paper radius="md" p="xl" withBorder {...props}>
-			{screen === "forgot password" ? (
-				<Stack>
-					<Text mx="auto" weight={500}>
-						Reset password
-					</Text>
-					<Text color="dimmed" size="sm" align="center">
-						Enter your email to get a reset link
-					</Text>
-					<TextInput
-						required
-						label="Email"
-						icon={<IconAt size={14} />}
-						placeholder="Your email"
-						value={form.values.email}
-						onChange={(event) =>
-							form.setFieldValue(
-								"email",
-								event.currentTarget.value
-							)
-						}
-						{...form.getInputProps("email")}
-					/>
-					<Group position="apart">
-						<Center inline>
-							<Anchor
-								component="button"
-								onClick={() => {
-									setScreen("login");
-								}}
-								p="sm"
-								size="sm"
-								color="dimmed"
-							>
-								<Group>
-									<IconArrowLeft size={16} stroke={1.5} />
-									<Text>Back to login page</Text>
-								</Group>
-							</Anchor>
-						</Center>
-						<Button type="submit">Send </Button>
-					</Group>
-				</Stack>
-			) : (
-				<>
-					<Text size="lg" weight={500}>
-						{upperFirst(screen)} with
-					</Text>
-
-					{/* <form onSubmit={form.onSubmit(submitHandler)}> */}
-					<form onSubmit={submitHandler}>
-						<Stack>
-							{screen === "register" && (
-								<TextInput
-									required
-									label="Name"
-									icon={<IconIdBadge size={14} />}
-									placeholder="Your username"
-									value={form.values.name}
-									onChange={(event) =>
-										form.setFieldValue(
-											"name",
-											event.currentTarget.value
-										)
-									}
-									{...form.getInputProps("name")}
-								/>
-							)}
-
-							<TextInput
-								required
-								label="Email"
-								icon={<IconAt size={14} />}
-								placeholder="Your email"
-								value={form.values.email}
-								onChange={(event) =>
-									form.setFieldValue(
-										"email",
-										event.currentTarget.value
-									)
-								}
-								{...form.getInputProps("email")}
-							/>
-
-							<PasswordInput
-								required
-								label="Password"
-								icon={<IconLock size={14} />}
-								placeholder="Your password"
-								value={form.values.password}
-								onChange={(event) =>
-									form.setFieldValue(
-										"password",
-										event.currentTarget.value
-									)
-								}
-								{...form.getInputProps("password")}
-							/>
-
-							{screen === "login" && (
-								<Anchor
-									component="button"
-									type="button"
-									color="dimmed"
-									onClick={() => setScreen("forgot password")}
-									size="xs"
-									sx={{ alignSelf: "flex-start" }}
-								>
-									Forgot password?
-								</Anchor>
-							)}
-						</Stack>
-
-						<Stack mt="xl">
-							<Button type="submit">{upperFirst(screen)}</Button>
-						</Stack>
-
-						{screen === "register" && (
-							<>
-								<Space h="md" />
-								<Text size="xs" color="dimmed">
-									By clicking Register, you agree to our{" "}
-									<Link href="/terms-and-conditions" passHref>
-										<Anchor>Terms and Condition</Anchor>
-									</Link>{" "}
-									and{" "}
-									<Link href="/privacy-policy" passHref>
-										<Anchor>Privacy Policy</Anchor>
-									</Link>
-									.
-								</Text>
-							</>
-						)}
-					</form>
-
-					<Divider
-						label="Or continue with"
-						labelPosition="center"
-						my="lg"
-					/>
-
-					<Group grow mb="md" mt="md" spacing="xl">
-						<Tooltip
-							transition="pop"
-							label="Google"
-							position="bottom"
-							withArrow
-						>
-							<Button
-								sx={{ width: 80, height: 80 }}
-								variant="default"
-								onClick={() => {
-									signIn("google", { callbackUrl: "/" });
-								}}
-							>
-								<Image
-									src={
-										"https://ik.imagekit.io/umtfellow/Google.svg?ik-sdk-version=javascript-1.4.3&updatedAt=1673374698849"
-									}
-									alt="Google"
-									width={20}
-									height={20}
-								/>
-								<Text ml={10}>Continue with Google</Text>
-							</Button>
-						</Tooltip>
-					</Group>
-
-					<Anchor
-						component="button"
-						type="button"
-						color="dimmed"
-						onClick={() =>
-							screen === "register" && isModal
-								? setScreen("login")
-								: screen === "login" && isModal
-								? setScreen("register")
-								: screen === "register" && !isModal
-								? router.push("/login")
-								: router.push("/register")
-						}
-						size="xs"
-					>
-						{screen === "register"
-							? "Already have an account? Login"
-							: "Don't have an account? Register"}
-					</Anchor>
-				</>
-			)}
+			{screen === "forgotPassword"
+				? resetPasswordScreen
+				: authenticationScreen}
 		</Paper>
 	);
 };
 
 export default Authentication;
+
