@@ -1,4 +1,4 @@
-import { Card } from "@mantine/core";
+import { Card, CardSection } from "@mantine/core";
 import CommunityCard from "./CommunityCard";
 
 interface CommunityListProps {
@@ -10,26 +10,13 @@ interface CommunityListProps {
 	}[];
 }
 
-const CommunityList: React.FC<CommunityListProps> = (props) => {
+const CommunityList: React.FC<CommunityListProps> = ({ communities }) => {
 	return (
-		<Card withBorder>
-			{props.communities.map((community, index) => (
-				<>
-					<Card.Section
-						p={10}
-						py={
-							index > 0 && index < props.communities.length - 1
-								? 15
-								: 10
-						}
-						key={props.communities[index].id}
-						withBorder={
-							index > 0 && index < props.communities.length - 1
-						}
-					>
-						<CommunityCard community={community} />
-					</Card.Section>
-				</>
+		<Card withBorder key="community-list">
+			{communities.map((community) => (
+				<CardSection p={10} py={15} withBorder key={community.id}>
+					<CommunityCard community={community} />
+				</CardSection>
 			))}
 		</Card>
 	);

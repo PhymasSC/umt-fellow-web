@@ -1,6 +1,6 @@
 import { Stack, Text, TextInput, Group, Button, Center } from "@mantine/core";
 import { IconArrowLeft, IconAt } from "@tabler/icons";
-import { useForm, UseFormReturnType } from "@mantine/form";
+import { UseFormReturnType } from "@mantine/form";
 
 type AuthScreens = 'login' | 'register' | 'forgotPassword';
 

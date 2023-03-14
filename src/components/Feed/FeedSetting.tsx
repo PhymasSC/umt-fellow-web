@@ -1,10 +1,8 @@
 import { useMutation } from "@apollo/client";
 import {
 	ActionIcon,
-	Button,
 	CopyButton,
 	Group,
-	GroupProps,
 	Menu,
 } from "@mantine/core";
 import { DELETE_THREAD } from "@operations/mutations";
@@ -19,7 +17,6 @@ import {
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { RefAttributes } from "react";
 
 interface FeedSettingProps {
 	author: {
@@ -28,31 +25,38 @@ interface FeedSettingProps {
 		image: string;
 	};
 }
+
 const FeedSetting: React.FC<FeedSettingProps> = ({ author }) => {
 	const router = useRouter();
 	const [deleteThread] = useMutation(DELETE_THREAD);
 	const { data: session } = useSession();
 
 	const removeThread = async () => {
-		console.log(router.query?.id?.[0]);
-		const res = await deleteThread({
-			variables: {
-				id: router.query?.id?.[0] || "",
-			},
-		});
-		console.log("Res:", res);
-		router.push("/");
+		try {
+			const res = await deleteThread({
+				variables: {
+					id: router.query?.id?.[0] || "",
+				},
+			});
+			console.log("Res:", res);
+			router.push("/");
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return (
 		<Group position="center">
-			<Menu withArrow transition="pop">
+			<Menu
+				transition="pop"
+			>
 				<Menu.Target>
 					<ActionIcon>
 						<IconDotsVertical />
 					</ActionIcon>
 				</Menu.Target>
 				<Menu.Dropdown>
+
 					{session?.user.id === author.id && (
 						<>
 							<Link
@@ -69,10 +73,7 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author }) => {
 									Edit thread
 								</Menu.Item>
 							</Link>
-							<Menu.Item
-								icon={<IconTrash size={16} />}
-								onClick={removeThread}
-							>
+							<Menu.Item icon={<IconTrash size={16} />} onClick={removeThread}>
 								Delete thread
 							</Menu.Item>
 							<Menu.Divider />
@@ -92,17 +93,14 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author }) => {
 									)
 								}
 								closeMenuOnClick={false}
-								//@ts-ignore
-								color={copied && "green"}
+								color={copied ? "green" : undefined}
 								onClick={copy}
 							>
 								{copied ? "Copied" : "Copy"}
 							</Menu.Item>
 						)}
 					</CopyButton>
-					<Menu.Item color="red" icon={<IconFlag size={16} />}>
-						Report
-					</Menu.Item>
+					<Menu.Item icon={<IconFlag size={16} />}>Report</Menu.Item>
 				</Menu.Dropdown>
 			</Menu>
 		</Group>
@@ -110,3 +108,4 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author }) => {
 };
 
 export default FeedSetting;
+

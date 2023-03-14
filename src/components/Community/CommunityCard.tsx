@@ -1,24 +1,15 @@
 import {
-	ActionIcon,
 	Button,
-	Card,
 	Grid,
 	Flex,
 	Avatar,
 	Stack,
 	Title,
 	Text,
-	Menu,
 } from "@mantine/core";
 import Link from "next/link";
-import {
-	IconDotsVertical,
-	IconFlag,
-	IconPencil,
-	IconReport,
-	IconTrash,
-} from "@tabler/icons";
 import { useState } from "react";
+import CommunityCardMenu from "./CommunityCardMenu";
 
 interface CommunityCardProps {
 	community: {
@@ -29,20 +20,21 @@ interface CommunityCardProps {
 	};
 }
 
-const CommunityCard: React.FC<CommunityCardProps> = (props) => {
+const CommunityCard: React.FC<CommunityCardProps> = ({ community }) => {
 	const [isJoined, setIsJoined] = useState(false);
+	const { id, name, description, avatar } = community;
 	return (
 		<Grid>
 			<Grid.Col span={1}>
 				<Flex h="100%" w="100%" justify="center" align="center">
-					<Avatar src={props.community.avatar} radius="xl" />
+					<Avatar src={avatar} radius="xl" />
 				</Flex>
 			</Grid.Col>
 			<Grid.Col span={8}>
 				<Stack spacing={0}>
-					<Title order={3}>{props.community.name}</Title>
+					<Title order={3}>{name}</Title>
 					<Text w="90%" color="dimmed">
-						{props.community.description}{" "}
+						{description}{" "}
 					</Text>
 				</Stack>
 			</Grid.Col>
@@ -54,43 +46,12 @@ const CommunityCard: React.FC<CommunityCardProps> = (props) => {
 					align="center"
 					gap={10}
 				>
-					<Link href={`/community/${props.community.id}`} passHref>
+					<Link href={`/community/${id}`} passHref>
 						<Button component="a" variant="light">
 							View
 						</Button>
 					</Link>
-					<Menu>
-						<Menu.Target>
-							<ActionIcon>
-								<IconDotsVertical />
-							</ActionIcon>
-						</Menu.Target>
-						<Menu.Dropdown>
-							<Menu.Item
-								color={isJoined ? "green" : "blue"}
-								onClick={() => {
-									setIsJoined(isJoined ? false : true);
-								}}
-								closeMenuOnClick={false}
-							>
-								{isJoined ? "Joined" : "Join"}
-							</Menu.Item>
-							<Menu.Divider />
-							<Menu.Item icon={<IconPencil size={14} />}>
-								Edit Community
-							</Menu.Item>
-							<Menu.Item icon={<IconTrash size={14} />}>
-								Delete Community
-							</Menu.Item>
-							<Menu.Divider />
-							<Menu.Item
-								color="red"
-								icon={<IconFlag size={14} />}
-							>
-								Report
-							</Menu.Item>
-						</Menu.Dropdown>
-					</Menu>
+					<CommunityCardMenu isJoined={isJoined} onClick={() => setIsJoined(isJoined => !isJoined)} />
 				</Flex>
 			</Grid.Col>
 		</Grid>
