@@ -47,9 +47,7 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author }) => {
 
 	return (
 		<Group position="center">
-			<Menu
-				transition="pop"
-			>
+			<Menu>
 				<Menu.Target>
 					<ActionIcon>
 						<IconDotsVertical />

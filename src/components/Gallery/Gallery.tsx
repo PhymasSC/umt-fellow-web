@@ -8,8 +8,8 @@ type Props = {
 const Gallery: React.FC<Props> = ({ images }) => {
 	const theme = useMantineTheme();
 	const PRIMARY_COL_HEIGHT = 700;
-	const SECONDARY_COL_HEIGHT = PRIMARY_COL_HEIGHT / 2 - theme.spacing.md / 2;
-	const TERTIARY_COL_HEIGHT = PRIMARY_COL_HEIGHT / 3.2 - theme.spacing.md / 3.2;
+	const SECONDARY_COL_HEIGHT = PRIMARY_COL_HEIGHT / 2 - parseFloat(theme.spacing.md) / 2;
+	const TERTIARY_COL_HEIGHT = PRIMARY_COL_HEIGHT / 3.2 - parseFloat(theme.spacing.md) / 3.2;
 
 	return (
 		<SimpleGrid
