@@ -42,7 +42,6 @@ interface HeaderResponsiveProps {
 const UFHeader = ({ links }: HeaderResponsiveProps) => {
 	const theme = useMantineTheme();
 	const { data: session } = useSession();
-	console.log(session);
 	const [opened, { toggle, close }] = useDisclosure(false);
 	const [active, setActive] = useState(links[0].link);
 	const [modalOpened, setModalOpened] = useState(false);
@@ -76,18 +75,18 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 	));
 
 	return (
-		<Header className={classes.root} height={HEADER_HEIGHT} fixed>
+		<Header className={classes.root} height={HEADER_HEIGHT} fixed={true}>
 			<Container px="xs" size="xl" className={classes.header}>
 				{/* Modal */}
 				<Modal
 					centered
-					overlayColor={
-						theme.colorScheme === "dark"
+					overlayProps={{
+						color: theme.colorScheme === "dark"
 							? theme.colors.dark[9]
-							: theme.colors.gray[2]
-					}
-					overlayOpacity={0.55}
-					overlayBlur={3}
+							: theme.colors.gray[2],
+						opacity: 0.55,
+						blur: 3,
+					}}
 					opened={modalOpened}
 					onClose={closeModal}
 					closeOnEscape
@@ -97,7 +96,7 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 				</Modal>
 
 				<Link href="/" passHref>
-					<Paper component="a" className={classes.logo}>
+					<Box component="a" className={classes.logo}>
 						<MediaQuery
 							largerThan="sm"
 							styles={{ display: "none" }}
@@ -127,7 +126,7 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 								UMT Fellow
 							</Title>
 						</MediaQuery>
-					</Paper>
+					</Box>
 				</Link>
 
 				<Group spacing={5} className={classes.links}>
@@ -137,7 +136,6 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 							<Space w="xs" />
 							<Menu
 								shadow="md"
-								transitionDuration={200}
 								trigger="hover"
 							>
 								<Menu.Target>
@@ -315,56 +313,56 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 									</Link>
 								</>
 							)) || (
-								<>
-									<Link
-										href={`/profile/${session?.user?.id}`}
-										passHref
-									>
+									<>
+										<Link
+											href={`/profile/${session?.user?.id}`}
+											passHref
+										>
+											<Button
+												component="a"
+												variant="subtle"
+												className={cx(classes.link, {
+													[classes.linkActive]:
+														active === "/profile",
+												})}
+												onClick={() => {
+													setActive("/profile");
+													close();
+												}}
+											>
+												Profile
+											</Button>
+										</Link>
+										<Link
+											href={`/setting/${session?.user?.id}`}
+											passHref
+										>
+											<Button
+												component="a"
+												variant="subtle"
+												className={cx(classes.link, {
+													[classes.linkActive]:
+														active === "/setting",
+												})}
+												onClick={() => {
+													setActive("/setting");
+													close();
+												}}
+											>
+												Settings
+											</Button>
+										</Link>
 										<Button
-											component="a"
 											variant="subtle"
-											className={cx(classes.link, {
-												[classes.linkActive]:
-													active === "/profile",
-											})}
+											className={classes.link}
 											onClick={() => {
-												setActive("/profile");
-												close();
+												signOut({ callbackUrl: "/login" });
 											}}
 										>
-											Profile
+											Log Out
 										</Button>
-									</Link>
-									<Link
-										href={`/setting/${session?.user?.id}`}
-										passHref
-									>
-										<Button
-											component="a"
-											variant="subtle"
-											className={cx(classes.link, {
-												[classes.linkActive]:
-													active === "/setting",
-											})}
-											onClick={() => {
-												setActive("/setting");
-												close();
-											}}
-										>
-											Settings
-										</Button>
-									</Link>
-									<Button
-										variant="subtle"
-										className={classes.link}
-										onClick={() => {
-											signOut({ callbackUrl: "/login" });
-										}}
-									>
-										Log Out
-									</Button>
-								</>
-							)}
+									</>
+								)}
 						</Paper>
 					)}
 				</Transition>

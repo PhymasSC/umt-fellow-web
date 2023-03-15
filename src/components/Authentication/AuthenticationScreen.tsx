@@ -116,7 +116,7 @@ const AuthenticationScreen = ({
             <Divider label="Or continue with" labelPosition="center" my="lg" />
 
             <Group grow mb="md" mt="md" spacing="xl">
-                <Tooltip transition="pop" label="Google" position="bottom" withArrow>
+                <Tooltip transitionProps={{ transition: 'pop', duration: 300 }} label="Google" position="bottom" withArrow>
                     <Button
                         sx={{ width: 80, height: 80 }}
                         variant="default"

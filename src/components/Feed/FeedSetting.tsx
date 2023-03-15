@@ -98,7 +98,7 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author }) => {
 							</Menu.Item>
 						)}
 					</CopyButton>
-					<Menu.Item icon={<IconFlag size={16} />}>Report</Menu.Item>
+					<Menu.Item color="red" icon={<IconFlag size={16} />}>Report</Menu.Item>
 				</Menu.Dropdown>
 			</Menu>
 		</Group>

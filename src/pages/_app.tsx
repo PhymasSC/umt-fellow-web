@@ -114,16 +114,9 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 								<AppShell
 									fixed
 									header={<Header links={LINKS} />}
-									// header={
-									// 	router.pathname === "/register" ||
-									// 	router.pathname === "/login" ? (
-									// 		<></>
-									// 	) : (
-									// 		<Header links={LINKS} />
-									// 	)
-									// }
 									sx={(theme) => ({
 										main: {
+											marginTop: "3.5em",
 											backgroundColor:
 												theme.colorScheme === "dark"
 													? theme.colors.dark[8]
@@ -131,7 +124,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 											padding:
 												router.pathname ===
 													"/register" ||
-												router.pathname === "/login"
+													router.pathname === "/login"
 													? "0em"
 													: "1.5em",
 
@@ -165,10 +158,10 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 												background: "0 0",
 											},
 											"input:-webkit-autofill, input:-webkit-autofill:focus":
-												{
-													transition:
-														"background-color 600000s 0s, color 600000s 0s",
-												},
+											{
+												transition:
+													"background-color 600000s 0s, color 600000s 0s",
+											},
 										})}
 									/>
 									<Component {...pageProps} />

@@ -72,13 +72,11 @@ const ImagePreview = (props: ImagePreviewInterface) => {
 						onClose={() => setOpened(false)}
 						title={<Title order={4}>{title || file?.name}</Title>}
 						size="auto"
-						overlayColor={
-							theme.colorScheme === "dark"
-								? theme.colors.dark[9]
-								: theme.colors.gray[2]
-						}
-						overlayOpacity={0.55}
-						overlayBlur={3}
+						overlayProps={{
+							color: theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.colors.gray[2],
+							opacity: 0.55,
+							blur: 3,
+						}}
 					>
 						<Image
 							src={imageUrl?.replace(/tr:([hw]-\d*,?)*\//g, "")}

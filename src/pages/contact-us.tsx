@@ -23,14 +23,13 @@ const useStyles = createStyles((theme) => ({
 	wrapper: {
 		minHeight: 400,
 		boxSizing: "border-box",
-		backgroundImage: `linear-gradient(-60deg, ${
-			theme.colors[theme.primaryColor][4]
-		} 0%, ${theme.colors[theme.primaryColor][7]} 100%)`,
+		backgroundImage: `linear-gradient(-60deg, ${theme.colors[theme.primaryColor][4]
+			} 0%, ${theme.colors[theme.primaryColor][7]} 100%)`,
 		borderRadius: theme.radius.md,
-		padding: theme.spacing.xl * 2.5,
-		margin: theme.spacing.xl * 2.5,
+		padding: `calc(${theme.spacing.xl}) * 2.5`,
+		margin: `calc(${theme.spacing.xl}) * 2.5`,
 		[`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-			padding: theme.spacing.xl * 1.5,
+			padding: `calc(${theme.spacing.xl}) * 1.5`,
 		},
 	},
 

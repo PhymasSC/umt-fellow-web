@@ -3,9 +3,14 @@ import { createStyles } from "@mantine/core";
 
 export const HEADER_HEIGHT = 60;
 
+
 export const useStyles = createStyles((theme) => ({
 	root: {
-		position: "relative",
+
+		backgroundColor: theme.colorScheme === "dark"
+			? `${theme.colors.dark[7]}CC`
+			: `${theme.colors.gray[0]}CC`,
+		backdropFilter: "blur(5px)",
 		zIndex: 1,
 	},
 
@@ -28,7 +33,8 @@ export const useStyles = createStyles((theme) => ({
 				theme.colorScheme === "dark"
 					? theme.colors[PRIMARY_COLOR][4]
 					: theme.colors[PRIMARY_COLOR][7],
-		}
+		},
+		textDecoration: "none",
 	},
 
 	dropdown: {
