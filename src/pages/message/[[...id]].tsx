@@ -81,7 +81,6 @@ const Message = () => {
 								<Flex gap={20}>
 									<Group>
 										<Indicator
-											dot
 											inline
 											size={16}
 											offset={7}
@@ -94,7 +93,7 @@ const Message = () => {
 												size="lg"
 												src={
 													data[parseInt(id[0]) - 1][
-														"avatar"
+													"avatar"
 													]
 												}
 											/>
@@ -116,7 +115,7 @@ const Message = () => {
 											radius="xl"
 											src={
 												data[parseInt(id[0]) - 1][
-													"avatar"
+												"avatar"
 												]
 											}
 										/>
@@ -129,18 +128,18 @@ const Message = () => {
 														"3px",
 													backgroundColor:
 														theme.colorScheme ===
-														"dark"
+															"dark"
 															? theme.colors
-																	.gray[1]
+																.gray[1]
 															: theme.colors
-																	.blue[7],
+																.blue[7],
 													color:
 														theme.colorScheme ===
-														"dark"
+															"dark"
 															? theme.colors
-																	.gray[9]
+																.gray[9]
 															: theme.colors
-																	.gray[1],
+																.gray[1],
 												})}
 											>
 												Test
@@ -154,18 +153,18 @@ const Message = () => {
 														"3px",
 													backgroundColor:
 														theme.colorScheme ===
-														"dark"
+															"dark"
 															? theme.colors
-																	.gray[1]
+																.gray[1]
 															: theme.colors
-																	.blue[7],
+																.blue[7],
 													color:
 														theme.colorScheme ===
-														"dark"
+															"dark"
 															? theme.colors
-																	.gray[9]
+																.gray[9]
 															: theme.colors
-																	.gray[1],
+																.gray[1],
 												})}
 											>
 												Test
@@ -177,18 +176,18 @@ const Message = () => {
 													borderTopLeftRadius: "3px",
 													backgroundColor:
 														theme.colorScheme ===
-														"dark"
+															"dark"
 															? theme.colors
-																	.gray[1]
+																.gray[1]
 															: theme.colors
-																	.blue[7],
+																.blue[7],
 													color:
 														theme.colorScheme ===
-														"dark"
+															"dark"
 															? theme.colors
-																	.gray[9]
+																.gray[9]
 															: theme.colors
-																	.gray[1],
+																.gray[1],
 												})}
 											>
 												Test
@@ -223,10 +222,10 @@ const Message = () => {
 							</Stack>
 						</Card>
 					)) || (
-						<Title align="center">
-							Select a conversation or start a new one!
-						</Title>
-					)}
+							<Title align="center">
+								Select a conversation or start a new one!
+							</Title>
+						)}
 				</Flex>
 			</Grid.Col>
 		</Grid>
