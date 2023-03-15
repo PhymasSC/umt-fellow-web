@@ -1,9 +1,6 @@
 import {
 	createStyles,
-	Text,
 	Avatar,
-	Group,
-	TypographyStylesProvider,
 	Paper,
 	Textarea,
 	Flex,

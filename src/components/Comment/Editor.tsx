@@ -18,7 +18,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { FileWithPath } from "@mantine/dropzone";
 import { useRouter } from "next/router";
-import { showNotification } from "@mantine/notifications";
+import { notifications } from "@mantine/notifications";
 import RTE from "./RichTextEditor";
 
 interface Props {
@@ -140,13 +140,12 @@ const Editor: React.FC<Props> = ({ data }) => {
 				res?.data?.updateThread?.code === 200
 			) {
 				router.replace(
-					`/thread/${
-						res?.data?.addThread?.thread?.id ||
-						res?.data?.updateThread?.thread?.id
+					`/thread/${res?.data?.addThread?.thread?.id ||
+					res?.data?.updateThread?.thread?.id
 					}`
 				);
 			} else {
-				showNotification({
+				notifications.show({
 					title: "Oops, something wrong happened",
 					message:
 						"There's some issue with the connection to the server, please try again.",
