@@ -10,7 +10,8 @@ import Link from "next/link";
 
 const useStyles = createStyles((theme) => ({
 	comment: {
-		padding: `${theme.spacing.lg}px ${theme.spacing.xl}px`,
+		padding: `${theme.spacing.lg} ${theme.spacing.xl}`,
+		backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.white,
 	},
 
 	body: {

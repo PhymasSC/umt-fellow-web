@@ -19,9 +19,10 @@ import {
 	Avatar,
 	Tooltip,
 	Box,
+	rem,
 } from "@mantine/core";
 import { Authentication, ThemeToggler } from "./../index";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useHeadroom } from "@mantine/hooks";
 import { useStyles, HEADER_HEIGHT } from "./Header.style";
 import { APP_LOGO } from "@constants/metadata";
 import { signOut, useSession } from "next-auth/react";
@@ -46,6 +47,7 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 	const [active, setActive] = useState(links[0].link);
 	const [modalOpened, setModalOpened] = useState(false);
 	const { classes, cx } = useStyles();
+	const pinned = useHeadroom({ fixedAt: 120 });
 	const closeModal = () => {
 		setModalOpened(false);
 	};
@@ -75,7 +77,10 @@ const UFHeader = ({ links }: HeaderResponsiveProps) => {
 	));
 
 	return (
-		<Header className={classes.root} height={HEADER_HEIGHT} fixed={true}>
+		<Header className={classes.root} height={HEADER_HEIGHT} fixed={true} sx={{
+			transform: `translate3d(0, ${pinned ? 0 : rem(-110)}, 0)`,
+			transition: 'transform 700ms ease',
+		}}>
 			<Container px="xs" size="xl" className={classes.header}>
 				{/* Modal */}
 				<Modal
