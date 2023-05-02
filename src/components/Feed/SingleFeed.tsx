@@ -153,8 +153,7 @@ const SingleFeed: React.FC<SingleFeedProps> = ({ feed, loading }) => {
         <Grid.Col span={1}>
           <Stack align="center" spacing="xs">
             <ActionIcon
-              onClick={(e) => {
-                e.stopPropagation();
+              onClick={() => {
                 handleVote("UPVOTE");
               }}
             >
