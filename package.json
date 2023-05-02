@@ -10,6 +10,7 @@
 	},
 	"proxy": "http://localhost:3000",
 	"dependencies": {
+		"@ably-labs/react-hooks": "^2.1.1",
 		"@apollo/client": "^3.7.1",
 		"@emotion/react": "^11.10.4",
 		"@emotion/server": "^11.10.0",
@@ -34,6 +35,7 @@
 		"@tiptap/pm": "^2.0.0-beta.220",
 		"@tiptap/react": "^2.0.0-beta.209",
 		"@tiptap/starter-kit": "^2.0.0-beta.209",
+		"ably": "^1.2.39",
 		"apollo-server-core": "^3.11.1",
 		"apollo-server-express": "^3.11.1",
 		"apollo-server-micro": "^3.11.1",

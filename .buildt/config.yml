@@ -1,8 +1,10 @@
 name: umt-fellow
 id: 9f998c15-f39b-474f-aa05-b1a549624437
-language: TypeScript
 extensions:
   - .ts
   - .cts
   - .mts
   - .tsx
+languages:
+  - TypeScript
+  - TSX
