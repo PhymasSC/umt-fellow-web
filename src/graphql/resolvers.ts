@@ -129,6 +129,7 @@ export const resolvers = {
 					imageUrl: true,
 				},
 			});
+			//@ts-ignore
 			images.forEach((image) => {
 				res.push(image.imageUrl);
 			});
