@@ -121,7 +121,9 @@ export const resolvers = {
 		},
 		images: async (parent: any) => {
 			const res: string[] = [];
-			const images = await prisma.images.findMany({
+			const images: {
+				imageUrl: string;
+			}[] = await prisma.images.findMany({
 				where: {
 					threadId: parent.id,
 				},
@@ -129,7 +131,6 @@ export const resolvers = {
 					imageUrl: true,
 				},
 			});
-			//@ts-ignore
 			images.forEach((image) => {
 				res.push(image.imageUrl);
 			});
