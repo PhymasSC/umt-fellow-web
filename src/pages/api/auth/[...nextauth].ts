@@ -4,18 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@lib/prisma";
-import { JWT } from "next-auth/jwt";
 import bcrypt from "bcrypt";
-import { AdapterUser } from "next-auth/adapters";
-
-interface Session extends DefaultSession {
-	user?: {
-		id?: string | null | undefined | unknown;
-		name?: string | null | undefined;
-		email?: string | null | undefined;
-		image?: string | null | undefined;
-	};
-}
 
 export const authOptions: NextAuthOptions = {
 	adapter: PrismaAdapter(prisma),
@@ -77,7 +66,7 @@ export const authOptions: NextAuthOptions = {
 	},
 	session: { strategy: "jwt" },
 	pages: {
-		signIn: "/login",
+		signIn: "/signup",
 	},
 	secret: process.env.NEXTAUTH_SECRET,
 };
