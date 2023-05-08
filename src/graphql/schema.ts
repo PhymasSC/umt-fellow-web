@@ -34,7 +34,7 @@ export const typeDefs = gql`
 		created_at: DateTime
 		updated_at: DateTime
 	}
-
+	
 	enum Role {
 		ADMIN
 		MODERATOR
@@ -54,7 +54,7 @@ export const typeDefs = gql`
 
 	type Query {
 		getUser(id: String!): User!
-		getUsers: [User]!
+		getUsers(limit: Int, offset: Int): [User]!
 		getThreads: [Thread]
 		getThreadsByAuthor(authorId: String!): [Thread]
 		getThreadById(id: String!): Thread

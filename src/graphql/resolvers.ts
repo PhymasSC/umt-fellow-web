@@ -27,8 +27,15 @@ export const resolvers = {
 			});
 			return user;
 		},
-		getUsers: async () => {
-			const users = await prisma.user.findMany();
+		// get x users according to params
+		getUsers: async (
+			_: any,
+			{ limit, offset }: { limit: number; offset: number }
+		) => {
+			const users = await prisma.user.findMany({
+				take: limit,
+				skip: offset,
+			});
 			return users;
 		},
 		getThreads: async () => {
