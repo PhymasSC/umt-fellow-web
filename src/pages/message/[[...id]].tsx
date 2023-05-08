@@ -50,9 +50,9 @@ const Message = () => {
         <Paper
           h="100%"
           withBorder
-          p={20}
+          p="md"
           sx={{
-            overflow: "scroll",
+            overflow: "auto",
           }}
         >
           <Flex direction="column" gap="md">
