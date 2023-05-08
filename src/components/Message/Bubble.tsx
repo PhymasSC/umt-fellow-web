@@ -12,8 +12,9 @@ const Bubble = ({
       p={10}
       radius="lg"
       fz="sm"
+      maw="70vw"
       sx={(theme) => ({
-        maxWidth: "70%",
+        wordBreak: "break-word",
         backgroundColor:
           theme.colorScheme === "dark"
             ? theme.colors.blue[1]

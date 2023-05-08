@@ -45,7 +45,7 @@ const Message = () => {
     },
   ];
   return (
-    <Grid h="calc(100vh - 2rem)" grow>
+    <Grid h="calc(100vh - 5rem)" grow>
       <Grid.Col h="100%" md={1}>
         <Paper
           h="100%"
@@ -68,7 +68,7 @@ const Message = () => {
           </Flex>
         </Paper>
       </Grid.Col>
-      <Grid.Col h="100%" md={8}>
+      <Grid.Col h="calc(100vh - 5rem)" md={8}>
         {(id && <Chatroom />) || (
           <Title align="center">
             Select a conversation or start a new one!

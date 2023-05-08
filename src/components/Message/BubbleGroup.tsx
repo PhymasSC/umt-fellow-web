@@ -2,6 +2,7 @@ import { Flex, Avatar } from "@mantine/core";
 import Bubble from "./Bubble";
 
 type BubbleProps = {
+  children: React.ReactNode;
   profileUrl: string;
   profileImage: string;
   message: string;
@@ -9,6 +10,7 @@ type BubbleProps = {
 };
 
 const BubbleGroup = ({
+  children,
   profileUrl,
   profileImage,
   isRecipient,
@@ -21,16 +23,7 @@ const BubbleGroup = ({
     >
       <Avatar radius="xl" src={profileImage} />
       <Flex direction="column" align={isRecipient ? "flex-end" : "flex-start"}>
-        <Bubble
-          message={`Ch
-            eck to see if this is a pretty long textCheck to see if this is a pretty long textCheck to see if this is a pretty long textCheck to see if this is a pretty long textCheck to see if this 
-            eck to see if this is a pretty long textCheck to see if this is a pretty long textCheck to see if this is a pretty long textCheck to see if this is a pretty long textCheck to see if this 
-            is a pretty long textCheck to see if this is a pretty long text`}
-          isRecipient={isRecipient}
-        />
-        <Bubble message="1" isRecipient={isRecipient} />
-        <Bubble message="1" isRecipient={isRecipient} />
-        <Bubble message="1" isRecipient={isRecipient} />
+        {children}
       </Flex>
     </Flex>
   );
