@@ -117,19 +117,17 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
                 header={<Header links={LINKS} />}
                 sx={(theme) => ({
                   main: {
-                    marginTop: "3.5em",
                     backgroundColor:
                       theme.colorScheme === "dark"
                         ? theme.colors.dark[8]
                         : theme.colors.gray[0],
                     padding:
-                      router.pathname === "/register" ||
-                      router.pathname === "/login"
-                        ? "0em"
-                        : "1.5em",
-
+                      (router.pathname === "/register" ||
+                        router.pathname === "/login") &&
+                      "0em",
                     [theme.fn.smallerThan("sm")]: {
-                      padding: "0",
+                      paddingLeft: "0",
+                      paddingRight: "0",
                     },
                   },
                 })}

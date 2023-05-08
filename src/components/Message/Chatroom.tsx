@@ -18,16 +18,14 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Bubble from "./Bubble";
 
-type ChatroomProps = {
-  id: string;
-};
-
 type Msg = {
+  name: string;
   sender: string;
   text: string;
   timestamp: Date;
   profileImage: string;
 };
+
 const Chatroom = () => {
   const { data: session } = useSession();
   const router = useRouter();
@@ -45,6 +43,7 @@ const Chatroom = () => {
     const msg = document.getElementById("message") as HTMLInputElement;
     const message: any = {
       sender: session?.user.id,
+      name: session?.user.name,
       text: msg.value,
       profileImage: session?.user.image,
       timestamp: new Date(),
@@ -93,14 +92,24 @@ const Chatroom = () => {
               return (
                 <BubbleGroup
                   key={index}
+                  name={message.name}
                   profileUrl={`/profile/${message.sender}`}
                   profileImage={message.profileImage}
-                  message={""}
                   isRecipient={message.sender === session?.user.id}
                 >
                   <Bubble
                     message={message.text}
-                    isRecipient={message.sender === session?.user.id}
+                    sx={(theme) => ({
+                      wordBreak: "break-word",
+                      backgroundColor:
+                        theme.colorScheme === "dark"
+                          ? theme.colors.blue[1]
+                          : theme.colors.blue[6],
+                      color:
+                        theme.colorScheme === "dark"
+                          ? theme.colors.gray[9]
+                          : theme.colors.gray[1],
+                    })}
                   />
                 </BubbleGroup>
               );

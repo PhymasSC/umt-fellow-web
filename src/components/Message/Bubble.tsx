@@ -1,30 +1,11 @@
-import { Paper } from "@mantine/core";
+import { DefaultProps, Paper, PaperStylesParams } from "@mantine/core";
 
-const Bubble = ({
-  message,
-  isRecipient,
-}: {
+type BubbleProps = {
   message: string;
-  isRecipient: boolean;
-}) => {
+} & DefaultProps<never, PaperStylesParams>;
+const Bubble = ({ message, sx }: BubbleProps) => {
   return (
-    <Paper
-      p={10}
-      radius="lg"
-      fz="sm"
-      maw="70vw"
-      sx={(theme) => ({
-        wordBreak: "break-word",
-        backgroundColor:
-          theme.colorScheme === "dark"
-            ? theme.colors.blue[1]
-            : theme.colors.blue[6],
-        color:
-          theme.colorScheme === "dark"
-            ? theme.colors.gray[9]
-            : theme.colors.gray[1],
-      })}
-    >
+    <Paper p={10} radius="lg" fz="sm" sx={sx}>
       {message.split("\n").map((line, index) => (
         <span key={index}>
           {line}

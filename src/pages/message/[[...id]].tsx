@@ -70,7 +70,16 @@ const Message = () => {
       </Grid.Col>
       <Grid.Col h="calc(100vh - 5rem)" md={8}>
         {(id && <Chatroom />) || (
-          <Title align="center">
+          <Title
+            align="center"
+            display="flex"
+            h="100%"
+            w="100%"
+            sx={{
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             Select a conversation or start a new one!
           </Title>
         )}
