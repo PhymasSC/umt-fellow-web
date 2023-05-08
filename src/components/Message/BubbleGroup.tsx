@@ -1,4 +1,5 @@
 import { Flex, Avatar } from "@mantine/core";
+import Link from "next/link";
 import Bubble from "./Bubble";
 
 type BubbleProps = {
@@ -21,7 +22,9 @@ const BubbleGroup = ({
       align="flex-end"
       direction={isRecipient ? "row-reverse" : "row"}
     >
-      <Avatar radius="xl" src={profileImage} />
+      <Link href={profileUrl} passHref>
+        <Avatar radius="xl" src={profileImage} component="a" />
+      </Link>
       <Flex direction="column" align={isRecipient ? "flex-end" : "flex-start"}>
         {children}
       </Flex>

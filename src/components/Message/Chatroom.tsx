@@ -8,7 +8,6 @@ import {
   Text,
   Textarea,
   ActionIcon,
-  Grid,
 } from "@mantine/core";
 import { IconSend } from "@tabler/icons";
 import BubbleGroup from "./BubbleGroup";
@@ -16,6 +15,7 @@ import { useChannel } from "@ably-labs/react-hooks";
 import type { Types } from "ably";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import Bubble from "./Bubble";
 
 type ChatroomProps = {
@@ -26,24 +26,27 @@ type Msg = {
   sender: string;
   text: string;
   timestamp: Date;
+  profileImage: string;
 };
 const Chatroom = () => {
   const { data: session } = useSession();
+  const router = useRouter();
   const [messages, setMessages] = useState<Msg[]>([]);
   const [channel, ably] = useChannel(
-    "channel-1",
+    `channel-${router.query.id as string}`,
     async (message: Types.Message) => {
+      console.log(channel.name);
       console.log("Received: ", message);
       setMessages((messages) => [...messages, message.data]);
     }
   );
-
   const sendMessage = () => {
     const window = document.getElementById("chat-window") as HTMLDivElement;
     const msg = document.getElementById("message") as HTMLInputElement;
     const message: any = {
       sender: session?.user.id,
-      text: msg.value,
+      text: msg.value.replace(/\n/g, "\u000A"),
+      profileImage: session?.user.image,
       timestamp: new Date(),
     };
     msg.value = "";
@@ -90,8 +93,8 @@ const Chatroom = () => {
               return (
                 <BubbleGroup
                   key={index}
-                  profileUrl={""}
-                  profileImage={""}
+                  profileUrl={`/profile/${message.sender}`}
+                  profileImage={message.profileImage}
                   message={""}
                   isRecipient={message.sender === session?.user.id}
                 >
@@ -115,7 +118,8 @@ const Chatroom = () => {
             maxRows={5}
             w="100%"
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
+              // if (e.key === "Enter" && !e.shiftKey) {
+              if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
                 sendMessage();
               }
