@@ -122,9 +122,10 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
                         ? theme.colors.dark[8]
                         : theme.colors.gray[0],
                     padding:
-                      (router.pathname === "/register" ||
-                        router.pathname === "/login") &&
-                      "0em",
+                      router.pathname === "/register" ||
+                      router.pathname === "/login"
+                        ? "0em"
+                        : "md",
                     [theme.fn.smallerThan("sm")]: {
                       paddingLeft: "0",
                       paddingRight: "0",
