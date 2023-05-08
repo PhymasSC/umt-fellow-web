@@ -25,7 +25,12 @@ const Bubble = ({
             : theme.colors.gray[1],
       })}
     >
-      {message}
+      {message.split("\n").map((line, index) => (
+        <span key={index}>
+          {line}
+          <br />
+        </span>
+      ))}
     </Paper>
   );
 };

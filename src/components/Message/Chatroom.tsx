@@ -45,7 +45,7 @@ const Chatroom = () => {
     const msg = document.getElementById("message") as HTMLInputElement;
     const message: any = {
       sender: session?.user.id,
-      text: msg.value.replace(/\n/g, "\u000A"),
+      text: msg.value,
       profileImage: session?.user.image,
       timestamp: new Date(),
     };
