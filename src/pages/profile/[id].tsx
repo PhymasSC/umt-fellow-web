@@ -6,31 +6,55 @@ import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 
 const Profile: NextPage = (props) => {
-	const router = useRouter();
-	const { id } = router.query;
-	const { loading: userLoading, data: userdata } = useQuery(GET_USER, {
-		variables: { id },
-	});
-	const { loading: threadLoading, data: threadData } = useQuery(
-		GET_THREADS_BY_AUTHOR,
-		{
-			variables: { authorId: id },
-		}
-	);
-	console.log(userdata, threadData);
-	// const { userdata, threadData } = props;
-	return (
-		<>
-			{userLoading || threadLoading ? (
-				<div>Loading...</div>
-			) : (
-				<ProfileComponent
-					user={userdata?.getUser}
-					threads={threadData}
-				></ProfileComponent>
-			)}
-		</>
-	);
+  const router = useRouter();
+  const { id } = router.query;
+  const { loading: userLoading, data: userdata } = useQuery(
+    GET_USER(`
+			emailVerified
+			isUMTMembership
+			sex
+			age
+			facebookLink
+			twitterLink
+			instagramLink
+			githubLink
+			dribbbleLink
+			youtubeLink
+			telegramLink
+			tiktokLink
+			redditLink
+			snapchatLink
+			about
+			faculty
+			major
+			year
+			cgpa
+			created_at
+			updated_at`),
+    {
+      variables: { id },
+    }
+  );
+  const { loading: threadLoading, data: threadData } = useQuery(
+    GET_THREADS_BY_AUTHOR,
+    {
+      variables: { authorId: id },
+    }
+  );
+  console.log(userdata, threadData);
+  // const { userdata, threadData } = props;
+  return (
+    <>
+      {userLoading || threadLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <ProfileComponent
+          user={userdata?.getUser}
+          threads={threadData}
+        ></ProfileComponent>
+      )}
+    </>
+  );
 };
 
 // export async function getServerSideProps(context: { params: { id: string } }) {
