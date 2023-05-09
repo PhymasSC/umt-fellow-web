@@ -30,7 +30,6 @@ const AutoCompleteItem = forwardRef<HTMLDivElement, ItemProps>(
     <div ref={ref} {...others}>
       <Group noWrap>
         <Avatar src={image} radius="xl" />
-
         <div>
           <Text>{name}</Text>
           <Text size="xs" color="dimmed">
@@ -42,6 +41,7 @@ const AutoCompleteItem = forwardRef<HTMLDivElement, ItemProps>(
   )
 );
 
+AutoCompleteItem.displayName = "@mantine/core/AutoCompleteItem";
 const Search = (props: SearchProps) => {
   const { placeholder } = props;
   const [value, setValue] = useState("");
