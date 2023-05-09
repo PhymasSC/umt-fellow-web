@@ -50,10 +50,6 @@ const Chatroom = () => {
       timestamp: new Date(),
     };
     msg.value = "";
-    viewport?.current?.scrollTo({
-      top: viewport.current.scrollHeight,
-      behavior: "smooth",
-    });
     channel.publish("chat-message", message);
   };
 
@@ -92,6 +88,12 @@ const Chatroom = () => {
           >
             <Flex direction="column" gap="md">
               {messages.map((message, index) => {
+                setTimeout(() => {
+                  viewport?.current?.scrollTo({
+                    top: viewport.current.scrollHeight,
+                    behavior: "smooth",
+                  });
+                }, 100);
                 return (
                   <BubbleGroup
                     key={index}
