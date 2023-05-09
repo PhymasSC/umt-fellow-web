@@ -1,8 +1,7 @@
 import { MessageList, Chatroom } from "@components/index";
-import { Title, Paper, Flex, TextInput, Grid } from "@mantine/core";
-import { IconSearch } from "@tabler/icons";
+import { Title, Paper, Flex, Grid } from "@mantine/core";
 import { useRouter } from "next/router";
-
+import { Search } from "@components/index";
 const Message = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -59,15 +58,12 @@ const Message = () => {
             <Title order={2} fz="md">
               Messages
             </Title>
-            <TextInput
-              placeholder="Search user"
-              icon={<IconSearch size={14} />}
-            />
-
+            <Search size="sm" />
             <MessageList data={data} />
           </Flex>
         </Paper>
       </Grid.Col>
+
       <Grid.Col h="calc(100vh - 5rem)" md={8}>
         {(id && <Chatroom />) || (
           <Title

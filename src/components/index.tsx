@@ -13,4 +13,5 @@ export { default as MessageList } from "@components/Message/MessageList";
 export { default as Notification } from "@components/Notification";
 export { CommunityList } from "@components/Community";
 export { Chatroom } from "@components/Message";
+export { default as Search } from "@components/Search";
 // Path: src\components\index.tsx

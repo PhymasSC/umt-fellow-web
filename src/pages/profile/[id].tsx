@@ -10,8 +10,7 @@ const Profile: NextPage = (props) => {
   const { id } = router.query;
   const { loading: userLoading, data: userdata } = useQuery(
     GET_USER(`
-	emailVerified
-			password
+			emailVerified
 			isUMTMembership
 			sex
 			age

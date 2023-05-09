@@ -55,6 +55,16 @@ export const GET_USER = (fields: any) => gql`
 	}
 `;
 
+export const GET_USERS_BY_NAME = (fields: any) => gql`
+	${USER_FRAGMENT}
+	query GetUsersByName($name: String!, $limit: Int, $offset: Int) {
+		getUsersByName(name: $name, limit: $limit, offset: $offset) {
+			...UserFragment
+			${fields}
+		}
+	}
+`;
+
 export const GET_THREADS = gql`
 	${THREAD_FRAGMENT}
 	{
