@@ -8,13 +8,14 @@ import {
   Text,
   Textarea,
   ActionIcon,
+  ScrollArea,
 } from "@mantine/core";
 import { IconSend } from "@tabler/icons";
 import BubbleGroup from "./BubbleGroup";
 import { useChannel } from "@ably-labs/react-hooks";
 import type { Types } from "ably";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/router";
 import Bubble from "./Bubble";
 
@@ -30,6 +31,7 @@ const Chatroom = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const [messages, setMessages] = useState<Msg[]>([]);
+  const viewport = useRef<HTMLDivElement>(null);
   const [channel, ably] = useChannel(
     `channel-${router.query.id as string}`,
     async (message: Types.Message) => {
@@ -39,7 +41,6 @@ const Chatroom = () => {
     }
   );
   const sendMessage = () => {
-    const window = document.getElementById("chat-window") as HTMLDivElement;
     const msg = document.getElementById("message") as HTMLInputElement;
     const message: any = {
       sender: session?.user.id,
@@ -49,7 +50,6 @@ const Chatroom = () => {
       timestamp: new Date(),
     };
     msg.value = "";
-    window.scrollTop = window.scrollHeight - window.clientHeight;
     channel.publish("chat-message", message);
   };
 
@@ -79,42 +79,48 @@ const Chatroom = () => {
           </Flex>
         </Flex>
 
-        <Card
-          id="chat-window"
-          withBorder
-          h="100%"
-          sx={{
-            overflow: "auto",
-          }}
-        >
-          <Flex direction="column" gap="md">
-            {messages.map((message, index) => {
-              return (
-                <BubbleGroup
-                  key={index}
-                  name={message.name}
-                  profileUrl={`/profile/${message.sender}`}
-                  profileImage={message.profileImage}
-                  isRecipient={message.sender === session?.user.id}
-                >
-                  <Bubble
-                    message={message.text}
-                    sx={(theme) => ({
-                      wordBreak: "break-word",
-                      backgroundColor:
-                        theme.colorScheme === "dark"
-                          ? theme.colors.blue[1]
-                          : theme.colors.blue[6],
-                      color:
-                        theme.colorScheme === "dark"
-                          ? theme.colors.gray[9]
-                          : theme.colors.gray[1],
-                    })}
-                  />
-                </BubbleGroup>
-              );
-            })}
-          </Flex>
+        <Card id="chat-window" withBorder h="100%">
+          <ScrollArea
+            h="100%"
+            offsetScrollbars
+            type="scroll"
+            viewportRef={viewport}
+          >
+            <Flex direction="column" gap="md">
+              {messages.map((message, index) => {
+                setTimeout(() => {
+                  viewport?.current?.scrollTo({
+                    top: viewport.current.scrollHeight,
+                    behavior: "smooth",
+                  });
+                }, 100);
+                return (
+                  <BubbleGroup
+                    key={index}
+                    name={message.name}
+                    profileUrl={`/profile/${message.sender}`}
+                    profileImage={message.profileImage}
+                    isRecipient={message.sender === session?.user.id}
+                  >
+                    <Bubble
+                      message={message.text}
+                      sx={(theme) => ({
+                        wordBreak: "break-word",
+                        backgroundColor:
+                          theme.colorScheme === "dark"
+                            ? theme.colors.blue[1]
+                            : theme.colors.blue[6],
+                        color:
+                          theme.colorScheme === "dark"
+                            ? theme.colors.gray[9]
+                            : theme.colors.gray[1],
+                      })}
+                    />
+                  </BubbleGroup>
+                );
+              })}
+            </Flex>
+          </ScrollArea>
         </Card>
 
         <Flex align="center" w="100%" gap="md" mah="200px">
