@@ -131,7 +131,6 @@ const SingleFeed: React.FC<SingleFeedProps> = ({ feed, loading }) => {
 
   const { title, author, created_at, updated_at, description, id, images } =
     feed;
-
   const handleVote = async (type: string) => {
     const res = await voteThread({
       variables: {
@@ -208,7 +207,7 @@ const SingleFeed: React.FC<SingleFeedProps> = ({ feed, loading }) => {
                 </Typography>
               </TypographyStylesProvider>
             </Spoiler>
-            {images && (
+            {images.length > 0 && (
               <>
                 <Space h="md" />
                 <Gallery
