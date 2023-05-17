@@ -46,6 +46,7 @@ model User {
   CommunityMember CommunityMember[]
   account         Account[]
   session         Session[]
+  Message         Message[]
 
   @@map("users")
 }
@@ -190,6 +191,27 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Conversation {
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  Message    Message[]
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  content        String
+  conversationId String       @map("conversation_id")
+  created_at     DateTime     @default(now())
+  updated_at     DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation(fields: [senderId], references: [id])
+  senderId       String       @map("sender_id")
+
+  @@index([conversationId], map: "messages_conversation_id_idx")
+  @@index([senderId], map: "messages_sender_id_idx")
 }
 
 enum Role {

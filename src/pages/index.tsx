@@ -19,7 +19,9 @@ import { GET_THREADS } from "@operations/queries";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
-  const { loading, error, data } = useQuery(GET_THREADS);
+  const { loading, error, data } = useQuery(GET_THREADS, {
+    pollInterval: 1000,
+  });
 
   return (
     <>

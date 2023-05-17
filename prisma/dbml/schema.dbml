@@ -36,6 +36,7 @@ Table users {
   CommunityMember community_members [not null]
   account Account [not null]
   session Session [not null]
+  Message Message [not null]
 }
 
 Table follows {
@@ -162,6 +163,24 @@ Table VerificationToken {
   }
 }
 
+Table Conversation {
+  id String [pk]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+  Message Message [not null]
+}
+
+Table Message {
+  id String [pk]
+  content String [not null]
+  conversationId String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+  conversation Conversation [not null]
+  sender users [not null]
+  senderId String [not null]
+}
+
 Enum Role {
   USER
   MODERATOR
@@ -199,3 +218,7 @@ Ref: community_members.userId > users.id
 Ref: Account.userId > users.id [delete: Cascade]
 
 Ref: Session.userId > users.id [delete: Cascade]
+
+Ref: Message.conversationId > Conversation.id [delete: Cascade]
+
+Ref: Message.senderId > users.id
