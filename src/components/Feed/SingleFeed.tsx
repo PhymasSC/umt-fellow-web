@@ -152,14 +152,22 @@ const SingleFeed: React.FC<SingleFeedProps> = ({ feed, loading }) => {
         <Grid.Col span={1}>
           <Stack align="center" spacing="xs">
             <ActionIcon
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 handleVote("UPVOTE");
               }}
             >
               <IconChevronUp />
             </ActionIcon>
             <Text>{formatter.format(votes)}</Text>
-            <ActionIcon onClick={() => handleVote("DOWNVOTE")}>
+            <ActionIcon
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleVote("DOWNVOTE");
+              }}
+            >
               <IconChevronDown />
             </ActionIcon>
           </Stack>
