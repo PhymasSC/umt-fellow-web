@@ -21,17 +21,19 @@ interface feed {
   id: string;
 }
 
+const Skeleton = () => (
+  <Card withBorder>
+    {[...Array(5)].map((_, index) => (
+      <Card.Section p="lg" withBorder key={index}>
+        <SingleFeed feed={undefined} loading />
+      </Card.Section>
+    ))}
+  </Card>
+);
+
 const Feed = ({ feeds, loading }: FeedProps) => {
   if (loading) {
-    return (
-      <Card p={0} radius="md" withBorder>
-        {[...Array(5)].map((_, index) => (
-          <Card.Section withBorder key={index}>
-            <SingleFeed feed={undefined} loading />
-          </Card.Section>
-        ))}
-      </Card>
-    );
+    return <Skeleton />;
   }
 
   return (
