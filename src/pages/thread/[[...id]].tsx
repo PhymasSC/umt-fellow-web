@@ -15,13 +15,11 @@ import {
   Space,
   Divider,
   Center,
-  Flex,
 } from "@mantine/core";
 import Link from "next/link";
 import { Comment } from "@components/index";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
 import { useQuery } from "@apollo/client";
 
 const ThreadPage: NextPage = (props) => {
@@ -50,7 +48,7 @@ const ThreadPage: NextPage = (props) => {
       </Container>
     );
   }
-
+  if (!loading && data?.getThreadById == null) router.push("/404");
   // View mode
   return (
     <>
