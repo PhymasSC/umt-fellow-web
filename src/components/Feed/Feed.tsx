@@ -32,12 +32,17 @@ const Skeleton = () => (
 );
 
 const Feed = ({ feeds, loading }: FeedProps) => {
-  if (loading) {
-    return <Skeleton />;
-  }
-
+  if (loading) return <Skeleton />;
   return (
-    <Card pt={0} pb={0} radius="md" withBorder>
+    <Card
+      pt={0}
+      pb={0}
+      radius="md"
+      withBorder
+      sx={{
+        overflow: "visible",
+      }}
+    >
       {Object.values(feeds || {}).map((value) =>
         value?.map((item) => (
           <Link key={item.id} href={`/thread/${item.id}`} passHref>
@@ -48,7 +53,7 @@ const Feed = ({ feeds, loading }: FeedProps) => {
                   theme.colorScheme === "dark"
                     ? theme.colors.gray[0]
                     : theme.colors.dark[9],
-
+                overflow: "visible",
                 "&:hover": {
                   cursor: "pointer",
                   backgroundColor:
@@ -58,6 +63,7 @@ const Feed = ({ feeds, loading }: FeedProps) => {
                 },
               })}
               component="a"
+              p="md"
               key={item.id}
               withBorder
             >
