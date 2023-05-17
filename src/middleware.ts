@@ -7,5 +7,5 @@ export default withAuth({
 });
 
 export const config = {
-    matcher: ["/rtchat"]
+    matcher: ["/rtchat", "/message", "/message/[id]"]
 }
