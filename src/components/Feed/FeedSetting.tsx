@@ -60,7 +60,7 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author, feedId }) => {
             <>
               <Link
                 href={{
-                  pathname: router.asPath.split("/")[1] + "/thread/" + feedId,
+                  pathname: "/thread/" + feedId,
                   query: "edit",
                 }}
                 passHref
