@@ -1,6 +1,7 @@
 import { Card } from "@mantine/core";
 import SingleFeed from "./SingleFeed";
 import Link from "next/link";
+import SingleFeedSkeleton from "./SingleFeedSkeleton";
 
 interface FeedProps {
   feeds: { threads: feed[] };
@@ -25,7 +26,7 @@ const Skeleton = () => (
   <Card withBorder>
     {[...Array(5)].map((_, index) => (
       <Card.Section p="lg" withBorder key={index}>
-        <SingleFeed feed={undefined} loading />
+        <SingleFeedSkeleton />
       </Card.Section>
     ))}
   </Card>
