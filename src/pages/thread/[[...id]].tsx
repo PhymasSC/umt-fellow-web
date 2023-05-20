@@ -28,6 +28,7 @@ const ThreadPage: NextPage = (props) => {
   const { data: session } = useSession();
   const { loading, data } = useQuery(GET_THREAD, {
     variables: { id: id?.[0] },
+    pollInterval: 500,
   });
   if (id === undefined) {
     return (
