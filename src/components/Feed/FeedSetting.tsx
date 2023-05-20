@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 interface FeedSettingProps {
+  feedId: string;
   author: {
     id: string;
     name: string;
@@ -21,7 +22,7 @@ interface FeedSettingProps {
   };
 }
 
-const FeedSetting: React.FC<FeedSettingProps> = ({ author }) => {
+const FeedSetting: React.FC<FeedSettingProps> = ({ author, feedId }) => {
   const router = useRouter();
   const [deleteThread] = useMutation(DELETE_THREAD);
   const { data: session } = useSession();
@@ -30,7 +31,7 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author }) => {
     try {
       const res = await deleteThread({
         variables: {
-          id: router.query?.id?.[0] || "",
+          id: feedId || "",
         },
       });
       console.log("Res:", res);
@@ -59,7 +60,7 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author }) => {
             <>
               <Link
                 href={{
-                  pathname: router.asPath,
+                  pathname: router.asPath.split("/")[1] + "/thread/" + feedId,
                   query: "edit",
                 }}
                 passHref
@@ -74,7 +75,10 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author }) => {
               <Menu.Divider />
             </>
           )}
-          <CopyButton value={`umtfellow.social${router.asPath}`} timeout={2000}>
+          <CopyButton
+            value={router.asPath.split("/")[1] + "/thread/" + feedId}
+            timeout={2000}
+          >
             {({ copied, copy }) => (
               <Menu.Item
                 icon={copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
