@@ -61,15 +61,7 @@ const SingleFeed: React.FC<SingleFeedProps> = ({ feed, loading }) => {
       variables: {
         threadId: feed?.id,
       },
-    }
-  );
-
-  const { loading: votesCountLoading, data: votesCountData } = useQuery(
-    GET_THREAD_VOTES,
-    {
-      variables: {
-        threadId: feed?.id,
-      },
+      pollInterval: 500,
     }
   );
 
