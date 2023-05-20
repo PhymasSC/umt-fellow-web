@@ -202,7 +202,7 @@ const SingleFeed: React.FC<SingleFeedProps> = ({ feed, loading }) => {
                     {dayjs(new Date(updated_at)).fromNow()}
                   </Text>
                 </Tooltip>
-                <FeedSetting author={author} />
+                <FeedSetting author={author} feedId={feed.id} />
               </Group>
             </Group>
             <Title size="h3" weight="600">
