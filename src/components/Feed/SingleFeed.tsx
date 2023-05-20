@@ -29,7 +29,7 @@ import {
 } from "@operations/queries";
 import { VOTE_THREAD } from "@operations/mutations";
 import { useStyles } from "./SingleFeed.style";
-
+import { MouseEvent } from "react";
 interface SingleFeedProps {
   feed?: {
     title: string;
@@ -152,7 +152,7 @@ const SingleFeed: React.FC<SingleFeedProps> = ({ feed, loading }) => {
         <Grid.Col span={1}>
           <Stack align="center" spacing="xs">
             <ActionIcon
-              onClick={(e) => {
+              onClick={(e: MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();
                 e.stopPropagation();
                 handleVote("UPVOTE");
@@ -162,7 +162,7 @@ const SingleFeed: React.FC<SingleFeedProps> = ({ feed, loading }) => {
             </ActionIcon>
             <Text>{formatter.format(votes)}</Text>
             <ActionIcon
-              onClick={(e) => {
+              onClick={(e: MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();
                 e.stopPropagation();
                 handleVote("DOWNVOTE");
