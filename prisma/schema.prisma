@@ -109,7 +109,7 @@ model CommunityMember {
 }
 
 model Images {
-  id         String   @id @default(uuid())
+  id         String   @id
   imageUrl   String   @db.Text
   threadId   String   @map("thread_id")
   created_at DateTime @default(now()) @map("created_at")

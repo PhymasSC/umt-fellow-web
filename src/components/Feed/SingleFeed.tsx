@@ -36,7 +36,10 @@ interface SingleFeedProps {
       name: string;
       image: string;
     };
-    images: string[];
+    images: {
+      id: string;
+      imageUrl: string;
+    }[];
     created_at: string;
     updated_at: string;
     description: string;
@@ -167,7 +170,7 @@ const SingleFeed: React.FC<SingleFeedProps> = ({ feed, loading }) => {
                 <Gallery
                   images={images.map(
                     (image) =>
-                      `https://ik.imagekit.io/umtfellow/tr:h-800/${image}`
+                      `https://ik.imagekit.io/umtfellow/tr:h-800/${image.imageUrl}`
                   )}
                 />
               </>

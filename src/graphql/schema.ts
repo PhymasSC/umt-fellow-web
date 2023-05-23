@@ -35,6 +35,14 @@ export const typeDefs = gql`
 		updated_at: DateTime
 	}
 	
+	type ThreadImages {
+		id: String!
+		imageUrl: String!
+		threadId: String!
+		created_at: DateTime
+		updated_at: DateTime
+	}
+
 	enum Role {
 		ADMIN
 		MODERATOR
@@ -68,7 +76,7 @@ export const typeDefs = gql`
 		id: String!
 		title: String!
 		description: String!
-		images: [String]
+		images: [ThreadImages]
 		tags: [String]
 		author: User
 		flag: Flag
@@ -115,9 +123,14 @@ export const typeDefs = gql`
 	}
 
 	input Image {
-		name: String!
-		blob: String!
+		id: String
+		name: String
+		blob: String
+		url: String
+		isExisting: Boolean!
+		isDeleted: Boolean!
 	}
+
 	type UserResponse {
 		code: Int!
 		success: Boolean!

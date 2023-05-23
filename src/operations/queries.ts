@@ -15,7 +15,10 @@ const THREAD_FRAGMENT = gql`
 		id
 		title
 		description
-		images
+		images{
+			id
+			imageUrl
+		}
 		tags
 		author {
 			...UserFragment
