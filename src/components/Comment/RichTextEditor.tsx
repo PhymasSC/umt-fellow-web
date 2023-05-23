@@ -27,156 +27,151 @@ lowlight.registerLanguage("html", html);
 lowlight.registerLanguage("java", java);
 
 interface RTEProps {
-	form: UseFormReturnType<{
-		title: string;
-		tags: string[];
-		description: string;
-		images: string[];
-	}>;
+  form: UseFormReturnType<{
+    title: string;
+    tags: string[];
+    description: string;
+    images: {
+      id: string;
+      imageUrl: string;
+    }[];
+  }>;
 }
 
 const RTE: React.FC<RTEProps> = ({ form }) => {
-	const youtubeUrlRef = useRef<HTMLInputElement>(null);
-	const editor = useEditor({
-		extensions: [
-			StarterKit,
-			Underline,
-			Link,
-			Superscript,
-			SubScript,
-			Highlight,
-			TextAlign.configure({ types: ["heading", "paragraph"] }),
-			Youtube,
-			CodeBlockLowlight.configure({
-				lowlight,
-			}),
-			Placeholder.configure({
-				placeholder: "Write your description here...",
-			}),
-		],
-		content: form.values.description || "",
-		onUpdate: ({ editor }) => {
-			form.setFieldValue("description", editor.getHTML());
-		},
-	});
+  const youtubeUrlRef = useRef<HTMLInputElement>(null);
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      Link,
+      Superscript,
+      SubScript,
+      Highlight,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      Youtube,
+      CodeBlockLowlight.configure({
+        lowlight,
+      }),
+      Placeholder.configure({
+        placeholder: "Write your description here...",
+      }),
+    ],
+    content: form.values.description || "",
+    onUpdate: ({ editor }) => {
+      form.setFieldValue("description", editor.getHTML());
+    },
+  });
 
-	const addVideo = () => {
-		console.log(youtubeUrlRef.current?.value);
-		editor?.commands.setYoutubeVideo({
-			src: youtubeUrlRef.current?.value || "",
-			width: 640,
-			height: 480,
-		});
-	};
-	return (
-		<RichTextEditor
-			editor={editor}
-			sx={(theme) => ({
-				"& .ProseMirror": {
-					minHeight: 200,
-					maxHeight: 300,
-					overflowY: "auto",
-					overflowX: "hidden",
-					backgroundColor:
-						theme.colorScheme === "dark"
-							? theme.colors.dark[6]
-							: theme.white,
-					padding: "1em",
-				},
-			})}
-		>
-			<RichTextEditor.Toolbar sticky stickyOffset={60}>
-				<RichTextEditor.ControlsGroup>
-					<RichTextEditor.Bold />
-					<RichTextEditor.Italic />
-					<RichTextEditor.Underline />
-					<RichTextEditor.Strikethrough />
-					<RichTextEditor.ClearFormatting />
-					<RichTextEditor.Highlight />
-					<RichTextEditor.Code />
-					<RichTextEditor.CodeBlock />
-				</RichTextEditor.ControlsGroup>
+  const addVideo = () => {
+    console.log(youtubeUrlRef.current?.value);
+    editor?.commands.setYoutubeVideo({
+      src: youtubeUrlRef.current?.value || "",
+      width: 640,
+      height: 480,
+    });
+  };
+  return (
+    <RichTextEditor
+      editor={editor}
+      sx={(theme) => ({
+        "& .ProseMirror": {
+          minHeight: 200,
+          maxHeight: 300,
+          overflowY: "auto",
+          overflowX: "hidden",
+          backgroundColor:
+            theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.white,
+          padding: "1em",
+        },
+      })}
+    >
+      <RichTextEditor.Toolbar sticky stickyOffset={60}>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+          <RichTextEditor.Underline />
+          <RichTextEditor.Strikethrough />
+          <RichTextEditor.ClearFormatting />
+          <RichTextEditor.Highlight />
+          <RichTextEditor.Code />
+          <RichTextEditor.CodeBlock />
+        </RichTextEditor.ControlsGroup>
 
-				<RichTextEditor.ControlsGroup>
-					<RichTextEditor.H1 />
-					<RichTextEditor.H2 />
-					<RichTextEditor.H3 />
-					<RichTextEditor.H4 />
-					<RichTextEditor.H5 />
-					<RichTextEditor.H6 />
-				</RichTextEditor.ControlsGroup>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.H1 />
+          <RichTextEditor.H2 />
+          <RichTextEditor.H3 />
+          <RichTextEditor.H4 />
+          <RichTextEditor.H5 />
+          <RichTextEditor.H6 />
+        </RichTextEditor.ControlsGroup>
 
-				<RichTextEditor.ControlsGroup>
-					<RichTextEditor.Blockquote />
-					<RichTextEditor.Hr />
-					<RichTextEditor.BulletList />
-					<RichTextEditor.OrderedList />
-					<RichTextEditor.Subscript />
-					<RichTextEditor.Superscript />
-				</RichTextEditor.ControlsGroup>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Blockquote />
+          <RichTextEditor.Hr />
+          <RichTextEditor.BulletList />
+          <RichTextEditor.OrderedList />
+          <RichTextEditor.Subscript />
+          <RichTextEditor.Superscript />
+        </RichTextEditor.ControlsGroup>
 
-				<RichTextEditor.ControlsGroup>
-					<RichTextEditor.Link />
-					<RichTextEditor.Unlink />
-				</RichTextEditor.ControlsGroup>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Link />
+          <RichTextEditor.Unlink />
+        </RichTextEditor.ControlsGroup>
 
-				<RichTextEditor.ControlsGroup>
-					<RichTextEditor.AlignLeft />
-					<RichTextEditor.AlignCenter />
-					<RichTextEditor.AlignJustify />
-					<RichTextEditor.AlignRight />
-				</RichTextEditor.ControlsGroup>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.AlignLeft />
+          <RichTextEditor.AlignCenter />
+          <RichTextEditor.AlignJustify />
+          <RichTextEditor.AlignRight />
+        </RichTextEditor.ControlsGroup>
 
-				<Popover
-					trapFocus
-					shadow="md"
-					withinPortal
-					offset={-44}
-					zIndex={10000}
-				>
-					<Popover.Target>
-						<RichTextEditor.Control
-							aria-label="Insert youtube url"
-							title="Insert youtube url"
-						>
-							<IconVideo stroke={1.5} size={16} />
-						</RichTextEditor.Control>
-					</Popover.Target>
-					<Popover.Dropdown
-						sx={(theme) => ({
-							padding: theme.spacing.sm,
-							paddingRight: theme.spacing.xl,
-							backgroundColor:
-								theme.colorScheme === "dark"
-									? theme.colors.dark[7]
-									: theme.white,
-						})}
-					>
-						<TextInput
-							w={280}
-							placeholder="https://example.com/"
-							type="url"
-							ref={youtubeUrlRef}
-							rightSection={
-								<Button
-									variant="default"
-									sx={{
-										borderTopLeftRadius: 0,
-										borderBottomLeftRadius: 0,
-									}}
-									onClick={addVideo}
-								>
-									Save
-								</Button>
-							}
-						/>
-					</Popover.Dropdown>
-				</Popover>
-			</RichTextEditor.Toolbar>
+        <Popover trapFocus shadow="md" withinPortal offset={-44} zIndex={10000}>
+          <Popover.Target>
+            <RichTextEditor.Control
+              aria-label="Insert youtube url"
+              title="Insert youtube url"
+            >
+              <IconVideo stroke={1.5} size={16} />
+            </RichTextEditor.Control>
+          </Popover.Target>
+          <Popover.Dropdown
+            sx={(theme) => ({
+              padding: theme.spacing.sm,
+              paddingRight: theme.spacing.xl,
+              backgroundColor:
+                theme.colorScheme === "dark"
+                  ? theme.colors.dark[7]
+                  : theme.white,
+            })}
+          >
+            <TextInput
+              w={280}
+              placeholder="https://example.com/"
+              type="url"
+              ref={youtubeUrlRef}
+              rightSection={
+                <Button
+                  variant="default"
+                  sx={{
+                    borderTopLeftRadius: 0,
+                    borderBottomLeftRadius: 0,
+                  }}
+                  onClick={addVideo}
+                >
+                  Save
+                </Button>
+              }
+            />
+          </Popover.Dropdown>
+        </Popover>
+      </RichTextEditor.Toolbar>
 
-			<RichTextEditor.Content />
-		</RichTextEditor>
-	);
+      <RichTextEditor.Content />
+    </RichTextEditor>
+  );
 };
 
 export default RTE;

@@ -141,21 +141,14 @@ export const resolvers = {
 			return user;
 		},
 		images: async (parent: any) => {
-			const res: string[] = [];
 			const images: {
 				imageUrl: string;
 			}[] = await prisma.images.findMany({
 				where: {
 					threadId: parent.id,
 				},
-				select: {
-					imageUrl: true,
-				},
 			});
-			images.forEach((image) => {
-				res.push(image.imageUrl);
-			});
-			return res;
+			return images;
 		},
 	},
 
@@ -208,7 +201,7 @@ export const resolvers = {
 			}: {
 				title: string;
 				description: string;
-				images: { name: string; blob: string }[];
+				images: { name: string; blob: string; isExisting: boolean; isDeleted: boolean }[];
 				tags: string[];
 				author: string;
 			}
@@ -222,7 +215,6 @@ export const resolvers = {
 						authorId: author,
 					},
 				});
-
 				const promises = images.map(async (image) => {
 					const upload = await imagekit.upload({
 						file: image.blob,
@@ -233,6 +225,7 @@ export const resolvers = {
 
 					await prisma.images.create({
 						data: {
+							id: upload.fileId,
 							imageUrl: upload.filePath,
 							threadId: thread.id,
 						},
@@ -272,7 +265,7 @@ export const resolvers = {
 				id: string;
 				title: string;
 				description: string;
-				images: { name: string; blob: string }[];
+				images: { id?: string; name?: string; blob?: string; url?: string, isExisting?: boolean, isDeleted: boolean }[];
 				tags: string[];
 			}
 		) => {
@@ -288,19 +281,36 @@ export const resolvers = {
 						updated_at: new Date(),
 					},
 				});
-
 				if (images.length > 0) {
 					const promises = images.map(async (image) => {
-						await imagekit.deleteFolder(`/threads/${thread.id}`);
+						if (image.isDeleted) {
+							console.log("Delete")
+							console.log(image)
+							const deletion = await imagekit.deleteFile(image.id || "");
+							await prisma.images.delete({
+								where: {
+									id: image.id || "",
+								},
+							});
+							return deletion
+						}
+						if (image.isExisting && image.url) {
+							console.log("Exist but not deleted")
+							console.log(image)
+							const res = await imagekit.getFileDetails(image.id || "")
+							console.log(res)
+							return res
+						};
 						const upload = await imagekit.upload({
-							file: image.blob,
-							fileName: image.name,
+							file: image?.blob || "",
+							fileName: image?.name || "",
 							folder: `/threads/${thread.id}`,
 							useUniqueFileName: true,
 						});
 
 						await prisma.images.create({
 							data: {
+								id: upload.fileId,
 								imageUrl: upload.filePath,
 								threadId: thread.id,
 							},

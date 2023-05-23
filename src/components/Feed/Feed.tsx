@@ -15,7 +15,10 @@ interface feed {
     name: string;
     image: string;
   };
-  images: string[];
+  images: {
+    id: string;
+    imageUrl: string;
+  }[];
   created_at: string;
   updated_at: string;
   description: string;

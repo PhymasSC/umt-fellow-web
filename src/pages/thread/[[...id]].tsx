@@ -92,10 +92,7 @@ const ThreadPage: NextPage = (props) => {
             <Grid>
               <Grid.Col xs={12} lg={8}>
                 <Card sx={{ overflow: "visible" }} withBorder>
-                  <SingleFeed
-                    feed={data?.getThreadById}
-                    loading={loading}
-                  ></SingleFeed>
+                  <SingleFeed feed={data?.getThreadById} loading={loading} />
                 </Card>
               </Grid.Col>
               <Grid.Col xs={12} lg={4}>
@@ -156,7 +153,7 @@ const ThreadPage: NextPage = (props) => {
                   name: data?.getThreadById?.author?.name,
                   image: data?.getThreadById?.author?.image,
                 }}
-              ></Comment>
+              />
             )}
           </Grid.Col>
           <Grid.Col xs={12} md={4}></Grid.Col>
