@@ -1,5 +1,5 @@
 import ImagePreview from "@components/Comment/ImagePreview";
-import { Grid, SimpleGrid, useMantineTheme } from "@mantine/core";
+import { Flex, Grid, SimpleGrid, Space, useMantineTheme } from "@mantine/core";
 
 type Props = {
   images: string[];
@@ -21,22 +21,24 @@ const Gallery: React.FC<Props> = ({ images }) => {
     >
       <Grid gutter="lg">
         <Grid.Col>
-          <ImagePreview
-            src={images[0]}
-            title={""}
-            width="100%"
-            height={
-              images.length <= 2 ? PRIMARY_COL_HEIGHT : SECONDARY_COL_HEIGHT
-            }
-          />
-          {images.length > 2 && (
+          <Flex direction="column" gap="md">
             <ImagePreview
-              src={images[1]}
+              src={images[0]}
               title={""}
               width="100%"
-              height={SECONDARY_COL_HEIGHT}
+              height={
+                images.length <= 2 ? PRIMARY_COL_HEIGHT : SECONDARY_COL_HEIGHT
+              }
             />
-          )}
+            {images.length > 2 && (
+              <ImagePreview
+                src={images[1]}
+                title={""}
+                width="100%"
+                height={SECONDARY_COL_HEIGHT}
+              />
+            )}
+          </Flex>
         </Grid.Col>
       </Grid>
 
