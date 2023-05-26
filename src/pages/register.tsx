@@ -1,8 +1,7 @@
-import { Paper, createStyles, Alert } from "@mantine/core";
+import { Paper, createStyles } from "@mantine/core";
 import { Authentication } from "@components/index";
 import { NextPage } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -11,8 +10,7 @@ const useStyles = createStyles((theme) => ({
     height: "100vh",
     padding: "3em",
     backgroundSize: "cover",
-    backgroundImage:
-      "url(https://images.unsplash.com/photo-1633155518197-afebeecd096d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=769&q=80)",
+    backgroundImage: "url('/auth-bg.jpeg')",
     [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
       padding: "0",
     },
@@ -51,8 +49,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const Register: NextPage = () => {
-  const router = useRouter();
   const { classes } = useStyles();
+
   return (
     <>
       <Head>
