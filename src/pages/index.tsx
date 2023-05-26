@@ -54,8 +54,8 @@ const Home: NextPage = () => {
                   variant="gradient"
                   gradient={{ from: "indigo", to: "cyan", deg: 45 }}
                 >
-                  Let's get this forum started! Start a thread and see who joins
-                  in.{" "}
+                  Let&apos;s get this forum started! Start a thread and see who
+                  joins in.{" "}
                 </Text>
               </Card>
             )) || <Feed feeds={data} loading={loading} />}
