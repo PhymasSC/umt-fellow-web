@@ -36,7 +36,29 @@ const Home: NextPage = () => {
                 }}
               />
             )}
-            <Feed feeds={data} loading={loading} />
+            {(data?.getThreads.length === 0 && (
+              <Card
+                withBorder
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "transparent",
+                  minHeight: "8em",
+                }}
+              >
+                <Text
+                  size="lg"
+                  fw="bold"
+                  align="center"
+                  variant="gradient"
+                  gradient={{ from: "indigo", to: "cyan", deg: 45 }}
+                >
+                  Let's get this forum started! Start a thread and see who joins
+                  in.{" "}
+                </Text>
+              </Card>
+            )) || <Feed feeds={data} loading={loading} />}
           </Flex>
         </Grid.Col>
         <Grid.Col xs={12} lg={4}>
