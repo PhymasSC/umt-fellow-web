@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useForm } from "@mantine/form";
+import { useForm, isEmail, matches, hasLength } from "@mantine/form";
 import { Paper, PaperProps } from "@mantine/core";
 import { signIn } from "next-auth/react";
 import { useMutation } from "@apollo/client";
@@ -33,13 +33,12 @@ const Authentication = ({
     },
 
     validate: {
-      name: (value) =>
-        (value.trim().length < 3 || value.trim().length > 190) &&
-        "Invalid username",
-      email: (val) => !EMAIL_PATTERN.test(val) && "Invalid email",
-      password: (val) =>
-        !PASSWORD_PATTERN.test(val) &&
-        "Password should include at least 6 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character",
+      name: hasLength({ min: 3, max: 190 }, "Invalid username"),
+      email: isEmail("Invalid email"),
+      password: matches(
+        PASSWORD_PATTERN,
+        "Password should include at least 6 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"
+      ),
     },
   });
 
