@@ -5442,7 +5442,7 @@ prisma-dbml-generator@^0.10.0:
     "@prisma/generator-helper" "4.6.1"
     "@prisma/internals" "4.6.1"
 
-prisma@^4.14.0:
+prisma@^4.14.1:
   version "4.14.1"
   resolved "https://registry.yarnpkg.com/prisma/-/prisma-4.14.1.tgz#7a6bb4ce847a9d08deabb6acdf3116fff15e1316"
   integrity sha512-z6hxzTMYqT9SIKlzD08dhzsLUpxjFKKsLpp5/kBDnSqiOjtUyyl/dC5tzxLcOa3jkEHQ8+RpB/fE3w8bgNP51g==
