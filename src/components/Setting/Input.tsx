@@ -1,4 +1,11 @@
-import { Loader, TextInput, TextInputProps } from "@mantine/core";
+import {
+  ActionIcon,
+  Flex,
+  Grid,
+  Loader,
+  TextInput,
+  TextInputProps,
+} from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useMutation } from "@apollo/client";
 import { EDIT_USER } from "@operations/mutations";
@@ -8,6 +15,7 @@ import { notifications } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
 import { FormValidateInput } from "@mantine/form/lib/types";
 import { isErrored } from "stream";
+import { IconTrash } from "@tabler/icons";
 
 type InputProps = {
   layout?: "horizontal" | "vertical";
@@ -18,6 +26,7 @@ type InputProps = {
       }>
     | undefined;
   errMsg?: string;
+  deleteable?: boolean;
   argType: string;
 } & TextInputProps;
 
@@ -27,6 +36,7 @@ const Input = ({
   value,
   validate,
   errMsg,
+  deleteable,
   ...props
 }: InputProps) => {
   const form = useForm({
@@ -69,17 +79,50 @@ const Input = ({
     }
   }, [debouncedValue]);
 
+  const handleDelete = async () => {
+    setLoading(true);
+    await editUser({
+      variables: {
+        id: session?.user.id,
+        [argType]: "",
+      },
+    });
+    setLoading(false);
+    notifications.show({
+      title: "Success",
+      message: "Successfully updated",
+      color: "green",
+    });
+    form.resetDirty();
+  };
+
   return (
-    <>
-      <TextInput
-        mt={(layout === "vertical" && "-1em") || "0"}
-        mb={(layout === "vertical" && "1em") || "0"}
-        disabled={loading}
-        rightSection={loading && <Loader size="xs" />}
-        {...form.getInputProps("val")}
-        {...props}
-      />
-    </>
+    <Grid>
+      <Grid.Col span="auto">
+        <TextInput
+          mt={(layout === "vertical" && "-1em") || "0"}
+          mb={(layout === "vertical" && "1em") || "0"}
+          disabled={loading}
+          rightSection={loading && <Loader size="xs" />}
+          {...form.getInputProps("val")}
+          {...props}
+        />
+      </Grid.Col>
+      {deleteable && (
+        <Grid.Col
+          span={1}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <ActionIcon color="red" onClick={handleDelete}>
+            <IconTrash size="1.2em" />
+          </ActionIcon>
+        </Grid.Col>
+      )}
+    </Grid>
   );
 };
 
