@@ -59,7 +59,6 @@ const Input = ({
       [argType]: true,
     })
   );
-
   const { data: session } = useSession();
   const Element = component;
   const update = async () => {
