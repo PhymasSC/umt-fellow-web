@@ -190,6 +190,58 @@ export const resolvers = {
 			}
 		},
 
+		editUser: async (
+			_: any,
+			attr: {
+				id: string;
+				name: string;
+				email: string;
+				password: string;
+				image: string;
+				facebookLink: string;
+				twitterLink: string;
+				instagramLink: string;
+				githubLink: string;
+				dribbbleLink: string;
+				youtubeLink: string;
+				telegramLink: string;
+				tiktokLink: string;
+				redditLink: string;
+				snapchatLink: string;
+				about: string;
+				faculty: string;
+				major: string;
+				year: string;
+				cgpa: number;
+			}
+		) => {
+			// const hashedPassword = await bcrypt.hash(password, saltRounds);
+			const { id, ...rest } = attr
+			console.log(id)
+			console.log(rest)
+			try {
+				const user = await prisma.user.update({
+					where: {
+						id,
+					},
+					data: rest,
+				});
+				return {
+					code: 200,
+					success: true,
+					message: "User edited successfully",
+					user,
+				};
+			} catch (error: any) {
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "User edit failed",
+					user: null,
+				};
+			}
+		},
+
 		addThread: async (
 			_: any,
 			{
