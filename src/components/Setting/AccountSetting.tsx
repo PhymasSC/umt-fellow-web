@@ -125,6 +125,15 @@ const AccountSetting = () => {
           type="text"
           placeholder={userData?.name || session?.user.name || ""}
           value={userData?.name || session?.user.name || ""}
+          validate={{
+            val: (val) => {
+              val.length < 3;
+              if (val.length < 3)
+                return "Name must be at least 3 characters long";
+              if (val.length > 50)
+                return "Name must be less than 50 characters long";
+            },
+          }}
         />
       ),
     },
