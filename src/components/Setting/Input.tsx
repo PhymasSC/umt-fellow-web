@@ -1,21 +1,12 @@
-import {
-  ActionIcon,
-  Flex,
-  Grid,
-  Loader,
-  TextInput,
-  TextInputProps,
-} from "@mantine/core";
-import { useDebouncedValue } from "@mantine/hooks";
+import { ActionIcon, Grid, TextInput, TextInputProps } from "@mantine/core";
 import { useMutation } from "@apollo/client";
 import { EDIT_USER } from "@operations/mutations";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { notifications } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
 import { FormValidateInput } from "@mantine/form/lib/types";
-import { isErrored } from "stream";
-import { IconTrash } from "@tabler/icons";
+import { IconEdit, IconTrash } from "@tabler/icons";
 
 type InputProps = {
   layout?: "horizontal" | "vertical";
@@ -46,22 +37,21 @@ const Input = ({
     validate,
   });
   const [loading, setLoading] = useState(false);
-  const [debouncedValue] = useDebouncedValue(form.values.val, 1000);
   const [editUser] = useMutation(
     EDIT_USER({
       [argType]: true,
     })
   );
-
   const { data: session } = useSession();
 
-  useEffect(() => {
-    const update = async () => {
+  const update = async () => {
+    form.validate();
+    if (form.isValid()) {
       setLoading(true);
       await editUser({
         variables: {
           id: session?.user.id,
-          [argType]: debouncedValue,
+          [argType]: form.values.val,
         },
       });
       setLoading(false);
@@ -71,13 +61,8 @@ const Input = ({
         color: "green",
       });
       form.resetDirty();
-    };
-
-    form.validate();
-    if (debouncedValue && form.isValid("val")) {
-      update().catch((err) => console.log(err));
     }
-  }, [debouncedValue]);
+  };
 
   const handleDelete = async () => {
     setLoading(true);
@@ -103,7 +88,16 @@ const Input = ({
           mt={(layout === "vertical" && "-1em") || "0"}
           mb={(layout === "vertical" && "1em") || "0"}
           disabled={loading}
-          rightSection={loading && <Loader size="xs" />}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              update();
+            }
+          }}
+          rightSection={
+            <ActionIcon color="blue" onClick={update}>
+              <IconEdit size="1.2em" />
+            </ActionIcon>
+          }
           {...form.getInputProps("val")}
           {...props}
         />
