@@ -249,6 +249,17 @@ const AccountSetting = () => {
       ),
     },
     {
+      label: "Email Address",
+      description:
+        "Your email address is used to verify your identity and to send you notifications about your account.",
+      layout: "horizontal",
+      input: (
+        <Text fw="normal" size="sm">
+          {userData?.email || session?.user.email || ""}
+        </Text>
+      ),
+    },
+    {
       label: <Title order={2}>Social Media</Title>,
       description:
         "This section allows you to update your social media links. These links will be displayed on your profile, so that other users can easily find you on other social media platforms.",
@@ -277,6 +288,7 @@ const AccountSetting = () => {
               <Input
                 argType="twitterLink"
                 placeholder={userData?.twitterLink || ""}
+                value={userData?.twitterLink || ""}
                 icon={<IconBrandTwitter strokeWidth={1} />}
                 component={TextInput}
                 deleteable
@@ -291,6 +303,7 @@ const AccountSetting = () => {
               <Input
                 argType="instagramLink"
                 placeholder={userData?.instagramLink || ""}
+                value={userData?.instagramLink || ""}
                 icon={<IconBrandInstagram strokeWidth={1} />}
                 component={TextInput}
                 deleteable
@@ -305,6 +318,7 @@ const AccountSetting = () => {
               <Input
                 argType="githubLink"
                 placeholder={userData?.githubLink || ""}
+                value={userData?.githubLink || ""}
                 icon={<IconBrandGithub strokeWidth={1} />}
                 component={TextInput}
                 deleteable
@@ -319,6 +333,7 @@ const AccountSetting = () => {
               <Input
                 argType="dribbbleLink"
                 placeholder={userData?.dribbbleLink || ""}
+                value={userData?.dribbbleLink || ""}
                 icon={<IconBrandDribbble strokeWidth={1} />}
                 component={TextInput}
                 deleteable
@@ -333,6 +348,7 @@ const AccountSetting = () => {
               <Input
                 argType="youtubeLink"
                 placeholder={userData?.youtubeLink || ""}
+                value={userData?.youtubeLink || ""}
                 icon={<IconBrandYoutube strokeWidth={1} />}
                 component={TextInput}
                 deleteable
@@ -347,6 +363,7 @@ const AccountSetting = () => {
               <Input
                 argType="telegramLink"
                 placeholder={userData?.telegramLink || ""}
+                value={userData?.telegramLink || ""}
                 icon={<IconBrandTelegram strokeWidth={1} />}
                 component={TextInput}
                 deleteable
@@ -361,6 +378,7 @@ const AccountSetting = () => {
               <Input
                 argType="tiktokLink"
                 placeholder={userData?.tiktokLink || ""}
+                value={userData?.tiktokLink || ""}
                 icon={<IconBrandTiktok strokeWidth={1} />}
                 component={TextInput}
                 deleteable
@@ -375,6 +393,7 @@ const AccountSetting = () => {
               <Input
                 argType="redditLink"
                 placeholder={userData?.redditLink || ""}
+                value={userData?.redditLink || ""}
                 icon={<IconBrandReddit strokeWidth={1} />}
                 component={TextInput}
                 deleteable
@@ -389,6 +408,7 @@ const AccountSetting = () => {
               <Input
                 argType="snapchatLink"
                 placeholder={userData?.snapchatLink || ""}
+                value={userData?.snapchatLink || ""}
                 icon={<IconBrandSnapchat strokeWidth={1} />}
                 component={TextInput}
                 deleteable
