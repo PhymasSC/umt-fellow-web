@@ -164,6 +164,7 @@ const AccountSetting = () => {
                 value={userData?.facebookLink || ""}
                 placeholder={userData?.facebookLink || ""}
                 icon={<IconBrandFacebook strokeWidth={1} />}
+                deleteable
               />
             }
           />
@@ -177,6 +178,7 @@ const AccountSetting = () => {
                 placeholder={userData?.twitterLink || ""}
                 value={userData?.twitterLink || ""}
                 icon={<IconBrandTwitter strokeWidth={1} />}
+                deleteable
               />
             }
           />
@@ -190,6 +192,7 @@ const AccountSetting = () => {
                 placeholder={userData?.instagramLink || ""}
                 value={userData?.instagramLink || ""}
                 icon={<IconBrandInstagram strokeWidth={1} />}
+                deleteable
               />
             }
           />
@@ -203,6 +206,7 @@ const AccountSetting = () => {
                 placeholder={userData?.githubLink || ""}
                 value={userData?.githubLink || ""}
                 icon={<IconBrandGithub strokeWidth={1} />}
+                deleteable
               />
             }
           />
@@ -216,6 +220,7 @@ const AccountSetting = () => {
                 placeholder={userData?.dribbbleLink || ""}
                 value={userData?.dribbbleLink || ""}
                 icon={<IconBrandDribbble strokeWidth={1} />}
+                deleteable
               />
             }
           />
@@ -229,6 +234,7 @@ const AccountSetting = () => {
                 placeholder={userData?.youtubeLink || ""}
                 value={userData?.youtubeLink || ""}
                 icon={<IconBrandYoutube strokeWidth={1} />}
+                deleteable
               />
             }
           />
@@ -242,6 +248,7 @@ const AccountSetting = () => {
                 placeholder={userData?.telegramLink || ""}
                 value={userData?.telegramLink || ""}
                 icon={<IconBrandTelegram strokeWidth={1} />}
+                deleteable
               />
             }
           />
@@ -255,6 +262,7 @@ const AccountSetting = () => {
                 placeholder={userData?.tiktokLink || ""}
                 value={userData?.tiktokLink || ""}
                 icon={<IconBrandTiktok strokeWidth={1} />}
+                deleteable
               />
             }
           />
@@ -268,6 +276,7 @@ const AccountSetting = () => {
                 placeholder={userData?.redditLink || ""}
                 value={userData?.redditLink || ""}
                 icon={<IconBrandReddit strokeWidth={1} />}
+                deleteable
               />
             }
           />
@@ -281,6 +290,7 @@ const AccountSetting = () => {
                 placeholder={userData?.snapchatLink || ""}
                 value={userData?.snapchatLink || ""}
                 icon={<IconBrandSnapchat strokeWidth={1} />}
+                deleteable
               />
             }
           />
