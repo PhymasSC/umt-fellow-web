@@ -120,6 +120,32 @@ export const typeDefs = gql`
 			userId: String!
 			voteType: VoteType!
 		): VoteResponse!
+		editUser(
+			id: String!
+			name: String
+			email: String
+			password: String
+			isUMTMembership: Boolean
+			sex: Sex
+			age: Int
+			image: String
+			facebookLink: String
+			twitterLink: String
+			instagramLink: String
+			githubLink: String
+			dribbbleLink: String
+			youtubeLink: String
+			telegramLink: String
+			tiktokLink: String
+			redditLink: String
+			snapchatLink: String
+			about: String
+			faculty: String
+			major: String
+			year: String
+			cgpa: Float
+		): UserResponse!
+
 	}
 
 	input Image {

@@ -1,7 +1,7 @@
 import {
   Stack,
   TextInput,
-  Grid,
+  Text,
   Button,
   PasswordInput,
   Avatar,
@@ -25,7 +25,7 @@ import { useSession } from "next-auth/react";
 import SettingLayout from "./SettingLayout";
 import { useQuery } from "@apollo/client";
 import { GET_USER } from "@operations/queries";
-import { useState } from "react";
+import Input from "./Input";
 
 type USER_TYPE = {
   id: string;
@@ -54,9 +54,9 @@ const AccountSetting = () => {
   const { data: session } = useSession();
   //   const { profileImage, setProfileImage } = useState(null);
   const {
-    data: userData,
+    data,
     loading,
-  }: { data: USER_TYPE | undefined; loading: boolean } = useQuery(
+  }: { data: { getUser: USER_TYPE } | undefined; loading: boolean } = useQuery(
     GET_USER(`
 		  sex
 		  age
@@ -82,7 +82,7 @@ const AccountSetting = () => {
       },
     }
   );
-
+  const userData: USER_TYPE | undefined = data?.getUser;
   const configuration: {
     label: string | React.ReactNode;
     description: string;
@@ -105,7 +105,11 @@ const AccountSetting = () => {
             height: "fit-content",
           }}
         >
-          <Avatar radius="999rem" size="xl" src={session?.user.image || null} />
+          <Avatar
+            radius="999rem"
+            size="xl"
+            src={userData?.image || session?.user.image || null}
+          />
         </Dropzone>
       ),
     },
@@ -115,30 +119,30 @@ const AccountSetting = () => {
         "The name displayed on your profile and @mention by other users",
       layout: "horizontal",
       input: (
-        <TextInput
-          mt="-1em"
-          mb="1em"
+        <Input
+          argType="name"
+          layout="horizontal"
           type="text"
-          placeholder={session?.user.name || ""}
-        ></TextInput>
-      ),
-    },
-    {
-      label: "Email Address",
-      description: "Update the email address associated with your account",
-      layout: "horizontal",
-      input: (
-        <TextInput
-          mt="-1em"
-          mb="1em"
-          type="email"
-          placeholder={session?.user.email || ""}
+          placeholder={userData?.name || session?.user.name || ""}
+          value={userData?.name || session?.user.name || ""}
         />
       ),
     },
     {
+      label: "Email Address",
+      description:
+        "Your email address is used to verify your identity and to send you notifications about your account.",
+      layout: "horizontal",
+      input: (
+        <Text fw="normal" size="sm">
+          {userData?.email || session?.user.email || ""}
+        </Text>
+      ),
+    },
+    {
       label: <Title order={2}>Social Media</Title>,
-      description: "Update your social media links",
+      description:
+        "This section allows you to update your social media links. These links will be displayed on your profile, so that other users can easily find you on other social media platforms.",
       input: (
         <Stack>
           <SettingLayout
@@ -146,7 +150,9 @@ const AccountSetting = () => {
             label="Facebook"
             description="Update your Facebook link"
             input={
-              <TextInput
+              <Input
+                argType="facebookLink"
+                value={userData?.facebookLink || ""}
                 placeholder={userData?.facebookLink || ""}
                 icon={<IconBrandFacebook strokeWidth={1} />}
               />
@@ -157,8 +163,10 @@ const AccountSetting = () => {
             label="Twitter"
             description="Update your Twitter link"
             input={
-              <TextInput
+              <Input
+                argType="twitterLink"
                 placeholder={userData?.twitterLink || ""}
+                value={userData?.twitterLink || ""}
                 icon={<IconBrandTwitter strokeWidth={1} />}
               />
             }
@@ -168,8 +176,10 @@ const AccountSetting = () => {
             label="Instagram"
             description="Update your Instagram link"
             input={
-              <TextInput
+              <Input
+                argType="instagramLink"
                 placeholder={userData?.instagramLink || ""}
+                value={userData?.instagramLink || ""}
                 icon={<IconBrandInstagram strokeWidth={1} />}
               />
             }
@@ -179,8 +189,10 @@ const AccountSetting = () => {
             label="Github"
             description="Update your Github link"
             input={
-              <TextInput
+              <Input
+                argType="githubLink"
                 placeholder={userData?.githubLink || ""}
+                value={userData?.githubLink || ""}
                 icon={<IconBrandGithub strokeWidth={1} />}
               />
             }
@@ -190,8 +202,10 @@ const AccountSetting = () => {
             label="Dribbble"
             description="Update your Dribbble link"
             input={
-              <TextInput
+              <Input
+                argType="dribbbleLink"
                 placeholder={userData?.dribbbleLink || ""}
+                value={userData?.dribbbleLink || ""}
                 icon={<IconBrandDribbble strokeWidth={1} />}
               />
             }
@@ -201,8 +215,10 @@ const AccountSetting = () => {
             label="Youtube"
             description="Update your Youtube link"
             input={
-              <TextInput
+              <Input
+                argType="youtubeLink"
                 placeholder={userData?.youtubeLink || ""}
+                value={userData?.youtubeLink || ""}
                 icon={<IconBrandYoutube strokeWidth={1} />}
               />
             }
@@ -212,8 +228,10 @@ const AccountSetting = () => {
             label="Telegram"
             description="Update your Telegram link"
             input={
-              <TextInput
+              <Input
+                argType="telegramLink"
                 placeholder={userData?.telegramLink || ""}
+                value={userData?.telegramLink || ""}
                 icon={<IconBrandTelegram strokeWidth={1} />}
               />
             }
@@ -223,8 +241,10 @@ const AccountSetting = () => {
             label="Tiktok"
             description="Update your Tiktok link"
             input={
-              <TextInput
+              <Input
+                argType="tiktokLink"
                 placeholder={userData?.tiktokLink || ""}
+                value={userData?.tiktokLink || ""}
                 icon={<IconBrandTiktok strokeWidth={1} />}
               />
             }
@@ -234,8 +254,10 @@ const AccountSetting = () => {
             label="Reddit"
             description="Update your Reddit link"
             input={
-              <TextInput
+              <Input
+                argType="redditLink"
                 placeholder={userData?.redditLink || ""}
+                value={userData?.redditLink || ""}
                 icon={<IconBrandReddit strokeWidth={1} />}
               />
             }
@@ -245,8 +267,10 @@ const AccountSetting = () => {
             label="Snapchat"
             description="Update your Snapchat link"
             input={
-              <TextInput
+              <Input
+                argType="snapchatLink"
                 placeholder={userData?.snapchatLink || ""}
+                value={userData?.snapchatLink || ""}
                 icon={<IconBrandSnapchat strokeWidth={1} />}
               />
             }
@@ -264,7 +288,12 @@ const AccountSetting = () => {
       description: "Permanently delete your account and all associated data",
       layout: "horizontal",
       input: (
-        <Button color="red" leftIcon={<IconTrash />}>
+        <Button
+          w="100%"
+          variant="outline"
+          color="red"
+          leftIcon={<IconTrash size="1em" />}
+        >
           Delete Account
         </Button>
       ),
