@@ -112,6 +112,23 @@ const Input = ({
     form.resetDirty();
   };
 
+  const handleDelete = async () => {
+    setLoading(true);
+    await editUser({
+      variables: {
+        id: session?.user.id,
+        [argType]: "",
+      },
+    });
+    setLoading(false);
+    notifications.show({
+      title: "Success",
+      message: "Successfully updated",
+      color: "green",
+    });
+    form.resetDirty();
+  };
+
   return (
     <Grid>
       <Grid.Col span="auto">
