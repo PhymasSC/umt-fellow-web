@@ -5,27 +5,50 @@ import { EDIT_USER } from "@operations/mutations";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { notifications } from "@mantine/notifications";
+import { useForm } from "@mantine/form";
+import { FormValidateInput } from "@mantine/form/lib/types";
+import { isErrored } from "stream";
 
 type InputProps = {
   layout?: "horizontal" | "vertical";
   value?: string;
+  validate?:
+    | FormValidateInput<{
+        val: string;
+      }>
+    | undefined;
+  errMsg?: string;
   argType: string;
 } & TextInputProps;
 
-const Input = ({ layout, argType, value, ...props }: InputProps) => {
-  const [val, setVal] = useState(value || "");
+const Input = ({
+  layout,
+  argType,
+  value,
+  validate,
+  errMsg,
+  ...props
+}: InputProps) => {
+  const form = useForm({
+    initialValues: {
+      val: value || "",
+    },
+    validate,
+  });
   const [loading, setLoading] = useState(false);
-  const [debouncedValue] = useDebouncedValue(val, 1000);
+  const [debouncedValue] = useDebouncedValue(form.values.val, 1000);
   const [editUser] = useMutation(
     EDIT_USER({
       [argType]: true,
     })
   );
+
   const { data: session } = useSession();
+
   useEffect(() => {
     const update = async () => {
       setLoading(true);
-      const res = await editUser({
+      await editUser({
         variables: {
           id: session?.user.id,
           [argType]: debouncedValue,
@@ -37,21 +60,26 @@ const Input = ({ layout, argType, value, ...props }: InputProps) => {
         message: "Successfully updated",
         color: "green",
       });
+      form.resetDirty();
     };
 
-    if (debouncedValue) update().catch((err) => console.log(err));
+    form.validate();
+    if (debouncedValue && form.isValid("val")) {
+      update().catch((err) => console.log(err));
+    }
   }, [debouncedValue]);
 
   return (
-    <TextInput
-      mt={(layout === "vertical" && "-1em") || "0"}
-      mb={(layout === "vertical" && "1em") || "0"}
-      value={val}
-      onChange={(event) => setVal(event.currentTarget.value)}
-      disabled={loading}
-      rightSection={loading && <Loader size="xs" />}
-      {...props}
-    />
+    <>
+      <TextInput
+        mt={(layout === "vertical" && "-1em") || "0"}
+        mb={(layout === "vertical" && "1em") || "0"}
+        disabled={loading}
+        rightSection={loading && <Loader size="xs" />}
+        {...form.getInputProps("val")}
+        {...props}
+      />
+    </>
   );
 };
 
