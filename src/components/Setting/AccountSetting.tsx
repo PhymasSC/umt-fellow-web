@@ -303,9 +303,10 @@ const AccountSetting = () => {
   console.log(userData);
   return (
     <Stack>
-      {configuration.map((config) => {
+      {configuration.map((config, index) => {
         return (
           <SettingLayout
+            key={index}
             layout={config.layout || "vertical"}
             label={config.label}
             description={config.description}
