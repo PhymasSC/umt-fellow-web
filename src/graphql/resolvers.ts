@@ -163,6 +163,8 @@ export const resolvers = {
 		) => {
 			const hashedPassword = await bcrypt.hash(password, saltRounds);
 			try {
+				console.log(email)
+				console.log(email.match(/\@(ocean\.)?umt.edu.my/g))
 				const user = await prisma.user.create({
 					data: {
 						name: name,
