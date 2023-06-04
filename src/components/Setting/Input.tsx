@@ -1,7 +1,6 @@
 import {
   ActionIcon,
   Grid,
-  NumberInput,
   NumberInputProps,
   Textarea,
   TextareaProps,
@@ -15,7 +14,7 @@ import { useSession } from "next-auth/react";
 import { notifications } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
 import { FormValidateInput } from "@mantine/form/lib/types";
-import { IconEdit, IconTrash } from "@tabler/icons";
+import { IconCheck, IconEdit, IconTrash, IconX } from "@tabler/icons";
 
 type InputProps = {
   layout?: "horizontal" | "vertical";
@@ -61,18 +60,30 @@ const Input = ({
     form.validate();
     if (form.isValid()) {
       setLoading(true);
-      await editUser({
-        variables: {
-          id: session?.user.id,
-          [argType]: form.values.val,
-        },
-      });
+
+      try {
+        await editUser({
+          variables: {
+            id: session?.user.id,
+            [argType]: form.values.val,
+            updated_at: new Date().toISOString(),
+          },
+        });
+        notifications.show({
+          title: "Success",
+          message: "Successfully updated!",
+          color: "teal",
+          icon: <IconCheck />,
+        });
+      } catch (err: any) {
+        notifications.show({
+          title: "Error",
+          message: err.message,
+          color: "red",
+          icon: <IconX />,
+        });
+      }
       setLoading(false);
-      notifications.show({
-        title: "Success",
-        message: "Successfully updated",
-        color: "green",
-      });
       form.resetDirty();
     }
   };
@@ -83,6 +94,7 @@ const Input = ({
       variables: {
         id: session?.user.id,
         [argType]: "",
+        updated_at: new Date().toISOString(),
       },
     });
     setLoading(false);
@@ -97,9 +109,7 @@ const Input = ({
   return (
     <Grid>
       <Grid.Col span="auto">
-        {typeof value === "number" ? (
-          <NumberInput disabled={loading} onChange={update} {...props} />
-        ) : isLongText ? (
+        {isLongText ? (
           <Textarea
             mt={(layout === "vertical" && "-1em") || "0"}
             mb={(layout === "vertical" && "1em") || "0"}
