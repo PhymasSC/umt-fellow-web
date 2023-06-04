@@ -35,7 +35,7 @@ model User {
   about           String?
   faculty         String?
   major           String?
-  year            String?
+  year            Float?
   cgpa            Float?
   created_at      DateTime          @default(now()) @map("created_at")
   updated_at      DateTime          @default(now()) @updatedAt @map("updated_at")

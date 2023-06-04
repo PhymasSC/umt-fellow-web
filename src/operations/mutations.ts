@@ -125,7 +125,7 @@ mutation Mutation($id: String!
 	${(arg.about && ",$about: String ") || ""}
 	${(arg.faculty && ",$faculty: String ") || ""}
 	${(arg.major && ",$major: String ") || ""}
-	${(arg.year && ",$year: String ") || ""}
+	${(arg.year && ",$year: Float ") || ""}
 	${(arg.cgpa && ",$cgpa: Float ") || ""}
 	) {
 	editUser(id: $id 
