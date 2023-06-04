@@ -163,6 +163,8 @@ export const resolvers = {
 		) => {
 			const hashedPassword = await bcrypt.hash(password, saltRounds);
 			try {
+				console.log(email)
+				console.log(email.match(/\@(ocean\.)?umt.edu.my/g))
 				const user = await prisma.user.create({
 					data: {
 						name: name,
@@ -185,6 +187,57 @@ export const resolvers = {
 					code: 1,
 					success: false,
 					message: error.message || "User creation failed",
+					user: null,
+				};
+			}
+		},
+
+		editUser: async (
+			_: any,
+			attr: {
+				id: string;
+				name: string;
+				email: string;
+				password: string;
+				image: string;
+				facebookLink: string;
+				twitterLink: string;
+				instagramLink: string;
+				githubLink: string;
+				dribbbleLink: string;
+				youtubeLink: string;
+				telegramLink: string;
+				tiktokLink: string;
+				redditLink: string;
+				snapchatLink: string;
+				about: string;
+				faculty: string;
+				major: string;
+				year: number;
+				cgpa: number;
+			}
+		) => {
+			// const hashedPassword = await bcrypt.hash(password, saltRounds);
+			const { id, ...rest } = attr
+			if (rest.password) rest.password = await bcrypt.hash(rest.password, saltRounds)
+			try {
+				const user = await prisma.user.update({
+					where: {
+						id,
+					},
+					data: rest,
+				});
+				return {
+					code: 200,
+					success: true,
+					message: "User edited successfully",
+					user,
+				};
+			} catch (error: any) {
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "User edit failed",
 					user: null,
 				};
 			}

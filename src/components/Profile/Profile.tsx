@@ -67,6 +67,23 @@ interface ProfileProps {
     nickname?: string | string[];
     isUMTMembership: boolean;
     stats: { label: string; value: string }[];
+    facebookLink: string;
+    twitterLink: string;
+    instagramLink: string;
+    githubLink: string;
+    dribbbleLink: string;
+    youtubeLink: string;
+    telegramLink: string;
+    tiktokLink: string;
+    redditLink: string;
+    snapchatLink: string;
+    about: string;
+    faculty: string;
+    major: string;
+    year: number;
+    cgpa: number;
+    created_at: string;
+    updated_at: string;
   };
   threads: any;
 }
@@ -76,6 +93,51 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
   const { data: session } = useSession();
   const { classes } = useStyles();
   const { width } = useViewportSize();
+
+  const socialMedia = [
+    {
+      icon: <IconBrandFacebook />,
+      link: user.facebookLink,
+    },
+    {
+      icon: <IconBrandInstagram />,
+      link: user.instagramLink,
+    },
+    {
+      icon: <IconBrandTwitter />,
+      link: user.twitterLink,
+    },
+    {
+      icon: <IconBrandSnapchat />,
+      link: user.snapchatLink,
+    },
+    {
+      icon: <IconBrandTiktok />,
+      link: user.tiktokLink,
+    },
+    {
+      icon: <IconBrandTelegram />,
+      link: user.telegramLink,
+    },
+    {
+      icon: <IconBrandReddit />,
+      link: user.redditLink,
+    },
+    {
+      icon: <IconBrandYoutube />,
+      link: user.youtubeLink,
+    },
+    {
+      icon: <IconBrandGithub />,
+      link: user.githubLink,
+    },
+    {
+      icon: <IconBrandDribbble />,
+      link: user.dribbbleLink,
+    },
+  ];
+
+  console.log(user);
   return (
     <Container fluid>
       <Card className={classes.card}>
@@ -85,7 +147,7 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
               height: "40vh",
             }}
             className={classes.cover}
-          ></Card.Section>
+          />
         </BackgroundImage>
         <Avatar
           src={user.image.replace(/\s+/g, "%20")}
@@ -138,91 +200,125 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
           </Stack>
         </Card.Section>
 
-        <Container m="xl" fluid>
-          <Grid>
-            <Grid.Col md={12} lg={4}>
-              <Stack>
-                <Card sx={{ padding: "2em !important" }}>
-                  <Title size={20}>Biography</Title>
-                  <Space h={30} />
-                  <Text size="sm">
-                    I am a year 3 student from University Malaysia Terengganu!
-                  </Text>
-                </Card>
-                <Card sx={{ padding: "2em !important" }}>
-                  <Title size={20}>Followers</Title>
-                  <Space h={30} />
-                  <Avatar.Group>
-                    <Avatar src="https://picsum.photos/100" radius="xl" />
-                    <Avatar src="https://picsum.photos/101" radius="xl" />
-                    <Avatar src="https://picsum.photos/102" radius="xl" />
-                    <Avatar src="https://picsum.photos/103" radius="xl" />
-                    <Avatar radius="xl">+2</Avatar>
-                  </Avatar.Group>
-                </Card>
-                <Card sx={{ padding: "2em !important" }}>
-                  <Title size={20}>Follow me on</Title>
-                  <Space h={30} />
-                  <Container>
-                    <Stack spacing={30}>
-                      <Group>
-                        <IconBrandFacebook />
-                        <Text weight={500}>Phymas</Text>
-                      </Group>
-                      <Group>
-                        <IconBrandInstagram />
-                        <Text weight={500}>Phymas</Text>
-                      </Group>
-                      <Group>
-                        <IconBrandTwitter />
-                        <Text weight={500}>Phymas</Text>
-                      </Group>
-                      <Group>
-                        <IconBrandSnapchat />
-                        <Text weight={500}>Phymas</Text>
-                      </Group>
-                      {/* <IconBrandTiktok />
-											<IconBrandTelegram />
-											<IconBrandReddit />
-											<IconBrandYoutube />
-											<IconBrandGithub />
-											<IconBrandDribbble /> */}
-                    </Stack>
-                  </Container>
-                </Card>
-                {width >= 1200 && <Footer />}
-              </Stack>
-            </Grid.Col>
-            <Grid.Col md={12} lg={8}>
-              <Card radius="md">
-                {threads.getThreadsByAuthor.length > 0 ? (
-                  <>
-                    <Feed feeds={threads}></Feed>
-                    <Container p={20}>
-                      <Title order={2} align={"center"}>
-                        You have finished reading all the threads from{" "}
-                        {user.name}!
-                      </Title>
-                    </Container>
-                  </>
-                ) : (
-                  <Container p={20}>
-                    <Text fw="bold" size="lg" align="center">
-                      This user has not created any threads yet.
-                      <Image src="/No_threads.svg" alt="No threads yet" />
+        <Space h="xl" />
+        <Grid>
+          <Grid.Col md={12} lg={3}>
+            <Stack>
+              <Card sx={{ padding: "2em !important" }}>
+                <Title size="md">About</Title>
+                <Text size="sm">
+                  {user.about || (
+                    <Text fs="italic" color="dimmed">
+                      This user has not written anything about themself.
                     </Text>
-                  </Container>
-                )}
+                  )}
+                  <Grid>
+                    {user.faculty && (
+                      <>
+                        <Grid.Col span={5}>
+                          <Text fw="bolder">Faculty:</Text>
+                        </Grid.Col>
+                        <Grid.Col span={7}>{user.faculty}</Grid.Col>
+                      </>
+                    )}
+                    {user.major && (
+                      <>
+                        <Grid.Col span={5}>
+                          <Text fw="bolder">Major:</Text>
+                        </Grid.Col>
+                        <Grid.Col span={7}>{user.major}</Grid.Col>
+                      </>
+                    )}
+                    {user.year && (
+                      <>
+                        <Grid.Col span={5}>
+                          <Text fw="bolder">Year:</Text>
+                        </Grid.Col>
+                        <Grid.Col span={7}>{user.year}</Grid.Col>
+                      </>
+                    )}
+                    {user.cgpa && (
+                      <>
+                        <Grid.Col span={5}>
+                          <Text fw="bolder">CGPA:</Text>
+                        </Grid.Col>
+                        <Grid.Col span={7}>{user.cgpa}</Grid.Col>
+                      </>
+                    )}
+                    <Grid.Col span={5}>
+                      <Text fw="bold">Joined at: </Text>
+                    </Grid.Col>
+                    <Grid.Col span={7}>
+                      {Intl.DateTimeFormat("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }).format(new Date(user.created_at))}
+                    </Grid.Col>
+                  </Grid>
+                </Text>
               </Card>
-              {width < 1200 && (
-                <>
-                  <Space h={20}></Space>
-                  <Footer />
-                </>
+              <Card sx={{ padding: "2em !important" }}>
+                <Title size="md">Followers</Title>
+                <Space h={30} />
+                <Avatar.Group>
+                  <Avatar src="https://picsum.photos/100" radius="xl" />
+                  <Avatar src="https://picsum.photos/101" radius="xl" />
+                  <Avatar src="https://picsum.photos/102" radius="xl" />
+                  <Avatar src="https://picsum.photos/103" radius="xl" />
+                  <Avatar radius="xl">+2</Avatar>
+                </Avatar.Group>
+              </Card>
+              {socialMedia.filter((social) => social.link).length > 0 && (
+                <Card sx={{ padding: "2em !important" }}>
+                  <Title size="md">Follow me on</Title>
+                  <Space h={30} />
+                  <Stack>
+                    {socialMedia.map(
+                      (social, index) =>
+                        social.link && (
+                          <Group key={index}>
+                            {social.icon}
+                            <Text>{social.link}</Text>
+                          </Group>
+                        )
+                    )}
+                  </Stack>
+                </Card>
               )}
-            </Grid.Col>
-          </Grid>
-        </Container>
+              {width >= 1200 && <Footer />}
+            </Stack>
+          </Grid.Col>
+
+          <Grid.Col md={12} lg={9}>
+            <Card radius="md">
+              {threads.getThreadsByAuthor.length > 0 ? (
+                <>
+                  <Feed feeds={threads}></Feed>
+                  <Container p={20}>
+                    <Title order={2} align={"center"}>
+                      You have finished reading all the threads from {user.name}
+                      !
+                    </Title>
+                  </Container>
+                </>
+              ) : (
+                <Container p={20}>
+                  <Text fw="bold" size="lg" align="center">
+                    This user has not created any threads yet.
+                    <Image src="/No_threads.svg" alt="No threads yet" />
+                  </Text>
+                </Container>
+              )}
+            </Card>
+            {width < 1200 && (
+              <>
+                <Space h={20}></Space>
+                <Footer />
+              </>
+            )}
+          </Grid.Col>
+        </Grid>
       </Card>
     </Container>
   );
