@@ -260,6 +260,99 @@ const AccountSetting = () => {
       ),
     },
     {
+      label: "About",
+      description:
+        "This is a short description about yourself that will be displayed on your profile page. It can be used to introduce yourself to other users, share your interests, or tell your story.",
+      layout: "horizontal",
+      input: (
+        <Input
+          argType="about"
+          layout="horizontal"
+          type="text"
+          placeholder={userData?.about || ""}
+          validate={{
+            val: (val) =>
+              val.length > 500 && "About must be less than 500 characters long",
+          }}
+          minRows={5}
+          maxRows={10}
+          isLongText
+        />
+      ),
+    },
+    {
+      label: "Faculty",
+      description: "The faculty you are currently enrolled in.",
+      layout: "horizontal",
+      input: (
+        <Input
+          argType="faculty"
+          layout="horizontal"
+          type="text"
+          placeholder={userData?.faculty || ""}
+          validate={{
+            val: (val) => {
+              if (val.length > 500)
+                return "About must be less than 500 characters long";
+            },
+          }}
+        />
+      ),
+    },
+    {
+      label: "Major",
+      description: "Your major field of study.",
+      layout: "horizontal",
+      input: (
+        <Input
+          argType="major"
+          layout="horizontal"
+          type="text"
+          placeholder={userData?.major || ""}
+          validate={{
+            val: (val) => {
+              if (val.length > 500)
+                return "About must be less than 500 characters long";
+            },
+          }}
+        />
+      ),
+    },
+    {
+      label: "Year",
+      description: "Your current year of study.",
+      layout: "horizontal",
+      input: (
+        <Input
+          argType="year"
+          layout="horizontal"
+          type="text"
+          value={userData?.year || 0}
+          precision={0}
+          min={1}
+          max={4}
+        />
+      ),
+    },
+    {
+      label: "Cumulative Grade Point Average (CGPA)",
+      description:
+        "Your overall grade point average (GPA) from all of your courses.",
+      layout: "horizontal",
+      input: (
+        <Input
+          argType="cgpa"
+          layout="horizontal"
+          type="text"
+          value={userData?.cgpa || 0}
+          precision={2}
+          min={0}
+          max={4}
+          step={0.5}
+        />
+      ),
+    },
+    {
       label: <Title order={2}>Social Media</Title>,
       description:
         "This section allows you to update your social media links. These links will be displayed on your profile, so that other users can easily find you on other social media platforms.",
@@ -288,7 +381,6 @@ const AccountSetting = () => {
               <Input
                 argType="twitterLink"
                 placeholder={userData?.twitterLink || ""}
-                value={userData?.twitterLink || ""}
                 icon={<IconBrandTwitter strokeWidth={1} />}
                 component={TextInput}
                 deleteable
@@ -303,7 +395,6 @@ const AccountSetting = () => {
               <Input
                 argType="instagramLink"
                 placeholder={userData?.instagramLink || ""}
-                value={userData?.instagramLink || ""}
                 icon={<IconBrandInstagram strokeWidth={1} />}
                 component={TextInput}
                 deleteable
@@ -318,7 +409,6 @@ const AccountSetting = () => {
               <Input
                 argType="githubLink"
                 placeholder={userData?.githubLink || ""}
-                value={userData?.githubLink || ""}
                 icon={<IconBrandGithub strokeWidth={1} />}
                 component={TextInput}
                 deleteable
@@ -333,7 +423,6 @@ const AccountSetting = () => {
               <Input
                 argType="dribbbleLink"
                 placeholder={userData?.dribbbleLink || ""}
-                value={userData?.dribbbleLink || ""}
                 icon={<IconBrandDribbble strokeWidth={1} />}
                 component={TextInput}
                 deleteable
@@ -348,7 +437,6 @@ const AccountSetting = () => {
               <Input
                 argType="youtubeLink"
                 placeholder={userData?.youtubeLink || ""}
-                value={userData?.youtubeLink || ""}
                 icon={<IconBrandYoutube strokeWidth={1} />}
                 component={TextInput}
                 deleteable
@@ -363,7 +451,6 @@ const AccountSetting = () => {
               <Input
                 argType="telegramLink"
                 placeholder={userData?.telegramLink || ""}
-                value={userData?.telegramLink || ""}
                 icon={<IconBrandTelegram strokeWidth={1} />}
                 component={TextInput}
                 deleteable
@@ -378,7 +465,6 @@ const AccountSetting = () => {
               <Input
                 argType="tiktokLink"
                 placeholder={userData?.tiktokLink || ""}
-                value={userData?.tiktokLink || ""}
                 icon={<IconBrandTiktok strokeWidth={1} />}
                 component={TextInput}
                 deleteable
@@ -393,7 +479,6 @@ const AccountSetting = () => {
               <Input
                 argType="redditLink"
                 placeholder={userData?.redditLink || ""}
-                value={userData?.redditLink || ""}
                 icon={<IconBrandReddit strokeWidth={1} />}
                 component={TextInput}
                 deleteable
@@ -408,7 +493,6 @@ const AccountSetting = () => {
               <Input
                 argType="snapchatLink"
                 placeholder={userData?.snapchatLink || ""}
-                value={userData?.snapchatLink || ""}
                 icon={<IconBrandSnapchat strokeWidth={1} />}
                 component={TextInput}
                 deleteable
