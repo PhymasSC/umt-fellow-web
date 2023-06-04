@@ -6,6 +6,7 @@ import {
   PasswordInput,
   Avatar,
   Title,
+  Textarea,
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import {
@@ -125,6 +126,8 @@ const AccountSetting = () => {
           layout="horizontal"
           type="text"
           placeholder={userData?.name || session?.user.name || ""}
+          value={userData?.name || session?.user.name || ""}
+          component={TextInput}
           validate={{
             val: (val) =>
               val.length < 3
@@ -157,6 +160,8 @@ const AccountSetting = () => {
           layout="horizontal"
           type="text"
           placeholder={userData?.about || ""}
+          value={userData?.about || ""}
+          component={Textarea}
           validate={{
             val: (val) =>
               val.length > 500 && "About must be less than 500 characters long",
@@ -177,6 +182,8 @@ const AccountSetting = () => {
           layout="horizontal"
           type="text"
           placeholder={userData?.faculty || ""}
+          value={userData?.faculty || ""}
+          component={TextInput}
           validate={{
             val: (val) => {
               if (val.length > 500)
@@ -196,6 +203,8 @@ const AccountSetting = () => {
           layout="horizontal"
           type="text"
           placeholder={userData?.major || ""}
+          value={userData?.major || ""}
+          component={TextInput}
           validate={{
             val: (val) => {
               if (val.length > 500)
@@ -253,7 +262,9 @@ const AccountSetting = () => {
               <Input
                 argType="facebookLink"
                 placeholder={userData?.facebookLink || ""}
+                value={userData?.facebookLink || ""}
                 icon={<IconBrandFacebook strokeWidth={1} />}
+                component={TextInput}
                 deleteable
               />
             }
@@ -267,6 +278,7 @@ const AccountSetting = () => {
                 argType="twitterLink"
                 placeholder={userData?.twitterLink || ""}
                 icon={<IconBrandTwitter strokeWidth={1} />}
+                component={TextInput}
                 deleteable
               />
             }
@@ -280,6 +292,7 @@ const AccountSetting = () => {
                 argType="instagramLink"
                 placeholder={userData?.instagramLink || ""}
                 icon={<IconBrandInstagram strokeWidth={1} />}
+                component={TextInput}
                 deleteable
               />
             }
@@ -293,6 +306,7 @@ const AccountSetting = () => {
                 argType="githubLink"
                 placeholder={userData?.githubLink || ""}
                 icon={<IconBrandGithub strokeWidth={1} />}
+                component={TextInput}
                 deleteable
               />
             }
@@ -306,6 +320,7 @@ const AccountSetting = () => {
                 argType="dribbbleLink"
                 placeholder={userData?.dribbbleLink || ""}
                 icon={<IconBrandDribbble strokeWidth={1} />}
+                component={TextInput}
                 deleteable
               />
             }
@@ -319,6 +334,7 @@ const AccountSetting = () => {
                 argType="youtubeLink"
                 placeholder={userData?.youtubeLink || ""}
                 icon={<IconBrandYoutube strokeWidth={1} />}
+                component={TextInput}
                 deleteable
               />
             }
@@ -332,6 +348,7 @@ const AccountSetting = () => {
                 argType="telegramLink"
                 placeholder={userData?.telegramLink || ""}
                 icon={<IconBrandTelegram strokeWidth={1} />}
+                component={TextInput}
                 deleteable
               />
             }
@@ -345,6 +362,7 @@ const AccountSetting = () => {
                 argType="tiktokLink"
                 placeholder={userData?.tiktokLink || ""}
                 icon={<IconBrandTiktok strokeWidth={1} />}
+                component={TextInput}
                 deleteable
               />
             }
@@ -358,6 +376,7 @@ const AccountSetting = () => {
                 argType="redditLink"
                 placeholder={userData?.redditLink || ""}
                 icon={<IconBrandReddit strokeWidth={1} />}
+                component={TextInput}
                 deleteable
               />
             }
@@ -371,6 +390,7 @@ const AccountSetting = () => {
                 argType="snapchatLink"
                 placeholder={userData?.snapchatLink || ""}
                 icon={<IconBrandSnapchat strokeWidth={1} />}
+                component={TextInput}
                 deleteable
               />
             }
@@ -381,7 +401,7 @@ const AccountSetting = () => {
     {
       label: "Password",
       description: "Change the password used to log in to your account.",
-      input: <PasswordInput />,
+      input: <Input argType="password" component={PasswordInput} />,
     },
     {
       label: "Delete Account",

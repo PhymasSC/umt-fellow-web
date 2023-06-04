@@ -219,8 +219,7 @@ export const resolvers = {
 		) => {
 			// const hashedPassword = await bcrypt.hash(password, saltRounds);
 			const { id, ...rest } = attr
-			console.log(id)
-			console.log(rest)
+			if (rest.password) rest.password = await bcrypt.hash(rest.password, saltRounds)
 			try {
 				const user = await prisma.user.update({
 					where: {
