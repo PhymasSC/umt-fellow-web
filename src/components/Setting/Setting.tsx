@@ -27,13 +27,7 @@ interface SettingProps {
   }[];
 }
 
-const tabs = [
-  "Account",
-  "Security & Privacy",
-  "Notification",
-  "Community",
-  "Chat & Messaging",
-];
+const tabs = ["Account", "Notification", "Community", "Chat & Messaging"];
 
 const Setting: React.FC<Setting> = (props) => {
   const { setting } = props;
@@ -64,7 +58,6 @@ const Setting: React.FC<Setting> = (props) => {
                     {value.description}
                   </Text>
                   {key === "accountSettings" && <AccountSetting />}
-                  {key === "securitySettings" && <SecuritySetting />}
                   {key === "notificationSettings" && <NotificationSetting />}
                   {key === "communitySettings" && <CommunitySetting />}
                   {key === "chatSettings" && <ChatSetting />}
