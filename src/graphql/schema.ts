@@ -26,7 +26,7 @@ export const typeDefs = gql`
 		about: String
 		faculty: String
 		major: String
-		year: String
+		year: Float
 		cgpa: Float
 		failedAttempts: Int
 		nextAvailableLogin: DateTime
@@ -142,7 +142,7 @@ export const typeDefs = gql`
 			about: String
 			faculty: String
 			major: String
-			year: String
+			year: Float
 			cgpa: Float
 		): UserResponse!
 

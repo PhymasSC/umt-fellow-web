@@ -213,7 +213,7 @@ export const resolvers = {
 				about: string;
 				faculty: string;
 				major: string;
-				year: string;
+				year: number;
 				cgpa: number;
 			}
 		) => {

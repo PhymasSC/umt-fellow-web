@@ -25,7 +25,7 @@ Table users {
   about String
   faculty String
   major String
-  year String
+  year Float
   cgpa Float
   created_at DateTime [default: `now()`, not null]
   updated_at DateTime [default: `now()`, not null]
