@@ -127,7 +127,6 @@ mutation Mutation($id: String!
 	${(arg.major && ",$major: String ") || ""}
 	${(arg.year && ",$year: String ") || ""}
 	${(arg.cgpa && ",$cgpa: Float ") || ""}
-	
 	) {
 	editUser(id: $id 
 		${(arg.name && ",name: $name ") || ""}
@@ -175,8 +174,6 @@ mutation Mutation($id: String!
 		major
 		year
 		cgpa
-		failedAttempts
-		nextAvailableLogin
 		created_at
 		updated_at
 	  }

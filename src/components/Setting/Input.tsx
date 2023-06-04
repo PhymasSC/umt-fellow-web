@@ -1,4 +1,13 @@
-import { ActionIcon, Grid, TextInput, TextInputProps } from "@mantine/core";
+import {
+  ActionIcon,
+  Grid,
+  NumberInput,
+  NumberInputProps,
+  Textarea,
+  TextareaProps,
+  TextInput,
+  TextInputProps,
+} from "@mantine/core";
 import { useMutation } from "@apollo/client";
 import { EDIT_USER } from "@operations/mutations";
 import { useState } from "react";
@@ -10,7 +19,7 @@ import { IconEdit, IconTrash } from "@tabler/icons";
 
 type InputProps = {
   layout?: "horizontal" | "vertical";
-  value?: string;
+  value?: string | number;
   validate?:
     | FormValidateInput<{
         val: string;
@@ -18,8 +27,11 @@ type InputProps = {
     | undefined;
   errMsg?: string;
   deleteable?: boolean;
+  isLongText?: boolean;
   argType: string;
-} & TextInputProps;
+} & TextInputProps &
+  TextareaProps &
+  NumberInputProps;
 
 const Input = ({
   layout,
@@ -28,11 +40,12 @@ const Input = ({
   validate,
   errMsg,
   deleteable,
+  isLongText,
   ...props
 }: InputProps) => {
   const form = useForm({
     initialValues: {
-      val: value || "",
+      val: value?.toString() || "",
     },
     validate,
   });
@@ -84,23 +97,40 @@ const Input = ({
   return (
     <Grid>
       <Grid.Col span="auto">
-        <TextInput
-          mt={(layout === "vertical" && "-1em") || "0"}
-          mb={(layout === "vertical" && "1em") || "0"}
-          disabled={loading}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              update();
+        {typeof value === "number" ? (
+          <NumberInput disabled={loading} onChange={update} {...props} />
+        ) : isLongText ? (
+          <Textarea
+            mt={(layout === "vertical" && "-1em") || "0"}
+            mb={(layout === "vertical" && "1em") || "0"}
+            disabled={loading}
+            rightSection={
+              <ActionIcon color="blue" onClick={update}>
+                <IconEdit size="1.2em" />
+              </ActionIcon>
             }
-          }}
-          rightSection={
-            <ActionIcon color="blue" onClick={update}>
-              <IconEdit size="1.2em" />
-            </ActionIcon>
-          }
-          {...form.getInputProps("val")}
-          {...props}
-        />
+            {...form.getInputProps("val")}
+            {...props}
+          />
+        ) : (
+          <TextInput
+            mt={(layout === "vertical" && "-1em") || "0"}
+            mb={(layout === "vertical" && "1em") || "0"}
+            disabled={loading}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                update();
+              }
+            }}
+            rightSection={
+              <ActionIcon color="blue" onClick={update}>
+                <IconEdit size="1.2em" />
+              </ActionIcon>
+            }
+            {...form.getInputProps("val")}
+            {...props}
+          />
+        )}
       </Grid.Col>
       {deleteable && (
         <Grid.Col

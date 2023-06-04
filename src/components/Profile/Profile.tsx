@@ -82,6 +82,8 @@ interface ProfileProps {
     major: string;
     year: number;
     cgpa: number;
+    created_at: string;
+    updated_at: string;
   };
   threads: any;
 }
@@ -204,13 +206,56 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
             <Stack>
               <Card sx={{ padding: "2em !important" }}>
                 <Title size="md">About</Title>
-                <Space h={30} />
                 <Text size="sm">
                   {user.about || (
                     <Text fs="italic" color="dimmed">
                       This user has not written anything about themself.
                     </Text>
                   )}
+                  <Grid>
+                    {user.faculty && (
+                      <>
+                        <Grid.Col span={5}>
+                          <Text fw="bolder">Faculty:</Text>
+                        </Grid.Col>
+                        <Grid.Col span={7}>{user.faculty}</Grid.Col>
+                      </>
+                    )}
+                    {user.major && (
+                      <>
+                        <Grid.Col span={5}>
+                          <Text fw="bolder">Major:</Text>
+                        </Grid.Col>
+                        <Grid.Col span={7}>{user.major}</Grid.Col>
+                      </>
+                    )}
+                    {user.year && (
+                      <>
+                        <Grid.Col span={5}>
+                          <Text fw="bolder">Year:</Text>
+                        </Grid.Col>
+                        <Grid.Col span={7}>{user.year}</Grid.Col>
+                      </>
+                    )}
+                    {user.cgpa && (
+                      <>
+                        <Grid.Col span={5}>
+                          <Text fw="bolder">CGPA:</Text>
+                        </Grid.Col>
+                        <Grid.Col span={7}>{user.cgpa}</Grid.Col>
+                      </>
+                    )}
+                    <Grid.Col span={5}>
+                      <Text fw="bold">Joined at: </Text>
+                    </Grid.Col>
+                    <Grid.Col span={7}>
+                      {Intl.DateTimeFormat("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }).format(new Date(user.created_at))}
+                    </Grid.Col>
+                  </Grid>
                 </Text>
               </Card>
               <Card sx={{ padding: "2em !important" }}>
@@ -228,25 +273,17 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
                 <Card sx={{ padding: "2em !important" }}>
                   <Title size="md">Follow me on</Title>
                   <Space h={30} />
-                  <Container>
-                    <Stack spacing={30}>
-                      {socialMedia.map(
-                        (social) =>
-                          social.link && (
-                            <Group>
-                              {social.icon}
-                              <Text>{social.link}</Text>
-                            </Group>
-                          )
-                      )}
-                      {/* <IconBrandTiktok />
-											<IconBrandTelegram />
-											<IconBrandReddit />
-											<IconBrandYoutube />
-											<IconBrandGithub />
-											<IconBrandDribbble /> */}
-                    </Stack>
-                  </Container>
+                  <Stack>
+                    {socialMedia.map(
+                      (social, index) =>
+                        social.link && (
+                          <Group key={index}>
+                            {social.icon}
+                            <Text>{social.link}</Text>
+                          </Group>
+                        )
+                    )}
+                  </Stack>
                 </Card>
               )}
               {width >= 1200 && <Footer />}
