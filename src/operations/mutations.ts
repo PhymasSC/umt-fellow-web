@@ -108,10 +108,11 @@ export const VOTE_THREAD = gql`
 `;
 
 export const EDIT_USER = (arg: {
-	name?: boolean, facebookLink?: boolean, twitterLink?: boolean, instagramLink?: boolean, githubLink?: boolean, dribbbleLink?: boolean, youtubeLink?: boolean, telegramLink?: boolean, tiktokLink?: boolean, redditLink?: boolean, snapchatLink?: boolean, about?: boolean, faculty?: boolean, major?: boolean, year?: boolean, cgpa?: boolean, failedAttempts?: boolean, nextAvailableLogin?: boolean
+	name?: boolean, password?: boolean, facebookLink?: boolean, twitterLink?: boolean, instagramLink?: boolean, githubLink?: boolean, dribbbleLink?: boolean, youtubeLink?: boolean, telegramLink?: boolean, tiktokLink?: boolean, redditLink?: boolean, snapchatLink?: boolean, about?: boolean, faculty?: boolean, major?: boolean, year?: boolean, cgpa?: boolean, failedAttempts?: boolean, nextAvailableLogin?: boolean
 }) => gql`
 mutation Mutation($id: String! 
 	${(arg.name && ",$name: String ") || ""}
+	${(arg.password && ",$password: String ") || ""}
 	${(arg.facebookLink && ",$facebookLink: String ") || ""}
 	${(arg.twitterLink && ",$twitterLink: String ") || ""}
 	${(arg.instagramLink && ",$instagramLink: String ") || ""}
@@ -130,6 +131,7 @@ mutation Mutation($id: String!
 	) {
 	editUser(id: $id 
 		${(arg.name && ",name: $name ") || ""}
+		${(arg.password && ",password: $password ") || ""}
 		${(arg?.facebookLink && ",facebookLink: $facebookLink ") || ""}
 		${(arg?.twitterLink && ",twitterLink: $twitterLink ") || ""}
 		${(arg?.instagramLink && ",instagramLink: $instagramLink ") || ""}

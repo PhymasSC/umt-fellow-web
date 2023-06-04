@@ -46,7 +46,7 @@ const Setting: React.FC<Setting> = (props) => {
         })}
       >
         <Tabs defaultValue="Account">
-          <Tabs.List>{items}</Tabs.List>
+          <Tabs.List grow>{items}</Tabs.List>
           <Container p={10}>
             {Object.entries(setting).map(([key, value]) => {
               return (
