@@ -19,7 +19,7 @@ import { IconCheck, IconEdit, IconTrash, IconX } from "@tabler/icons";
 
 type InputProps = {
   layout?: "horizontal" | "vertical";
-  value?: string | number;
+  value?: string;
   validate?:
     | FormValidateInput<{
         val: string;
@@ -49,7 +49,7 @@ const Input = ({
 }: InputProps) => {
   const form = useForm({
     initialValues: {
-      val: value?.toString() || "",
+      val: value || "",
     },
     validate,
   });
@@ -139,28 +139,15 @@ const Input = ({
             if (e.key === "Enter") {
               update();
             }
-            {...form.getInputProps("val")}
-            {...props}
-          />
-        ) : (
-          <TextInput
-            mt={(layout === "vertical" && "-1em") || "0"}
-            mb={(layout === "vertical" && "1em") || "0"}
-            disabled={loading}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                update();
-              }
-            }}
-            rightSection={
-              <ActionIcon color="blue" onClick={update}>
-                <IconEdit size="1.2em" />
-              </ActionIcon>
-            }
-            {...form.getInputProps("val")}
-            {...props}
-          />
-        )}
+          }}
+          rightSection={
+            <ActionIcon color="blue" onClick={update}>
+              <IconEdit size="1.2em" />
+            </ActionIcon>
+          }
+          {...form.getInputProps("val")}
+          {...props}
+        />
       </Grid.Col>
       {deleteable && (
         <Grid.Col

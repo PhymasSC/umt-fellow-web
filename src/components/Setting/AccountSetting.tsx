@@ -290,6 +290,8 @@ const AccountSetting = () => {
           layout="horizontal"
           type="text"
           placeholder={userData?.faculty || ""}
+          value={userData?.faculty || ""}
+          component={TextInput}
           validate={{
             val: (val) => {
               if (val.length > 500)
@@ -309,6 +311,8 @@ const AccountSetting = () => {
           layout="horizontal"
           type="text"
           placeholder={userData?.major || ""}
+          value={userData?.major || ""}
+          component={TextInput}
           validate={{
             val: (val) => {
               if (val.length > 500)
