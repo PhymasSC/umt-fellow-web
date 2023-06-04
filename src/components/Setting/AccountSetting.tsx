@@ -323,10 +323,10 @@ const AccountSetting = () => {
       description: "Your current year of study.",
       layout: "horizontal",
       input: (
-        <Input
+        <NumberInput
           argType="year"
           layout="horizontal"
-          type="text"
+          type="number"
           value={userData?.year || 0}
           precision={0}
           min={1}
@@ -340,10 +340,10 @@ const AccountSetting = () => {
         "Your overall grade point average (GPA) from all of your courses.",
       layout: "horizontal",
       input: (
-        <Input
+        <NumberInput
           argType="cgpa"
           layout="horizontal"
-          type="text"
+          type="number"
           value={userData?.cgpa || 0}
           precision={2}
           min={0}
