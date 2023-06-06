@@ -34,7 +34,12 @@ const ImageDropzone = (
             onDrop={(file) =>
               setNewImages([
                 ...newImages,
-                ...file.slice(0, 5 - newImages.length),
+                ...file.slice(
+                  0,
+                  5 -
+                    (newImages.length +
+                      existingImages.filter((img) => !img.isDeleted).length)
+                ),
               ])
             }
             onReject={(files) => console.log("rejected files", files)}
@@ -83,7 +88,10 @@ const ImageDropzone = (
                   Each file should not exceed 5mb
                 </Text>
                 <Text size="sm" color="dimmed" inline align="center" mt={7}>
-                  Total images: {newImages.length + existingImages.length} / 5
+                  Total images:{" "}
+                  {newImages.length +
+                    existingImages.filter((img) => !img.isDeleted).length}{" "}
+                  / 5
                 </Text>
               </div>
             </Group>
