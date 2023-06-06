@@ -152,7 +152,6 @@ const Editor: React.FC<Props> = ({ data }) => {
             images: resolvedValues,
           },
         });
-        console.log(res);
       }
 
       setIsLoading(false);

@@ -7,6 +7,7 @@ import {
   Image,
   Modal,
   Title,
+  Text,
   useMantineTheme,
 } from "@mantine/core";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -70,12 +71,21 @@ const ImagePreview = (props: ImagePreviewInterface) => {
       <Modal
         opened={deleteModalOpened}
         onClose={() => setDeleteModalOpened(false)}
-        title="Are you sure you want to delete the photo?"
+        title={<Text>Are you sure you want to delete the photo?</Text>}
         centered
+        overlayProps={{
+          color:
+            theme.colorScheme === "dark"
+              ? theme.colors.dark[9]
+              : theme.colors.gray[2],
+          opacity: 0.55,
+          blur: 3,
+        }}
       >
         <Flex direction="row-reverse" gap="md">
           <Button
             color="red"
+            variant="light"
             onClick={() => {
               setDeleteModalOpened(false);
               cancelCallback && cancelCallback();
