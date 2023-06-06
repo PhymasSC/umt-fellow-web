@@ -1,4 +1,4 @@
-import NextAuth, { DefaultSession, NextAuthOptions, User } from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialProvider from "next-auth/providers/credentials";
@@ -26,7 +26,6 @@ export const authOptions: NextAuthOptions = {
 				},
 				password: { label: "Password", type: "password" },
 			},
-			//@ts-ignore
 			authorize: async (credentials, req) => {
 				// database look up
 				const { email, password } = credentials as {
@@ -49,12 +48,11 @@ export const authOptions: NextAuthOptions = {
 		}),
 	],
 	callbacks: {
-		session({ session, token, user }) {
+		session({ session, token }) {
 			if (session?.user) {
-				//@ts-ignore
-				session.user.id = token.uid;
+				session.user.id = token?.sub || "";
 			}
-			return session; // The return type will match the one returned in `useSession()`
+			return session;
 		},
 
 		jwt: async ({ user, token }) => {
@@ -64,7 +62,7 @@ export const authOptions: NextAuthOptions = {
 			return token;
 		},
 	},
-	session: { strategy: "jwt" },
+	session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60, updateAge: 24 * 60 * 60 },
 	pages: {
 		signIn: "/login",
 	},
