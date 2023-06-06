@@ -1,17 +1,6 @@
-import { Feed, Typography } from "@components/index";
-import {
-  Card,
-  Container,
-  Flex,
-  Grid,
-  Group,
-  Space,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Feed } from "@components/index";
+import { Card, Flex, Grid, Text } from "@mantine/core";
 import { Footer, Comment } from "@components/index";
-import { IconTestPipe2 } from "@tabler/icons";
-import Link from "next/link";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@apollo/client";
@@ -19,9 +8,7 @@ import { GET_THREADS } from "@operations/queries";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
-  const { loading, error, data } = useQuery(GET_THREADS, {
-    pollInterval: 1000,
-  });
+  const { loading, data } = useQuery(GET_THREADS);
 
   return (
     <>
