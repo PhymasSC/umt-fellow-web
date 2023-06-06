@@ -21,15 +21,36 @@ import { Comment } from "@components/index";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@apollo/client";
+import { client } from "@lib/apollo-client";
 
-const ThreadPage: NextPage = (props) => {
+type ThreadPageProps = {
+  getThreadById: {
+    id: string;
+    title: string;
+    description: string;
+    images: {
+      id: string;
+      imageUrl: string;
+    }[];
+    tags: string[];
+    author: {
+      id: string;
+      name: string;
+      image: string;
+      email: string;
+    };
+    flag: string;
+    created_at: string;
+    updated_at: string;
+  };
+};
+const ThreadPage: NextPage<ThreadPageProps> = (props) => {
   const router = useRouter();
   const { id, edit } = router.query;
   const { data: session } = useSession();
-  const { loading, data } = useQuery(GET_THREAD, {
-    variables: { id: id?.[0] },
-    pollInterval: 500,
-  });
+  const { getThreadById: data } = props;
+  console.log(data);
+
   if (id === undefined) {
     return (
       <Container>
@@ -41,15 +62,15 @@ const ThreadPage: NextPage = (props) => {
   if (
     edit != undefined &&
     //@ts-ignore
-    session?.user.id === data.getThreadById?.author?.id
+    session?.user.id === data?.author?.id
   ) {
     return (
       <Container>
-        <Editor data={data?.getThreadById} />
+        <Editor data={data} />
       </Container>
     );
   }
-  if (!loading && data?.getThreadById == null) router.push("/404");
+  if (data == null) router.push("/404");
   // View mode
   return (
     <>
@@ -92,7 +113,7 @@ const ThreadPage: NextPage = (props) => {
             <Grid>
               <Grid.Col xs={12} lg={8}>
                 <Card sx={{ overflow: "visible" }} withBorder>
-                  <SingleFeed feed={data?.getThreadById} loading={loading} />
+                  <SingleFeed feed={data} loading={false} />
                 </Card>
               </Grid.Col>
               <Grid.Col xs={12} lg={4}>
@@ -109,28 +130,23 @@ const ThreadPage: NextPage = (props) => {
                 >
                   <Title order={4}>Thread Starter</Title>
                   <Space h="md"></Space>
-                  {!loading && (
-                    <>
-                      <Avatar
-                        src={data?.getThreadById?.author.image}
-                        size={120}
-                        radius={120}
-                        mx="auto"
-                      />
-                      <Text align="center" size="lg" weight={500} mt="md">
-                        {data?.getThreadById?.author.name}
-                      </Text>
+                  <>
+                    <Avatar
+                      src={data?.author.image}
+                      size={120}
+                      radius={120}
+                      mx="auto"
+                    />
+                    <Text align="center" size="lg" weight={500} mt="md">
+                      {data?.author.name}
+                    </Text>
 
-                      <Link
-                        href={`/profile/${data?.getThreadById?.author.id}`}
-                        passHref
-                      >
-                        <Button component="a" variant="light" fullWidth mt="md">
-                          View profile
-                        </Button>
-                      </Link>
-                    </>
-                  )}
+                    <Link href={`/profile/${data?.author.id}`} passHref>
+                      <Button component="a" variant="light" fullWidth mt="md">
+                        View profile
+                      </Button>
+                    </Link>
+                  </>
                   <Link href={`/message`} passHref>
                     <Button component="a" variant="outline" fullWidth mt="md">
                       Send a message
@@ -147,14 +163,12 @@ const ThreadPage: NextPage = (props) => {
               <Title>No Replies yet</Title>
             </Center>
             <Space h="xl" />
-            {!loading && (
-              <Comment
-                author={{
-                  name: data?.getThreadById?.author?.name,
-                  image: data?.getThreadById?.author?.image,
-                }}
-              />
-            )}
+            <Comment
+              author={{
+                name: data?.author?.name,
+                image: data?.author?.image,
+              }}
+            />
           </Grid.Col>
           <Grid.Col xs={12} md={4}></Grid.Col>
         </Grid>
@@ -163,29 +177,29 @@ const ThreadPage: NextPage = (props) => {
   );
 };
 
-// export async function getServerSideProps(context: { params: { id: string } }) {
-// 	const id = Array.isArray(context.params.id)
-// 		? context.params.id[0]
-// 		: context.params.id;
-// 	if (!id)
-// 		return {
-// 			props: {},
-// 		};
-// 	try {
-// 		const { data } = await client.query({
-// 			query: GET_THREAD,
-// 			variables: { id },
-// 		});
-// 		return {
-// 			props: data,
-// 		};
-// 	} catch (error) {
-// 		console.log(error);
-// 	}
+export async function getServerSideProps(context: { params: { id: string } }) {
+  const id = Array.isArray(context.params.id)
+    ? context.params.id[0]
+    : context.params.id;
+  if (!id)
+    return {
+      props: {},
+    };
+  try {
+    const { data } = await client.query({
+      query: GET_THREAD,
+      variables: { id },
+    });
+    return {
+      props: data,
+    };
+  } catch (error) {
+    console.log(error);
+  }
 
-// 	return {
-// 		notFound: true,
-// 	};
-// }
+  return {
+    notFound: true,
+  };
+}
 
 export default ThreadPage;
