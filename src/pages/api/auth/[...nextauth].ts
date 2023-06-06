@@ -48,24 +48,24 @@ export const authOptions: NextAuthOptions = {
 		}),
 	],
 	callbacks: {
-		session({ session, token }) {
-			if (session?.user) {
-				session.user.id = token?.sub || "";
+		jwt({ token, account, user }) {
+			if (account) {
+				token.accessToken = account.access_token
+				token.id = user?.id
 			}
-			return session;
+			return token
 		},
+		session({ session, token }) {
+			// I skipped the line below coz it gave me a TypeError
+			// session.accessToken = token.accessToken;
+			session.user.id = token.sub || "";
 
-		jwt: async ({ user, token }) => {
-			if (user) {
-				token.uid = user.id;
-			}
-			return token;
+			return session;
 		},
 	},
 	session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60, updateAge: 24 * 60 * 60 },
 	pages: {
 		signIn: "/login",
 	},
-	secret: process.env.NEXTAUTH_SECRET,
 };
 export default NextAuth(authOptions);
