@@ -260,6 +260,7 @@ const Header = ({ links }: HeaderResponsiveProps) => {
         <Transition transition="slide-down" duration={200} mounted={opened}>
           {(styles) => (
             <Paper className={classes.dropdown} withBorder style={styles}>
+              {items}
               <Divider m="xs" />
               {(!session && (
                 <>
