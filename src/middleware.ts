@@ -9,6 +9,7 @@ export default withAuth(
         callbacks: {
             authorized: ({ token }) => {
                 console.log(`Authorized: `, token)
+                console.log('Secret: ', process.env.NEXTAUTH_SECRET)
                 if (token) return true
                 return false
             },
