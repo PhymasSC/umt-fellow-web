@@ -34,7 +34,7 @@ const OTPScreen = ({ OTP }: OTPScreenProps) => {
       />
 
       <Text size="xs" c="dimmed" component="a" href="" align="left">
-        Didn't receive the OTP? Click here to request a new one ↻.
+        Didn&apos;t receive the OTP? Click here to request a new one ↻.
       </Text>
       <Text size="xs" c="dimmed">
         Your OTP will be expired in **x** minutes. Please enter it below before
