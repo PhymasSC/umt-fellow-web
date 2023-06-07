@@ -188,7 +188,7 @@ const Header = ({ links }: HeaderResponsiveProps) => {
                       Profile
                     </Menu.Item>
                   </Link>
-                  <Link href={`/setting/${session.user?.id}`} passHref>
+                  <Link href={`/setting`} passHref>
                     <Menu.Item
                       icon={<IconSettings size={14} />}
                       component="a"
@@ -260,6 +260,7 @@ const Header = ({ links }: HeaderResponsiveProps) => {
         <Transition transition="slide-down" duration={200} mounted={opened}>
           {(styles) => (
             <Paper className={classes.dropdown} withBorder style={styles}>
+              {items}
               <Divider m="xs" />
               {(!session && (
                 <>
@@ -311,7 +312,7 @@ const Header = ({ links }: HeaderResponsiveProps) => {
                       Profile
                     </Button>
                   </Link>
-                  <Link href={`/setting/${session?.user?.id}`} passHref>
+                  <Link href={`/setting`} passHref>
                     <Button
                       component="a"
                       variant="subtle"

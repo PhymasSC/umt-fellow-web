@@ -1,21 +1,5 @@
-import { NextRequestWithAuth, withAuth } from "next-auth/middleware"
-
-export default withAuth(
-    // `withAuth` augments your `Request` with the user's token.
-    function middleware(req: NextRequestWithAuth) {
-        console.log(`Next auth Token: ,`, req.nextauth.token)
-    },
-    {
-        callbacks: {
-            authorized: ({ token }) => {
-                console.log(`Authorized: `, token || "No token")
-                if (token) return true
-                return false
-            },
-        },
-    }
-)
+export { default } from "next-auth/middleware";
 
 export const config = {
-    matcher: ["/rtchat", "/message", "/message/[id]"]
+    matcher: ["/rtchat", "/message", "/message/:id", "/setting"]
 }
