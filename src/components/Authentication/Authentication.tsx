@@ -7,8 +7,9 @@ import { ADD_USER } from "@operations/mutations";
 import { EMAIL_PATTERN, PASSWORD_PATTERN } from "@constants/regex";
 import AuthenticationScreen from "./AuthenticationScreen";
 import ResetPasswordScreen from "./ResetPasswordScreen";
+import OTPScreen from "./OTPScreen";
 
-type AuthScreens = "login" | "register" | "forgotPassword";
+type AuthScreens = "login" | "register" | "forgotPassword" | "otp";
 
 interface AuthProps extends PaperProps {
   isModal?: boolean;
@@ -63,26 +64,26 @@ const Authentication = ({
       if (hasErrors) {
         return;
       }
+      setScreen("otp");
+      // const response = await register({
+      //   variables: {
+      //     name: form.values.name,
+      //     email: form.values.email,
+      //     password: form.values.password,
+      //   },
+      // });
 
-      const response = await register({
-        variables: {
-          name: form.values.name,
-          email: form.values.email,
-          password: form.values.password,
-        },
-      });
-
-      if (response.data.addUser.code === 200) {
-        signIn("credentials", {
-          email: form.values.email,
-          password: form.values.password,
-          callbackUrl: "/",
-          // redirect: false,
-        });
-      } else {
-        setError(response.data.addUser.code);
-        form.setErrors({ email: "Email has been registered" });
-      }
+      // if (response.data.addUser.code === 200) {
+      //   signIn("credentials", {
+      //     email: form.values.email,
+      //     password: form.values.password,
+      //     callbackUrl: "/",
+      //     // redirect: false,
+      //   });
+      // } else {
+      //   setError(response.data.addUser.code);
+      //   form.setErrors({ email: "Email has been registered" });
+      // }
     }
   };
 
@@ -100,9 +101,15 @@ const Authentication = ({
     />
   );
 
+  const OTP = <OTPScreen OTP="123456" />;
+
   return (
     <Paper radius="md" p="xl" withBorder {...props}>
-      {screen === "forgotPassword" ? resetPasswordScreen : authenticationScreen}
+      {screen === "forgotPassword"
+        ? resetPasswordScreen
+        : screen === "otp"
+        ? OTP
+        : authenticationScreen}
     </Paper>
   );
 };
