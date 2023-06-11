@@ -1,25 +1,25 @@
-import { Card, CardSection } from "@mantine/core";
+import { Grid } from "@mantine/core";
 import CommunityCard from "./CommunityCard";
 
 interface CommunityListProps {
-	communities: {
-		id: number;
-		name: string;
-		description: string;
-		avatar: string;
-	}[];
+  communities: {
+    id: number;
+    name: string;
+    description: string;
+    avatar: string;
+  }[];
 }
 
 const CommunityList: React.FC<CommunityListProps> = ({ communities }) => {
-	return (
-		<Card withBorder key="community-list">
-			{communities.map((community) => (
-				<CardSection p={10} py={15} withBorder key={community.id}>
-					<CommunityCard community={community} />
-				</CardSection>
-			))}
-		</Card>
-	);
+  return (
+    <Grid>
+      {communities.map((community, index) => (
+        <Grid.Col xs={6} md={4} lg={3} xl={2} key={index}>
+          <CommunityCard community={community} />
+        </Grid.Col>
+      ))}
+    </Grid>
+  );
 };
 
 export default CommunityList;

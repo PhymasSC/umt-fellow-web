@@ -1,37 +1,50 @@
-import { Menu, ActionIcon } from "@mantine/core";
-import { IconDotsVertical, IconPencil, IconTrash, IconFlag } from "@tabler/icons";
+import { Menu, ActionIcon, Button, Group } from "@mantine/core";
+import { IconPencil, IconTrash, IconDotsVertical } from "@tabler/icons";
 
-const CommunityCardMenu: React.FC<{ isJoined: boolean; onClick: () => void }> = ({ isJoined, onClick }) => (
-    <Menu>
-        <Menu.Target>
-            <ActionIcon>
-                <IconDotsVertical />
-            </ActionIcon>
-        </Menu.Target>
-        <Menu.Dropdown>
-            <Menu.Item
-                color={isJoined ? "green" : "blue"}
-                onClick={onClick}
-                closeMenuOnClick={false}
-            >
-                {isJoined ? "Joined" : "Join"}
-            </Menu.Item>
-            <Menu.Divider />
-            <Menu.Item icon={<IconPencil size={14} />}>
-                Edit Community
-            </Menu.Item>
-            <Menu.Item icon={<IconTrash size={14} />}>
-                Delete Community
-            </Menu.Item>
-            <Menu.Divider />
-            <Menu.Item
-                color="red"
-                icon={<IconFlag size={14} />}
-            >
-                Report
-            </Menu.Item>
-        </Menu.Dropdown>
+const CommunityCardMenu: React.FC<{
+  isJoined: boolean;
+  onClick: () => void;
+}> = ({ isJoined, onClick }) => (
+  <Group noWrap spacing={1}>
+    <Button
+      color={isJoined ? "green" : "blue"}
+      sx={{
+        borderTopRightRadius: 0,
+        borderBottomRightRadius: 0,
+      }}
+      onClick={(e) => {
+        if (e.defaultPrevented) return;
+        e.preventDefault();
+        onClick();
+      }}
+    >
+      {" "}
+      {isJoined ? "Joined" : "Join"}
+    </Button>
+    <Menu withinPortal>
+      <Menu.Target>
+        <ActionIcon
+          variant="filled"
+          color={isJoined ? "green" : "blue"}
+          size={36}
+          sx={{
+            borderTopLeftRadius: 0,
+            borderBottomLeftRadius: 0,
+          }}
+          onClick={(e) => {
+            if (e.defaultPrevented) return;
+            e.preventDefault();
+          }}
+        >
+          <IconDotsVertical size="1rem" stroke={1.5} />
+        </ActionIcon>
+      </Menu.Target>
+      <Menu.Dropdown>
+        <Menu.Item icon={<IconPencil size={14} />}>Edit Community</Menu.Item>
+        <Menu.Item icon={<IconTrash size={14} />}>Delete Community</Menu.Item>
+      </Menu.Dropdown>
     </Menu>
+  </Group>
 );
 
 export default CommunityCardMenu;
