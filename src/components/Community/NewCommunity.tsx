@@ -1,11 +1,19 @@
 import { FormLayout } from "@components/Form";
-import { Avatar, Button, Flex, Input, Space, Textarea } from "@mantine/core";
+import {
+  Avatar,
+  Button,
+  Flex,
+  Input,
+  Space,
+  Text,
+  Textarea,
+} from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 type FormLayoutProps = {
   layout: "horizontal" | "vertical";
   label: string | React.ReactNode;
-  description: string;
+  description: string | React.ReactNode;
   input: React.ReactNode;
 };
 
@@ -23,8 +31,13 @@ const NewCommunity = () => {
     {
       layout: "horizontal",
       label: "Avatar",
-      description:
-        "The avatar image is a small image that represents your community. It will be displayed next to the community name in all forum listings. Recommended image size: 100x100 pixels",
+      description: (
+        <>
+          The avatar image is a small image that represents your community. It
+          will be displayed next to the community name in all forum listings.
+          <Text fw="bold">Recommended image size: 100x100 pixels</Text>
+        </>
+      ),
       input: (
         <Dropzone
           accept={IMAGE_MIME_TYPE}
@@ -53,8 +66,14 @@ const NewCommunity = () => {
     {
       layout: "horizontal",
       label: "Banner",
-      description:
-        "The banner image is a larger image that appears at the top of your community's forum page. It can be used to showcase your community's purpose, goals, or members. Recommended image size: 1920x1200 pixels",
+      description: (
+        <>
+          The banner image is a larger image that appears at the top of your
+          community's forum page. It can be used to showcase your community's
+          purpose, goals, or members.
+          <Text fw="bold">Recommended image size: 1920x1200 pixels</Text>
+        </>
+      ),
       input: (
         <Dropzone
           accept={IMAGE_MIME_TYPE}

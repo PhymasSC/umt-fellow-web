@@ -10,10 +10,14 @@ import {
 import { COMMUNITIES } from "@constants/communities";
 import { IconPlus } from "@tabler/icons";
 import { useDisclosure } from "@mantine/hooks";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const Communities = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const theme = useMantineTheme();
+  const { data: session } = useSession();
+  const router = useRouter();
   return (
     <Container fluid>
       <Modal
@@ -41,7 +45,12 @@ const Communities = () => {
         <Title order={1} size="h3" mb="md">
           Community List
         </Title>
-        <Button rightIcon={<IconPlus size={16} />} onClick={open}>
+        <Button
+          rightIcon={<IconPlus size={16} />}
+          onClick={() => {
+            session?.user ? open() : router.push("/login");
+          }}
+        >
           Create
         </Button>
       </Flex>
