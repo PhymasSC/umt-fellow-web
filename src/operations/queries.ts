@@ -112,3 +112,47 @@ export const GET_THREAD_UPVOTES_AND_DOWNVOTES = gql`
 		getThreadUpvotesAndDownvotes(threadId: $threadId)
 	}
 `;
+
+export const GET_COMMUNITY_BY_ID = gql`
+query GetCommunityById($id: String!) {
+	getCommunityById(id: $id) {
+	  id
+	  name
+	  description
+	  avatar
+	  banner
+	  created_at
+	  updated_at
+	  creatorId {
+		id
+		name
+		email
+		emailVerified
+		password
+		isUMTMembership
+		sex
+		age
+		image
+		facebookLink
+		twitterLink
+		instagramLink
+		githubLink
+		dribbbleLink
+		youtubeLink
+		telegramLink
+		tiktokLink
+		redditLink
+		snapchatLink
+		about
+		faculty
+		major
+		year
+		cgpa
+		failedAttempts
+		nextAvailableLogin
+		created_at
+		updated_at
+	  }
+	}
+  }
+`;

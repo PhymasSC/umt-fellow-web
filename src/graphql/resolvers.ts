@@ -52,6 +52,7 @@ export const resolvers = {
 			});
 			return users;
 		},
+
 		getThreads: async () => {
 			const threads = await prisma.thread.findMany({
 				orderBy: {
@@ -79,7 +80,6 @@ export const resolvers = {
 			});
 			return thread;
 		},
-
 		getThreadVotes: async (_: any, { threadId }: { threadId: string }) => {
 			const votes = await prisma.threadvotes.findMany({
 				where: {
@@ -88,7 +88,6 @@ export const resolvers = {
 			});
 			return votes;
 		},
-
 		getThreadUpvotesAndDownvotes: async (
 			_: any,
 			{ threadId }: { threadId: string }
@@ -109,6 +108,21 @@ export const resolvers = {
 
 			return [upvotes, downvotes];
 		},
+
+		getCommunities: async () => {
+			const communities = await prisma.community.findMany();
+			return communities;
+		},
+		getCommunityById: async (_: any, { id }: { id: string }) => {
+			const community = await prisma.community.findFirst({
+				where: {
+					id,
+				},
+			});
+			return community;
+		},
+
+
 	},
 
 	Vote: {

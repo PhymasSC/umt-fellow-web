@@ -75,12 +75,15 @@ export const typeDefs = gql`
 		getUser(id: String!): User!
 		getUsers(limit: Int, offset: Int): [User]!
 		getUsersByName(name: String!, limit: Int, offset: Int): [User]!
+		
 		getThreads: [Thread]
 		getThreadsByAuthor(authorId: String!): [Thread]
 		getThreadById(id: String!): Thread
 		getThreadVotes(threadId: String!): [Vote]
 		getThreadUpvotesAndDownvotes(threadId: String!): [Int]!
 
+		getCommunities: [Community]
+		getCommunityById(id: String!): Community
 	}
 
 	type Thread {
