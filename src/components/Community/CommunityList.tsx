@@ -3,10 +3,11 @@ import CommunityCard from "./CommunityCard";
 
 interface CommunityListProps {
   communities: {
-    id: number;
+    id: string;
     name: string;
     description: string;
     avatar: string;
+    banner: string;
   }[];
 }
 

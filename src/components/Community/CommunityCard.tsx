@@ -5,16 +5,17 @@ import CommunityCardMenu from "./CommunityCardMenu";
 
 interface CommunityCardProps {
   community: {
-    id: number;
+    id: string;
     name: string;
     description: string;
     avatar: string;
+    banner: string;
   };
 }
 
 const CommunityCard: React.FC<CommunityCardProps> = ({ community }) => {
   const [isJoined, setIsJoined] = useState(false);
-  const { id, name, description, avatar } = community;
+  const { id, name, description, banner } = community;
   return (
     <Link href={`/community/${id}`} passHref>
       <Card
@@ -31,7 +32,11 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ community }) => {
         })}
       >
         <Card.Section>
-          <Image src={avatar} alt="test" />
+          <Image
+            height={300}
+            src={`https://ik.imagekit.io/umtfellow/tr:h-600/${banner}`}
+            alt="test"
+          />
         </Card.Section>
         <Flex direction="column" align="center" justify="center">
           <Title order={1} size="md" mt="md">
@@ -40,7 +45,14 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ community }) => {
           <Text size="sm" color="dimmed" ta="left">
             {description}{" "}
           </Text>
-          <Flex h="100%" w="100%" justify="center" align="center" gap={10}>
+          <Flex
+            h="100%"
+            w="100%"
+            justify="center"
+            align="center"
+            gap={10}
+            mt="sm"
+          >
             <CommunityCardMenu
               isJoined={isJoined}
               onClick={() => setIsJoined((isJoined) => !isJoined)}

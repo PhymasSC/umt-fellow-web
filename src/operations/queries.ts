@@ -113,6 +113,18 @@ export const GET_THREAD_UPVOTES_AND_DOWNVOTES = gql`
 	}
 `;
 
+export const GET_COMMUNITIES = gql`
+query GetCommunities {
+	getCommunities {
+		id
+		name
+		description
+		avatar
+		banner
+	}
+}
+`;
+
 export const GET_COMMUNITY_BY_ID = gql`
 query GetCommunityById($id: String!) {
 	getCommunityById(id: $id) {

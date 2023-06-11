@@ -12,8 +12,21 @@ import { IconPlus } from "@tabler/icons";
 import { useDisclosure } from "@mantine/hooks";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { client } from "@lib/apollo-client";
+import { GET_COMMUNITIES } from "@operations/queries";
+import { NextPage } from "next";
 
-const Communities = () => {
+type CommunitiesProps = {
+  communities: {
+    id: string;
+    name: string;
+    description: string;
+    avatar: string;
+    banner: string;
+  }[];
+};
+
+const Communities: NextPage<CommunitiesProps> = ({ communities }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const theme = useMantineTheme();
   const { data: session } = useSession();
@@ -54,9 +67,32 @@ const Communities = () => {
           Create
         </Button>
       </Flex>
-      <CommunityList communities={COMMUNITIES} />
+      <CommunityList communities={communities} />
     </Container>
   );
+};
+
+export const getServerSideProps = async () => {
+  try {
+    const { data } = await client.query({
+      query: GET_COMMUNITIES,
+    });
+
+    console.log(data);
+    return {
+      props: {
+        communities: data.getCommunities,
+      },
+    };
+  } catch (err) {
+    console.log(err);
+  }
+
+  return {
+    props: {
+      error: "An error occurred",
+    },
+  };
 };
 
 export default Communities;
