@@ -46,6 +46,7 @@ const ImagePreview = (props: ImagePreviewInterface) => {
     const getBlob = async () => {
       if (src && setFiles) {
         try {
+          console.log("TEST");
           const response = await fetch(imageUrl || "");
           const blob = await response.blob();
           const blobUrl = URL.createObjectURL(blob);
@@ -139,12 +140,19 @@ const ImagePreview = (props: ImagePreviewInterface) => {
               right: "0.3em",
               zIndex: 99,
             }}
-            onClick={() => setDeleteModalOpened(true)}
           >
             {isUpload ? (
-              <IconX size={20} color="gray" />
+              <IconX
+                size={20}
+                color="gray"
+                onClick={() => setDeleteModalOpened(true)}
+              />
             ) : (
-              <IconArrowsDiagonal2 size={20} color="gray" />
+              <IconArrowsDiagonal2
+                onClick={() => setOpened(true)}
+                size={20}
+                color="gray"
+              />
             )}
           </ActionIcon>
           <Image

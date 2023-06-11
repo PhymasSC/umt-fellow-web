@@ -20,6 +20,7 @@ const Communities = () => {
         opened={opened}
         onClose={close}
         centered
+        size="75vw"
         title={
           <Title order={2} size="h4">
             Create Community
