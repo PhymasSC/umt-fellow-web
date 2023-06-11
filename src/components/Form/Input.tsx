@@ -1,11 +1,8 @@
 import {
   ActionIcon,
   Grid,
-  NumberInputProps,
   PasswordInputProps,
-  Textarea,
   TextareaProps,
-  TextInput,
   TextInputProps,
 } from "@mantine/core";
 import { useMutation } from "@apollo/client";
