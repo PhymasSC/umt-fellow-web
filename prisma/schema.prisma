@@ -83,7 +83,7 @@ model Community {
   id              String            @id @default(uuid())
   name            String            @unique
   avatar          String
-  description     String
+  description     String            @db.Text
   banner          String
   created_at      DateTime          @default(now()) @map("created_at")
   updated_at      DateTime          @default(now()) @updatedAt @map("updated_at")
