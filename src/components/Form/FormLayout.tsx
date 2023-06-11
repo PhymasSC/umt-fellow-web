@@ -18,7 +18,6 @@ const SettingLayout = (props: TextInputSettingProps) => {
             {label}
             <Tooltip
               multiline
-              w="30%"
               label={
                 <Text size="xs" color="dimmed">
                   {description}
