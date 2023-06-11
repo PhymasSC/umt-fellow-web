@@ -1,6 +1,6 @@
 import { Menu, ActionIcon, Button, Group } from "@mantine/core";
 import { IconPencil, IconTrash, IconDotsVertical } from "@tabler/icons";
-
+import { MouseEvent } from "react";
 const CommunityCardMenu: React.FC<{
   isJoined: boolean;
   onClick: () => void;
@@ -12,7 +12,7 @@ const CommunityCardMenu: React.FC<{
         borderTopRightRadius: 0,
         borderBottomRightRadius: 0,
       }}
-      onClick={(e) => {
+      onClick={(e: MouseEvent<HTMLButtonElement>) => {
         if (e.defaultPrevented) return;
         e.preventDefault();
         onClick();
@@ -31,7 +31,7 @@ const CommunityCardMenu: React.FC<{
             borderTopLeftRadius: 0,
             borderBottomLeftRadius: 0,
           }}
-          onClick={(e) => {
+          onClick={(e: MouseEvent<HTMLButtonElement>) => {
             if (e.defaultPrevented) return;
             e.preventDefault();
           }}
