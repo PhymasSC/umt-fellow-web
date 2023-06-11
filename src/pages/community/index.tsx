@@ -1,13 +1,52 @@
-import {  CommunityList } from "@components/index";
-import { Container, Title } from "@mantine/core";
+import { CommunityList, NewCommunity } from "@components/index";
+import {
+  Button,
+  Container,
+  Flex,
+  Title,
+  Modal,
+  useMantineTheme,
+} from "@mantine/core";
 import { COMMUNITIES } from "@constants/communities";
+import { IconPlus } from "@tabler/icons";
+import { useDisclosure } from "@mantine/hooks";
+
 const Communities = () => {
-	return (
-		<Container>
-			<Title mb="md">Community List</Title>
-			<CommunityList communities={COMMUNITIES} />
-		</Container>
-	);
+  const [opened, { open, close }] = useDisclosure(false);
+  const theme = useMantineTheme();
+  return (
+    <Container fluid>
+      <Modal
+        opened={opened}
+        onClose={close}
+        centered
+        title={
+          <Title order={2} size="h4">
+            Create Community
+          </Title>
+        }
+        overlayProps={{
+          color:
+            theme.colorScheme === "dark"
+              ? theme.colors.dark[9]
+              : theme.colors.gray[2],
+          opacity: 0.55,
+          blur: 3,
+        }}
+      >
+        <NewCommunity />
+      </Modal>
+      <Flex justify="space-between">
+        <Title order={1} size="h3" mb="md">
+          Community List
+        </Title>
+        <Button rightIcon={<IconPlus size={16} />} onClick={open}>
+          Create
+        </Button>
+      </Flex>
+      <CommunityList communities={COMMUNITIES} />
+    </Container>
+  );
 };
 
 export default Communities;
