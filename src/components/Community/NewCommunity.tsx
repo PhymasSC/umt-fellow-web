@@ -1,15 +1,21 @@
+import { useMutation } from "@apollo/client";
 import { FormLayout } from "@components/Form";
 import {
   Avatar,
   Button,
   Flex,
-  Input,
+  TextInput,
   Space,
   Text,
   Textarea,
 } from "@mantine/core";
-import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
+import { ADD_COMMUNITY } from "@operations/mutations";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useState } from "react";
+
 type FormLayoutProps = {
   layout: "horizontal" | "vertical";
   label: string | React.ReactNode;
@@ -18,6 +24,13 @@ type FormLayoutProps = {
 };
 
 const NewCommunity = () => {
+  const [avatarObj, setAvatarObj] = useState<FileWithPath>({} as FileWithPath);
+  const [bannerObj, setBannerObj] = useState<FileWithPath>({} as FileWithPath);
+  const [loading, setLoading] = useState(false);
+  const [addCommunity] = useMutation(ADD_COMMUNITY);
+  const { data: session } = useSession();
+  const router = useRouter();
+
   const form = useForm({
     initialValues: {
       name: "",
@@ -26,6 +39,18 @@ const NewCommunity = () => {
       bannerImg: "",
     },
   });
+
+  const getBase64 = (file: File): Promise<string> => {
+    return new Promise<string>((resolve) => {
+      let baseURL = "";
+      let reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        baseURL = reader?.result?.toString() || "";
+        resolve(baseURL);
+      };
+    });
+  };
 
   const Form: FormLayoutProps[] = [
     {
@@ -43,7 +68,9 @@ const NewCommunity = () => {
           accept={IMAGE_MIME_TYPE}
           maxFiles={1}
           onDrop={(img) => {
-            form.setValues({ avatarImg: URL.createObjectURL(img[0]) });
+            setAvatarObj(img[0]);
+            console.log(avatarObj);
+            form.setValues({ avatarImg: URL.createObjectURL(avatarObj) });
           }}
           sx={{
             position: "relative",
@@ -69,8 +96,8 @@ const NewCommunity = () => {
       description: (
         <>
           The banner image is a larger image that appears at the top of your
-          community's forum page. It can be used to showcase your community's
-          purpose, goals, or members.
+          community&apos;s forum page. It can be used to showcase your
+          community&apos;s purpose, goals, or members.
           <Text fw="bold">Recommended image size: 1920x1200 pixels</Text>
         </>
       ),
@@ -79,6 +106,7 @@ const NewCommunity = () => {
           accept={IMAGE_MIME_TYPE}
           maxFiles={1}
           onDrop={(img) => {
+            setBannerObj(img[0]);
             form.setValues({ bannerImg: URL.createObjectURL(img[0]) });
           }}
         >
@@ -101,7 +129,7 @@ const NewCommunity = () => {
       label: "Name",
       description:
         "The name of the community is what users will see when they browse forum listings. It should be clear, concise, and easy to remember.",
-      input: <Input placeholder="Name" {...form.getInputProps("name")} />,
+      input: <TextInput placeholder="Name" {...form.getInputProps("name")} />,
     },
     {
       layout: "horizontal",
@@ -122,7 +150,29 @@ const NewCommunity = () => {
 
   return (
     <form
-      onSubmit={form.onSubmit((values) => console.log(values))}
+      onSubmit={form.onSubmit(async (values) => {
+        setLoading(true);
+        let avatarBlob = await getBase64(avatarObj).then((res) => res);
+        let bannerBlob = await getBase64(bannerObj).then((res) => res);
+
+        let res = await addCommunity({
+          variables: {
+            name: values.name || "",
+            description: values.description || "",
+            avatar: avatarBlob || "",
+            banner: bannerBlob || "",
+            creatorId: session?.user.id || "",
+          },
+        });
+
+        setLoading(false);
+
+        res.data?.addCommunity.success === false
+          ? form.setErrors({
+              name: `A community with the name '${values.name}' already exists. Please choose a different name.`,
+            })
+          : router.push(`/community/${res.data?.addCommunity.community.id}`);
+      })}
       onReset={form.onReset}
     >
       {Form.map((form, index) => (
@@ -136,8 +186,10 @@ const NewCommunity = () => {
       ))}
       <Space h="md" />
       <Flex direction="row-reverse">
-        <Button type="submit">Create</Button>
-        <Button type="reset" variant="subtle" color="red">
+        <Button type="submit" loading={loading}>
+          Create
+        </Button>
+        <Button type="reset" variant="subtle" color="red" disabled={loading}>
           Cancel
         </Button>
       </Flex>
