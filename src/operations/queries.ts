@@ -121,6 +121,9 @@ query GetCommunities {
 		description
 		avatar
 		banner
+		creatorId {
+			id 
+		}
 	}
 }
 `;
