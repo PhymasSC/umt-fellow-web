@@ -23,11 +23,9 @@ import {
   IconTrash,
 } from "@tabler/icons";
 import { useSession } from "next-auth/react";
-import SettingLayout from "./SettingLayout";
 import { useQuery } from "@apollo/client";
 import { GET_USER } from "@operations/queries";
-import Input from "./Input";
-import NumberInput from "./NumberInput";
+import { Input, NumberInput, FormLayout } from "../Form";
 
 type USER_TYPE = {
   id: string;
@@ -254,7 +252,7 @@ const AccountSetting = () => {
         "This section allows you to update your social media links. These links will be displayed on your profile, so that other users can easily find you on other social media platforms.",
       input: (
         <Stack>
-          <SettingLayout
+          <FormLayout
             layout="horizontal"
             label="Facebook"
             description="Update your Facebook link"
@@ -269,7 +267,7 @@ const AccountSetting = () => {
               />
             }
           />
-          <SettingLayout
+          <FormLayout
             layout="horizontal"
             label="Twitter"
             description="Update your Twitter link"
@@ -283,7 +281,7 @@ const AccountSetting = () => {
               />
             }
           />
-          <SettingLayout
+          <FormLayout
             layout="horizontal"
             label="Instagram"
             description="Update your Instagram link"
@@ -297,7 +295,7 @@ const AccountSetting = () => {
               />
             }
           />
-          <SettingLayout
+          <FormLayout
             layout="horizontal"
             label="Github"
             description="Update your Github link"
@@ -311,7 +309,7 @@ const AccountSetting = () => {
               />
             }
           />
-          <SettingLayout
+          <FormLayout
             layout="horizontal"
             label="Dribbble"
             description="Update your Dribbble link"
@@ -325,7 +323,7 @@ const AccountSetting = () => {
               />
             }
           />
-          <SettingLayout
+          <FormLayout
             layout="horizontal"
             label="Youtube"
             description="Update your Youtube link"
@@ -339,7 +337,7 @@ const AccountSetting = () => {
               />
             }
           />
-          <SettingLayout
+          <FormLayout
             layout="horizontal"
             label="Telegram"
             description="Update your Telegram link"
@@ -353,7 +351,7 @@ const AccountSetting = () => {
               />
             }
           />
-          <SettingLayout
+          <FormLayout
             layout="horizontal"
             label="Tiktok"
             description="Update your Tiktok link"
@@ -367,7 +365,7 @@ const AccountSetting = () => {
               />
             }
           />
-          <SettingLayout
+          <FormLayout
             layout="horizontal"
             label="Reddit"
             description="Update your Reddit link"
@@ -381,7 +379,7 @@ const AccountSetting = () => {
               />
             }
           />
-          <SettingLayout
+          <FormLayout
             layout="horizontal"
             label="Snapchat"
             description="Update your Snapchat link"
@@ -425,7 +423,7 @@ const AccountSetting = () => {
     <Stack>
       {configuration.map((config, index) => {
         return (
-          <SettingLayout
+          <FormLayout
             key={index}
             layout={config.layout || "vertical"}
             label={config.label}

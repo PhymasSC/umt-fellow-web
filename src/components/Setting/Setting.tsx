@@ -1,10 +1,8 @@
 import { Card, Container, Tabs, Text, Title } from "@mantine/core";
-import { useSession } from "next-auth/react";
 import AccountSetting from "./AccountSetting";
 import ChatSetting from "./ChatSetting";
 import CommunitySetting from "./CommunitySetting";
 import NotificationSetting from "./NotificationSetting";
-import SecuritySetting from "./SecuritySetting";
 
 interface Setting {
   setting: {
