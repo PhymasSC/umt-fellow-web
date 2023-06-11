@@ -6,8 +6,9 @@ import {
   Title,
   Modal,
   useMantineTheme,
+  Card,
+  Text,
 } from "@mantine/core";
-import { COMMUNITIES } from "@constants/communities";
 import { IconPlus } from "@tabler/icons";
 import { useDisclosure } from "@mantine/hooks";
 import { useSession } from "next-auth/react";
@@ -31,6 +32,7 @@ const Communities: NextPage<CommunitiesProps> = ({ communities }) => {
   const theme = useMantineTheme();
   const { data: session } = useSession();
   const router = useRouter();
+
   return (
     <Container fluid>
       <Modal
@@ -67,7 +69,31 @@ const Communities: NextPage<CommunitiesProps> = ({ communities }) => {
           Create
         </Button>
       </Flex>
-      <CommunityList communities={communities} />
+      {communities.length === 0 ? (
+        <Card
+          withBorder
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "transparent",
+            minHeight: "8em",
+          }}
+        >
+          <Text
+            size="lg"
+            fw="bold"
+            align="center"
+            variant="gradient"
+            gradient={{ from: "indigo", to: "cyan", deg: 45 }}
+          >
+            Let&apos;s get this forum started! Create the first community ever
+            in this platform!
+          </Text>
+        </Card>
+      ) : (
+        <CommunityList communities={communities} />
+      )}
     </Container>
   );
 };
