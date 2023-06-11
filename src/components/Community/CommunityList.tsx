@@ -8,6 +8,9 @@ interface CommunityListProps {
     description: string;
     avatar: string;
     banner: string;
+    creatorId: {
+      id: string;
+    };
   }[];
 }
 

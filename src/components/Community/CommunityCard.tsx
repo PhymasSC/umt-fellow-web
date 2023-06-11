@@ -10,6 +10,9 @@ interface CommunityCardProps {
     description: string;
     avatar: string;
     banner: string;
+    creatorId: {
+      id: string;
+    };
   };
 }
 
@@ -55,6 +58,7 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ community }) => {
           >
             <CommunityCardMenu
               isJoined={isJoined}
+              creatorId={community.creatorId.id}
               onClick={() => setIsJoined((isJoined) => !isJoined)}
             />
           </Flex>

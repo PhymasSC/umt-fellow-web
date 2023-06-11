@@ -24,6 +24,9 @@ type CommunitiesProps = {
     description: string;
     avatar: string;
     banner: string;
+    creatorId: {
+      id: string;
+    };
   }[];
 };
 
