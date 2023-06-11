@@ -43,6 +43,17 @@ export const typeDefs = gql`
 		updated_at: DateTime
 	}
 
+	type Community {
+		id: String!
+		name: String!
+		description: String!
+		avatar: String!
+		banner: String!
+		creatorId: User!
+		created_at: DateTime
+		updated_at: DateTime
+	}
+
 	enum Role {
 		ADMIN
 		MODERATOR
@@ -145,6 +156,13 @@ export const typeDefs = gql`
 			year: Float
 			cgpa: Float
 		): UserResponse!
+		addCommunity(
+			name: String!
+			description: String!
+			avatar: String!
+			banner: String!
+			creatorId: String!
+		) : CommunityResponse!
 
 	}
 
@@ -178,5 +196,12 @@ export const typeDefs = gql`
 		vote: Vote
 		upvotes: Int!
 		downvotes: Int!
+	}
+
+	type CommunityResponse {
+		code: Int!
+		success: Boolean!
+		message: String!
+		community: Community
 	}
 `;

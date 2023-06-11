@@ -61,8 +61,10 @@ Table comments {
 
 Table communities {
   id String [pk]
-  name String [not null]
-  image String
+  name String [unique, not null]
+  avatar String [not null]
+  description String [not null]
+  banner String [not null]
   created_at DateTime [default: `now()`, not null]
   updated_at DateTime [default: `now()`, not null]
   creatorId String [not null]

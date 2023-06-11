@@ -152,6 +152,16 @@ export const resolvers = {
 		},
 	},
 
+	Community: {
+		creatorId: async (parent: any) => {
+			const user = await prisma.user.findFirst({
+				where: {
+					id: parent.creatorId,
+				},
+			});
+			return user;
+		}
+	},
 	Mutation: {
 		addUser: async (
 			_: any,
@@ -478,6 +488,70 @@ export const resolvers = {
 					success: false,
 					message: error.message || "Vote failed",
 					vote: null,
+				};
+			}
+		},
+
+		addCommunity: async (
+			_: any,
+			{
+				name,
+				description,
+				avatar,
+				banner,
+				creatorId
+			}: {
+				name: string,
+				description: string,
+				avatar: string,
+				banner: string
+				creatorId: string,
+			}
+		) => {
+			try {
+				let isDuplicated = !!(await prisma.community.findFirst({
+					where: {
+						name
+					},
+				}))
+
+				if (isDuplicated) throw new Error("Community already exists");
+
+				const avatarUpload = await imagekit.upload({
+					file: avatar,
+					fileName: name,
+					folder: `/community/avatar`,
+				});
+
+				const bannerUpload = await imagekit.upload({
+					file: banner,
+					fileName: name,
+					folder: `/community/banner`,
+				});
+
+
+				const community = await prisma.community.create({
+					data: {
+						name,
+						description,
+						avatar: avatarUpload.filePath,
+						banner: bannerUpload.filePath,
+						creatorId,
+					},
+				});
+				console.log(community)
+				return {
+					code: 200,
+					success: true,
+					message: "Community created successfully",
+					community,
+				};
+			} catch (error: any) {
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "Community creation failed",
+					community: null,
 				};
 			}
 		},
