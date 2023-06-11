@@ -69,23 +69,20 @@ const NewCommunity = () => {
           maxFiles={1}
           onDrop={(img) => {
             setAvatarObj(img[0]);
-            console.log(avatarObj);
-            form.setValues({ avatarImg: URL.createObjectURL(avatarObj) });
+            form.setValues({ avatarImg: URL.createObjectURL(img[0]) });
           }}
+          radius={999}
           sx={{
-            position: "relative",
-            borderRadius: "999rem",
             width: "fit-content",
-            height: "fit-content",
           }}
         >
           <Avatar
-            radius="999rem"
             size="xl"
             src={form.values.avatarImg || null}
             onLoad={() => {
               URL.revokeObjectURL(form.values.avatarImg);
             }}
+            radius={999}
           />
         </Dropzone>
       ),
