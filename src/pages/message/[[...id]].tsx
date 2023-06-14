@@ -1,10 +1,11 @@
 import { MessageList, Chatroom } from "@components/index";
-import { Title, Paper, Flex, Grid } from "@mantine/core";
+import { Title, Paper, Flex, Grid, useMantineTheme } from "@mantine/core";
 import { useRouter } from "next/router";
 import { Search } from "@components/index";
 const Message = () => {
   const router = useRouter();
   const { id } = router.query;
+  const theme = useMantineTheme();
 
   const data = [
     {
@@ -43,9 +44,18 @@ const Message = () => {
       isSelected: id == "5" && true,
     },
   ];
+
   return (
     <Grid h="calc(100vh - 5rem)" grow>
-      <Grid.Col h="100%" md={1}>
+      <Grid.Col
+        h="100%"
+        xs={1}
+        sx={{
+          [theme.fn.smallerThan("xs")]: {
+            display: id ? "none" : "block",
+          },
+        }}
+      >
         <Paper
           h="100%"
           withBorder

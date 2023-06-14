@@ -73,7 +73,6 @@ Table communities {
 }
 
 Table community_members {
-  id String [pk]
   communityId String [not null]
   userId String [not null]
   role Role [not null, default: 'USER']
@@ -81,6 +80,10 @@ Table community_members {
   updated_at DateTime [default: `now()`, not null]
   community communities [not null]
   user users [not null]
+
+  indexes {
+    (communityId, userId) [pk]
+  }
 }
 
 Table images {

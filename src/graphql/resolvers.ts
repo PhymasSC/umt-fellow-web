@@ -109,8 +109,12 @@ export const resolvers = {
 			return [upvotes, downvotes];
 		},
 
-		getCommunities: async () => {
+		getCommunities: async (_: any, { userId }: { userId?: string }) => {
 			const communities = await prisma.community.findMany();
+			if (!userId) return communities;
+
+
+			console.log(communities)
 			return communities;
 		},
 		getCommunityById: async (_: any, { id }: { id: string }) => {
@@ -121,7 +125,30 @@ export const resolvers = {
 			});
 			return community;
 		},
+		getCommunityMembers: async (
+			_: any,
+			{ communityId }: { communityId: string }
+		) => {
+			const members = await prisma.communityMember.findMany({
+				where: {
+					communityId
+				},
+			});
+			return members;
+		},
 
+		getCommunityMember: async (
+			_: any,
+			{ communityId, userId }: { communityId: string, userId: string }
+		) => {
+			const member = await prisma.communityMember.findFirst({
+				where: {
+					communityId,
+					userId
+				},
+			});
+			return member;
+		}
 
 	},
 
@@ -176,6 +203,26 @@ export const resolvers = {
 			return user;
 		}
 	},
+
+	CommunityMember: {
+		userId: async (parent: any) => {
+			const user = await prisma.user.findFirst({
+				where: {
+					id: parent.userId,
+				},
+			});
+			return user;
+		},
+		communityId: async (parent: any) => {
+			const community = await prisma.community.findFirst({
+				where: {
+					id: parent.communityId,
+				},
+			});
+			return community;
+		},
+	},
+
 	Mutation: {
 		addUser: async (
 			_: any,
@@ -569,5 +616,76 @@ export const resolvers = {
 				};
 			}
 		},
+
+
+		addCommunityMember: async (
+			_: any,
+			{
+				communityId,
+				userId,
+			}: {
+				communityId: string,
+				userId: string,
+			}
+		) => {
+			try {
+				const member = await prisma.communityMember.create({
+					data: {
+						communityId,
+						userId,
+					},
+				});
+
+				return {
+					code: 200,
+					success: true,
+					message: "Member added successfully",
+					communityMember: member,
+				};
+			} catch (error: any) {
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "Member addition failed",
+					member: null,
+				};
+			}
+		},
+		deleteCommunityMember: async (
+			_: any,
+			{
+				communityId,
+				userId,
+			}: {
+				communityId: string,
+				userId: string,
+			}
+		) => {
+			try {
+				const member = await prisma.communityMember.delete({
+					where: {
+						communityId_userId: {
+							communityId,
+							userId,
+						},
+					},
+				});
+
+				return {
+					code: 200,
+					success: true,
+					message: "Member deleted successfully",
+					communityMember: member,
+				};
+			} catch (error: any) {
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "Member deletion failed",
+					member: null,
+				};
+			}
+		},
+
 	},
 };
