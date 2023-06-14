@@ -22,6 +22,7 @@ const CommunityCardMenu: React.FC<{
   return (
     <Group noWrap spacing={1}>
       <Button
+        fullWidth
         color={joined ? "green" : "blue"}
         sx={(theme) => ({
           borderTopRightRadius:
