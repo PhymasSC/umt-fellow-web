@@ -8,7 +8,7 @@ const Setting: NextPage = () => {
   return (
     <>
       <Container>
-        <SettingComponent setting={SETTINGS}> </SettingComponent>
+        <SettingComponent setting={SETTINGS} />
       </Container>
     </>
   );

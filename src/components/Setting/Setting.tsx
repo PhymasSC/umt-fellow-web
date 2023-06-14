@@ -1,4 +1,5 @@
 import { Card, Container, Tabs, Text, Title } from "@mantine/core";
+import { useRouter } from "next/router";
 import AccountSetting from "./AccountSetting";
 import ChatSetting from "./ChatSetting";
 import CommunitySetting from "./CommunitySetting";
@@ -28,6 +29,8 @@ interface SettingProps {
 const tabs = ["Account", "Notification", "Community", "Chat & Messaging"];
 
 const Setting: React.FC<Setting> = (props) => {
+  const router = useRouter();
+  const { t: tab = 1 } = router.query;
   const { setting } = props;
   const items = tabs.map((tab) => (
     <Tabs.Tab value={tab} key={tab}>
@@ -43,7 +46,7 @@ const Setting: React.FC<Setting> = (props) => {
             theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
         })}
       >
-        <Tabs defaultValue="Account">
+        <Tabs defaultValue={tabs[(tab as number) - 1]}>
           <Tabs.List grow>{items}</Tabs.List>
           <Container p={10}>
             {Object.entries(setting).map(([key, value]) => {
