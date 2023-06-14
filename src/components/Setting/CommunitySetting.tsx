@@ -1,18 +1,9 @@
-import {
-  Stack,
-  Group,
-  Avatar,
-  Title,
-  Accordion,
-  TextInput,
-  Button,
-} from "@mantine/core";
-import { IconPencil, IconTrash } from "@tabler/icons";
-import { KeyValueInput, FormLayout } from "../Form";
+import { Stack, Group, Avatar, Title, Accordion } from "@mantine/core";
 import { GET_COMMUNITIES_OWNED_BY_USER } from "@operations/queries";
 import { useQuery } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import CommunitySettingForm from "./CommunitySettingForm";
 
 type data = {
   id: string;
@@ -50,67 +41,7 @@ const CommunitySetting = () => {
               </Group>
             </Accordion.Control>
             <Accordion.Panel>
-              <FormLayout
-                layout={"vertical"}
-                label={"Community Name"}
-                description={"The name of the community"}
-                input={
-                  <TextInput
-                    mt="-1em"
-                    mb="1em"
-                    placeholder={community.name}
-                  ></TextInput>
-                }
-              />
-              <FormLayout
-                layout={"vertical"}
-                label={"Community Description"}
-                description={"The description of the community"}
-                input={
-                  <TextInput
-                    mt="-1em"
-                    mb="1em"
-                    placeholder={community.description}
-                  ></TextInput>
-                }
-              />
-
-              <FormLayout
-                layout={"vertical"}
-                label={"Community Rules"}
-                description={"The rules of the community"}
-                input={<KeyValueInput _key="Name" value="Description" />}
-              />
-
-              <FormLayout
-                layout={"horizontal"}
-                label={"Delete Community"}
-                description={"Delete the community"}
-                input={
-                  <Button
-                    fullWidth
-                    color="red"
-                    leftIcon={<IconTrash size={16} />}
-                  >
-                    Delete Community
-                  </Button>
-                }
-              />
-
-              <FormLayout
-                layout={"horizontal"}
-                label={"Save Changes"}
-                description={"Save the changes"}
-                input={
-                  <Button
-                    fullWidth
-                    color="green"
-                    leftIcon={<IconPencil size={16} />}
-                  >
-                    Save Changes
-                  </Button>
-                }
-              />
+              <CommunitySettingForm data={community} />
             </Accordion.Panel>
           </Accordion.Item>
         ))}
