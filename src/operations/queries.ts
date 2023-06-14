@@ -172,3 +172,18 @@ query GetCommunityById($id: String!) {
 	}
   }
 `;
+
+export const GET_COMMUNITIES_OWNED_BY_USER = gql`
+query ($userId: String!) {
+	getCommunitiesOwnedByUser(userId: $userId) {
+		id
+		name
+		description
+		avatar
+		banner
+		isJoined
+		created_at
+		updated_at
+	}
+  }
+`;

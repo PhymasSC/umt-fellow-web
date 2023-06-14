@@ -137,6 +137,15 @@ export const resolvers = {
 			});
 			return community;
 		},
+		getCommunitiesOwnedByUser: async (_: any, { userId }: { userId: string }) => {
+			const communities = await prisma.community.findMany({
+				where: {
+					creatorId: userId,
+				},
+			});
+			return communities;
+		},
+
 		getCommunityMembers: async (
 			_: any,
 			{ communityId }: { communityId: string }

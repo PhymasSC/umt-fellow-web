@@ -7,6 +7,7 @@ import {
   DELETE_COMMUNITY_MEMBER,
 } from "@operations/mutations";
 import { useMutation } from "@apollo/client";
+import Link from "next/link";
 
 const CommunityCardMenu: React.FC<{
   communityId: string;
@@ -78,9 +79,11 @@ const CommunityCardMenu: React.FC<{
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Item icon={<IconPencil size={14} />}>
-              Edit Community
-            </Menu.Item>
+            <Link href={`/setting?t=3&id=${communityId}`}>
+              <Menu.Item icon={<IconPencil size={14} />} component="a">
+                Edit Community
+              </Menu.Item>
+            </Link>
             <Menu.Item icon={<IconTrash size={14} />} color="red">
               Delete Community
             </Menu.Item>
