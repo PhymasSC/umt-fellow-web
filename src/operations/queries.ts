@@ -114,8 +114,8 @@ export const GET_THREAD_UPVOTES_AND_DOWNVOTES = gql`
 `;
 
 export const GET_COMMUNITIES = gql`
-query GetCommunities {
-	getCommunities {
+query GetCommunities($userId: String) {
+	getCommunities(userId: $userId) {
 		id
 		name
 		description
@@ -124,6 +124,7 @@ query GetCommunities {
 		creatorId {
 			id 
 		}
+		isJoined
 	}
 }
 `;

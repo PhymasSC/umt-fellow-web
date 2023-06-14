@@ -113,9 +113,21 @@ export const resolvers = {
 			const communities = await prisma.community.findMany();
 			if (!userId) return communities;
 
-
-			console.log(communities)
-			return communities;
+			const communitiesWithJoinStatus = await Promise.all(
+				communities.map(async (community) => {
+					const communityMember = await prisma.communityMember.findFirst({
+						where: {
+							communityId: community.id,
+							userId,
+						},
+					});
+					return {
+						...community,
+						isJoined: !!communityMember,
+					};
+				})
+			);
+			return communitiesWithJoinStatus
 		},
 		getCommunityById: async (_: any, { id }: { id: string }) => {
 			const community = await prisma.community.findFirst({
@@ -651,6 +663,7 @@ export const resolvers = {
 				};
 			}
 		},
+
 		deleteCommunityMember: async (
 			_: any,
 			{

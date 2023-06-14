@@ -1,6 +1,5 @@
 import { Flex, Title, Text, Card, Image } from "@mantine/core";
 import Link from "next/link";
-import { useState } from "react";
 import CommunityCardMenu from "./CommunityCardMenu";
 
 interface CommunityCardProps {
@@ -13,12 +12,12 @@ interface CommunityCardProps {
     creatorId: {
       id: string;
     };
+    isJoined: boolean;
   };
 }
 
 const CommunityCard: React.FC<CommunityCardProps> = ({ community }) => {
-  const [isJoined, setIsJoined] = useState(false);
-  const { id, name, description, banner } = community;
+  const { id, name, description, banner, isJoined } = community;
   return (
     <Link href={`/community/${id}`} passHref>
       <Card
@@ -57,9 +56,9 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ community }) => {
             mt="sm"
           >
             <CommunityCardMenu
+              communityId={id}
               isJoined={isJoined}
               creatorId={community.creatorId.id}
-              onClick={() => setIsJoined((isJoined) => !isJoined)}
             />
           </Flex>
         </Flex>

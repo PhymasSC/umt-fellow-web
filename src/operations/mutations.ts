@@ -249,15 +249,11 @@ export const ADD_COMMUNITY_MEMBER = (arg: any) => gql`
 			code
 			success
 			message
-			communityMember {
-				id
-				${arg}
-			}
 		}
 	}
 `;
 
-export const DELETE_COMMUNITY_MEMBER = gql`
+export const DELETE_COMMUNITY_MEMBER = (arg: any) => gql`
 mutation DeleteCommunityMember($communityId: String!, $userId: String!) {
 	deleteCommunityMember(communityId: $communityId, userId: $userId) {
 	  code

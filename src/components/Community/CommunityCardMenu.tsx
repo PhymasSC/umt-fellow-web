@@ -1,38 +1,68 @@
 import { Menu, ActionIcon, Button, Group } from "@mantine/core";
 import { IconPencil, IconTrash, IconDotsVertical } from "@tabler/icons";
 import { useSession } from "next-auth/react";
-import { MouseEvent } from "react";
+import { MouseEvent, useState } from "react";
+import {
+  ADD_COMMUNITY_MEMBER,
+  DELETE_COMMUNITY_MEMBER,
+} from "@operations/mutations";
+import { useMutation } from "@apollo/client";
+
 const CommunityCardMenu: React.FC<{
+  communityId: string;
   isJoined: boolean;
-  onClick: () => void;
   creatorId: string;
-}> = ({ isJoined, onClick, creatorId }) => {
+}> = ({ communityId, isJoined, creatorId }) => {
+  const [loading, setLoading] = useState(false);
+  const [joined, setJoined] = useState(isJoined);
   const { data: session } = useSession();
+  const [addCommunityMember] = useMutation(ADD_COMMUNITY_MEMBER(""));
+  const [deleteCommunityMember] = useMutation(DELETE_COMMUNITY_MEMBER(""));
+
   return (
     <Group noWrap spacing={1}>
       <Button
-        color={isJoined ? "green" : "blue"}
+        color={joined ? "green" : "blue"}
         sx={(theme) => ({
           borderTopRightRadius:
             session?.user.id === creatorId ? 0 : theme.radius.md,
           borderBottomRightRadius:
             session?.user.id === creatorId ? 0 : theme.radius.md,
         })}
-        onClick={(e: MouseEvent<HTMLButtonElement>) => {
+        onClick={async (e: MouseEvent<HTMLButtonElement>) => {
           if (e.defaultPrevented) return;
           e.preventDefault();
-          onClick();
+          setLoading(true);
+          if (!isJoined) {
+            await addCommunityMember({
+              variables: {
+                communityId: communityId,
+                userId: session?.user.id,
+              },
+            });
+            setJoined(!joined);
+          } else {
+            await deleteCommunityMember({
+              variables: {
+                communityId: communityId,
+                userId: session?.user.id,
+              },
+            });
+            setJoined(!joined);
+          }
+          setLoading(false);
         }}
+        loading={loading}
       >
         {" "}
-        {isJoined ? "Unfollow" : "Follow"}
+        {joined ? "Unfollow" : "Follow"}
       </Button>
       {session?.user.id === creatorId && (
         <Menu withinPortal>
           <Menu.Target>
             <ActionIcon
               variant="filled"
-              color={isJoined ? "green" : "blue"}
+              color={joined ? "green" : "blue"}
               size={36}
               sx={{
                 borderTopLeftRadius: 0,
