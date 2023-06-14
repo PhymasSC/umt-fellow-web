@@ -1,4 +1,11 @@
-import { Flex, Title, Text, Card, Image } from "@mantine/core";
+import {
+  Flex,
+  Title,
+  Text,
+  Card,
+  Image,
+  TypographyStylesProvider,
+} from "@mantine/core";
 import Link from "next/link";
 import CommunityCardMenu from "./CommunityCardMenu";
 
@@ -22,6 +29,7 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ community }) => {
     <Link href={`/community/${id}`} passHref>
       <Card
         withBorder
+        p="xl"
         component="a"
         sx={(theme) => ({
           textDecoration: "none",
@@ -38,30 +46,34 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ community }) => {
             height={300}
             src={`https://ik.imagekit.io/umtfellow/tr:h-600/${banner}`}
             alt="test"
+            radius="md"
           />
         </Card.Section>
-        <Flex direction="column" align="center" justify="center">
-          <Title order={1} size="md" mt="md">
-            {name}
-          </Title>
-          <Text size="sm" color="dimmed" ta="left">
-            {description}{" "}
-          </Text>
-          <Flex
-            h="100%"
-            w="100%"
-            justify="center"
-            align="center"
-            gap={10}
-            mt="sm"
-          >
-            <CommunityCardMenu
-              communityId={id}
-              isJoined={isJoined}
-              creatorId={community.creatorId.id}
-            />
+
+        <Card.Section>
+          <Flex direction="column">
+            <Title ta="center" order={1} size="md" mt="md">
+              {name}
+            </Title>
+            <TypographyStylesProvider>
+              <Text color="dimmed" size="sm" lineClamp={8}>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: `<p>${description.replaceAll(/\n/g, "<br/>")}</p>`,
+                  }}
+                />
+              </Text>
+            </TypographyStylesProvider>
           </Flex>
-        </Flex>
+        </Card.Section>
+
+        <Card.Section withBorder py="sm">
+          <CommunityCardMenu
+            communityId={id}
+            isJoined={isJoined}
+            creatorId={community.creatorId.id}
+          />
+        </Card.Section>
       </Card>
     </Link>
   );

@@ -11,8 +11,9 @@ import {
   Group,
   Tooltip,
   Space,
+  TypographyStylesProvider,
 } from "@mantine/core";
-import { Comment, Feed } from "@components/index";
+import { Comment, Feed, Typography } from "@components/index";
 import Link from "next/link";
 import { IconCake } from "@tabler/icons";
 import { useSession } from "next-auth/react";
@@ -93,7 +94,13 @@ const Community: NextPage<CommunityProps> = (props) => {
             <Title mb={10} order={3} size="sm" color="dimmed">
               About Community
             </Title>
-            <Text>{data.description}</Text>
+            <TypographyStylesProvider>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: data.description.replaceAll(/\n/g, "<br/>"),
+                }}
+              />
+            </TypographyStylesProvider>
             <Text>
               <Group>
                 <Text fw={800}>Created by:</Text>
