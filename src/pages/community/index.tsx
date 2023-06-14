@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 import { IconPlus } from "@tabler/icons";
 import { useDisclosure } from "@mantine/hooks";
-import { useSession } from "next-auth/react";
+import { getSession, useSession, GetSessionParams } from "next-auth/react";
 import { useRouter } from "next/router";
 import { client } from "@lib/apollo-client";
 import { GET_COMMUNITIES } from "@operations/queries";
@@ -27,6 +27,7 @@ type CommunitiesProps = {
     creatorId: {
       id: string;
     };
+    isJoined: boolean;
   }[];
 };
 
@@ -101,10 +102,15 @@ const Communities: NextPage<CommunitiesProps> = ({ communities }) => {
   );
 };
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (ctx: GetSessionParams) => {
+  // @ts-expect-error
+  const { user } = await getSession(ctx);
   try {
     const { data } = await client.query({
       query: GET_COMMUNITIES,
+      variables: {
+        userId: user.id,
+      },
     });
 
     console.log(data);

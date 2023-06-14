@@ -11,6 +11,7 @@ interface CommunityListProps {
     creatorId: {
       id: string;
     };
+    isJoined: boolean;
   }[];
 }
 
