@@ -241,3 +241,28 @@ mutation AddCommunity($name: String!, $description: String!, $avatar: String!, $
   }
 `;
 
+// Community Members
+
+export const ADD_COMMUNITY_MEMBER = (arg: any) => gql`
+  	mutation AddCommunityMember($communityId: String!, $userId: String!) {
+		addCommunityMember(communityId: $communityId, userId: $userId) {
+			code
+			success
+			message
+			communityMember {
+				id
+				${arg}
+			}
+		}
+	}
+`;
+
+export const DELETE_COMMUNITY_MEMBER = gql`
+mutation DeleteCommunityMember($communityId: String!, $userId: String!) {
+	deleteCommunityMember(communityId: $communityId, userId: $userId) {
+	  code
+	  success
+	  message
+	}
+  }
+`;

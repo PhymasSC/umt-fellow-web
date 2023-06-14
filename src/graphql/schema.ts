@@ -54,6 +54,39 @@ export const typeDefs = gql`
 		updated_at: DateTime
 	}
 
+	type CommunityMember {
+		communityId: Community!
+		userId: User!
+		role: Role!
+		created_at: DateTime
+		updated_at: DateTime
+	}
+
+	type Thread {
+		id: String!
+		title: String!
+		description: String!
+		images: [ThreadImages]
+		tags: [String]
+		author: User
+		flag: Flag
+		created_at: DateTime
+		updated_at: DateTime
+	}
+
+	type Vote {
+		thread: Thread!
+		user: User!
+		vote: VoteType
+		created_at: DateTime
+		updated_at: DateTime
+	}
+
+	enum VoteType {
+		UPVOTE
+		DOWNVOTE
+	}
+
 	enum Role {
 		ADMIN
 		MODERATOR
@@ -82,33 +115,11 @@ export const typeDefs = gql`
 		getThreadVotes(threadId: String!): [Vote]
 		getThreadUpvotesAndDownvotes(threadId: String!): [Int]!
 
-		getCommunities: [Community]
+		getCommunities(userId: String): [Community]
 		getCommunityById(id: String!): Community
-	}
 
-	type Thread {
-		id: String!
-		title: String!
-		description: String!
-		images: [ThreadImages]
-		tags: [String]
-		author: User
-		flag: Flag
-		created_at: DateTime
-		updated_at: DateTime
-	}
-
-	type Vote {
-		thread: Thread!
-		user: User!
-		vote: VoteType
-		created_at: DateTime
-		updated_at: DateTime
-	}
-
-	enum VoteType {
-		UPVOTE
-		DOWNVOTE
+		getCommunityMembers(communityId: String!): [CommunityMember]!
+		getCommunityMember(communityId: String!, userId: String!): CommunityMember!
 	}
 
 	type Mutation {
@@ -167,6 +178,15 @@ export const typeDefs = gql`
 			creatorId: String!
 		) : CommunityResponse!
 
+		
+		addCommunityMember(
+			communityId: String!
+			userId: String!
+		) : CommunityMemberResponse!
+		deleteCommunityMember(
+			communityId: String!
+			userId: String!
+		) : CommunityMemberResponse!
 	}
 
 	input Image {
@@ -206,5 +226,12 @@ export const typeDefs = gql`
 		success: Boolean!
 		message: String!
 		community: Community
+	}
+
+	type CommunityMemberResponse {
+		code: Int!
+		success: Boolean!
+		message: String!
+		communityMember: CommunityMember
 	}
 `;
