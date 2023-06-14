@@ -81,7 +81,7 @@ const CommunityCardMenu: React.FC<{
             <Menu.Item icon={<IconPencil size={14} />}>
               Edit Community
             </Menu.Item>
-            <Menu.Item icon={<IconTrash size={14} />}>
+            <Menu.Item icon={<IconTrash size={14} />} color="red">
               Delete Community
             </Menu.Item>
           </Menu.Dropdown>
