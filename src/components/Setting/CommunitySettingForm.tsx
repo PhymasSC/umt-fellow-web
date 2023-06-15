@@ -1,8 +1,8 @@
 import { FormLayout, Input, KeyValueInput } from "@components/Form";
 import { TextInput, Button, Textarea } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { IconTrash, IconPencil } from "@tabler/icons";
+import { IconTrash } from "@tabler/icons";
 import { UPDATE_COMMUNITY } from "@operations/mutations";
+import ImageInput from "@components/Form/ImageInput";
 
 type data = {
   data: {
@@ -10,14 +10,44 @@ type data = {
     name: string;
     description: string;
     avatar: string;
+    banner: string;
   };
 };
 
 const CommunitySettingForm = (props: data) => {
-  const { id, name, description, avatar } = props.data;
+  const { id, name, description, avatar, banner } = props.data;
 
   return (
     <>
+      <FormLayout
+        layout={"horizontal"}
+        label={"Community Avatar"}
+        description={"The avatar of the community"}
+        input={
+          <ImageInput
+            img={`https://ik.imagekit.io/umtfellow/tr:h-600/${avatar}`}
+            mutation={UPDATE_COMMUNITY({ avatar: true })}
+            imgName={name}
+            argType={"avatar"}
+            variables={{ id: id }}
+          />
+        }
+      />
+      <FormLayout
+        layout={"horizontal"}
+        label={"Community banner"}
+        description={"The banner of the community"}
+        input={
+          <ImageInput
+            isBanner
+            img={`https://ik.imagekit.io/umtfellow/tr:h-600/${banner}`}
+            mutation={UPDATE_COMMUNITY({ banner: true })}
+            imgName={name}
+            argType={"banner"}
+            variables={{ id: id }}
+          />
+        }
+      />
       <FormLayout
         layout={"vertical"}
         label={"Community Name"}
