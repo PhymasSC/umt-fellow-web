@@ -184,8 +184,8 @@ export const typeDefs = gql`
 			id: String!
 			name: String
 			description: String
-			avatar: String
-			banner: String
+			avatar: Image
+			banner: Image
 		) : CommunityResponse!
 		
 		addCommunityMember(

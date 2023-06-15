@@ -250,8 +250,8 @@ export const UPDATE_COMMUNITY = (arg: {
 mutation UpdateCommunity($id: String! 
 	${(arg.name && ", $name: String!" || "")} 
 	${(arg.description && ", $description: String!" || '')} 
-	${(arg.avatar && ", $avatar: String!" || "")} 
-	${(arg.banner && ", $banner: String!" || "")} ) {
+	${(arg.avatar && ", $avatar: Image" || "")} 
+	${(arg.banner && ", $banner: Image" || "")} ) {
 	updateCommunity(id: $id 
 		${(arg.name && ", name: $name" || "")} 
 		${(arg.description && ", description: $description" || "")} 
