@@ -648,23 +648,22 @@ export const resolvers = {
 			}
 		) => {
 			const { id, avatar, banner, ...rest } = attr
-			if (avatar.blob || banner.blob) {
+			if (avatar?.blob || banner?.blob) {
 
 				const upload = await imagekit.upload({
-					file: avatar.blob || banner.blob,
-					fileName: avatar.name || banner.name,
-					folder: `/community/${avatar.blob ? "avatar" : "banner"}/`,
+					file: avatar?.blob || banner?.blob,
+					fileName: avatar?.name || banner?.name,
+					folder: `/community/${avatar?.blob ? "avatar" : "banner"}/`,
 					useUniqueFileName: true,
 				});
 
-				console.log(upload)
 				const community = prisma.community.update({
 					where: {
 						id,
 					},
 					data: {
 						updated_at: new Date().toISOString(),
-						[avatar.blob ? "avatar" : "banner"]: upload.filePath,
+						[avatar?.blob ? "avatar" : "banner"]: upload.filePath,
 					},
 				});
 
