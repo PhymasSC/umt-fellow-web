@@ -4,6 +4,7 @@ import { useQuery } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import CommunitySettingForm from "./CommunitySettingForm";
+import { Key } from "react";
 
 type data = {
   id: string;
@@ -28,8 +29,8 @@ const CommunitySetting = () => {
   return (
     <Stack>
       <Accordion variant="contained" defaultValue={id?.[0] || ""}>
-        {data.getCommunitiesOwnedByUser.map((community: data) => (
-          <Accordion.Item value={community.id}>
+        {data.getCommunitiesOwnedByUser.map((community: data, index: Key) => (
+          <Accordion.Item value={community.id} key={index}>
             <Accordion.Control>
               <Group>
                 <Avatar
