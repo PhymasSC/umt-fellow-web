@@ -1,7 +1,8 @@
-import { FormLayout, KeyValueInput } from "@components/Form";
-import { TextInput, Button } from "@mantine/core";
+import { FormLayout, Input, KeyValueInput } from "@components/Form";
+import { TextInput, Button, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconTrash, IconPencil } from "@tabler/icons";
+import { UPDATE_COMMUNITY } from "@operations/mutations";
 
 type data = {
   data: {
@@ -14,33 +15,40 @@ type data = {
 
 const CommunitySettingForm = (props: data) => {
   const { id, name, description, avatar } = props.data;
-  const form = useForm({
-    initialValues: {
-      name: name,
-      description: description,
-    },
-  });
 
   return (
-    <form
-      onSubmit={form.onSubmit((values) => console.log(values))}
-      onReset={form.onReset}
-    >
+    <>
       <FormLayout
         layout={"vertical"}
         label={"Community Name"}
         description={"The name of the community"}
-        input={<TextInput mt="-1em" mb="1em" {...form.getInputProps("name")} />}
+        input={
+          <Input
+            argType="name"
+            component={TextInput}
+            mutation={UPDATE_COMMUNITY({ name: true })}
+            variables={{ id: id }}
+            placeholder={name || "Community Name"}
+            value={name}
+            mt="-1em"
+            mb="1em"
+          />
+        }
       />
       <FormLayout
         layout={"vertical"}
         label={"Community Description"}
         description={"The description of the community"}
         input={
-          <TextInput
+          <Input
+            argType="description"
+            component={Textarea}
+            mutation={UPDATE_COMMUNITY({ description: true })}
+            variables={{ id: id }}
             mt="-1em"
             mb="1em"
-            {...form.getInputProps("description")}
+            placeholder={description || "Community Description"}
+            value={description}
           />
         }
       />
@@ -68,23 +76,7 @@ const CommunitySettingForm = (props: data) => {
           </Button>
         }
       />
-
-      <FormLayout
-        layout={"horizontal"}
-        label={"Save Changes"}
-        description={"Save the changes"}
-        input={
-          <Button
-            type="submit"
-            fullWidth
-            variant="white"
-            leftIcon={<IconPencil size={16} />}
-          >
-            Save Changes
-          </Button>
-        }
-      />
-    </form>
+    </>
   );
 };
 
