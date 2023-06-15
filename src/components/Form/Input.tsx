@@ -1,35 +1,27 @@
-import {
-  ActionIcon,
-  Grid,
-  PasswordInputProps,
-  TextareaProps,
-  TextInputProps,
-} from "@mantine/core";
+import { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { EDIT_USER } from "@operations/mutations";
-import { useState } from "react";
-import { useSession } from "next-auth/react";
-import { notifications } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
-import { FormValidateInput } from "@mantine/form/lib/types";
+import { notifications } from "@mantine/notifications";
+import {
+  Grid,
+  ActionIcon,
+  TextInputProps,
+  TextareaProps,
+  Loader,
+} from "@mantine/core";
 import { IconCheck, IconEdit, IconTrash, IconX } from "@tabler/icons";
 
 type InputProps = {
   layout?: "horizontal" | "vertical";
   value?: string;
-  validate?:
-    | FormValidateInput<{
-        val: string;
-      }>
-    | undefined;
+  validate?: any;
   errMsg?: string;
   deleteable?: boolean;
   isLongText?: boolean;
-  component:
-    | React.FC<TextareaProps>
-    | React.FC<TextInputProps>
-    | React.FC<PasswordInputProps>;
+  component: React.FC<any>;
   argType: string;
+  mutation: any;
+  variables: object; // Object of mutation variables
 } & TextInputProps &
   TextareaProps;
 
@@ -41,7 +33,9 @@ const Input = ({
   errMsg,
   deleteable,
   isLongText,
-  component,
+  component: Element,
+  mutation,
+  variables,
   ...props
 }: InputProps) => {
   const form = useForm({
@@ -51,40 +45,38 @@ const Input = ({
     validate,
   });
   const [loading, setLoading] = useState(false);
-  const [editUser] = useMutation(
-    EDIT_USER({
-      [argType]: true,
-    })
-  );
-  const { data: session } = useSession();
-  const Element = component;
-  const update = async () => {
+  const [mutate] = useMutation(mutation);
+
+  const handleUpdate = async () => {
     form.validate();
     if (form.isValid()) {
       setLoading(true);
 
       try {
-        await editUser({
+        const { val } = form.values;
+        await mutate({
           variables: {
-            id: session?.user.id,
-            [argType]: form.values.val,
+            [argType]: val,
             updated_at: new Date().toISOString(),
+            ...variables,
           },
         });
+
         notifications.show({
           title: "Success",
           message: "Successfully updated!",
           color: "teal",
           icon: <IconCheck />,
         });
-      } catch (err: any) {
+      } catch (error: any) {
         notifications.show({
           title: "Error",
-          message: err.message,
+          message: error.message,
           color: "red",
           icon: <IconX />,
         });
       }
+
       setLoading(false);
       form.resetDirty();
     }
@@ -92,38 +84,47 @@ const Input = ({
 
   const handleDelete = async () => {
     setLoading(true);
-    await editUser({
+    await mutate({
       variables: {
-        id: session?.user.id,
         [argType]: "",
+        ...variables,
         updated_at: new Date().toISOString(),
       },
     });
+
     setLoading(false);
     notifications.show({
       title: "Success",
       message: "Successfully updated",
       color: "green",
     });
+
     form.resetDirty();
   };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleUpdate();
+    }
+  };
+
+  useEffect(() => {
+    form.setFieldValue("val", value || "");
+  }, [value]);
 
   return (
     <Grid>
       <Grid.Col span="auto">
         <Element
-          mt={(layout === "vertical" && "-1em") || "0"}
-          mb={(layout === "vertical" && "1em") || "0"}
-          disabled={loading}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              update();
-            }
-          }}
+          mt={layout === "vertical" ? "-1em" : "0"}
+          mb={layout === "vertical" ? "1em" : "0"}
+          onKeyDown={handleKeyDown}
           rightSection={
-            <ActionIcon color="blue" onClick={update}>
-              <IconEdit size="1.2em" />
-            </ActionIcon>
+            (loading && <Loader size="xs" />) || (
+              <ActionIcon color="blue" onClick={handleUpdate}>
+                <IconEdit size="1.2em" />
+              </ActionIcon>
+            )
           }
           {...form.getInputProps("val")}
           {...props}

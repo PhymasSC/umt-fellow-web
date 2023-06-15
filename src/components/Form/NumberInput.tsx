@@ -1,31 +1,37 @@
 import { useMutation } from "@apollo/client";
-import { NumberInput as Input, NumberInputProps } from "@mantine/core";
+import { ActionIcon, Flex, NumberInput, NumberInputProps } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { FormValidateInput } from "@mantine/form/lib/types";
-import { useDebouncedValue } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { EDIT_USER } from "@operations/mutations";
-import { IconCheck, IconX } from "@tabler/icons";
+import { IconCheck, IconEdit, IconX } from "@tabler/icons";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 type InputProps = {
   layout?: "horizontal" | "vertical";
   value?: number;
-  validate?:
-    | FormValidateInput<{
-        val: number;
-      }>
-    | undefined;
+  validate?: FormValidateInput<{ val: number }> | undefined;
   errMsg?: string;
   deleteable?: boolean;
   isLongText?: boolean;
   argType: string;
+  mutation: any;
+  variables: object;
 } & NumberInputProps;
 
-const NumberInput = (props: InputProps) => {
-  const { argType, value, validate, errMsg, deleteable, isLongText, ...rest } =
-    props;
+const CustomNumberInput = (props: InputProps) => {
+  const {
+    argType,
+    value,
+    validate,
+    errMsg,
+    deleteable,
+    isLongText,
+    mutation,
+    variables,
+    ...rest
+  } = props;
+
   const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
   const form = useForm({
@@ -34,25 +40,24 @@ const NumberInput = (props: InputProps) => {
     },
     validate,
   });
-  const [debouncedValue] = useDebouncedValue(form.values.val, 1000);
-  const [editUser] = useMutation(
-    EDIT_USER({
-      [argType]: true,
-    })
-  );
 
-  const update = async () => {
+  const [mutate] = useMutation(mutation);
+
+  const handleUpdate = async () => {
     form.validate();
     if (!form.isValid()) return;
+
     setLoading(true);
-    console.log(debouncedValue);
-    console.log(typeof debouncedValue);
     try {
-      await editUser({
-        variables: {
-          id: session?.user.id,
-          [argType]: debouncedValue,
-        },
+      const { val } = form.values;
+      const mutationVariables = {
+        [argType]: val,
+        updated_at: new Date().toISOString(),
+        ...variables,
+      };
+
+      await mutate({
+        variables: mutationVariables,
       });
       notifications.show({
         title: "Success",
@@ -60,10 +65,10 @@ const NumberInput = (props: InputProps) => {
         color: "teal",
         icon: <IconCheck />,
       });
-    } catch (err: any) {
+    } catch (error: any) {
       notifications.show({
         title: "Error",
-        message: err.message,
+        message: error.message,
         color: "red",
         icon: <IconX />,
       });
@@ -72,10 +77,23 @@ const NumberInput = (props: InputProps) => {
   };
 
   useEffect(() => {
-    update();
-  }, [debouncedValue]);
+    form.setFieldValue("val", value || 0);
+  }, [value]);
 
-  return <Input {...form.getInputProps("val")} {...rest} />;
+  return (
+    <Flex justify="space-between" gap="md">
+      <NumberInput
+        sx={{
+          width: "100%",
+        }}
+        {...form.getInputProps("val")}
+        {...rest}
+      />
+      <ActionIcon color="blue" loading={loading} onClick={handleUpdate}>
+        <IconEdit size={20} />
+      </ActionIcon>
+    </Flex>
+  );
 };
 
-export default NumberInput;
+export default CustomNumberInput;

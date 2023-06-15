@@ -26,6 +26,7 @@ import { useSession } from "next-auth/react";
 import { useQuery } from "@apollo/client";
 import { GET_USER } from "@operations/queries";
 import { Input, NumberInput, FormLayout } from "../Form";
+import { EDIT_USER } from "@operations/mutations";
 
 type USER_TYPE = {
   id: string;
@@ -127,12 +128,14 @@ const AccountSetting = () => {
           value={userData?.name || session?.user.name || ""}
           component={TextInput}
           validate={{
-            val: (val) =>
+            val: (val: string | any[]) =>
               val.length < 3
                 ? "Name must be at least 3 characters long"
                 : val.length > 50 &&
                   "Name must be less than 50 characters long",
           }}
+          mutation={EDIT_USER({ name: true })}
+          variables={{ id: session?.user.id }}
         />
       ),
     },
@@ -161,12 +164,14 @@ const AccountSetting = () => {
           value={userData?.about || ""}
           component={Textarea}
           validate={{
-            val: (val) =>
+            val: (val: string | any[]) =>
               val.length > 500 && "About must be less than 500 characters long",
           }}
           minRows={5}
           maxRows={10}
           isLongText
+          mutation={EDIT_USER({ about: true })}
+          variables={{ id: session?.user.id }}
         />
       ),
     },
@@ -183,11 +188,13 @@ const AccountSetting = () => {
           value={userData?.faculty || ""}
           component={TextInput}
           validate={{
-            val: (val) => {
+            val: (val: string | any[]) => {
               if (val.length > 500)
                 return "About must be less than 500 characters long";
             },
           }}
+          mutation={EDIT_USER({ faculty: true })}
+          variables={{ id: session?.user.id }}
         />
       ),
     },
@@ -204,11 +211,13 @@ const AccountSetting = () => {
           value={userData?.major || ""}
           component={TextInput}
           validate={{
-            val: (val) => {
+            val: (val: string | any[]) => {
               if (val.length > 500)
                 return "About must be less than 500 characters long";
             },
           }}
+          mutation={EDIT_USER({ major: true })}
+          variables={{ id: session?.user.id }}
         />
       ),
     },
@@ -225,6 +234,8 @@ const AccountSetting = () => {
           precision={0}
           min={1}
           max={4}
+          mutation={EDIT_USER({ year: true })}
+          variables={{ id: session?.user.id }}
         />
       ),
     },
@@ -243,6 +254,8 @@ const AccountSetting = () => {
           min={0}
           max={4}
           step={0.5}
+          mutation={EDIT_USER({ cgpa: true })}
+          variables={{ id: session?.user.id }}
         />
       ),
     },
@@ -259,11 +272,13 @@ const AccountSetting = () => {
             input={
               <Input
                 argType="facebookLink"
-                placeholder={userData?.facebookLink || ""}
+                placeholder={userData?.facebookLink || "Your Facebook username"}
                 value={userData?.facebookLink || ""}
                 icon={<IconBrandFacebook strokeWidth={1} />}
                 component={TextInput}
                 deleteable
+                mutation={EDIT_USER({ facebookLink: true })}
+                variables={{ id: session?.user.id }}
               />
             }
           />
@@ -274,10 +289,13 @@ const AccountSetting = () => {
             input={
               <Input
                 argType="twitterLink"
-                placeholder={userData?.twitterLink || ""}
+                placeholder={userData?.twitterLink || "Your Twitter username"}
+                value={userData?.twitterLink || ""}
                 icon={<IconBrandTwitter strokeWidth={1} />}
                 component={TextInput}
                 deleteable
+                mutation={EDIT_USER({ twitterLink: true })}
+                variables={{ id: session?.user.id }}
               />
             }
           />
@@ -288,10 +306,15 @@ const AccountSetting = () => {
             input={
               <Input
                 argType="instagramLink"
-                placeholder={userData?.instagramLink || ""}
+                placeholder={
+                  userData?.instagramLink || "Your Instagram username"
+                }
+                value={userData?.instagramLink || ""}
                 icon={<IconBrandInstagram strokeWidth={1} />}
                 component={TextInput}
                 deleteable
+                mutation={EDIT_USER({ instagramLink: true })}
+                variables={{ id: session?.user.id }}
               />
             }
           />
@@ -302,10 +325,13 @@ const AccountSetting = () => {
             input={
               <Input
                 argType="githubLink"
-                placeholder={userData?.githubLink || ""}
+                placeholder={userData?.githubLink || "Your Github username"}
+                value={userData?.githubLink || ""}
                 icon={<IconBrandGithub strokeWidth={1} />}
                 component={TextInput}
                 deleteable
+                mutation={EDIT_USER({ githubLink: true })}
+                variables={{ id: session?.user.id }}
               />
             }
           />
@@ -316,10 +342,13 @@ const AccountSetting = () => {
             input={
               <Input
                 argType="dribbbleLink"
-                placeholder={userData?.dribbbleLink || ""}
+                placeholder={userData?.dribbbleLink || "Your Dribbble username"}
+                value={userData?.dribbbleLink || ""}
                 icon={<IconBrandDribbble strokeWidth={1} />}
                 component={TextInput}
                 deleteable
+                mutation={EDIT_USER({ dribbbleLink: true })}
+                variables={{ id: session?.user.id }}
               />
             }
           />
@@ -330,10 +359,15 @@ const AccountSetting = () => {
             input={
               <Input
                 argType="youtubeLink"
-                placeholder={userData?.youtubeLink || ""}
+                placeholder={
+                  userData?.youtubeLink || "Your Youtube channel name"
+                }
+                value={userData?.youtubeLink || ""}
                 icon={<IconBrandYoutube strokeWidth={1} />}
                 component={TextInput}
                 deleteable
+                mutation={EDIT_USER({ youtubeLink: true })}
+                variables={{ id: session?.user.id }}
               />
             }
           />
@@ -344,10 +378,13 @@ const AccountSetting = () => {
             input={
               <Input
                 argType="telegramLink"
-                placeholder={userData?.telegramLink || ""}
+                placeholder={userData?.telegramLink || "Your Telegram username"}
+                value={userData?.telegramLink || ""}
                 icon={<IconBrandTelegram strokeWidth={1} />}
                 component={TextInput}
                 deleteable
+                mutation={EDIT_USER({ telegramLink: true })}
+                variables={{ id: session?.user.id }}
               />
             }
           />
@@ -358,10 +395,13 @@ const AccountSetting = () => {
             input={
               <Input
                 argType="tiktokLink"
-                placeholder={userData?.tiktokLink || ""}
+                placeholder={userData?.tiktokLink || "Your Tiktok username"}
+                value={userData?.tiktokLink || ""}
                 icon={<IconBrandTiktok strokeWidth={1} />}
                 component={TextInput}
                 deleteable
+                mutation={EDIT_USER({ tiktokLink: true })}
+                variables={{ id: session?.user.id }}
               />
             }
           />
@@ -372,10 +412,13 @@ const AccountSetting = () => {
             input={
               <Input
                 argType="redditLink"
-                placeholder={userData?.redditLink || ""}
+                placeholder={userData?.redditLink || "Your Reddit username"}
+                value={userData?.redditLink || ""}
                 icon={<IconBrandReddit strokeWidth={1} />}
                 component={TextInput}
                 deleteable
+                mutation={EDIT_USER({ redditLink: true })}
+                variables={{ id: session?.user.id }}
               />
             }
           />
@@ -386,10 +429,13 @@ const AccountSetting = () => {
             input={
               <Input
                 argType="snapchatLink"
-                placeholder={userData?.snapchatLink || ""}
+                placeholder={userData?.snapchatLink || "Your Snapchat username"}
+                value={userData?.snapchatLink || ""}
                 icon={<IconBrandSnapchat strokeWidth={1} />}
                 component={TextInput}
                 deleteable
+                mutation={EDIT_USER({ snapchatLink: true })}
+                variables={{ id: session?.user.id }}
               />
             }
           />
@@ -399,7 +445,14 @@ const AccountSetting = () => {
     {
       label: "Password",
       description: "Change the password used to log in to your account.",
-      input: <Input argType="password" component={PasswordInput} />,
+      input: (
+        <Input
+          argType="password"
+          component={PasswordInput}
+          mutation={EDIT_USER({ password: true })}
+          variables={{ id: session?.user.id }}
+        />
+      ),
     },
     {
       label: "Delete Account",
@@ -418,7 +471,6 @@ const AccountSetting = () => {
     },
   ];
 
-  console.log(userData);
   return (
     <Stack>
       {configuration.map((config, index) => {
