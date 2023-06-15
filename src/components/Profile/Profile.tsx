@@ -16,6 +16,7 @@ import {
   Image,
   BackgroundImage,
   Flex,
+  Anchor,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import {
@@ -98,46 +99,55 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
     {
       icon: <IconBrandFacebook />,
       link: user.facebookLink,
+      url: `https://www.facebook.com/${user.facebookLink}`,
     },
     {
       icon: <IconBrandInstagram />,
       link: user.instagramLink,
+      url: `https://www.instagram.com/${user.instagramLink}`,
     },
     {
       icon: <IconBrandTwitter />,
       link: user.twitterLink,
+      url: `https://twitter.com/${user.twitterLink}`,
     },
     {
       icon: <IconBrandSnapchat />,
       link: user.snapchatLink,
+      url: `https://www.snapchat.com/add/${user.snapchatLink}`,
     },
     {
       icon: <IconBrandTiktok />,
       link: user.tiktokLink,
+      url: `https://www.tiktok.com/@${user.tiktokLink}`,
     },
     {
       icon: <IconBrandTelegram />,
       link: user.telegramLink,
+      url: `https://t.me/${user.telegramLink}`,
     },
     {
       icon: <IconBrandReddit />,
       link: user.redditLink,
+      url: `https://www.reddit.com/user/${user.redditLink}`,
     },
     {
       icon: <IconBrandYoutube />,
       link: user.youtubeLink,
+      url: `https://www.youtube.com/channel/${user.youtubeLink}`,
     },
     {
       icon: <IconBrandGithub />,
       link: user.githubLink,
+      url: `https://github.com/${user.githubLink}`,
     },
     {
       icon: <IconBrandDribbble />,
       link: user.dribbbleLink,
+      url: `https://dribbble.com/${user.dribbbleLink}`,
     },
   ];
 
-  console.log(user);
   return (
     <Container fluid>
       <Card className={classes.card}>
@@ -279,7 +289,13 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
                         social.link && (
                           <Group key={index}>
                             {social.icon}
-                            <Text>{social.link}</Text>
+                            <Anchor
+                              href={social.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Text>{social.link}</Text>
+                            </Anchor>
                           </Group>
                         )
                     )}
