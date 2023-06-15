@@ -42,7 +42,7 @@ mutation Mutation($id: String!
 	${(arg.year && ",$year: Float ") || ""}
 	${(arg.cgpa && ",$cgpa: Float ") || ""}
 	) {
-	editUser(id: $id 
+	updateUser(id: $id 
 		${(arg.name && ",name: $name ") || ""}
 		${(arg.password && ",password: $password ") || ""}
 		${(arg?.facebookLink && ",facebookLink: $facebookLink ") || ""}
@@ -241,24 +241,56 @@ mutation AddCommunity($name: String!, $description: String!, $avatar: String!, $
   }
 `;
 
+export const UPDATE_COMMUNITY = (arg: {
+	name?: boolean,
+	description?: boolean,
+	avatar?: boolean,
+	banner?: boolean
+}) => gql`
+mutation UpdateCommunity($id: String! 
+	${(arg.name && ", $name: String!" || "")} 
+	${(arg.description && ", $description: String!" || '')} 
+	${(arg.avatar && ", $avatar: String!" || "")} 
+	${(arg.banner && ", $banner: String!" || "")} ) {
+	updateCommunity(id: $id 
+		${(arg.name && ", name: $name" || "")} 
+		${(arg.description && ", description: $description" || "")} 
+		${(arg.avatar && ", avatar: $avatar" || "")} 
+		${(arg.banner && ", banner: $banner" || "")} ) {
+		code
+		message
+		community {
+			id
+			name
+			description
+			avatar
+			banner
+			created_at
+			updated_at
+		}
+	}
+}
+`;
+
 // Community Members
 
 export const ADD_COMMUNITY_MEMBER = (arg: any) => gql`
   	mutation AddCommunityMember($communityId: String!, $userId: String!) {
-		addCommunityMember(communityId: $communityId, userId: $userId) {
-			code
-			success
-			message
-		}
+	addCommunityMember(communityId: $communityId, userId: $userId) {
+		code
+		success
+		message
 	}
+}
 `;
+
 
 export const DELETE_COMMUNITY_MEMBER = (arg: any) => gql`
 mutation DeleteCommunityMember($communityId: String!, $userId: String!) {
 	deleteCommunityMember(communityId: $communityId, userId: $userId) {
-	  code
-	  success
-	  message
+		code
+		success
+		message
 	}
-  }
+}
 `;

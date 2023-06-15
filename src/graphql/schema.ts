@@ -147,7 +147,7 @@ export const typeDefs = gql`
 			userId: String!
 			voteType: VoteType!
 		): VoteResponse!
-		editUser(
+		updateUser(
 			id: String!
 			name: String
 			email: String
@@ -172,6 +172,7 @@ export const typeDefs = gql`
 			year: Float
 			cgpa: Float
 		): UserResponse!
+
 		addCommunity(
 			name: String!
 			description: String!
@@ -179,7 +180,13 @@ export const typeDefs = gql`
 			banner: String!
 			creatorId: String!
 		) : CommunityResponse!
-
+		updateCommunity(
+			id: String!
+			name: String
+			description: String
+			avatar: String
+			banner: String
+		) : CommunityResponse!
 		
 		addCommunityMember(
 			communityId: String!

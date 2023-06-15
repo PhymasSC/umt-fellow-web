@@ -284,7 +284,7 @@ export const resolvers = {
 			}
 		},
 
-		editUser: async (
+		updateUser: async (
 			_: any,
 			attr: {
 				id: string;
@@ -317,7 +317,10 @@ export const resolvers = {
 					where: {
 						id,
 					},
-					data: rest,
+					data: {
+						updated_at: new Date().toISOString(),
+						...rest,
+					},
 				});
 				return {
 					code: 200,
@@ -421,7 +424,6 @@ export const resolvers = {
 					},
 					data: {
 						title,
-						//@ts-ignore
 						description,
 						updated_at: new Date(),
 					},
@@ -440,10 +442,7 @@ export const resolvers = {
 							return deletion
 						}
 						if (image.isExisting && image.url) {
-							console.log("Exist but not deleted")
-							console.log(image)
 							const res = await imagekit.getFileDetails(image.id || "")
-							console.log(res)
 							return res
 						};
 						const upload = await imagekit.upload({
@@ -638,6 +637,42 @@ export const resolvers = {
 			}
 		},
 
+		updateCommunity: async (
+			_: any,
+			attr: {
+				id: string,
+				name: string,
+				description: string,
+				avatar: string,
+				banner: string,
+			}
+		) => {
+			const { id, ...rest } = attr
+			try {
+				const community = await prisma.community.update({
+					where: {
+						id,
+					},
+					data: {
+						updated_at: new Date().toISOString(),
+						...rest
+					},
+				});
+				return {
+					code: 200,
+					success: true,
+					message: "Community updated successfully",
+					community,
+				};
+			} catch (error: any) {
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "Community update failed",
+					community: null,
+				};
+			}
+		},
 
 		addCommunityMember: async (
 			_: any,
