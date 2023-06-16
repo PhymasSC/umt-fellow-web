@@ -78,21 +78,21 @@ export const typeDefs = gql`
 	type Channel {
 		id: String!
 		name: String!
-		pariticipants: [ChannelParticipant]
+		participants: [ChannelParticipant]
 		messages: [Message]
 	}
 
 	type ChannelParticipant {
-		Channel: Channel!
-		User: User!
+		channel: Channel!
+		user: User!
 		created_at: DateTime
 		updated_at: DateTime
 	}
 
 	type Message {
 		id: String!
-		Channel: Channel!
-		User: User!
+		channel: Channel!
+		user: User!
 		message: String!
 		created_at: DateTime
 		updated_at: DateTime
@@ -145,6 +145,8 @@ export const typeDefs = gql`
 
 		getCommunityMembers(communityId: String!): [CommunityMember]!
 		getCommunityMember(communityId: String!, userId: String!): CommunityMember!
+
+		getChannels(userId: String): [Channel]
 	}
 
 	type Mutation {

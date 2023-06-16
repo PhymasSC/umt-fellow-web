@@ -169,6 +169,22 @@ export const resolvers = {
 				},
 			});
 			return member;
+		},
+
+		getChannels: async (_: any, { userId }: { userId: string }) => {
+			const channels = await prisma.channel.findMany({
+				where: {
+					ChannelParticipants: {
+						some: {
+							userId
+						}
+					},
+					Message: {
+						some: {}
+					}
+				},
+			});
+			return channels;
 		}
 
 	},
@@ -243,6 +259,68 @@ export const resolvers = {
 			return community;
 		},
 	},
+
+	Channel: {
+		participants: async (parent: any) => {
+			const participants = await prisma.channelParticipants.findMany({
+				where: {
+					channelId: parent.id,
+				},
+			});
+			return participants;
+		},
+
+		messages: async (parent: any) => {
+			const messages = await prisma.message.findMany({
+				where: {
+					channelId: parent.id,
+				},
+			});
+			return messages;
+		},
+
+	},
+
+	ChannelParticipant: {
+		user: async (parent: any) => {
+			const user = await prisma.user.findFirst({
+				where: {
+					id: parent.userId,
+				},
+			});
+			return user;
+		},
+
+		channel: async (parent: any) => {
+			const channel = await prisma.channel.findFirst({
+				where: {
+					id: parent.channelId,
+				},
+			});
+			return channel;
+		}
+	},
+
+	Message: {
+		user: async (parent: any) => {
+			const user = await prisma.user.findFirst({
+				where: {
+					id: parent.userId,
+				},
+			});
+			return user;
+		},
+
+		channel: async (parent: any) => {
+			const channel = await prisma.channel.findFirst({
+				where: {
+					id: parent.channelId,
+				},
+			});
+			return channel;
+		}
+	},
+
 
 	Mutation: {
 		addUser: async (
