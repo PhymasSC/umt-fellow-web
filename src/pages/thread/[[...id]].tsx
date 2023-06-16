@@ -22,6 +22,8 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@apollo/client";
 import { client } from "@lib/apollo-client";
+import MessageButton from "@components/Message/MessageButton";
+import { IconMessageCircle } from "@tabler/icons";
 
 type ThreadPageProps = {
   getThreadById: {
@@ -129,29 +131,29 @@ const ThreadPage: NextPage<ThreadPageProps> = (props) => {
                   })}
                 >
                   <Title order={4}>Thread Starter</Title>
-                  <Space h="md"></Space>
-                  <>
-                    <Avatar
-                      src={data?.author.image}
-                      size={120}
-                      radius={120}
-                      mx="auto"
-                    />
-                    <Text align="center" size="lg" weight={500} mt="md">
-                      {data?.author.name}
-                    </Text>
+                  <Space h="md" />
+                  <Avatar
+                    src={data?.author.image}
+                    size={120}
+                    radius={120}
+                    mx="auto"
+                  />
+                  <Text align="center" size="lg" weight={500} mt="md">
+                    {data?.author.name}
+                  </Text>
 
-                    <Link href={`/profile/${data?.author.id}`} passHref>
-                      <Button component="a" variant="light" fullWidth mt="md">
-                        View profile
-                      </Button>
-                    </Link>
-                  </>
-                  <Link href={`/message`} passHref>
-                    <Button component="a" variant="outline" fullWidth mt="md">
-                      Send a message
+                  <Link href={`/profile/${data?.author.id}`} passHref>
+                    <Button component="a" variant="light" fullWidth mt="md">
+                      View profile
                     </Button>
                   </Link>
+                  <MessageButton
+                    fullWidth
+                    leftIcon={<IconMessageCircle size={18} />}
+                    component={Button}
+                    recipientId={data?.author.id}
+                    senderId={session?.user.id || ""}
+                  />
                 </Paper>
               </Grid.Col>
             </Grid>

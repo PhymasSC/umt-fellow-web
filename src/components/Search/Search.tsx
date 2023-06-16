@@ -8,10 +8,12 @@ import {
   Loader,
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
-import { IconSearch } from "@tabler/icons";
+import { IconMoodCry, IconSearch } from "@tabler/icons";
 import { useQuery } from "@apollo/client";
 import { GET_USERS_BY_NAME } from "@operations/queries";
 import { forwardRef, useState } from "react";
+import MessageButton from "@components/Message/MessageButton";
+import { useSession } from "next-auth/react";
 
 type SearchProps = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -24,33 +26,36 @@ interface ItemProps extends SelectItemProps {
   image: string;
   email: string;
 }
-
-const AutoCompleteItem = forwardRef<HTMLDivElement, ItemProps>(
-  ({ id, name, image, ...others }: ItemProps, ref) => (
-    <div ref={ref} {...others}>
-      <Group noWrap>
-        <Avatar src={image} radius="xl" />
-        <div>
-          <Text>{name}</Text>
-          <Text size="xs" color="dimmed">
-            @{id}
-          </Text>
-        </div>
-      </Group>
-    </div>
-  )
-);
-
-AutoCompleteItem.displayName = "@mantine/core/AutoCompleteItem";
 const Search = (props: SearchProps) => {
   const { placeholder } = props;
   const [value, setValue] = useState("");
   const debouncedValue = useDebouncedValue(value, 250);
+  const { data: session } = useSession();
   const { loading, data, refetch } = useQuery(GET_USERS_BY_NAME("id"), {
     variables: { name: debouncedValue[0], limit: 5 },
   });
 
-  function buildOptions(item: { id: any }) {
+  const AutoCompleteItem = forwardRef<HTMLDivElement, ItemProps>(
+    ({ id, name, image, ...others }: ItemProps, ref) => (
+      <div ref={ref} {...others}>
+        <MessageButton senderId={session?.user.id || ""} recipientId={id}>
+          <Group noWrap>
+            <Avatar src={image} radius="xl" />
+            <div>
+              <Text>{name}</Text>
+              <Text size="xs" color="dimmed">
+                @{id}
+              </Text>
+            </div>
+          </Group>
+        </MessageButton>
+      </div>
+    )
+  );
+
+  AutoCompleteItem.displayName = "@mantine/core/AutoCompleteItem";
+
+  function buildOptions(item: { id: string; name: string; image: string }) {
     return {
       ...item,
       value: item.id,
@@ -79,7 +84,12 @@ const Search = (props: SearchProps) => {
         refetch({ name: debouncedValue[0], limit: 5 });
       }}
       rightSection={loading && <Loader size="xs" />}
-      nothingFound="No users found"
+      nothingFound={
+        <Group position="center">
+          <IconMoodCry size={18} />
+          No users found
+        </Group>
+      }
       data={data?.getUsersByName.map(buildOptions) || []}
     />
   );

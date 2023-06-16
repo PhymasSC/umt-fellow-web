@@ -75,6 +75,29 @@ export const typeDefs = gql`
 		updated_at: DateTime
 	}
 
+	type Channel {
+		id: String!
+		name: String!
+		pariticipants: [ChannelParticipant]
+		messages: [Message]
+	}
+
+	type ChannelParticipant {
+		Channel: Channel!
+		User: User!
+		created_at: DateTime
+		updated_at: DateTime
+	}
+
+	type Message {
+		id: String!
+		Channel: Channel!
+		User: User!
+		message: String!
+		created_at: DateTime
+		updated_at: DateTime
+	}
+
 	type Vote {
 		thread: Thread!
 		user: User!

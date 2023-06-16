@@ -49,9 +49,9 @@ const Message = () => {
     <Grid h="calc(100vh - 5rem)" grow>
       <Grid.Col
         h="100%"
-        xs={1}
+        sm={2}
         sx={{
-          [theme.fn.smallerThan("xs")]: {
+          [theme.fn.smallerThan("sm")]: {
             display: id ? "none" : "block",
           },
         }}
@@ -74,7 +74,7 @@ const Message = () => {
         </Paper>
       </Grid.Col>
 
-      <Grid.Col h="calc(100vh - 5rem)" md={8}>
+      <Grid.Col h="calc(100vh - 5rem)" sm={8}>
         {(id && <Chatroom />) || (
           <Title
             align="center"

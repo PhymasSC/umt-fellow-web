@@ -13,40 +13,41 @@ datasource db {
 }
 
 model User {
-  id              String            @id @default(cuid())
-  name            String
-  email           String            @unique
-  emailVerified   DateTime?
-  password        String?
-  isUMTMembership Boolean?          @default(false)
-  sex             String?
-  age             Int?
-  image           String?
-  facebookLink    String?
-  twitterLink     String?
-  instagramLink   String?
-  githubLink      String?
-  dribbbleLink    String?
-  youtubeLink     String?
-  telegramLink    String?
-  tiktokLink      String?
-  redditLink      String?
-  snapchatLink    String?
-  about           String?
-  faculty         String?
-  major           String?
-  year            Float?
-  cgpa            Float?
-  created_at      DateTime          @default(now()) @map("created_at")
-  updated_at      DateTime          @default(now()) @updatedAt @map("updated_at")
-  Comment         Comment[]
-  Follower        Follow[]          @relation("follower")
-  Following       Follow[]          @relation("following")
-  Community       Community[]
-  CommunityMember CommunityMember[]
-  account         Account[]
-  session         Session[]
-  Message         Message[]
+  id                  String                @id @default(cuid())
+  name                String
+  email               String                @unique
+  emailVerified       DateTime?
+  password            String?
+  isUMTMembership     Boolean?              @default(false)
+  sex                 String?
+  age                 Int?
+  image               String?
+  facebookLink        String?
+  twitterLink         String?
+  instagramLink       String?
+  githubLink          String?
+  dribbbleLink        String?
+  youtubeLink         String?
+  telegramLink        String?
+  tiktokLink          String?
+  redditLink          String?
+  snapchatLink        String?
+  about               String?
+  faculty             String?
+  major               String?
+  year                Float?
+  cgpa                Float?
+  created_at          DateTime              @default(now()) @map("created_at")
+  updated_at          DateTime              @default(now()) @updatedAt @map("updated_at")
+  Comment             Comment[]
+  Follower            Follow[]              @relation("follower")
+  Following           Follow[]              @relation("following")
+  Community           Community[]
+  CommunityMember     CommunityMember[]
+  account             Account[]
+  session             Session[]
+  Message             Message[]
+  ChannelParticipants ChannelParticipants[]
 
   @@map("users")
 }
@@ -195,24 +196,39 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Conversation {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @default(now())
-  Message    Message[]
+model Channel {
+  id                  String                @id @default(uuid())
+  isGroup             Boolean               @default(false)
+  created_at          DateTime              @default(now())
+  updated_at          DateTime              @default(now())
+  Message             Message[]
+  ChannelParticipants ChannelParticipants[]
+}
+
+model ChannelParticipants {
+  channelId  String   @map("channel_id")
+  userId     String   @map("user_id")
+  channel    Channel  @relation(fields: [channelId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  @@id([channelId, userId])
+  @@index([userId], map: "channel_participants_user_id_idx")
+  @@index([channelId], map: "channel_participants_channel_id_idx")
 }
 
 model Message {
-  id             String       @id @default(uuid())
-  content        String
-  conversationId String       @map("conversation_id")
-  created_at     DateTime     @default(now())
-  updated_at     DateTime     @default(now())
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  sender         User         @relation(fields: [senderId], references: [id])
-  senderId       String       @map("sender_id")
+  id         String   @id @default(uuid())
+  content    String
+  channelId  String   @map("channel_id")
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  channel    Channel  @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  sender     User     @relation(fields: [senderId], references: [id])
+  senderId   String   @map("sender_id")
 
-  @@index([conversationId], map: "messages_conversation_id_idx")
+  @@index([channelId], map: "messages_channel_id_idx")
   @@index([senderId], map: "messages_sender_id_idx")
 }
 
