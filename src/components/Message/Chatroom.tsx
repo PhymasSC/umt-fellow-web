@@ -21,8 +21,8 @@ import Bubble from "./Bubble";
 
 type Msg = {
   name: string;
-  sender: string;
-  text: string;
+  senderId: string;
+  content: string;
   timestamp: Date;
   profileImage: string;
 };
@@ -32,25 +32,40 @@ const Chatroom = () => {
   const router = useRouter();
   const [messages, setMessages] = useState<Msg[]>([]);
   const viewport = useRef<HTMLDivElement>(null);
+
   const [channel, ably] = useChannel(
-    `channel-${router.query.id as string}`,
+    `channel-${router.query.id?.[0] as string}`,
     async (message: Types.Message) => {
-      console.log(channel.name);
-      console.log("Received: ", message);
       setMessages((messages) => [...messages, message.data]);
     }
   );
-  const sendMessage = () => {
+
+  const sendMessage = async () => {
     const msg = document.getElementById("message") as HTMLInputElement;
-    const message: any = {
-      sender: session?.user.id,
-      name: session?.user.name,
-      text: msg.value,
-      profileImage: session?.user.image,
-      timestamp: new Date(),
-    };
-    msg.value = "";
-    channel.publish("chat-message", message);
+
+    try {
+      const response = await fetch("/api/messages/create-message", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          senderId: session?.user.id,
+          channelId: router.query.id?.[0],
+          content: msg.value,
+          profileImage: session?.user.image,
+          name: session?.user.name,
+        }),
+      });
+
+      if (response.ok) {
+        msg.value = "";
+      } else {
+        console.error("Failed to send message");
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
   };
 
   return (
@@ -98,12 +113,12 @@ const Chatroom = () => {
                   <BubbleGroup
                     key={index}
                     name={message.name}
-                    profileUrl={`/profile/${message.sender}`}
+                    profileUrl={`/profile/${message.senderId}`}
                     profileImage={message.profileImage}
-                    isRecipient={message.sender === session?.user.id}
+                    isRecipient={message.senderId === session?.user.id}
                   >
                     <Bubble
-                      message={message.text}
+                      message={message.content}
                       sx={(theme) => ({
                         wordBreak: "break-word",
                         backgroundColor:
