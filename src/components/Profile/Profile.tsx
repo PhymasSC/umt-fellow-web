@@ -65,6 +65,7 @@ interface ProfileProps {
   user: {
     id: string;
     image: string;
+    coverImage: string;
     avatar?: string;
     name: string;
     nickname?: string | string[];
@@ -153,7 +154,13 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
   return (
     <Container fluid>
       <Card className={classes.card}>
-        <BackgroundImage src={user.image.replace(/\s+/g, "%20")} radius="sm">
+        <BackgroundImage
+          src={
+            (user.coverImage?.length != 0 && user.coverImage) ||
+            "https://picsum.photos/800/500"
+          }
+          radius="sm"
+        >
           <Card.Section
             sx={{
               height: "40vh",

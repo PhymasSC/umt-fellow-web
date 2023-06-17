@@ -13,10 +13,12 @@ type ImageInputProps = {
   argType: string;
   mutation: any;
   variables?: object;
+  update?: any;
 };
 
 const ImageInput = (props: ImageInputProps) => {
-  const { isBanner, img, imgName, argType, mutation, variables } = props;
+  const { isBanner, img, imgName, argType, mutation, variables, update } =
+    props;
   const [loading, setLoading] = useState(false);
   const [mutate] = useMutation(mutation);
   const form = useForm({
@@ -64,6 +66,7 @@ const ImageInput = (props: ImageInputProps) => {
             color: "teal",
             icon: <IconCheck />,
           });
+          if (update) update();
         } catch (error: any) {
           notifications.show({
             title: "Error",

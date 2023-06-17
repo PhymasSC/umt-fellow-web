@@ -160,7 +160,7 @@ const Header = ({ links }: HeaderResponsiveProps) => {
                     })}
                   >
                     <Avatar
-                      src={session.user?.image?.toString()}
+                      src={session.user?.image || ""}
                       alt={session.user?.name || "User"}
                       radius="xl"
                       size="sm"

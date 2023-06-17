@@ -10,6 +10,7 @@ const Profile: NextPage = (props) => {
   const { id } = router.query;
   const { loading: userLoading, data: userdata } = useQuery(
     GET_USER(`
+      coverImage
 			emailVerified
 			isUMTMembership
 			sex
@@ -41,8 +42,6 @@ const Profile: NextPage = (props) => {
       variables: { authorId: id },
     }
   );
-  console.log(userdata, threadData);
-  // const { userdata, threadData } = props;
   return (
     <>
       {userLoading || threadLoading ? (

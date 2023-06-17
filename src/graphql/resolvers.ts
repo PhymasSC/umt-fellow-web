@@ -400,7 +400,8 @@ export const resolvers = {
 				name: string;
 				email: string;
 				password: string;
-				image: string;
+				image: { name: string; blob: string; isExisting: boolean; isDeleted: boolean };
+				coverImage: { name: string; blob: string; isExisting: boolean; isDeleted: boolean };
 				facebookLink: string;
 				twitterLink: string;
 				instagramLink: string;
@@ -419,7 +420,33 @@ export const resolvers = {
 			}
 		) => {
 			// const hashedPassword = await bcrypt.hash(password, saltRounds);
-			const { id, ...rest } = attr
+			const { id, image, coverImage, ...rest } = attr
+			if (image?.blob || coverImage?.blob) {
+
+				const upload = await imagekit.upload({
+					file: image?.blob || coverImage?.blob,
+					fileName: image?.name || coverImage?.name,
+					folder: `/profile/${image?.blob ? "image" : "coverImage"}/`,
+					useUniqueFileName: true,
+				});
+
+				const user = prisma.user.update({
+					where: {
+						id,
+					},
+					data: {
+						updated_at: new Date().toISOString(),
+						[image?.blob ? "image" : "coverImage"]: `https://ik.imagekit.io/umtfellow/tr:h-600/${upload.filePath}`,
+					},
+				});
+
+				return {
+					code: 200,
+					success: true,
+					message: "Profile updated successfully",
+					user
+				}
+			}
 			if (rest.password) rest.password = await bcrypt.hash(rest.password, saltRounds)
 			try {
 				const user = await prisma.user.update({

@@ -13,6 +13,7 @@ export const typeDefs = gql`
 		sex: Sex
 		age: Int
 		image: String
+		coverImage: String
 		facebookLink: String
 		twitterLink: String
 		instagramLink: String
@@ -182,7 +183,8 @@ export const typeDefs = gql`
 			isUMTMembership: Boolean
 			sex: Sex
 			age: Int
-			image: String
+			image: Image
+			coverImage: Image
 			facebookLink: String
 			twitterLink: String
 			instagramLink: String

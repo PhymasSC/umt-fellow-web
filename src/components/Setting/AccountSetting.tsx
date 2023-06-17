@@ -27,12 +27,14 @@ import { useQuery } from "@apollo/client";
 import { GET_USER } from "@operations/queries";
 import { Input, NumberInput, FormLayout } from "../Form";
 import { EDIT_USER } from "@operations/mutations";
+import ImageInput from "@components/Form/ImageInput";
 
 type USER_TYPE = {
   id: string;
   name: string;
   email: string;
   image: string;
+  coverImage: string;
   sex: string;
   age: number;
   facebookLink: string;
@@ -52,7 +54,7 @@ type USER_TYPE = {
   cgpa: number;
 };
 const AccountSetting = () => {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   //   const { profileImage, setProfileImage } = useState(null);
   const {
     data,
@@ -95,23 +97,28 @@ const AccountSetting = () => {
       description: "Update your profile picture",
       layout: "horizontal",
       input: (
-        <Dropzone
-          accept={IMAGE_MIME_TYPE}
-          maxFiles={1}
-          onDrop={() => {}}
-          sx={{
-            position: "relative",
-            borderRadius: "999rem",
-            width: "fit-content",
-            height: "fit-content",
-          }}
-        >
-          <Avatar
-            radius="999rem"
-            size="xl"
-            src={userData?.image || session?.user.image || null}
-          />
-        </Dropzone>
+        <ImageInput
+          imgName={session?.user.name || ""}
+          img={session?.user.image || ""}
+          argType={"image"}
+          mutation={EDIT_USER({ image: true })}
+          variables={{ id: session?.user.id }}
+        />
+      ),
+    },
+    {
+      label: "Cover Photo",
+      description: "Update your cover photo",
+      layout: "horizontal",
+      input: (
+        <ImageInput
+          isBanner
+          imgName={userData?.name || session?.user.name || ""}
+          img={userData?.coverImage || ""}
+          argType={"coverImage"}
+          mutation={EDIT_USER({ coverImage: true })}
+          variables={{ id: session?.user.id }}
+        />
       ),
     },
     {
@@ -471,6 +478,7 @@ const AccountSetting = () => {
     },
   ];
 
+  console.log(session);
   return (
     <Stack>
       {configuration.map((config, index) => {
