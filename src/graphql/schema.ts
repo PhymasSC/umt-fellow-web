@@ -147,7 +147,7 @@ export const typeDefs = gql`
 		getCommunityMember(communityId: String!, userId: String!): CommunityMember!
 
 		getChannels(userId: String): [Channel]
-
+		getChannelParticipants(channelId: String!): [ChannelParticipant]
 		getMessages(channelId: String!): [Message]
 	}
 

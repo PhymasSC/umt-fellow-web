@@ -187,6 +187,18 @@ export const resolvers = {
 			return channels;
 		},
 
+		getChannelParticipants: async (
+			_: any,
+			{ channelId }: { channelId: string }
+		) => {
+			const participants = await prisma.channelParticipants.findMany({
+				where: {
+					channelId
+				},
+			});
+			return participants;
+		},
+
 		getMessages: async (_: any, { channelId }: { channelId: string }) => {
 			const messages = await prisma.message.findMany({
 				where: {
