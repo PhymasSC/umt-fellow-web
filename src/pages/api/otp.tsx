@@ -1,10 +1,16 @@
-import { createHash } from "crypto";
+import speakeasy from "speakeasy";
 import { NextApiRequest, NextApiResponse } from "next";
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { email } = req.body;
-  const otp = Math.random().toString(36).substring(7);
-  const hash = createHash("sha256").update(otp).digest("hex");
-  res.json({ hash, otp });
-};
 
-export default handler;
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Generate a new secret for the TOTP
+  const secret = speakeasy.generateSecret({ length: 20 });
+
+  // Generate the TOTP token based on the secret
+
+  const token = speakeasy.totp({
+    secret: secret.base32,
+    encoding: "base32",
+  });
+
+  res.status(200).json({ token });
+}

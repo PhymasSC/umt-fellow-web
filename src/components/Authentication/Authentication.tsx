@@ -2,9 +2,7 @@ import { useState } from "react";
 import { useForm, isEmail, matches, hasLength } from "@mantine/form";
 import { Paper, PaperProps } from "@mantine/core";
 import { signIn } from "next-auth/react";
-import { useMutation } from "@apollo/client";
-import { ADD_USER } from "@operations/mutations";
-import { EMAIL_PATTERN, PASSWORD_PATTERN } from "@constants/regex";
+import { PASSWORD_PATTERN } from "@constants/regex";
 import AuthenticationScreen from "./AuthenticationScreen";
 import ResetPasswordScreen from "./ResetPasswordScreen";
 import OTPScreen from "./OTPScreen";
@@ -23,7 +21,6 @@ const Authentication = ({
 }: AuthProps) => {
   const [screen, setScreen] = useState<AuthScreens>(defaultPage);
   const [error, setError] = useState("");
-  const [register] = useMutation(ADD_USER);
 
   const form = useForm({
     initialValues: {
@@ -34,7 +31,7 @@ const Authentication = ({
     },
 
     validate: {
-      name: hasLength({ min: 3, max: 190 }, "Invalid username"),
+      name: hasLength({ min: 3, max: 60 }, "Invalid username"),
       email: isEmail("Invalid email"),
       password: matches(
         PASSWORD_PATTERN,
@@ -65,25 +62,6 @@ const Authentication = ({
         return;
       }
       setScreen("otp");
-      // const response = await register({
-      //   variables: {
-      //     name: form.values.name,
-      //     email: form.values.email,
-      //     password: form.values.password,
-      //   },
-      // });
-
-      // if (response.data.addUser.code === 200) {
-      //   signIn("credentials", {
-      //     email: form.values.email,
-      //     password: form.values.password,
-      //     callbackUrl: "/",
-      //     // redirect: false,
-      //   });
-      // } else {
-      //   setError(response.data.addUser.code);
-      //   form.setErrors({ email: "Email has been registered" });
-      // }
     }
   };
 
@@ -101,7 +79,13 @@ const Authentication = ({
     />
   );
 
-  const OTP = <OTPScreen OTP="123456" />;
+  const OTP = (
+    <OTPScreen
+      name={form.values.name}
+      email={form.values.email}
+      password={form.values.password}
+    />
+  );
 
   return (
     <Paper radius="md" p="xl" withBorder {...props}>

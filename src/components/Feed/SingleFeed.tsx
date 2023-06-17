@@ -62,7 +62,7 @@ const SingleFeed: React.FC<SingleFeedProps> = ({ feed, loading }) => {
       variables: {
         threadId: feed?.id,
       },
-      pollInterval: 500,
+      // pollInterval: 500,
     }
   );
 

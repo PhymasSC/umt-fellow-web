@@ -6,6 +6,7 @@ interface SubjectType {
 }
 const SUBJECT: SubjectType = {
   OTP: "Verify Your UMT Fellow Account",
+  FORGOT_PASSWORD: "Reset Your UMT Fellow Account Password",
 };
 
 const TEMPLATE_ID = {
@@ -13,30 +14,35 @@ const TEMPLATE_ID = {
   OTP: "d-e1d5b603a9e241e3bd6f79c20b7ca6da",
 };
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  //   if (req.method !== "POST") {
-  //     res.status(405).json({ message: "Method not allowed" });
-  //     return;
-  //   }
+  if (req.method !== "POST") {
+    res.status(405).json({ message: "Method not allowed" });
+    return;
+  }
 
-  //   const { name, email, emailType, data } = req.body;
+  const {
+    name,
+    email,
+    emailType,
+    data,
+  }: {
+    name: string;
+    email: string;
+    emailType: "OTP" | "FORGOT_PASSWORD";
+    data: any;
+  } = req.body;
   mail.setApiKey(process.env.SENDGRID_API_KEY || "");
 
   mail
     .send({
       replyTo: "umtfellow@gmail.com",
-      templateId: "d-e1d5b603a9e241e3bd6f79c20b7ca6da",
+      templateId: TEMPLATE_ID[emailType],
       dynamicTemplateData: {
-        username: "sc",
-        "otp-1": 1,
-        "otp-2": 2,
-        "otp-3": 3,
-        "otp-4": 4,
-        "otp-5": 5,
-        "otp-6": 6,
+        username: name,
+        ...data,
       },
-      to: "garylau@live.com",
+      to: email,
       from: process.env.SENDGRID_FROM_EMAIL || "",
-      subject: "Verify Your UMT Fellow Account",
+      subject: SUBJECT[emailType],
     })
     .then(() => {
       console.log("Email sent");
