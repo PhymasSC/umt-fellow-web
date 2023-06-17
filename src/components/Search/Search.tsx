@@ -14,6 +14,7 @@ import { GET_USERS_BY_NAME } from "@operations/queries";
 import { forwardRef, useState } from "react";
 import MessageButton from "@components/Message/MessageButton";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 type SearchProps = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -30,6 +31,7 @@ const Search = (props: SearchProps) => {
   const { placeholder } = props;
   const [value, setValue] = useState("");
   const debouncedValue = useDebouncedValue(value, 250);
+  const router = useRouter();
   const { data: session } = useSession();
   const { loading, data, refetch } = useQuery(GET_USERS_BY_NAME("id"), {
     variables: { name: debouncedValue[0], limit: 5 },
@@ -38,17 +40,15 @@ const Search = (props: SearchProps) => {
   const AutoCompleteItem = forwardRef<HTMLDivElement, ItemProps>(
     ({ id, name, image, ...others }: ItemProps, ref) => (
       <div ref={ref} {...others}>
-        <MessageButton senderId={session?.user.id || ""} recipientId={id}>
-          <Group noWrap>
-            <Avatar src={image} radius="xl" />
-            <div>
-              <Text>{name}</Text>
-              <Text size="xs" color="dimmed">
-                @{id}
-              </Text>
-            </div>
-          </Group>
-        </MessageButton>
+        <Group noWrap>
+          <Avatar src={image} radius="xl" />
+          <div>
+            <Text>{name}</Text>
+            <Text size="xs" color="dimmed">
+              @{id}
+            </Text>
+          </div>
+        </Group>
       </div>
     )
   );
@@ -63,6 +63,7 @@ const Search = (props: SearchProps) => {
   }
   return (
     <Autocomplete
+      limit={5}
       size={props.size || "md"}
       icon={
         <IconSearch
@@ -78,6 +79,23 @@ const Search = (props: SearchProps) => {
       placeholder={placeholder || "Search"}
       value={value}
       itemComponent={AutoCompleteItem}
+      onItemSubmit={(item) => {
+        fetch("/api/messages/create-channel", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            senderId: session?.user.id,
+            recipientId: item.id,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            router.push(`/message/${data.channelId}`);
+          });
+        setValue("");
+      }}
       filter={(value, item) => true}
       onChange={(val) => {
         setValue(val);
