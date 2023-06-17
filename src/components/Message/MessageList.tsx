@@ -4,7 +4,7 @@ import Link from "next/link";
 import SingleMessage from "./SingleMessage";
 import { GET_CHANNELS } from "@operations/queries";
 import { useQuery } from "@apollo/client";
-import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 type ChannelData = {
   id: string;
@@ -25,26 +25,13 @@ type ChannelData = {
 };
 
 const MessageList = () => {
+  const router = useRouter();
   const { data: session } = useSession();
   const { data, loading, error } = useQuery(GET_CHANNELS, {
     variables: {
       userId: session?.user.id || "",
     },
   });
-
-  // const { getChannels }: { getChannels: ChannelData } = data;
-  useEffect(() => {
-    // console.log(data);
-    // console.log(getChannels);
-    console.log(
-      data?.getChannels?.map((item: ChannelData) =>
-        item.participants.filter((item) => item.user.id !== session?.user.id)
-      )
-    );
-    console.log(data);
-
-    // data.getChannels.participants;
-  }, [data]);
 
   return (
     <SimpleGrid>
@@ -67,7 +54,7 @@ const MessageList = () => {
                 name={user.name}
                 message={item.messages[0].content}
                 avatar={user.image}
-                isSelected={true}
+                isSelected={router.query.id?.[0] === item.id}
               />
             </Box>
           </Link>
