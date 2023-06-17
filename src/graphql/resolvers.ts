@@ -276,6 +276,7 @@ export const resolvers = {
 					channelId: parent.id,
 				},
 			});
+			console.log(messages);
 			return messages;
 		},
 

@@ -93,7 +93,7 @@ export const typeDefs = gql`
 		id: String!
 		channel: Channel!
 		user: User!
-		message: String!
+		content: String!
 		created_at: DateTime
 		updated_at: DateTime
 	}

@@ -187,3 +187,22 @@ query ($userId: String!) {
 	}
   }
 `;
+
+export const GET_CHANNELS = gql`
+query GetChannels($userId: String) {
+	getChannels(userId: $userId) {
+	  id
+	  messages {
+		content
+	  }
+	  participants {
+		created_at
+		user {
+		  id
+		  image
+		  name
+		}
+	  }
+	}
+  }
+`

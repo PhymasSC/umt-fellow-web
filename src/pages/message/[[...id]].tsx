@@ -7,44 +7,6 @@ const Message = () => {
   const { id } = router.query;
   const theme = useMantineTheme();
 
-  const data = [
-    {
-      id: 1,
-      name: "John Doe",
-      message: "Hey, how are you?",
-      avatar: "https://picsum.photos/100",
-      isSelected: id == "1",
-    },
-    {
-      id: 2,
-      name: "Jane Doe",
-      message: "I'm fine, thanks.",
-      avatar: "https://picsum.photos/101",
-      isSelected: id == "2" && true,
-    },
-    {
-      id: 3,
-      name: "David Khor",
-      message: "Is this a real life?",
-      avatar: "https://picsum.photos/102",
-      isSelected: id == "3" && true,
-    },
-    {
-      id: 4,
-      name: "Amanda Tan",
-      message: "Is this just fantasy?",
-      avatar: "https://picsum.photos/103",
-      isSelected: id == "4" && true,
-    },
-    {
-      id: 5,
-      name: "John Doe",
-      message: "Caught in a landslide",
-      avatar: "https://picsum.photos/104",
-      isSelected: id == "5" && true,
-    },
-  ];
-
   return (
     <Grid h="calc(100vh - 5rem)" grow>
       <Grid.Col
@@ -69,7 +31,7 @@ const Message = () => {
               Messages
             </Title>
             <Search size="sm" />
-            <MessageList data={data} />
+            <MessageList />
           </Flex>
         </Paper>
       </Grid.Col>
