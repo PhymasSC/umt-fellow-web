@@ -48,10 +48,7 @@ const Profile: NextPage = (props) => {
       {userLoading || threadLoading ? (
         <div>Loading...</div>
       ) : (
-        <ProfileComponent
-          user={userdata?.getUser}
-          threads={threadData}
-        ></ProfileComponent>
+        <ProfileComponent user={userdata?.getUser} threads={threadData} />
       )}
     </>
   );

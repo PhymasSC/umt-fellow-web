@@ -32,8 +32,10 @@ import {
   IconBrandReddit,
   IconBrandYoutube,
   IconCircleCheck,
+  IconMessageCircle,
 } from "@tabler/icons";
 import { useSession } from "next-auth/react";
+import MessageButton from "@components/Message/MessageButton";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -197,14 +199,22 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 
             {
               //@ts-ignore
-              session?.user?.id != user.id && (
-                <Button
-                  variant="light"
-                  color="cyan"
-                  leftIcon={<IconUserPlus size={15} />}
-                >
-                  Follow
-                </Button>
+              session && session?.user?.id != user.id && (
+                <Group>
+                  <Button
+                    variant="light"
+                    color="cyan"
+                    leftIcon={<IconUserPlus size={15} />}
+                  >
+                    Follow
+                  </Button>
+                  <MessageButton
+                    component={Button}
+                    leftIcon={<IconMessageCircle size={15} />}
+                    senderId={session.user.id}
+                    recipientId={user.id}
+                  />
+                </Group>
               )
             }
           </Stack>
