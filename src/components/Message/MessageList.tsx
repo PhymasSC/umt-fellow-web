@@ -5,11 +5,16 @@ import SingleMessage from "./SingleMessage";
 import { GET_CHANNELS } from "@operations/queries";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 type ChannelData = {
   id: string;
   messages: {
     content: string;
+    user: {
+      id: string;
+      name: string;
+    };
   }[];
   participants: {
     user: {
@@ -53,6 +58,7 @@ const MessageList = () => {
               <SingleMessage
                 name={user.name}
                 message={item.messages[0].content}
+                lastSender={item.messages[0].user}
                 avatar={user.image}
                 isSelected={router.query.id?.[0] === item.id}
               />

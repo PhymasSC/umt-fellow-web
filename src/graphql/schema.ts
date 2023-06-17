@@ -79,7 +79,7 @@ export const typeDefs = gql`
 		id: String!
 		name: String!
 		participants: [ChannelParticipant]
-		messages: [Message]
+		messages(limit: Int): [Message]
 	}
 
 	type ChannelParticipant {

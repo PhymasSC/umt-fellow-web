@@ -1,10 +1,15 @@
 import { Flex, Avatar, Image, Space, Text, Box } from "@mantine/core";
+import { useSession } from "next-auth/react";
 
 interface SingleMessageProps {
   name: string;
   message: string;
   avatar: string;
   isSelected: boolean;
+  lastSender?: {
+    id: string;
+    name: string;
+  };
 }
 
 const SingleMessage: React.FC<SingleMessageProps> = ({
@@ -12,7 +17,9 @@ const SingleMessage: React.FC<SingleMessageProps> = ({
   message,
   avatar,
   isSelected,
+  lastSender,
 }) => {
+  const { data: session } = useSession();
   return (
     <Box
       sx={(theme) => ({
@@ -42,6 +49,7 @@ const SingleMessage: React.FC<SingleMessageProps> = ({
             {name}
           </Text>
           <Text color="dimmed" fz="xs" lineClamp={1}>
+            {lastSender && lastSender?.id === session?.user.id && "You: "}
             {message}
           </Text>
         </Flex>

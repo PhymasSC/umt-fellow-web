@@ -77,20 +77,6 @@ const Chatroom = () => {
 
   useEffect(() => {
     if (data) {
-      console.log(data.getMessages);
-      console.log(
-        data.getMessages
-          .map((info: any) => {
-            return {
-              name: info.user.name,
-              senderId: info.user.id,
-              content: info.content,
-              timestamp: info.created_at,
-              profileImage: info.user.image,
-            };
-          })
-          .reverse()
-      );
       setMessages([
         ...data.getMessages
           .map((info: any) => {
@@ -182,7 +168,7 @@ const Chatroom = () => {
           <Textarea
             id="message"
             size="sm"
-            placeholder="Aa"
+            placeholder="Message"
             autosize
             minRows={1}
             maxRows={5}

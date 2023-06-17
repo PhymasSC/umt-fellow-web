@@ -192,8 +192,11 @@ export const GET_CHANNELS = gql`
 query GetChannels($userId: String) {
 	getChannels(userId: $userId) {
 	  id
-	  messages {
+	  messages(limit: 1) {
 		content
+		user {
+		  id
+		}
 	  }
 	  participants {
 		created_at

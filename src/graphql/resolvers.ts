@@ -282,12 +282,17 @@ export const resolvers = {
 			return participants;
 		},
 
-		messages: async (parent: any) => {
-			const messages = await prisma.message.findMany({
+		messages: async (parent: any, { limit }: { limit?: number }) => {
+			const queryOption: any = {
 				where: {
 					channelId: parent.id,
 				},
-			});
+				orderBy: {
+					created_at: "desc"
+				}
+			}
+			if (limit) queryOption.take = limit
+			const messages = await prisma.message.findMany(queryOption);
 			console.log(messages);
 			return messages;
 		},
