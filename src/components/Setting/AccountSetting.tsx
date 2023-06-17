@@ -102,6 +102,9 @@ const AccountSetting = () => {
           argType={"image"}
           mutation={EDIT_USER({ image: true })}
           variables={{ id: userData?.id }}
+          onCompleted={async (data) => {
+            update({ picture: data?.user?.image });
+          }}
         />
       ),
     },
@@ -144,7 +147,7 @@ const AccountSetting = () => {
           variables={{ id: userData?.id }}
           onCompleted={(data) => {
             update({ name: data });
-            setInterval(() => update(), 100); // Update session after 100ms
+            setTimeout(() => update(), 100); // Update session after 100ms
           }}
         />
       ),

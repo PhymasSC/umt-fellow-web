@@ -14,6 +14,7 @@ type ImageInputProps = {
   mutation: any;
   variables?: object;
   update?: any;
+  onCompleted?: (val: any) => void;
 };
 
 const ImageInput = (props: ImageInputProps) => {
@@ -49,7 +50,7 @@ const ImageInput = (props: ImageInputProps) => {
         let blob = await getBase64(img[0]).then((res) => res);
         console.log(blob);
         try {
-          await mutate({
+          let res = await mutate({
             variables: {
               [argType]: {
                 name: imgName,
@@ -66,7 +67,9 @@ const ImageInput = (props: ImageInputProps) => {
             color: "teal",
             icon: <IconCheck />,
           });
-          if (update) update();
+          if (props.onCompleted) {
+            props.onCompleted(res?.data?.["updateUser"]);
+          }
         } catch (error: any) {
           notifications.show({
             title: "Error",
