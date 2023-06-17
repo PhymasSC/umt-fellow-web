@@ -1,4 +1,4 @@
-import { Flex, Avatar, Image, Space, Title, Text, Box } from "@mantine/core";
+import { Flex, Avatar, Image, Space, Text, Box } from "@mantine/core";
 
 interface SingleMessageProps {
   name: string;
@@ -16,33 +16,32 @@ const SingleMessage: React.FC<SingleMessageProps> = ({
   return (
     <Box
       sx={(theme) => ({
-        textDecoration: "none",
-        color: `${
-          isSelected
-            ? theme.colorScheme === "dark"
-              ? theme.colors.dark
-              : theme.colors.dark
-            : "inherit"
-        }`,
+        borderRadius: ".3em",
         backgroundColor: `${
           isSelected &&
           (theme.colorScheme === "dark"
-            ? theme.colors.gray[8]
-            : theme.colors.blue[1])
+            ? theme.colors.gray[9]
+            : theme.colors.gray[0])
         }`,
-        borderRadius: ".3em",
+        "&:hover": {
+          backgroundColor: `${
+            theme.colorScheme === "dark"
+              ? theme.colors.gray[9]
+              : theme.colors.gray[0]
+          }`,
+        },
       })}
     >
-      <Flex align="center" p="xs">
+      <Flex align="center" p="xs" w="100%">
         <Avatar size="md" radius="xl">
-          <Image src={avatar} alt="" />
+          <Image src={avatar} alt={`Profile picture of ${name}`} />
         </Avatar>
         <Space w="md" />
-        <Flex direction="column" justify="center">
-          <Title order={2} fz="sm">
+        <Flex direction="column" justify="center" w="100%">
+          <Text fw={500} fz="sm">
             {name}
-          </Title>
-          <Text color="dimmed" fz="xs">
+          </Text>
+          <Text color="dimmed" fz="xs" lineClamp={1}>
             {message}
           </Text>
         </Flex>

@@ -147,6 +147,8 @@ export const typeDefs = gql`
 		getCommunityMember(communityId: String!, userId: String!): CommunityMember!
 
 		getChannels(userId: String): [Channel]
+
+		getMessages(channelId: String!): [Message]
 	}
 
 	type Mutation {

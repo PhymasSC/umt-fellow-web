@@ -1,4 +1,4 @@
-import { SimpleGrid, Box } from "@mantine/core";
+import { SimpleGrid, Box, Stack } from "@mantine/core";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import SingleMessage from "./SingleMessage";
@@ -34,7 +34,7 @@ const MessageList = () => {
   });
 
   return (
-    <SimpleGrid>
+    <SimpleGrid cols={1} verticalSpacing={0}>
       {data?.getChannels?.map((item: ChannelData) => {
         const user = item.participants.filter(
           (item) => item.user.id !== session?.user.id

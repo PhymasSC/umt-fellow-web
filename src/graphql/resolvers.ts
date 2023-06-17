@@ -185,6 +185,18 @@ export const resolvers = {
 				},
 			});
 			return channels;
+		},
+
+		getMessages: async (_: any, { channelId }: { channelId: string }) => {
+			const messages = await prisma.message.findMany({
+				where: {
+					channelId
+				},
+				orderBy: {
+					created_at: "desc"
+				}
+			});
+			return messages;
 		}
 
 	},
@@ -304,9 +316,10 @@ export const resolvers = {
 
 	Message: {
 		user: async (parent: any) => {
+			console.log(parent)
 			const user = await prisma.user.findFirst({
 				where: {
-					id: parent.userId,
+					id: parent.senderId,
 				},
 			});
 			return user;

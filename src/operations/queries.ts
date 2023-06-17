@@ -206,3 +206,18 @@ query GetChannels($userId: String) {
 	}
   }
 `
+
+export const GET_MESSAGES = gql`
+query GetMessages($channelId: String!) {
+	getMessages(channelId: $channelId) {
+	  id
+	  created_at
+	  content
+	  user {
+		id
+		name
+		image
+	  }
+	}
+  }
+  `

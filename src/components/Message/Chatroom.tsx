@@ -15,9 +15,11 @@ import BubbleGroup from "./BubbleGroup";
 import { useChannel } from "@ably-labs/react-hooks";
 import type { Types } from "ably";
 import { useSession } from "next-auth/react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import Bubble from "./Bubble";
+import { GET_MESSAGES } from "@operations/queries";
+import { useQuery } from "@apollo/client";
 
 type Msg = {
   name: string;
@@ -32,6 +34,11 @@ const Chatroom = () => {
   const router = useRouter();
   const [messages, setMessages] = useState<Msg[]>([]);
   const viewport = useRef<HTMLDivElement>(null);
+  const { data } = useQuery(GET_MESSAGES, {
+    variables: {
+      channelId: router.query.id?.[0],
+    },
+  });
 
   const [channel, ably] = useChannel(
     `channel-${router.query.id?.[0] as string}`,
@@ -68,6 +75,38 @@ const Chatroom = () => {
     }
   };
 
+  useEffect(() => {
+    if (data) {
+      console.log(data.getMessages);
+      console.log(
+        data.getMessages
+          .map((info: any) => {
+            return {
+              name: info.user.name,
+              senderId: info.user.id,
+              content: info.content,
+              timestamp: info.created_at,
+              profileImage: info.user.image,
+            };
+          })
+          .reverse()
+      );
+      setMessages([
+        ...data.getMessages
+          .map((info: any) => {
+            return {
+              name: info.user.name,
+              senderId: info.user.id,
+              content: info.content,
+              timestamp: info.created_at,
+              profileImage: info.user.image,
+            };
+          })
+          .reverse(),
+      ]);
+    }
+  }, [data]);
+
   return (
     <Card withBorder h="100%" w="100%">
       <Flex direction="column" gap="md" h="100%">
@@ -85,8 +124,8 @@ const Chatroom = () => {
             </Indicator>
           </Group>
           <Flex direction="column" justify="center" gap="0">
-            <Title order={1} fz="lg">
-              {"Lau"}
+            <Title order={1} size="h6" fw={500}>
+              {router.query.id?.[0]}
             </Title>
             <Text color="dimmed" fz="xs">
               Online
@@ -118,6 +157,7 @@ const Chatroom = () => {
                     isRecipient={message.senderId === session?.user.id}
                   >
                     <Bubble
+                      timestamp={message.timestamp}
                       message={message.content}
                       sx={(theme) => ({
                         wordBreak: "break-word",
