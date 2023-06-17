@@ -14,10 +14,11 @@ const useStyles = createStyles((theme) => ({
     height: "100vh",
     padding: "3em",
     backgroundSize: "cover",
-    backgroundImage:
-      "url(https://images.unsplash.com/photo-1633155518197-afebeecd096d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=769&q=80)",
-    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+    backgroundImage: "url('/auth-bg.jpeg')",
+
+    [theme.fn.smallerThan("sm")]: {
       padding: "0",
+      justifyContent: "center",
     },
   },
 

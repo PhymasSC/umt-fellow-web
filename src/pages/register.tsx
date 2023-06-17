@@ -11,8 +11,9 @@ const useStyles = createStyles((theme) => ({
     padding: "3em",
     backgroundSize: "cover",
     backgroundImage: "url('/auth-bg.jpeg')",
-    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+    [theme.fn.smallerThan("sm")]: {
       padding: "0",
+      justifyContent: "center",
     },
   },
 
