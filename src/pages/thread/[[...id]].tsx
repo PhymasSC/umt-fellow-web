@@ -147,13 +147,15 @@ const ThreadPage: NextPage<ThreadPageProps> = (props) => {
                       View profile
                     </Button>
                   </Link>
-                  <MessageButton
-                    fullWidth
-                    leftIcon={<IconMessageCircle size={18} />}
-                    component={Button}
-                    recipientId={data?.author.id}
-                    senderId={session?.user.id || ""}
-                  />
+                  {session && session.user.id !== data?.author.id && (
+                    <MessageButton
+                      fullWidth
+                      leftIcon={<IconMessageCircle size={18} />}
+                      component={Button}
+                      recipientId={data?.author.id}
+                      senderId={session?.user.id || ""}
+                    />
+                  )}
                 </Paper>
               </Grid.Col>
             </Grid>
