@@ -21,7 +21,8 @@ type InputProps = {
   component: React.FC<any>;
   argType: string;
   mutation: any;
-  variables: object; // Object of mutation variables
+  variables: object;
+  onCompleted?: (val: string) => void;
 } & TextInputProps &
   TextareaProps;
 
@@ -79,6 +80,8 @@ const Input = ({
 
       setLoading(false);
       form.resetDirty();
+
+      if (props.onCompleted) props.onCompleted(form.values.val);
     }
   };
 

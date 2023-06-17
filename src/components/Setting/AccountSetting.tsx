@@ -4,11 +4,9 @@ import {
   Text,
   Button,
   PasswordInput,
-  Avatar,
   Title,
   Textarea,
 } from "@mantine/core";
-import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import {
   IconBrandDribbble,
   IconBrandFacebook,
@@ -55,12 +53,12 @@ type USER_TYPE = {
 };
 const AccountSetting = () => {
   const { data: session, update } = useSession();
-  //   const { profileImage, setProfileImage } = useState(null);
   const {
     data,
     loading,
   }: { data: { getUser: USER_TYPE } | undefined; loading: boolean } = useQuery(
     GET_USER(`
+      coverImage
 		  sex
 		  age
 		  image
@@ -86,6 +84,7 @@ const AccountSetting = () => {
     }
   );
   const userData: USER_TYPE | undefined = data?.getUser;
+
   const configuration: {
     label: string | React.ReactNode;
     description: string;
@@ -98,11 +97,11 @@ const AccountSetting = () => {
       layout: "horizontal",
       input: (
         <ImageInput
-          imgName={session?.user.name || ""}
-          img={session?.user.image || ""}
+          imgName={userData?.name || ""}
+          img={userData?.image || ""}
           argType={"image"}
           mutation={EDIT_USER({ image: true })}
-          variables={{ id: session?.user.id }}
+          variables={{ id: userData?.id }}
         />
       ),
     },
@@ -117,7 +116,7 @@ const AccountSetting = () => {
           img={userData?.coverImage || ""}
           argType={"coverImage"}
           mutation={EDIT_USER({ coverImage: true })}
-          variables={{ id: session?.user.id }}
+          variables={{ id: userData?.id }}
         />
       ),
     },
@@ -142,7 +141,11 @@ const AccountSetting = () => {
                   "Name must be less than 50 characters long",
           }}
           mutation={EDIT_USER({ name: true })}
-          variables={{ id: session?.user.id }}
+          variables={{ id: userData?.id }}
+          onCompleted={(data) => {
+            update({ name: data });
+            setInterval(() => update(), 100); // Update session after 100ms
+          }}
         />
       ),
     },
