@@ -5,6 +5,7 @@ import {
   Textarea,
   Flex,
   Container,
+  Button,
 } from "@mantine/core";
 import RichTextEditor from "./RichTextEditor";
 import Link from "next/link";
@@ -39,14 +40,6 @@ interface CommentProps {
   };
 }
 
-interface FormValues {
-  title: string;
-  tags: string[];
-  description: string;
-  images: { id: string; imageUrl: string }[];
-  community: string;
-}
-
 const Comment = (props: CommentProps) => {
   const { author, isReply } = props;
   const { classes } = useStyles();
@@ -56,14 +49,8 @@ const Comment = (props: CommentProps) => {
     router.push("/thread");
   };
 
-  const form = useForm<FormValues>({
-    initialValues: {
-      title: "",
-      tags: [],
-      description: "",
-      images: [],
-      community: "",
-    },
+  const form = useForm({
+    initialValues: { description: "" },
   });
 
   return (
@@ -81,7 +68,10 @@ const Comment = (props: CommentProps) => {
           fluid
         >
           {isReply ? (
-            <RichTextEditor form={form} />
+            <>
+              <RichTextEditor form={form} />
+              <Button>Comment</Button>
+            </>
           ) : (
             <Link href="/thread">
               <Textarea

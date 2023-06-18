@@ -6,6 +6,7 @@ import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
+import { Indent } from "@lib/tiptap-indent";
 import { useRef } from "react";
 import { IconVideo } from "@tabler/icons";
 import { Button, Popover, TextInput } from "@mantine/core";
@@ -27,19 +28,10 @@ lowlight.registerLanguage("html", html);
 lowlight.registerLanguage("java", java);
 
 interface RTEProps {
-  form: UseFormReturnType<{
-    title: string;
-    tags: string[];
-    description: string;
-    community: string;
-    images: {
-      id: string;
-      imageUrl: string;
-    }[];
-  }>;
+  form: UseFormReturnType<any>;
 }
 
-const RTE: React.FC<RTEProps> = ({ form }) => {
+const RTE = ({ form }: RTEProps) => {
   const youtubeUrlRef = useRef<HTMLInputElement>(null);
   const editor = useEditor({
     extensions: [
@@ -57,6 +49,7 @@ const RTE: React.FC<RTEProps> = ({ form }) => {
       Placeholder.configure({
         placeholder: "Write your description here...",
       }),
+      Indent,
     ],
     content: form.values.description || "",
     onUpdate: ({ editor }) => {
@@ -72,13 +65,15 @@ const RTE: React.FC<RTEProps> = ({ form }) => {
       height: 480,
     });
   };
+  const pressedKeys = useRef<Record<string, any>>({});
+
   return (
     <RichTextEditor
       editor={editor}
       sx={(theme) => ({
         "& .ProseMirror": {
           minHeight: 200,
-          maxHeight: 300,
+          maxHeight: 500,
           overflowY: "auto",
           overflowX: "hidden",
           backgroundColor:
