@@ -31,6 +31,7 @@ interface RTEProps {
     title: string;
     tags: string[];
     description: string;
+    community: string;
     images: {
       id: string;
       imageUrl: string;
