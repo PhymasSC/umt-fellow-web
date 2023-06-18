@@ -325,9 +325,9 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 
           <Grid.Col md={12} lg={9}>
             <Card radius="md">
-              {threads.getThreadsByAuthor.length > 0 ? (
+              {threads?.getThreadsByAuthor.length > 0 ? (
                 <>
-                  <Feed feeds={threads}></Feed>
+                  <Feed feeds={threads?.getThreadsByAuthor}></Feed>
                   <Container p={20}>
                     <Title order={2} align={"center"}>
                       You have finished reading all the threads from {user.name}
