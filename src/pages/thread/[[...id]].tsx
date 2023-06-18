@@ -20,7 +20,6 @@ import Link from "next/link";
 import { Comment } from "@components/index";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { useQuery } from "@apollo/client";
 import { client } from "@lib/apollo-client";
 import MessageButton from "@components/Message/MessageButton";
 import { IconMessageCircle } from "@tabler/icons";
@@ -30,6 +29,7 @@ type ThreadPageProps = {
     id: string;
     title: string;
     description: string;
+    community: string;
     images: {
       id: string;
       imageUrl: string;
