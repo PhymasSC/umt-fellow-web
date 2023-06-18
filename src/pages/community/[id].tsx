@@ -17,10 +17,15 @@ import { Comment, Feed, Typography } from "@components/index";
 import Link from "next/link";
 import { IconCake } from "@tabler/icons";
 import { useSession } from "next-auth/react";
-import { GET_THREADS, GET_COMMUNITY_BY_ID } from "@operations/queries";
+import {
+  GET_THREADS,
+  GET_COMMUNITY_BY_ID,
+  GET_THREADS_BY_COMMUNITY,
+} from "@operations/queries";
 import { client } from "@lib/apollo-client";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
+import { useQuery } from "@apollo/client";
 
 type CommunityProps = {
   data: {
@@ -40,7 +45,13 @@ type CommunityProps = {
 };
 const Community: NextPage<CommunityProps> = (props) => {
   const { data } = props;
-  // const { loading, error, data } = useQuery(GET_THREADS);
+  const {
+    loading,
+    error,
+    data: threadsData,
+  } = useQuery(GET_THREADS_BY_COMMUNITY, {
+    variables: { communityId: props.data.id },
+  });
   const { data: session } = useSession();
   const [createdDate, setCreatedDate] = useState("");
   const router = useRouter();
@@ -52,6 +63,7 @@ const Community: NextPage<CommunityProps> = (props) => {
   useEffect(() => {
     setCreatedDate(new Date(data.created_at).toLocaleDateString());
   }, [data]);
+
   return (
     <Container fluid>
       <Image
@@ -85,7 +97,31 @@ const Community: NextPage<CommunityProps> = (props) => {
               }}
             />
             <Space h="2em" />
-            {/* <Feed feeds={data}></Feed> */}
+            {loading || threadsData.getThreadsByCommunity.length === 0 ? (
+              <Card
+                withBorder
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "transparent",
+                  minHeight: "8em",
+                }}
+              >
+                <Text
+                  size="lg"
+                  fw="bold"
+                  align="center"
+                  variant="gradient"
+                  gradient={{ from: "indigo", to: "cyan", deg: 45 }}
+                >
+                  Let&apos;s get this forum started! Start a thread and see who
+                  joins in.{" "}
+                </Text>
+              </Card>
+            ) : (
+              <Feed feeds={threadsData?.getThreadsByCommunity} />
+            )}
           </Container>
         </Grid.Col>
         <Grid.Col span={4}>

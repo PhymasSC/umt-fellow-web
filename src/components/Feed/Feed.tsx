@@ -4,7 +4,7 @@ import Link from "next/link";
 import SingleFeedSkeleton from "./SingleFeedSkeleton";
 
 interface FeedProps {
-  feeds: { threads: feed[] };
+  feeds: feed[];
   loading?: boolean;
 }
 
@@ -47,35 +47,33 @@ const Feed = ({ feeds, loading }: FeedProps) => {
         overflow: "visible",
       }}
     >
-      {Object.values(feeds || {}).map((value) =>
-        value?.map((item) => (
-          <Link key={item.id} href={`/thread/${item.id}`} passHref>
-            <Card.Section
-              sx={(theme) => ({
-                textDecoration: "none",
-                color:
+      {feeds.map((item) => (
+        <Link key={item.id} href={`/thread/${item.id}`} passHref>
+          <Card.Section
+            sx={(theme) => ({
+              textDecoration: "none",
+              color:
+                theme.colorScheme === "dark"
+                  ? theme.colors.gray[0]
+                  : theme.colors.dark[9],
+              overflow: "visible",
+              "&:hover": {
+                cursor: "pointer",
+                backgroundColor:
                   theme.colorScheme === "dark"
-                    ? theme.colors.gray[0]
-                    : theme.colors.dark[9],
-                overflow: "visible",
-                "&:hover": {
-                  cursor: "pointer",
-                  backgroundColor:
-                    theme.colorScheme === "dark"
-                      ? theme.colors.dark[7]
-                      : theme.colors.gray[0],
-                },
-              })}
-              component="a"
-              p="md"
-              key={item.id}
-              withBorder
-            >
-              <SingleFeed feed={item} />
-            </Card.Section>
-          </Link>
-        ))
-      )}
+                    ? theme.colors.dark[7]
+                    : theme.colors.gray[0],
+              },
+            })}
+            component="a"
+            p="md"
+            key={item.id}
+            withBorder
+          >
+            <SingleFeed feed={item} />
+          </Card.Section>
+        </Link>
+      ))}
     </Card>
   );
 };

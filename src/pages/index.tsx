@@ -5,11 +5,15 @@ import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@apollo/client";
 import { GET_THREADS } from "@operations/queries";
+import { useEffect } from "react";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
   const { loading, data } = useQuery(GET_THREADS);
 
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
   return (
     <>
       <Grid>
@@ -45,7 +49,7 @@ const Home: NextPage = () => {
                   joins in.{" "}
                 </Text>
               </Card>
-            )) || <Feed feeds={data} loading={loading} />}
+            )) || <Feed feeds={data.getThreads} loading={loading} />}
           </Flex>
         </Grid.Col>
         <Grid.Col xs={12} lg={4}>

@@ -95,6 +95,15 @@ export const GET_THREADS_BY_AUTHOR = gql`
 	}
 `;
 
+export const GET_THREADS_BY_COMMUNITY = gql`
+	${THREAD_FRAGMENT}
+	query GetThreadsByCommunity($communityId: String!) {
+		getThreadsByCommunity(communityId: $communityId) {
+			...ThreadFragment
+		}
+	}
+`;
+
 export const GET_THREAD_VOTES = gql`
 	${USER_FRAGMENT}
 	query GetThreadVotes($threadId: String!) {

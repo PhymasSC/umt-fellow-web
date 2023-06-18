@@ -137,6 +137,7 @@ export const typeDefs = gql`
 		getThreads: [Thread]
 		getThreadsByAuthor(authorId: String!): [Thread]
 		getThreadById(id: String!): Thread
+		getThreadsByCommunity(communityId: String!): [Thread]
 		getThreadVotes(threadId: String!): [Vote]
 		getThreadUpvotesAndDownvotes(threadId: String!): [Int]!
 

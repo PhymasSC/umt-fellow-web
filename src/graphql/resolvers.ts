@@ -89,6 +89,16 @@ export const resolvers = {
 			});
 			return thread;
 		},
+		getThreadsByCommunity: async (
+			_: any,
+			{ communityId }: { communityId: string },
+			{ prisma }: { prisma: PrismaType }
+		) => {
+			const threads = await prisma.thread.findMany({
+				where: { communityId }
+			});
+			return threads;
+		},
 		getThreadVotes: async (_: any, { threadId }: { threadId: string }, { prisma }: { prisma: PrismaType }) => {
 			const votes = await prisma.threadvotes.findMany({
 				where: {
