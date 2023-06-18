@@ -167,12 +167,15 @@ const ThreadPage: NextPage<ThreadPageProps> = (props) => {
               <Title>No Replies yet</Title>
             </Center>
             <Space h="xl" />
-            <Comment
-              author={{
-                name: data?.author?.name,
-                image: data?.author?.image,
-              }}
-            />
+            {session && (
+              <Comment
+                isReply
+                author={{
+                  name: session?.user.name || "",
+                  image: session?.user.image || "",
+                }}
+              />
+            )}
           </Grid.Col>
           <Grid.Col xs={12} md={4}></Grid.Col>
         </Grid>

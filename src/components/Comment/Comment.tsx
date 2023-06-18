@@ -6,8 +6,10 @@ import {
   Flex,
   Container,
 } from "@mantine/core";
+import RichTextEditor from "./RichTextEditor";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useForm } from "@mantine/form";
 
 const useStyles = createStyles((theme) => ({
   comment: {
@@ -29,24 +31,48 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-interface CommentHtmlProps {
+interface CommentProps {
+  isReply?: boolean;
   author: {
     name: string;
     image: string;
   };
 }
 
-const Comment = (props: CommentHtmlProps) => {
-  const { author } = props;
+interface FormValues {
+  title: string;
+  tags: string[];
+  description: string;
+  images: { id: string; imageUrl: string }[];
+  community: string;
+}
+
+const Comment = (props: CommentProps) => {
+  const { author, isReply } = props;
   const { classes } = useStyles();
   const router = useRouter();
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
     router.push("/thread");
   };
+
+  const form = useForm<FormValues>({
+    initialValues: {
+      title: "",
+      tags: [],
+      description: "",
+      images: [],
+      community: "",
+    },
+  });
+
   return (
     <Paper withBorder radius="md" className={classes.comment}>
-      <Flex gap="md" justify="flex-start" align="center">
+      <Flex
+        gap="md"
+        justify="flex-start"
+        align={isReply ? "flex-start" : "center"}
+      >
         <Avatar src={author.image} alt={author.name} radius="xl" />
         <Container
           sx={{
@@ -54,16 +80,20 @@ const Comment = (props: CommentHtmlProps) => {
           }}
           fluid
         >
-          <Link href="/thread">
-            <Textarea
-              radius="xl"
-              placeholder="What's in your mind?"
-              autosize
-              maxRows={1}
-              onFocus={handleSubmit}
-              onChange={handleSubmit}
-            />
-          </Link>
+          {isReply ? (
+            <RichTextEditor form={form} />
+          ) : (
+            <Link href="/thread">
+              <Textarea
+                radius="xl"
+                placeholder="What's in your mind?"
+                autosize
+                maxRows={1}
+                onFocus={handleSubmit}
+                onChange={handleSubmit}
+              />
+            </Link>
+          )}
         </Container>
       </Flex>
     </Paper>
