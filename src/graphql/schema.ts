@@ -143,6 +143,7 @@ export const typeDefs = gql`
 		getCommunities(userId: String): [Community]
 		getCommunityById(id: String!): Community
 		getCommunitiesOwnedByUser(userId: String!): [Community]
+		getCommunitiesFollowedByUser(userId: String!): [Community]
 
 		getCommunityMembers(communityId: String!): [CommunityMember]!
 		getCommunityMember(communityId: String!, userId: String!): CommunityMember!

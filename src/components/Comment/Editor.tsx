@@ -8,6 +8,8 @@ import {
   Button,
   Flex,
   MultiSelect,
+  TextInput,
+  Autocomplete,
 } from "@mantine/core";
 import ImageDropzone from "./ImageDropzone";
 import { ADD_THREAD, UPDATE_THREAD } from "@operations/mutations";
@@ -20,6 +22,7 @@ import { FileWithPath } from "@mantine/dropzone";
 import { useRouter } from "next/router";
 import { notifications } from "@mantine/notifications";
 import RTE from "./RichTextEditor";
+import CommunityPicker from "./CommunityPicker";
 
 interface Props {
   data?: DATA_TYPE;
@@ -192,29 +195,28 @@ const Editor: React.FC<Props> = ({ data }) => {
           <Title order={3}>{data ? "Edit thread" : "New thread"}</Title>
           <Space h="md" />
           <Stack>
-            <Box sx={{ position: "relative" }}>
-              <Textarea
-                ref={titleRef}
-                icon={<IconLetterT size={14} />}
-                placeholder="Title"
-                autosize
-                minRows={1}
-                maxRows={4}
-                maxLength={200}
-                rightSection={
-                  <Box
-                    sx={{
-                      fontSize: ".6em",
-                      paddingRight: "1em",
-                    }}
-                  >
-                    {titleLength}/200
-                  </Box>
-                }
-                required
-                {...form.getInputProps("title")}
-              />
-            </Box>
+            <CommunityPicker />
+            <Textarea
+              ref={titleRef}
+              icon={<IconLetterT size={14} />}
+              placeholder="Title"
+              autosize
+              minRows={1}
+              maxRows={4}
+              maxLength={200}
+              rightSection={
+                <Box
+                  sx={{
+                    fontSize: ".6em",
+                    paddingRight: "1em",
+                  }}
+                >
+                  {titleLength}/200
+                </Box>
+              }
+              required
+              {...form.getInputProps("title")}
+            />
             <MultiSelect
               placeholder="Select tags (Optional)"
               data={[]}

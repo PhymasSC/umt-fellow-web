@@ -188,6 +188,17 @@ query ($userId: String!) {
   }
 `;
 
+export const GET_COMMUNITIES_FOLLOWED_BY_USER = gql`
+query ($userId: String!) {
+	getCommunitiesFollowedByUser(userId: $userId) {
+	  id
+	  name
+	  avatar
+	  description
+	}
+  }
+`;
+
 export const GET_CHANNELS = gql`
 query GetChannels($userId: String) {
 	getChannels(userId: $userId) {

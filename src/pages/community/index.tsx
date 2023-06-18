@@ -113,7 +113,6 @@ export const getServerSideProps = async (ctx: GetSessionParams) => {
       },
     });
 
-    console.log(data);
     return {
       props: {
         communities: data.getCommunities,

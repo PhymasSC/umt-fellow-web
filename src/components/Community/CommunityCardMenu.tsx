@@ -8,6 +8,7 @@ import {
 } from "@operations/mutations";
 import { useMutation } from "@apollo/client";
 import Link from "next/link";
+import { GET_COMMUNITIES } from "@operations/queries";
 
 const CommunityCardMenu: React.FC<{
   communityId: string;
@@ -49,6 +50,12 @@ const CommunityCardMenu: React.FC<{
                 communityId: communityId,
                 userId: session?.user.id,
               },
+              refetchQueries: [
+                {
+                  query: GET_COMMUNITIES,
+                  variables: { userId: session?.user.id },
+                },
+              ],
             });
             setJoined(!joined);
           }
