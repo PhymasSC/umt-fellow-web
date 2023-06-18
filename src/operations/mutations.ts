@@ -108,12 +108,14 @@ export const ADD_THREAD = gql`
 		$description: String!
 		$author: String!
 		$images: [Image]
+		$communityId: String!
 	) {
 		addThread(
 			title: $title
 			description: $description
 			images: $images
 			author: $author
+			communityId: $communityId
 		) {
 			code
 			success

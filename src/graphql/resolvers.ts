@@ -511,22 +511,27 @@ export const resolvers = {
 				images,
 				tags,
 				author,
+				communityId
 			}: {
 				title: string;
 				description: string;
 				images: { name: string; blob: string; isExisting: boolean; isDeleted: boolean }[];
 				tags: string[];
 				author: string;
+				communityId: string;
 			},
 			{ prisma }: { prisma: PrismaType }
 		) => {
 			try {
+				const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 				const thread = await prisma.thread.create({
 					data: {
 						title,
 						//@ts-ignore
 						description,
 						authorId: author,
+						communityId: uuidRegex.test(communityId) ? communityId : null,
 					},
 				});
 				const promises = images.map(async (image) => {

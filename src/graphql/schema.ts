@@ -162,6 +162,7 @@ export const typeDefs = gql`
 			images: [Image]
 			tags: [String]
 			author: String!
+			communityId: String!
 		): ThreadResponse!
 		updateThread(
 			id: String!

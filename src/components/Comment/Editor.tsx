@@ -94,7 +94,7 @@ const Editor: React.FC<Props> = ({ data }) => {
         }
       },
       community: (value) => {
-        if (value.length < 1) {
+        if (value.length < 1 && router.query.edit === undefined) {
           return "Please select a valid space";
         }
       },
@@ -107,98 +107,97 @@ const Editor: React.FC<Props> = ({ data }) => {
 
   const submitHandler = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    console.log(form.values);
     const { hasErrors, errors } = form.validate();
     if (hasErrors) {
       return;
     }
     setIsLoading(true);
-    // const getBase64 = (file: File): Promise<string> => {
-    //   return new Promise<string>((resolve) => {
-    //     let fileInfo;
-    //     let baseURL = "";
-    //     // Make new FileReader
-    //     let reader = new FileReader();
-    //     // Convert the file to base64 text
-    //     reader.readAsDataURL(file);
-    //     // on reader load somthing...
-    //     reader.onload = () => {
-    //       // Make a fileInfo Object
-    //       baseURL = reader?.result?.toString() || "";
-    //       resolve(baseURL);
-    //     };
-    //   });
-    // };
+    const getBase64 = (file: File): Promise<string> => {
+      return new Promise<string>((resolve) => {
+        let fileInfo;
+        let baseURL = "";
+        // Make new FileReader
+        let reader = new FileReader();
+        // Convert the file to base64 text
+        reader.readAsDataURL(file);
+        // on reader load somthing...
+        reader.onload = () => {
+          // Make a fileInfo Object
+          baseURL = reader?.result?.toString() || "";
+          resolve(baseURL);
+        };
+      });
+    };
 
-    // const imagesBase64 = newImages.map(async (image) => {
-    //   return await {
-    //     name: image.name,
-    //     blob: await getBase64(image).then((res) => res),
-    //     isExisting: false,
-    //     isDeleted: false,
-    //   };
-    // });
+    const imagesBase64 = newImages.map(async (image) => {
+      return await {
+        name: image.name,
+        blob: await getBase64(image).then((res) => res),
+        isExisting: false,
+        isDeleted: false,
+      };
+    });
 
-    // const getFilesInBase64 = async () => {
-    //   const resolvedValues: {
-    //     name?: string;
-    //     blob?: string;
-    //     url?: string;
-    //     isExisting: boolean;
-    //     isDeleted: boolean;
-    //   }[] = existingImages.filter((image) => image.isExisting);
-    //   for await (const imageBase64 of imagesBase64) {
-    //     resolvedValues.push(imageBase64);
-    //   }
+    const getFilesInBase64 = async () => {
+      const resolvedValues: {
+        name?: string;
+        blob?: string;
+        url?: string;
+        isExisting: boolean;
+        isDeleted: boolean;
+      }[] = existingImages.filter((image) => image.isExisting);
+      for await (const imageBase64 of imagesBase64) {
+        resolvedValues.push(imageBase64);
+      }
 
-    //   let res;
-    //   if (router.query.edit !== undefined) {
-    //     res = await updateThread({
-    //       variables: {
-    //         id: data?.id || "",
-    //         title: form.values.title,
-    //         // tags: form.values.tags,
-    //         description: form.values.description,
-    //         images: resolvedValues,
-    //       },
-    //     });
-    //   } else {
-    //     res = await submitThread({
-    //       variables: {
-    //         title: form.values.title,
-    //         // tags: form.values.tags,
-    //         description: form.values.description,
-    //         author: session?.user?.id || "",
-    //         images: resolvedValues,
-    //       },
-    //     });
-    //   }
+      let res;
+      if (router.query.edit !== undefined) {
+        res = await updateThread({
+          variables: {
+            id: data?.id || "",
+            title: form.values.title,
+            // tags: form.values.tags,
+            description: form.values.description,
+            images: resolvedValues,
+          },
+        });
+      } else {
+        res = await submitThread({
+          variables: {
+            title: form.values.title,
+            // tags: form.values.tags,
+            description: form.values.description,
+            author: session?.user?.id || "",
+            images: resolvedValues,
+            communityId: form.values.community,
+          },
+        });
+      }
 
-    //   setIsLoading(false);
+      setIsLoading(false);
 
-    //   if (
-    //     res?.data?.addThread?.code === 200 ||
-    //     res?.data?.updateThread?.code === 200
-    //   ) {
-    //     router.replace(
-    //       `/thread/${
-    //         res?.data?.addThread?.thread?.id ||
-    //         res?.data?.updateThread?.thread?.id
-    //       }`
-    //     );
-    //   } else {
-    //     notifications.show({
-    //       title: "Oops, something wrong happened",
-    //       message:
-    //         "There's some issue with the connection to the server, please try again.",
-    //       autoClose: 3000,
-    //       color: "orange",
-    //       icon: <IconAlertTriangle />,
-    //     });
-    //   }
-    // };
-    // getFilesInBase64();
-    setIsLoading(false);
+      if (
+        res?.data?.addThread?.code === 200 ||
+        res?.data?.updateThread?.code === 200
+      ) {
+        router.replace(
+          `/thread/${
+            res?.data?.addThread?.thread?.id ||
+            res?.data?.updateThread?.thread?.id
+          }`
+        );
+      } else {
+        notifications.show({
+          title: "Oops, something wrong happened",
+          message:
+            "There's some issue with the connection to the server, please try again.",
+          autoClose: 3000,
+          color: "orange",
+          icon: <IconAlertTriangle />,
+        });
+      }
+    };
+    getFilesInBase64();
   };
 
   return (
@@ -213,7 +212,9 @@ const Editor: React.FC<Props> = ({ data }) => {
           <Title order={3}>{data ? "Edit thread" : "New thread"}</Title>
           <Space h="md" />
           <Stack>
-            <CommunityPicker form={form} required />
+            {router.query.edit === undefined && (
+              <CommunityPicker form={form} required />
+            )}
             <Textarea
               ref={titleRef}
               icon={<IconLetterT size={14} />}
