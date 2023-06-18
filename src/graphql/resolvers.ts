@@ -1,7 +1,8 @@
-import prisma from "@lib/prisma";
+
 import { GraphQLDateTime } from "graphql-iso-date";
 import bcrypt from "bcrypt";
 import ImageKit from "imagekit";
+import { PrismaClient, Prisma } from "@prisma/client";
 const saltRounds = 10;
 
 const imagekit = new ImageKit({
@@ -15,11 +16,16 @@ enum VoteType {
 	DOWNVOTE = "DOWNVOTE",
 }
 
+type PrismaType = PrismaClient<
+	Prisma.PrismaClientOptions,
+	never,
+	Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
+>;
 export const resolvers = {
 	DateTime: GraphQLDateTime,
 
 	Query: {
-		getUser: async (_: any, { id }: { id: string }) => {
+		getUser: async (_: any, { id }: { id: string }, { prisma }: { prisma: PrismaType }) => {
 			const user = await prisma.user.findFirst({
 				where: {
 					id,
@@ -29,7 +35,8 @@ export const resolvers = {
 		},
 		getUsers: async (
 			_: any,
-			{ limit, offset }: { limit: number; offset: number }
+			{ limit, offset }: { limit: number; offset: number },
+			{ prisma }: { prisma: PrismaType }
 		) => {
 			const users = await prisma.user.findMany({
 				take: limit,
@@ -39,7 +46,8 @@ export const resolvers = {
 		},
 		getUsersByName: async (
 			_: any,
-			{ name, limit, offset }: { name: string, limit: number; offset: number },
+			{ name, limit, offset }: { name: string, limit: number; offset: number }
+			, { prisma }: { prisma: PrismaType }
 		) => {
 			const users = await prisma.user.findMany({
 				where: {
@@ -53,7 +61,7 @@ export const resolvers = {
 			return users;
 		},
 
-		getThreads: async () => {
+		getThreads: async (_: any, __: any, { prisma }: { prisma: PrismaType }) => {
 			const threads = await prisma.thread.findMany({
 				orderBy: {
 					updated_at: "desc",
@@ -63,7 +71,8 @@ export const resolvers = {
 		},
 		getThreadsByAuthor: async (
 			_: any,
-			{ authorId }: { authorId: string }
+			{ authorId }: { authorId: string },
+			{ prisma }: { prisma: PrismaType }
 		) => {
 			const threads = await prisma.thread.findMany({
 				where: {
@@ -72,7 +81,7 @@ export const resolvers = {
 			});
 			return threads;
 		},
-		getThreadById: async (_: any, { id }: { id: string }) => {
+		getThreadById: async (_: any, { id }: { id: string }, { prisma }: { prisma: PrismaType }) => {
 			const thread = await prisma.thread.findFirst({
 				where: {
 					id,
@@ -80,7 +89,7 @@ export const resolvers = {
 			});
 			return thread;
 		},
-		getThreadVotes: async (_: any, { threadId }: { threadId: string }) => {
+		getThreadVotes: async (_: any, { threadId }: { threadId: string }, { prisma }: { prisma: PrismaType }) => {
 			const votes = await prisma.threadvotes.findMany({
 				where: {
 					thread_id: threadId,
@@ -90,7 +99,8 @@ export const resolvers = {
 		},
 		getThreadUpvotesAndDownvotes: async (
 			_: any,
-			{ threadId }: { threadId: string }
+			{ threadId }: { threadId: string },
+			{ prisma }: { prisma: PrismaType }
 		) => {
 			const upvotes = await prisma.threadvotes.count({
 				where: {
@@ -109,7 +119,7 @@ export const resolvers = {
 			return [upvotes, downvotes];
 		},
 
-		getCommunities: async (_: any, { userId }: { userId?: string }) => {
+		getCommunities: async (_: any, { userId }: { userId?: string }, { prisma }: { prisma: PrismaType }) => {
 			const communities = await prisma.community.findMany();
 			if (!userId) return communities;
 
@@ -129,7 +139,7 @@ export const resolvers = {
 			);
 			return communitiesWithJoinStatus
 		},
-		getCommunityById: async (_: any, { id }: { id: string }) => {
+		getCommunityById: async (_: any, { id }: { id: string }, { prisma }: { prisma: PrismaType }) => {
 			const community = await prisma.community.findFirst({
 				where: {
 					id,
@@ -137,7 +147,7 @@ export const resolvers = {
 			});
 			return community;
 		},
-		getCommunitiesOwnedByUser: async (_: any, { userId }: { userId: string }) => {
+		getCommunitiesOwnedByUser: async (_: any, { userId }: { userId: string }, { prisma }: { prisma: PrismaType }) => {
 			const communities = await prisma.community.findMany({
 				where: {
 					creatorId: userId,
@@ -145,10 +155,25 @@ export const resolvers = {
 			});
 			return communities;
 		},
+		getCommunitiesFollowedByUser: async (_: any, { userId }: { userId: string }, { prisma }: { prisma: PrismaType }) => {
+			const communities = await prisma.community.findMany({
+				where: {
+					CommunityMember: {
+						some: {
+							userId
+						}
+					}
+				}
+			});
+
+			console.log(communities)
+			return communities;
+		},
 
 		getCommunityMembers: async (
 			_: any,
-			{ communityId }: { communityId: string }
+			{ communityId }: { communityId: string },
+			{ prisma }: { prisma: PrismaType }
 		) => {
 			const members = await prisma.communityMember.findMany({
 				where: {
@@ -160,7 +185,8 @@ export const resolvers = {
 
 		getCommunityMember: async (
 			_: any,
-			{ communityId, userId }: { communityId: string, userId: string }
+			{ communityId, userId }: { communityId: string, userId: string },
+			{ prisma }: { prisma: PrismaType }
 		) => {
 			const member = await prisma.communityMember.findFirst({
 				where: {
@@ -171,7 +197,7 @@ export const resolvers = {
 			return member;
 		},
 
-		getChannels: async (_: any, { userId }: { userId: string }) => {
+		getChannels: async (_: any, { userId }: { userId: string }, { prisma }: { prisma: PrismaType }) => {
 			const channels = await prisma.channel.findMany({
 				where: {
 					ChannelParticipants: {
@@ -189,7 +215,8 @@ export const resolvers = {
 
 		getChannelParticipants: async (
 			_: any,
-			{ channelId }: { channelId: string }
+			{ channelId }: { channelId: string },
+			{ prisma }: { prisma: PrismaType }
 		) => {
 			const participants = await prisma.channelParticipants.findMany({
 				where: {
@@ -199,7 +226,7 @@ export const resolvers = {
 			return participants;
 		},
 
-		getMessages: async (_: any, { channelId }: { channelId: string }) => {
+		getMessages: async (_: any, { channelId }: { channelId: string }, { prisma }: { prisma: PrismaType }) => {
 			const messages = await prisma.message.findMany({
 				where: {
 					channelId
@@ -214,7 +241,7 @@ export const resolvers = {
 	},
 
 	Vote: {
-		thread: async (parent: any) => {
+		thread: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
 			const thread = await prisma.thread.findFirst({
 				where: {
 					id: parent.thread_id,
@@ -223,7 +250,7 @@ export const resolvers = {
 			return thread;
 		},
 
-		user: async (parent: any) => {
+		user: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
 			const user = await prisma.user.findFirst({
 				where: {
 					id: parent.user_id,
@@ -234,7 +261,7 @@ export const resolvers = {
 	},
 
 	Thread: {
-		author: async (parent: any) => {
+		author: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
 			const user = await prisma.user.findFirst({
 				where: {
 					id: parent.authorId,
@@ -242,7 +269,7 @@ export const resolvers = {
 			});
 			return user;
 		},
-		images: async (parent: any) => {
+		images: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
 			const images: {
 				imageUrl: string;
 			}[] = await prisma.images.findMany({
@@ -255,7 +282,7 @@ export const resolvers = {
 	},
 
 	Community: {
-		creatorId: async (parent: any) => {
+		creatorId: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
 			const user = await prisma.user.findFirst({
 				where: {
 					id: parent.creatorId,
@@ -266,7 +293,7 @@ export const resolvers = {
 	},
 
 	CommunityMember: {
-		userId: async (parent: any) => {
+		userId: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
 			const user = await prisma.user.findFirst({
 				where: {
 					id: parent.userId,
@@ -274,7 +301,7 @@ export const resolvers = {
 			});
 			return user;
 		},
-		communityId: async (parent: any) => {
+		communityId: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
 			const community = await prisma.community.findFirst({
 				where: {
 					id: parent.communityId,
@@ -285,7 +312,7 @@ export const resolvers = {
 	},
 
 	Channel: {
-		participants: async (parent: any) => {
+		participants: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
 			const participants = await prisma.channelParticipants.findMany({
 				where: {
 					channelId: parent.id,
@@ -294,7 +321,7 @@ export const resolvers = {
 			return participants;
 		},
 
-		messages: async (parent: any, { limit }: { limit?: number }) => {
+		messages: async (parent: any, { limit }: { limit?: number }, { prisma }: { prisma: PrismaType }) => {
 			const queryOption: any = {
 				where: {
 					channelId: parent.id,
@@ -312,7 +339,7 @@ export const resolvers = {
 	},
 
 	ChannelParticipant: {
-		user: async (parent: any) => {
+		user: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
 			const user = await prisma.user.findFirst({
 				where: {
 					id: parent.userId,
@@ -321,7 +348,7 @@ export const resolvers = {
 			return user;
 		},
 
-		channel: async (parent: any) => {
+		channel: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
 			const channel = await prisma.channel.findFirst({
 				where: {
 					id: parent.channelId,
@@ -332,7 +359,7 @@ export const resolvers = {
 	},
 
 	Message: {
-		user: async (parent: any) => {
+		user: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
 			console.log(parent)
 			const user = await prisma.user.findFirst({
 				where: {
@@ -342,7 +369,7 @@ export const resolvers = {
 			return user;
 		},
 
-		channel: async (parent: any) => {
+		channel: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
 			const channel = await prisma.channel.findFirst({
 				where: {
 					id: parent.channelId,
@@ -360,7 +387,8 @@ export const resolvers = {
 				name,
 				email,
 				password,
-			}: { name: string; email: string; password: string }
+			}: { name: string; email: string; password: string },
+			{ prisma }: { prisma: PrismaType }
 		) => {
 			const hashedPassword = await bcrypt.hash(password, saltRounds);
 			try {
@@ -417,7 +445,8 @@ export const resolvers = {
 				major: string;
 				year: number;
 				cgpa: number;
-			}
+			},
+			{ prisma }: { prisma: PrismaType }
 		) => {
 			// const hashedPassword = await bcrypt.hash(password, saltRounds);
 			const { id, image, coverImage, ...rest } = attr
@@ -488,7 +517,8 @@ export const resolvers = {
 				images: { name: string; blob: string; isExisting: boolean; isDeleted: boolean }[];
 				tags: string[];
 				author: string;
-			}
+			},
+			{ prisma }: { prisma: PrismaType }
 		) => {
 			try {
 				const thread = await prisma.thread.create({
@@ -551,7 +581,8 @@ export const resolvers = {
 				description: string;
 				images: { id?: string; name?: string; blob?: string; url?: string, isExisting?: boolean, isDeleted: boolean }[];
 				tags: string[];
-			}
+			},
+			{ prisma }: { prisma: PrismaType }
 		) => {
 			try {
 				const thread = await prisma.thread.update({
@@ -619,7 +650,7 @@ export const resolvers = {
 			}
 		},
 
-		deleteThread: async (_: any, { id }: { id: string }) => {
+		deleteThread: async (_: any, { id }: { id: string }, { prisma }: { prisma: PrismaType }) => {
 			try {
 				const images = await prisma.images.deleteMany({
 					where: {
@@ -655,7 +686,8 @@ export const resolvers = {
 				threadId,
 				userId,
 				voteType,
-			}: { threadId: string; userId: string; voteType: VoteType }
+			}: { threadId: string; userId: string; voteType: VoteType },
+			{ prisma }: { prisma: PrismaType }
 		) => {
 			try {
 				const vote = await prisma.threadvotes.upsert({
@@ -723,7 +755,8 @@ export const resolvers = {
 				avatar: string,
 				banner: string
 				creatorId: string,
-			}
+			},
+			{ prisma }: { prisma: PrismaType }
 		) => {
 			try {
 				let isDuplicated = !!(await prisma.community.findFirst({
@@ -781,7 +814,8 @@ export const resolvers = {
 				description: string,
 				avatar: { name: string; blob: string; isExisting: boolean; isDeleted: boolean },
 				banner: { name: string; blob: string; isExisting: boolean; isDeleted: boolean },
-			}
+			},
+			{ prisma }: { prisma: PrismaType }
 		) => {
 			const { id, avatar, banner, ...rest } = attr
 			if (avatar?.blob || banner?.blob) {
@@ -844,7 +878,8 @@ export const resolvers = {
 			}: {
 				communityId: string,
 				userId: string,
-			}
+			},
+			{ prisma }: { prisma: PrismaType }
 		) => {
 			try {
 				const member = await prisma.communityMember.create({
@@ -878,7 +913,8 @@ export const resolvers = {
 			}: {
 				communityId: string,
 				userId: string,
-			}
+			},
+			{ prisma }: { prisma: PrismaType }
 		) => {
 			try {
 				const member = await prisma.communityMember.delete({
