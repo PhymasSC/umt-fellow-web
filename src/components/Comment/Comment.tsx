@@ -11,6 +11,7 @@ import RichTextEditor from "./RichTextEditor";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "@mantine/form";
+import { Editor } from "@tiptap/react";
 
 const useStyles = createStyles((theme) => ({
   comment: {
@@ -53,6 +54,10 @@ const Comment = (props: CommentProps) => {
     initialValues: { description: "" },
   });
 
+  const handleEditorUpdate = ({ editor }: { editor: Editor }) => {
+    form.setFieldValue("description", editor.getHTML());
+  };
+
   return (
     <Paper withBorder radius="md" className={classes.comment}>
       <Flex
@@ -69,8 +74,18 @@ const Comment = (props: CommentProps) => {
         >
           {isReply ? (
             <>
-              <RichTextEditor form={form} />
-              <Button>Comment</Button>
+              <RichTextEditor
+                content={form.values.description}
+                onUpdate={handleEditorUpdate}
+              />
+              <Button
+                mt="md"
+                onClick={() => {
+                  console.log(form.values.description);
+                }}
+              >
+                Comment
+              </Button>
             </>
           ) : (
             <Link href="/thread">

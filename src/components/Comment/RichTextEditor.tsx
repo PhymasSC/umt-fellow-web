@@ -1,5 +1,5 @@
 import { RichTextEditor, Link } from "@mantine/tiptap";
-import { useEditor } from "@tiptap/react";
+import { Content, useEditor } from "@tiptap/react";
 import Highlight from "@tiptap/extension-highlight";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -28,10 +28,12 @@ lowlight.registerLanguage("html", html);
 lowlight.registerLanguage("java", java);
 
 interface RTEProps {
-  form: UseFormReturnType<any>;
+  content: Content;
+  onUpdate: any;
 }
 
-const RTE = ({ form }: RTEProps) => {
+const RTE = (props: RTEProps) => {
+  const { content, onUpdate } = props;
   const youtubeUrlRef = useRef<HTMLInputElement>(null);
   const editor = useEditor({
     extensions: [
@@ -51,10 +53,8 @@ const RTE = ({ form }: RTEProps) => {
       }),
       Indent,
     ],
-    content: form.values.description || "",
-    onUpdate: ({ editor }) => {
-      form.setFieldValue("description", editor.getHTML());
-    },
+    content: content,
+    onUpdate,
   });
 
   const addVideo = () => {
@@ -65,7 +65,6 @@ const RTE = ({ form }: RTEProps) => {
       height: 480,
     });
   };
-  const pressedKeys = useRef<Record<string, any>>({});
 
   return (
     <RichTextEditor

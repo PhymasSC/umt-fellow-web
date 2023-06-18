@@ -252,7 +252,12 @@ const Editor: React.FC<Props> = ({ data }) => {
               // }}
               {...form.getInputProps("tags")}
             />
-            <RTE form={form} />
+            <RTE
+              content={form.values.description}
+              onUpdate={({ editor }) =>
+                form.setFieldValue("description", editor.getHTML())
+              }
+            />
             <ImageDropzone
               newImages={newImages}
               setNewImages={setNewImages}
