@@ -49,7 +49,7 @@ const Home: NextPage = () => {
                   joins in.{" "}
                 </Text>
               </Card>
-            )) || <Feed feeds={data.getThreads} loading={loading} />}
+            )) || <Feed feeds={data?.getThreads} loading={loading} />}
           </Flex>
         </Grid.Col>
         <Grid.Col xs={12} lg={4}>
