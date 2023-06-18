@@ -12,6 +12,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "@mantine/form";
 import { Editor } from "@tiptap/react";
+import { notifications } from "@mantine/notifications";
+import { IconAlertTriangle } from "@tabler/icons";
 
 const useStyles = createStyles((theme) => ({
   comment: {
@@ -51,11 +53,35 @@ const Comment = (props: CommentProps) => {
   };
 
   const form = useForm({
-    initialValues: { description: "" },
+    initialValues: { description: "", plainDescription: "" },
   });
+
+  const validateComment = (comment: string): boolean => {
+    const minLength = 1;
+    const trimmedComment = comment.trim();
+
+    if (trimmedComment.length < minLength) return false;
+
+    if (!trimmedComment) return false;
+
+    return true;
+  };
 
   const handleEditorUpdate = ({ editor }: { editor: Editor }) => {
     form.setFieldValue("description", editor.getHTML());
+    form.setFieldValue("plainDescription", editor.getText());
+  };
+
+  const submitComment = () => {
+    if (!validateComment(form.values.plainDescription)) {
+      notifications.show({
+        title: "Comment should not be empty",
+        message: "Please write something before submitting.",
+        color: "red",
+        icon: <IconAlertTriangle />,
+      });
+      return;
+    }
   };
 
   return (
@@ -78,12 +104,7 @@ const Comment = (props: CommentProps) => {
                 content={form.values.description}
                 onUpdate={handleEditorUpdate}
               />
-              <Button
-                mt="md"
-                onClick={() => {
-                  console.log(form.values.description);
-                }}
-              >
+              <Button mt="md" onClick={submitComment}>
                 Comment
               </Button>
             </>
