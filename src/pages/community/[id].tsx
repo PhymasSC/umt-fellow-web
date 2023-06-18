@@ -97,7 +97,7 @@ const Community: NextPage<CommunityProps> = (props) => {
               }}
             />
             <Space h="2em" />
-            {loading || threadsData.getThreadsByCommunity.length === 0 ? (
+            {threadsData?.getThreadsByCommunity?.length === 0 ? (
               <Card
                 withBorder
                 sx={{
@@ -120,7 +120,10 @@ const Community: NextPage<CommunityProps> = (props) => {
                 </Text>
               </Card>
             ) : (
-              <Feed feeds={threadsData?.getThreadsByCommunity} />
+              <Feed
+                feeds={threadsData?.getThreadsByCommunity}
+                loading={loading}
+              />
             )}
           </Container>
         </Grid.Col>

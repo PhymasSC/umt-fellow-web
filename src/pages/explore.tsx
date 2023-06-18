@@ -26,13 +26,7 @@ const Explore: NextPage = () => {
         <Grid>
           <Container>
             <Flex mih={50} gap="md" direction="column" wrap="wrap">
-              {loading ? (
-                <Skeleton sx={(theme) => ({ width: "100%" })}>
-                  Page is loading
-                </Skeleton>
-              ) : (
-                <Feed feeds={data.getThreads} />
-              )}
+              <Feed feeds={data?.getThreads} loading={loading} />
             </Flex>
           </Container>
         </Grid>
