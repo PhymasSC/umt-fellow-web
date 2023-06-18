@@ -38,7 +38,6 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
     props.colorScheme
   );
   const toggleColorScheme = (value?: ColorScheme) => {
-    console.log(colorScheme);
     const color = value || (colorScheme === "dark" ? "light" : "dark");
     setColorScheme(value || color);
     setCookies("color-scheme", color, {
@@ -123,7 +122,8 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
                         : theme.colors.gray[0],
                     padding:
                       router.pathname === "/register" ||
-                      router.pathname === "/login"
+                      router.pathname === "/login" ||
+                      router.pathname === "/reset-password"
                         ? "0em"
                         : "md",
                     [theme.fn.smallerThan("sm")]: {

@@ -36,9 +36,9 @@ const OTPScreen = (props: OTPScreenProps) => {
       },
       body: JSON.stringify({
         email: props.email,
-        name: props.name,
         emailType: "OTP",
         data: {
+          username: props.name,
           otp: token.split(""),
         },
       }),
@@ -82,8 +82,6 @@ const OTPScreen = (props: OTPScreenProps) => {
         }}
         onComplete={async (res) => {
           setLoading(true);
-          console.log(res);
-          console.log(otp);
           if (res === otp && !isExpired) {
             const response = await register({
               variables: {

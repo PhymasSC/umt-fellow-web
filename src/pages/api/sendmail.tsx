@@ -13,6 +13,7 @@ const TEMPLATE_ID = {
   FORGOT_PASSWORD: "d-3811326b68cc4d549a5d4119960b696c",
   OTP: "d-e1d5b603a9e241e3bd6f79c20b7ca6da",
 };
+
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     res.status(405).json({ message: "Method not allowed" });
@@ -20,12 +21,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const {
-    name,
     email,
     emailType,
     data,
   }: {
-    name: string;
     email: string;
     emailType: "OTP" | "FORGOT_PASSWORD";
     data: any;
@@ -37,7 +36,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       replyTo: "umtfellow@gmail.com",
       templateId: TEMPLATE_ID[emailType],
       dynamicTemplateData: {
-        username: name,
         ...data,
       },
       to: email,

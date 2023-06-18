@@ -49,8 +49,20 @@ model User {
   session             Session[]
   Message             Message[]
   ChannelParticipants ChannelParticipants[]
+  resetTokens         ResetToken[]
 
   @@map("users")
+}
+
+model ResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }
 
 model Follow {

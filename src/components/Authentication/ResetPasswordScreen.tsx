@@ -1,6 +1,7 @@
-import { Stack, Text, TextInput, Group, Button, Center } from "@mantine/core";
-import { IconArrowLeft, IconAt } from "@tabler/icons";
+import { Stack, Text, TextInput, Group, Button } from "@mantine/core";
+import { IconArrowLeft, IconAt, IconMailFast, IconSend } from "@tabler/icons";
 import { UseFormReturnType } from "@mantine/form";
+import { useState } from "react";
 
 type AuthScreens = "login" | "register" | "forgotPassword" | "otp";
 
@@ -15,6 +16,58 @@ interface ResetPasswordScreenProps {
 }
 
 const ResetPasswordScreen = ({ form, setScreen }: ResetPasswordScreenProps) => {
+  const [message, setMessage] = useState("");
+
+  const submitHandler = async (e: any) => {
+    e.preventDefault();
+    const { hasErrors, errors } = form.validate();
+
+    if (hasErrors && errors.email) {
+      return;
+    }
+
+    const response: {
+      token: string;
+      email: string;
+      expires: string;
+    } = await (
+      await fetch("/api/reset-link", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: form.values.email }),
+      })
+    ).json();
+
+    const mailResponse = await fetch("/api/sendmail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: form.values.email,
+        emailType: "FORGOT_PASSWORD",
+        data: {
+          reset_url: `${
+            process.env.NODE_ENV === "production"
+              ? "https://www.umtfellow.social/"
+              : "http://localhost:3000/"
+          }reset-password?token=${encodeURIComponent(
+            response.token
+          )}&email=${encodeURIComponent(
+            response.email
+          )}&expires=${encodeURIComponent(response.expires)}`,
+        },
+      }),
+    });
+
+    setMessage("Reset link has been sent to your email");
+    setTimeout(() => {
+      setMessage("");
+    }, 5000);
+  };
+
   return (
     <Stack>
       <Text mx="auto" weight={500}>
@@ -28,27 +81,36 @@ const ResetPasswordScreen = ({ form, setScreen }: ResetPasswordScreenProps) => {
         label="Email"
         icon={<IconAt size={14} />}
         placeholder="Your email"
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            submitHandler(e);
+          }
+        }}
+        rightSection={
+          <IconSend size={14} onClick={submitHandler} cursor="pointer" />
+        }
         {...form.getInputProps("email")}
       />
-      <Group position="apart">
-        <Center inline>
-          <Button
-            component="button"
-            onClick={() => {
-              setScreen("login");
-            }}
-            p="sm"
-            size="sm"
-            color="dimmed"
-          >
-            <Group>
-              <IconArrowLeft size={16} stroke={1.5} />
-              <Text>Back to login page</Text>
-            </Group>
-          </Button>
-        </Center>
-        <Button type="submit">Send </Button>
-      </Group>
+      {message && (
+        <Text color="green" size="xs">
+          <Group spacing="xs">
+            {message}
+            <IconMailFast stroke={1} size={18} />
+          </Group>
+        </Text>
+      )}
+
+      <Button
+        component="button"
+        leftIcon={<IconArrowLeft size={14} />}
+        onClick={() => {
+          setScreen("login");
+        }}
+        variant="default"
+        color="dark"
+      >
+        Back to login page
+      </Button>
     </Stack>
   );
 };

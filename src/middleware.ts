@@ -6,9 +6,15 @@ export default async function middleware(req: NextRequest, event: NextFetchEvent
     const token = await getToken({ req });
     const isAuthenticated = !!token;
 
-    if ((req.nextUrl.pathname.startsWith('/login') || req.nextUrl.pathname.startsWith("/register")) && isAuthenticated) {
+    const isLogin = req.nextUrl.pathname.startsWith('/login');
+    const isRegister = req.nextUrl.pathname.startsWith('/register');
+    const isResetPassword = req.nextUrl.pathname.startsWith('/reset-password');
+
+    if ((isLogin || isRegister || isResetPassword) && isAuthenticated) {
         return NextResponse.redirect(new URL('/', req.url));
     }
+
+    if (isRegister || isResetPassword) return;
 
     const authMiddleware = await withAuth({
         pages: {
@@ -20,5 +26,5 @@ export default async function middleware(req: NextRequest, event: NextFetchEvent
     return authMiddleware(req, event);
 }
 export const config = {
-    matcher: ["/rtchat", "/message", "/message/:id", "/setting", "/login", "/register"]
+    matcher: ["/rtchat", "/message", "/message/:id", "/setting", "/login", "/register", "/reset-password"]
 }
