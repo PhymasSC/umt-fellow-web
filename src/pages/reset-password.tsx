@@ -12,6 +12,7 @@ import { IconLock } from "@tabler/icons";
 import { matches, useForm } from "@mantine/form";
 import { PASSWORD_PATTERN } from "@constants/regex";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -62,6 +63,10 @@ const useStyles = createStyles((theme) => ({
 const ResetPassword: NextPage = () => {
   const { classes } = useStyles();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const { token } = router.query;
+
   const form = useForm({
     initialValues: {
       newPassword: "",
@@ -75,7 +80,7 @@ const ResetPassword: NextPage = () => {
     },
   });
 
-  const submitHandler = (e: { preventDefault: () => void }) => {
+  const submitHandler = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (form.values.newPassword !== form.values.repeatPassword) {
       form.setErrors({ repeatPassword: "Passwords do not match" });
@@ -84,9 +89,25 @@ const ResetPassword: NextPage = () => {
     form.validate();
 
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+
+    const response = await (
+      await fetch("/api/reset-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token, password: form.values.newPassword }),
+      })
+    ).json();
+
+    if (response.err) {
+      form.setErrors({
+        newPassword:
+          "The token has expired. Please request a new reset password link to regain access to your account.",
+      });
+    }
+
+    setLoading(false);
   };
 
   return (

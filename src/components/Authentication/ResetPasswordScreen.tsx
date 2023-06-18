@@ -1,4 +1,4 @@
-import { Stack, Text, TextInput, Group, Button } from "@mantine/core";
+import { Stack, Text, TextInput, Group, Button, Loader } from "@mantine/core";
 import { IconArrowLeft, IconAt, IconMailFast, IconSend } from "@tabler/icons";
 import { UseFormReturnType } from "@mantine/form";
 import { useState } from "react";
@@ -17,6 +17,7 @@ interface ResetPasswordScreenProps {
 
 const ResetPasswordScreen = ({ form, setScreen }: ResetPasswordScreenProps) => {
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const submitHandler = async (e: any) => {
     e.preventDefault();
@@ -26,10 +27,12 @@ const ResetPasswordScreen = ({ form, setScreen }: ResetPasswordScreenProps) => {
       return;
     }
 
+    setLoading(true);
     const response: {
       token: string;
       email: string;
       expires: string;
+      err?: string;
     } = await (
       await fetch("/api/reset-link", {
         method: "POST",
@@ -40,6 +43,27 @@ const ResetPasswordScreen = ({ form, setScreen }: ResetPasswordScreenProps) => {
       })
     ).json();
 
+    if (response.err === "social") {
+      setLoading(false);
+      form.setFieldError(
+        "email",
+        "This email is associated with a social account. Please login with google."
+      );
+      return;
+    } else if (response.err === "no-account") {
+      setLoading(false);
+      form.setFieldError(
+        "email",
+        "This email is not associated with any account. Please register."
+      );
+      return;
+    }
+    const reset_url = `${
+      process.env.NODE_ENV === "production"
+        ? "https://www.umtfellow.social/"
+        : "http://localhost:3000/"
+    }reset-password?token=${encodeURIComponent(response.token)}`;
+
     const mailResponse = await fetch("/api/sendmail", {
       method: "POST",
       headers: {
@@ -48,20 +72,10 @@ const ResetPasswordScreen = ({ form, setScreen }: ResetPasswordScreenProps) => {
       body: JSON.stringify({
         email: form.values.email,
         emailType: "FORGOT_PASSWORD",
-        data: {
-          reset_url: `${
-            process.env.NODE_ENV === "production"
-              ? "https://www.umtfellow.social/"
-              : "http://localhost:3000/"
-          }reset-password?token=${encodeURIComponent(
-            response.token
-          )}&email=${encodeURIComponent(
-            response.email
-          )}&expires=${encodeURIComponent(response.expires)}`,
-        },
+        data: { reset_url },
       }),
     });
-
+    setLoading(false);
     setMessage("Reset link has been sent to your email");
     setTimeout(() => {
       setMessage("");
@@ -87,7 +101,11 @@ const ResetPasswordScreen = ({ form, setScreen }: ResetPasswordScreenProps) => {
           }
         }}
         rightSection={
-          <IconSend size={14} onClick={submitHandler} cursor="pointer" />
+          loading ? (
+            <Loader size="xs" />
+          ) : (
+            <IconSend size={14} onClick={submitHandler} cursor="pointer" />
+          )
         }
         {...form.getInputProps("email")}
       />
