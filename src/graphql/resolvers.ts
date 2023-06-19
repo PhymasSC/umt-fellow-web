@@ -2,7 +2,7 @@
 import { GraphQLDateTime } from "graphql-iso-date";
 import bcrypt from "bcrypt";
 import ImageKit from "imagekit";
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient, Prisma, Role } from "@prisma/client";
 const saltRounds = 10;
 
 const imagekit = new ImageKit({
@@ -947,9 +947,11 @@ export const resolvers = {
 			{
 				communityId,
 				userId,
+				role
 			}: {
 				communityId: string,
 				userId: string,
+				role?: Role
 			},
 			{ prisma }: { prisma: PrismaType }
 		) => {
@@ -958,6 +960,7 @@ export const resolvers = {
 					data: {
 						communityId,
 						userId,
+						role: role || Role.USER,
 					},
 				});
 

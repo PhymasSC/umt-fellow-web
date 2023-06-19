@@ -18,8 +18,8 @@ const CommunityCardMenu: React.FC<{
   const [loading, setLoading] = useState(false);
   const [joined, setJoined] = useState(isJoined);
   const { data: session } = useSession();
-  const [addCommunityMember] = useMutation(ADD_COMMUNITY_MEMBER(""));
-  const [deleteCommunityMember] = useMutation(DELETE_COMMUNITY_MEMBER(""));
+  const [addCommunityMember] = useMutation(ADD_COMMUNITY_MEMBER);
+  const [deleteCommunityMember] = useMutation(DELETE_COMMUNITY_MEMBER);
 
   return (
     <Group noWrap spacing={1}>

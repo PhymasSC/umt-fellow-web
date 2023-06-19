@@ -237,6 +237,7 @@ export const typeDefs = gql`
 		addCommunityMember(
 			communityId: String!
 			userId: String!
+			role: Role
 		) : CommunityMemberResponse!
 		deleteCommunityMember(
 			communityId: String!

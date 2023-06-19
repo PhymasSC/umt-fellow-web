@@ -280,9 +280,9 @@ mutation UpdateCommunity($id: String!
 
 // Community Members
 
-export const ADD_COMMUNITY_MEMBER = (arg: any) => gql`
-  	mutation AddCommunityMember($communityId: String!, $userId: String!) {
-	addCommunityMember(communityId: $communityId, userId: $userId) {
+export const ADD_COMMUNITY_MEMBER = gql`
+  	mutation AddCommunityMember($communityId: String!, $userId: String!, $role: Role) {
+	addCommunityMember(communityId: $communityId, userId: $userId, role: $role) {
 		code
 		success
 		message
@@ -291,7 +291,7 @@ export const ADD_COMMUNITY_MEMBER = (arg: any) => gql`
 `;
 
 
-export const DELETE_COMMUNITY_MEMBER = (arg: any) => gql`
+export const DELETE_COMMUNITY_MEMBER = gql`
 mutation DeleteCommunityMember($communityId: String!, $userId: String!) {
 	deleteCommunityMember(communityId: $communityId, userId: $userId) {
 		code
