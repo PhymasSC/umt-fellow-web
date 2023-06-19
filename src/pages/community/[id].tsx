@@ -90,13 +90,17 @@ const Community: NextPage<CommunityProps> = (props) => {
       <Grid>
         <Grid.Col span={8}>
           <Container>
-            <Comment
-              author={{
-                name: session?.user.name || "",
-                image: session?.user.image || "",
-              }}
-            />
-            <Space h="2em" />
+            {session && (
+              <>
+                <Comment
+                  author={{
+                    name: session?.user.name || "",
+                    image: session?.user.image || "",
+                  }}
+                />
+                <Space h="2em" />
+              </>
+            )}
             {threadsData?.getThreadsByCommunity?.length === 0 ? (
               <Card
                 withBorder
