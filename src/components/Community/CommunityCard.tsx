@@ -6,6 +6,7 @@ import {
   Image,
   TypographyStylesProvider,
 } from "@mantine/core";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import CommunityCardMenu from "./CommunityCardMenu";
 
@@ -25,6 +26,8 @@ interface CommunityCardProps {
 
 const CommunityCard: React.FC<CommunityCardProps> = ({ community }) => {
   const { id, name, description, banner, isJoined } = community;
+  const { data: session } = useSession();
+
   return (
     <Link href={`/community/${id}`} passHref>
       <Card
@@ -67,13 +70,15 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ community }) => {
           </Flex>
         </Card.Section>
 
-        <Card.Section withBorder py="sm">
-          <CommunityCardMenu
-            communityId={id}
-            isJoined={isJoined}
-            creatorId={community.creatorId.id}
-          />
-        </Card.Section>
+        {session && (
+          <Card.Section withBorder py="sm">
+            <CommunityCardMenu
+              communityId={id}
+              isJoined={isJoined}
+              creatorId={community.creatorId.id}
+            />
+          </Card.Section>
+        )}
       </Card>
     </Link>
   );

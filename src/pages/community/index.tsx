@@ -39,27 +39,29 @@ const Communities: NextPage<CommunitiesProps> = ({ communities }) => {
 
   return (
     <Container fluid>
-      <Modal
-        opened={opened}
-        onClose={close}
-        centered
-        size="75vw"
-        title={
-          <Title order={2} size="h4">
-            Create Community
-          </Title>
-        }
-        overlayProps={{
-          color:
-            theme.colorScheme === "dark"
-              ? theme.colors.dark[9]
-              : theme.colors.gray[2],
-          opacity: 0.55,
-          blur: 3,
-        }}
-      >
-        <NewCommunity />
-      </Modal>
+      {session && (
+        <Modal
+          opened={opened}
+          onClose={close}
+          centered
+          size="75vw"
+          title={
+            <Title order={2} size="h4">
+              Create Community
+            </Title>
+          }
+          overlayProps={{
+            color:
+              theme.colorScheme === "dark"
+                ? theme.colors.dark[9]
+                : theme.colors.gray[2],
+            opacity: 0.55,
+            blur: 3,
+          }}
+        >
+          <NewCommunity />
+        </Modal>
+      )}
       <Flex justify="space-between">
         <Title order={1} size="h3" mb="md">
           Community List
@@ -103,13 +105,13 @@ const Communities: NextPage<CommunitiesProps> = ({ communities }) => {
 };
 
 export const getServerSideProps = async (ctx: GetSessionParams) => {
-  // @ts-expect-error
-  const { user } = await getSession(ctx);
+  const session = await getSession(ctx);
+  const user = session?.user;
   try {
     const { data } = await client.query({
       query: GET_COMMUNITIES,
       variables: {
-        userId: user.id,
+        userId: user?.id || "",
       },
     });
 
