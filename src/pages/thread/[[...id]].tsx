@@ -206,6 +206,10 @@ const ThreadPage: NextPage<ThreadPageProps & CommentProps> = (props) => {
                   name: session?.user.name || "",
                   image: session?.user.image || "",
                 }}
+                mutation={{
+                  userId: session?.user.id || "",
+                  threadId: data?.id || "",
+                }}
               />
             )}
             <Space h="xl" />

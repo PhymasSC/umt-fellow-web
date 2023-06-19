@@ -300,3 +300,14 @@ mutation DeleteCommunityMember($communityId: String!, $userId: String!) {
 	}
 }
 `;
+
+// Comment
+export const ADD_COMMENT = gql`
+mutation Mutation($threadId: String!, $userId: String!, $content: String!, $parentId: String) {
+	addComment(threadId: $threadId, userId: $userId, content: $content, parentId: $parentId) {
+	  code
+	  message
+	  success
+	}
+  }
+`;

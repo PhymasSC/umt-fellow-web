@@ -9,7 +9,14 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Comment from "./NewComment";
 
-const CommentControl = () => {
+type CommentControlProps = {
+  mutation: {
+    userId: string;
+    threadId: string;
+    parentId?: string;
+  };
+};
+const CommentControl = (props: CommentControlProps) => {
   const [commentOpen, setCommentOpen] = useState(false);
   const { data: session } = useSession();
   return (
@@ -37,6 +44,11 @@ const CommentControl = () => {
           author={{
             name: session?.user.name || "",
             image: session?.user.image || "",
+          }}
+          mutation={{
+            userId: props?.mutation?.userId,
+            threadId: props?.mutation?.threadId,
+            parentId: props.mutation?.parentId || "",
           }}
           isReply
         />

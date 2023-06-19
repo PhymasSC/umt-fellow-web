@@ -14,6 +14,8 @@ import { useForm } from "@mantine/form";
 import { Editor } from "@tiptap/react";
 import { notifications } from "@mantine/notifications";
 import { IconAlertTriangle } from "@tabler/icons";
+import { ADD_COMMENT } from "@operations/mutations";
+import { useMutation } from "@apollo/client";
 
 const useStyles = createStyles((theme) => ({
   comment: {
@@ -41,12 +43,19 @@ interface CommentProps {
     name: string;
     image: string;
   };
+  mutation?: {
+    userId: string;
+    threadId: string;
+    parentId?: string;
+  };
 }
 
 const Comment = (props: CommentProps) => {
   const { author, isReply } = props;
   const { classes } = useStyles();
   const router = useRouter();
+  const [addComment] = useMutation(ADD_COMMENT);
+
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
     router.push("/thread");
@@ -72,7 +81,7 @@ const Comment = (props: CommentProps) => {
     form.setFieldValue("plainDescription", editor.getText());
   };
 
-  const submitComment = () => {
+  const submitComment = async () => {
     if (!validateComment(form.values.plainDescription)) {
       notifications.show({
         title: "Comment should not be empty",
@@ -81,6 +90,25 @@ const Comment = (props: CommentProps) => {
         icon: <IconAlertTriangle />,
       });
       return;
+    }
+
+    const response = await addComment({
+      variables: {
+        userId: props?.mutation?.userId,
+        threadId: props?.mutation?.threadId,
+        content: form.values.description,
+        parentId: props.mutation?.parentId || "",
+      },
+    });
+
+    if (response.data) {
+      form.setFieldValue("description", "");
+      notifications.show({
+        title: "Comment added successfully",
+        message: "Your comment has been added successfully.",
+        color: "green",
+        icon: <IconAlertTriangle />,
+      });
     }
   };
 
