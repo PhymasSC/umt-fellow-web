@@ -112,6 +112,8 @@ export const typeDefs = gql`
 		thread: Thread!
 		user: User!
 		content: String!
+		parentId: String
+		children: [Comment]
 		created_at: DateTime
 		updated_at: DateTime
 	}
@@ -161,6 +163,9 @@ export const typeDefs = gql`
 		getChannels(userId: String): [Channel]
 		getChannelParticipants(channelId: String!): [ChannelParticipant]
 		getMessages(channelId: String!): [Message]
+
+		getComments(threadId: String!): [Comment]
+		getCommentsByParentId(parentId: String!): [Comment]
 	}
 
 	type Mutation {
@@ -242,6 +247,7 @@ export const typeDefs = gql`
 			threadId: String!
 			userId: String!
 			content: String!
+			parentId: String
 		): CommentResponse!
 	}
 

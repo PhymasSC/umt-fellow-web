@@ -246,8 +246,36 @@ export const resolvers = {
 				}
 			});
 			return messages;
-		}
+		},
 
+		getComments: async (_: any, { threadId }: { threadId: string }, { prisma }: { prisma: PrismaType }) => {
+			const comments = await prisma.comment.findMany({
+				where: {
+					threadId,
+					parentId: ""
+				},
+				orderBy: {
+					created_at: "desc"
+				}
+			});
+			return comments;
+		},
+		getCommentsByParentId: async (
+			_: any,
+			{ parentId }: { parentId: string },
+			{ prisma }: { prisma: PrismaType }
+		) => {
+			const comments = await prisma.comment.findMany({
+				where: {
+					parentId
+				},
+				orderBy: {
+					created_at: "desc"
+				}
+			});
+			console.log(comments)
+			return comments;
+		}
 	},
 
 	Vote: {
@@ -389,6 +417,35 @@ export const resolvers = {
 		}
 	},
 
+	Comment: {
+		user: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
+			const user = await prisma.user.findFirst({
+				where: {
+					id: parent.userId,
+				},
+			});
+			return user;
+		},
+		thread: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
+			const thread = await prisma.thread.findFirst({
+				where: {
+					id: parent.threadId,
+				},
+			});
+			return thread;
+		},
+		children: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
+			const children = await prisma.comment.findMany({
+				where: {
+					parentId: parent.id,
+				},
+				orderBy: {
+					created_at: "desc"
+				}
+			});
+			return children;
+		}
+	},
 
 	Mutation: {
 		addUser: async (
@@ -963,10 +1020,12 @@ export const resolvers = {
 				threadId,
 				userId,
 				content,
+				parentId,
 			}: {
 				threadId: string,
 				userId: string,
 				content: string,
+				parentId?: string,
 			},
 			{ prisma }: { prisma: PrismaType }
 		) => {
@@ -976,6 +1035,7 @@ export const resolvers = {
 						threadId,
 						userId,
 						content,
+						parentId: parentId || ""
 					},
 				});
 
