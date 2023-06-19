@@ -1,5 +1,13 @@
 import { ContentLayout } from "@components/Layout";
-import { Button, Group, Avatar, Space, Text, Tooltip } from "@mantine/core";
+import {
+  Button,
+  Group,
+  Avatar,
+  Space,
+  Text,
+  Tooltip,
+  Badge,
+} from "@mantine/core";
 import Link from "next/link";
 import dayjs from "dayjs";
 type SingleCommentProps = {
@@ -7,12 +15,13 @@ type SingleCommentProps = {
   name: string;
   image: string;
   children: React.ReactNode;
+  isAuthor: boolean;
   created_at: string;
   updated_at: string;
 };
 
 const SingleComment = (props: SingleCommentProps) => {
-  const { id, name, image, children, created_at, updated_at } = props;
+  const { id, name, image, isAuthor, children, created_at, updated_at } = props;
 
   return (
     <ContentLayout
@@ -33,7 +42,7 @@ const SingleComment = (props: SingleCommentProps) => {
               </Group>
             </Button>
           </Link>
-          ·
+          {isAuthor && <Badge color="yellow">Author</Badge>}·
           <Tooltip
             multiline
             label={`Created at ${dayjs(new Date(created_at)).toDate()}`}

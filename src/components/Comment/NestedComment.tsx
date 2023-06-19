@@ -42,10 +42,11 @@ type Comment = {
 
 type CommentProps = {
   data: Comment;
+  author: string;
 };
 
 const NestedComment = (props: CommentProps) => {
-  const { data: comment } = props;
+  const { data: comment, author } = props;
   const { data: session } = useSession();
   const router = useRouter();
   const { id } = router.query;
@@ -72,6 +73,7 @@ const NestedComment = (props: CommentProps) => {
       id={comment.user.id}
       name={comment.user.name}
       image={comment.user.image}
+      isAuthor={comment.user.id === author}
       created_at={comment.created_at}
       updated_at={comment.updated_at}
     >
@@ -101,6 +103,7 @@ const NestedComment = (props: CommentProps) => {
             id={child.user.id}
             name={child.user.name}
             image={child.user.image}
+            isAuthor={comment.user.id === author}
             created_at={child.created_at}
             updated_at={child.updated_at}
           >
@@ -131,6 +134,7 @@ const NestedComment = (props: CommentProps) => {
                   id={child.user.id}
                   name={child.user.name}
                   image={child.user.image}
+                  isAuthor={comment.user.id === author}
                   created_at={child.created_at}
                   updated_at={child.updated_at}
                 >
@@ -157,7 +161,7 @@ const NestedComment = (props: CommentProps) => {
                         })}
                         withBorder
                       >
-                        <NestedComment data={child} />
+                        <NestedComment data={child} author={author} />
                       </Card>
                     ))}
                   {!expanded &&
