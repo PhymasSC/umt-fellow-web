@@ -217,7 +217,7 @@ const ThreadPage: NextPage<ThreadPageProps & CommentProps> = (props) => {
             {comments.length > 0 ? (
               <Card withBorder>
                 {comments.map((comment) => (
-                  <Card.Section withBorder>
+                  <Card.Section key={comment.id} withBorder>
                     <NestedComment key={comment.id} data={comment} />
                   </Card.Section>
                 ))}

@@ -50,8 +50,9 @@ const SingleComment = (props: SingleCommentProps) => {
           </Group>
         </Group>
       }
-      children={<>{children}</>}
-    />
+    >
+      {children}
+    </ContentLayout>
   );
 };
 
