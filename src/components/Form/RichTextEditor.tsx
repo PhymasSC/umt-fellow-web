@@ -30,10 +30,11 @@ interface RTEProps {
   content: Content;
   onUpdate: any;
   placeholder?: string;
+  onClearContext?: any;
 }
 
 const RTE = (props: RTEProps) => {
-  const { content, onUpdate, placeholder } = props;
+  const { content, onUpdate, placeholder, onClearContext } = props;
   const youtubeUrlRef = useRef<HTMLInputElement>(null);
   const editor = useEditor({
     extensions: [
@@ -58,7 +59,6 @@ const RTE = (props: RTEProps) => {
   });
 
   const addVideo = () => {
-    console.log(youtubeUrlRef.current?.value);
     editor?.commands.setYoutubeVideo({
       src: youtubeUrlRef.current?.value || "",
       width: 640,

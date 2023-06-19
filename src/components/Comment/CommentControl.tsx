@@ -1,4 +1,4 @@
-import { ActionIcon, Group, Stack } from "@mantine/core";
+import { ActionIcon, Button, Group, Stack } from "@mantine/core";
 import {
   IconFlag3,
   IconMessageCircle,
@@ -23,19 +23,25 @@ const CommentControl = (props: CommentControlProps) => {
     <Stack>
       <Group>
         {session && (
-          <ActionIcon onClick={() => setCommentOpen(!commentOpen)}>
-            {(!commentOpen && <IconMessageCircle />) || (
-              <IconMessageCircleOff />
-            )}
-          </ActionIcon>
+          <Button
+            variant="default"
+            onClick={() => setCommentOpen(!commentOpen)}
+            leftIcon={
+              (commentOpen && <IconMessageCircleOff size={18} />) || (
+                <IconMessageCircle size={18} />
+              )
+            }
+          >
+            Replies
+          </Button>
         )}
-        <ActionIcon>
-          <IconShare />
-        </ActionIcon>
+        <Button variant="default" leftIcon={<IconShare size={18} />}>
+          Share
+        </Button>
         {session && (
-          <ActionIcon>
-            <IconFlag3 />
-          </ActionIcon>
+          <Button variant="default" leftIcon={<IconFlag3 size={18} />}>
+            Report
+          </Button>
         )}
       </Group>
 

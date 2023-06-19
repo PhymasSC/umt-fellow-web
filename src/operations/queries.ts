@@ -286,6 +286,8 @@ export const GET_COMMENTS = gql`
 `
 
 export const GET_COMMENTS_BY_PARENT_ID = gql`
+  ${COMMENT_RECURSIVE_FRAGMENT}
+  
   query GetCommentsByParentId($parentId: String!){
 	getCommentsByParentId(parentId: $parentId) {
 	  ...CommentsRecursive

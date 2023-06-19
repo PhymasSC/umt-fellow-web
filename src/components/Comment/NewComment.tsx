@@ -16,6 +16,7 @@ import { notifications } from "@mantine/notifications";
 import { IconAlertTriangle } from "@tabler/icons";
 import { ADD_COMMENT } from "@operations/mutations";
 import { useMutation } from "@apollo/client";
+import { useEffect, useState } from "react";
 
 const useStyles = createStyles((theme) => ({
   comment: {
@@ -55,6 +56,7 @@ const Comment = (props: CommentProps) => {
   const { classes } = useStyles();
   const router = useRouter();
   const [addComment] = useMutation(ADD_COMMENT);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -62,7 +64,10 @@ const Comment = (props: CommentProps) => {
   };
 
   const form = useForm({
-    initialValues: { description: "", plainDescription: "" },
+    initialValues: {
+      description: "",
+      plainDescription: "",
+    },
   });
 
   const validateComment = (comment: string): boolean => {
@@ -81,6 +86,11 @@ const Comment = (props: CommentProps) => {
     form.setFieldValue("plainDescription", editor.getText());
   };
 
+  const clearContext = (editor: Editor) => {
+    editor.commands.setContent("");
+    editor.commands.clearContent();
+  };
+
   const submitComment = async () => {
     if (!validateComment(form.values.plainDescription)) {
       notifications.show({
@@ -92,6 +102,7 @@ const Comment = (props: CommentProps) => {
       return;
     }
 
+    setLoading(true);
     const response = await addComment({
       variables: {
         userId: props?.mutation?.userId,
@@ -100,9 +111,12 @@ const Comment = (props: CommentProps) => {
         parentId: props.mutation?.parentId || "",
       },
     });
+    form.setValues({
+      description: "",
+      plainDescription: "",
+    });
 
     if (response.data) {
-      form.setFieldValue("description", "");
       notifications.show({
         title: "Comment added successfully",
         message: "Your comment has been added successfully.",
@@ -110,6 +124,7 @@ const Comment = (props: CommentProps) => {
         icon: <IconAlertTriangle />,
       });
     }
+    setLoading(false);
   };
 
   return (
@@ -132,8 +147,9 @@ const Comment = (props: CommentProps) => {
                 content={form.values.description}
                 onUpdate={handleEditorUpdate}
                 placeholder="What's your thoughts?"
+                onClearContext={clearContext}
               />
-              <Button mt="md" onClick={submitComment}>
+              <Button mt="md" onClick={submitComment} loading={loading}>
                 Comment
               </Button>
             </>
