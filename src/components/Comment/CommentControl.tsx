@@ -35,8 +35,8 @@ const CommentControl = () => {
       {commentOpen && (
         <Comment
           author={{
-            name: "",
-            image: "",
+            name: session?.user.name || "",
+            image: session?.user.image || "",
           }}
           isReply
         />

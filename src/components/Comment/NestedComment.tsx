@@ -11,6 +11,7 @@ type Comment = {
   created_at: string;
   updated_at: string;
   replies: {
+    id: string;
     user: {
       id: string;
       name: string;
@@ -20,6 +21,7 @@ type Comment = {
     created_at: string;
     updated_at: string;
     replies: {
+      id: string;
       user: {
         id: string;
         name: string;
@@ -51,6 +53,7 @@ const NestedComment = (props: CommentProps) => {
       {comment.replies.map((child, index) => (
         <Card
           w="99%"
+          key={child.id}
           sx={(theme) => ({
             backgroundColor:
               theme.colorScheme === "dark"
@@ -60,7 +63,6 @@ const NestedComment = (props: CommentProps) => {
           withBorder
         >
           <SingleComment
-            key={index}
             id={child.user.id}
             name={child.user.name}
             image={child.user.image}
@@ -73,6 +75,7 @@ const NestedComment = (props: CommentProps) => {
             {child.replies.map((child, index) => (
               <Card
                 w="100%"
+                key={child.id}
                 sx={(theme) => ({
                   backgroundColor:
                     theme.colorScheme === "dark"
@@ -82,7 +85,6 @@ const NestedComment = (props: CommentProps) => {
                 withBorder
               >
                 <SingleComment
-                  key={index}
                   id={child.user.id}
                   name={child.user.name}
                   image={child.user.image}
