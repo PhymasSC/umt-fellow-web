@@ -51,6 +51,9 @@ export const typeDefs = gql`
 		avatar: String!
 		banner: String!
 		creatorId: User!
+		admin: User
+		moderators: [User]
+		members(limit: Int): [User]
 		isJoined: Boolean
 		created_at: DateTime
 		updated_at: DateTime

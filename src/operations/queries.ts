@@ -138,7 +138,7 @@ query GetCommunities($userId: String) {
 }
 `;
 
-export const GET_COMMUNITY_BY_ID = gql`
+export const GET_COMMUNITY_BY_ID = (limit?: number) => gql`
 query GetCommunityById($id: String!) {
 	getCommunityById(id: $id) {
 	  id
@@ -151,32 +151,22 @@ query GetCommunityById($id: String!) {
 	  creatorId {
 		id
 		name
-		email
-		emailVerified
-		password
-		isUMTMembership
-		sex
-		age
 		image
-		facebookLink
-		twitterLink
-		instagramLink
-		githubLink
-		dribbbleLink
-		youtubeLink
-		telegramLink
-		tiktokLink
-		redditLink
-		snapchatLink
-		about
-		faculty
-		major
-		year
-		cgpa
-		failedAttempts
-		nextAvailableLogin
-		created_at
-		updated_at
+	  }
+	  moderators {
+		id
+		name
+		image
+	  }
+	  admin {
+		id
+		name
+		image
+	  }
+	  members(limit: ${limit || 5}) {
+		id
+		name
+		image
 	  }
 	}
   }

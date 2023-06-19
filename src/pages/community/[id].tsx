@@ -18,7 +18,6 @@ import Link from "next/link";
 import { IconCake } from "@tabler/icons";
 import { useSession } from "next-auth/react";
 import {
-  GET_THREADS,
   GET_COMMUNITY_BY_ID,
   GET_THREADS_BY_COMMUNITY,
 } from "@operations/queries";
@@ -41,15 +40,47 @@ type CommunityProps = {
       name: string;
       image: string;
     };
+    admin: {
+      id: string;
+      name: string;
+      image: string;
+    };
+    moderators: {
+      id: string;
+      name: string;
+      image: string;
+    }[];
+    members: {
+      id: string;
+      name: string;
+      image: string;
+    }[];
   };
 };
+
+const Profile = ({
+  id,
+  name,
+  image,
+}: {
+  id: string;
+  name: string;
+  image: string;
+}) => {
+  return (
+    <Tooltip label={name}>
+      <span>
+        <Link href={`/profile/${id}`} passHref>
+          <Avatar component="a" src={image} alt={name} radius="xl" />
+        </Link>
+      </span>
+    </Tooltip>
+  );
+};
+
 const Community: NextPage<CommunityProps> = (props) => {
   const { data } = props;
-  const {
-    loading,
-    error,
-    data: threadsData,
-  } = useQuery(GET_THREADS_BY_COMMUNITY, {
+  const { loading, data: threadsData } = useQuery(GET_THREADS_BY_COMMUNITY, {
     variables: { communityId: props.data.id },
   });
   const { data: session } = useSession();
@@ -147,52 +178,42 @@ const Community: NextPage<CommunityProps> = (props) => {
             <Text>
               <Group>
                 <Text fw={800}>Created by:</Text>
-                <Tooltip label={data.creatorId.name}>
-                  <span>
-                    <Link href={`/profile/${data.creatorId.id}`} passHref>
-                      <Avatar
-                        component="a"
-                        src={data.creatorId.image}
-                        alt={data.creatorId.name}
-                        radius="xl"
-                      />
-                    </Link>
-                  </span>
-                </Tooltip>
+                <Profile {...data.creatorId} />
               </Group>
             </Text>
 
             <Text fw={800} mb={10}>
-              Admins:
+              <Group>
+                <Text fw={800}>Admins:</Text>
+                <Profile {...data.admin} />
+              </Group>
             </Text>
-            <Tooltip label={data.creatorId.name}>
-              <Avatar
-                src={data.creatorId.image}
-                alt={data.creatorId.name}
-                radius="xl"
-              />
-            </Tooltip>
-            <Text fw={800} mb={10}>
-              Moderators:
-            </Text>
-            {/* {COMMUNITIES[id - 1]?.members
-              ?.filter((member) => member.role === "Moderator")
-              .map((member) => (
-                <Tooltip key={member.id} label={member.name}>
-                  <Avatar src={member.avatar} alt={member.name} radius="xl" />
-                </Tooltip>
-              ))}
-            <Text fw={800} mb={10}>
-              Members:
-            </Text>
-            <Avatar.Group spacing="xs">
-              {COMMUNITIES[id - 1]?.members?.map((member) => (
-                <Tooltip key={member.id} label={member.name}>
-                  <Avatar src={member.avatar} alt={member.name} radius="xl" />
-                </Tooltip>
-              ))}
-              <Avatar radius="xl">+99</Avatar>
-            </Avatar.Group> */}
+
+            {data.moderators?.length > 0 && (
+              <>
+                <Text fw={800} mb={10}>
+                  Moderators:
+                </Text>
+                <Avatar.Group spacing="xs">
+                  {data.moderators?.map((moderator) => (
+                    <Profile {...moderator} />
+                  ))}
+                </Avatar.Group>
+              </>
+            )}
+
+            {data.members?.length > 0 && (
+              <>
+                <Text fw={800} mb={10}>
+                  Members:
+                </Text>
+                <Avatar.Group spacing="xs">
+                  {data.members?.map((member) => (
+                    <Profile {...member} />
+                  ))}
+                </Avatar.Group>
+              </>
+            )}
 
             <Group mt={20} align="center">
               <IconCake />
@@ -209,7 +230,7 @@ export async function getServerSideProps(context: { params: { id: string } }) {
   const id = context.params.id;
   try {
     let res = await client.query({
-      query: GET_COMMUNITY_BY_ID,
+      query: GET_COMMUNITY_BY_ID(5),
       variables: { id: id },
     });
 

@@ -332,6 +332,77 @@ export const resolvers = {
 				},
 			});
 			return user;
+		},
+		admin: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
+			const adminId = (await prisma.community.findFirst({
+				where: {
+					id: parent.id
+				},
+				include: {
+					CommunityMember: {
+						where: {
+							role: Role.ADMIN
+						}
+					}
+				}
+			}))?.CommunityMember?.[0]?.userId || ""
+
+			const admin = await prisma.user.findFirst({
+				where: {
+					id: adminId,
+				},
+			});
+			return admin;
+		},
+		moderators: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
+			const moderatorsId = (await prisma.community.findFirst({
+				where: {
+					id: parent.id
+				},
+				include: {
+					CommunityMember: {
+						where: {
+							role: Role.MODERATOR
+						}
+					}
+				}
+			}))?.CommunityMember?.map((member: any) => member.userId) || []
+
+			const moderators = await prisma.user.findMany({
+				where: {
+					id: {
+						in: moderatorsId
+					}
+				}
+			})
+
+			return moderators;
+		},
+		members: async (parent: any, { limit }: { limit?: number }, { prisma }: { prisma: PrismaType }) => {
+
+			const membersId = (await prisma.community.findFirst({
+				where: {
+					id: parent.id
+				},
+				include: {
+					CommunityMember: {
+						where: {
+							role: Role.USER
+						}
+					}
+				},
+				take: limit
+			}))?.CommunityMember?.map((member: any) => member.userId) || []
+
+			const members = await prisma.user.findMany({
+				where: {
+					id: {
+						in: membersId
+					}
+				}
+			})
+
+			return members;
 		}
 	},
 
