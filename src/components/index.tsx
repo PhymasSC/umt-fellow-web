@@ -15,4 +15,5 @@ export { CommunityList } from "@components/Community";
 export { Chatroom } from "@components/Message";
 export { default as Search } from "@components/Search";
 export { NewCommunity } from "@components/Community";
+export { NestedComment } from "@components/Comment";
 // Path: src\components\index.tsx

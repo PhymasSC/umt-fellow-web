@@ -103,6 +103,7 @@ const Comment = (props: CommentProps) => {
               <RichTextEditor
                 content={form.values.description}
                 onUpdate={handleEditorUpdate}
+                placeholder="What's your thoughts?"
               />
               <Button mt="md" onClick={submitComment}>
                 Comment

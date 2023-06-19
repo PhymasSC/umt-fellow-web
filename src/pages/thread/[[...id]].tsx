@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { Editor } from "@components/index";
+import { Editor, NestedComment } from "@components/index";
 import { GET_THREAD } from "@operations/queries";
 import SingleFeed from "@components/Thread/SingleThread";
 import Head from "next/head";
@@ -167,6 +167,7 @@ const ThreadPage: NextPage<ThreadPageProps> = (props) => {
               <Title>No Replies yet</Title>
             </Center>
             <Space h="xl" />
+            <NestedComment />
             {session && (
               <Comment
                 isReply

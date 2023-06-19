@@ -18,7 +18,6 @@ import ts from "highlight.js/lib/languages/typescript";
 import html from "highlight.js/lib/languages/xml";
 import java from "highlight.js/lib/languages/java";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import { UseFormReturnType } from "@mantine/form";
 import Placeholder from "@tiptap/extension-placeholder";
 
 lowlight.registerLanguage("css", css);
@@ -30,10 +29,11 @@ lowlight.registerLanguage("java", java);
 interface RTEProps {
   content: Content;
   onUpdate: any;
+  placeholder?: string;
 }
 
 const RTE = (props: RTEProps) => {
-  const { content, onUpdate } = props;
+  const { content, onUpdate, placeholder } = props;
   const youtubeUrlRef = useRef<HTMLInputElement>(null);
   const editor = useEditor({
     extensions: [
@@ -49,7 +49,7 @@ const RTE = (props: RTEProps) => {
         lowlight,
       }),
       Placeholder.configure({
-        placeholder: "Write your description here...",
+        placeholder: placeholder || "Write your description here...",
       }),
       Indent,
     ],
