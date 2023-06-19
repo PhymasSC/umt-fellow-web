@@ -135,9 +135,11 @@ const Header = ({ links }: HeaderResponsiveProps) => {
         </Link>
 
         <Group spacing={5} className={classes.links}>
+          {items}
+          <ThemeToggler />
+
           {session && (
             <>
-              {items}
               <Space w="xs" />
               <Menu shadow="md" trigger="hover">
                 <Menu.Target>
@@ -208,7 +210,7 @@ const Header = ({ links }: HeaderResponsiveProps) => {
                   >
                     Log Out
                   </Menu.Item>
-                  <Menu.Divider />
+                  {/* <Menu.Divider />
                   <Menu.Label>Personalize</Menu.Label>
                   <Menu.Item
                     icon={
@@ -221,7 +223,7 @@ const Header = ({ links }: HeaderResponsiveProps) => {
                     closeMenuOnClick={false}
                   >
                     <ThemeToggler compact />
-                  </Menu.Item>
+                  </Menu.Item> */}
                   <Menu.Divider />
                   <Menu.Label>Danger Zone</Menu.Label>
                   <Menu.Item
@@ -236,7 +238,6 @@ const Header = ({ links }: HeaderResponsiveProps) => {
           )}
           {!session && (
             <>
-              <ThemeToggler />
               <Space w="xs" />
               <Button
                 onClick={() => {
