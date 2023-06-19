@@ -28,7 +28,7 @@ const ContentLayout = (props: ContentLayoutProps) => {
           </VoteButton>
         </Grid.Col>
         <Grid.Col span={11}>
-          <Stack align="flex-start">
+          <Stack>
             <Group position="apart">{header}</Group>
 
             {children}
