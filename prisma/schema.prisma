@@ -110,6 +110,7 @@ model Community {
 }
 
 model CommunityMember {
+  id          String    @id @default(uuid())
   communityId String    @map("community_id")
   userId      String    @map("user_id")
   role        Role      @default(USER)
@@ -118,7 +119,7 @@ model CommunityMember {
   community   Community @relation(fields: [communityId], references: [id])
   user        User      @relation(fields: [userId], references: [id])
 
-  @@id([communityId, userId])
+  @@unique([communityId, userId])
   @@index([communityId])
   @@index([userId])
   @@map("community_members")

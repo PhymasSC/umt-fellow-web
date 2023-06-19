@@ -107,6 +107,15 @@ export const typeDefs = gql`
 		updated_at: DateTime
 	}
 
+	type Comment {
+		id: String!
+		thread: Thread!
+		user: User!
+		content: String!
+		created_at: DateTime
+		updated_at: DateTime
+	}
+	
 	enum VoteType {
 		UPVOTE
 		DOWNVOTE
@@ -228,6 +237,12 @@ export const typeDefs = gql`
 			communityId: String!
 			userId: String!
 		) : CommunityMemberResponse!
+
+		addComment(
+			threadId: String!
+			userId: String!
+			content: String!
+		): CommentResponse!
 	}
 
 	input Image {
@@ -274,5 +289,12 @@ export const typeDefs = gql`
 		success: Boolean!
 		message: String!
 		communityMember: CommunityMember
+	}
+
+	type CommentResponse {
+		code: Int!
+		success: Boolean!
+		message: String!
+		comment: Comment
 	}
 `;

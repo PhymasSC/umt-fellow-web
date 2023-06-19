@@ -21,12 +21,12 @@ import {
 } from "@mantine/core";
 import { IconChevronUp, IconChevronDown } from "@tabler/icons";
 import { Gallery, Typography } from "@components/index";
-import FeedSetting from "./FeedSetting";
+import FeedSetting from "./ThreadMenu";
 import { GET_THREAD_UPVOTES_AND_DOWNVOTES } from "@operations/queries";
 import { VOTE_THREAD } from "@operations/mutations";
-import { useStyles } from "./SingleFeed.style";
+import { useStyles } from "./SingleThread.style";
 import { MouseEvent } from "react";
-import SingleFeedSkeleton from "./SingleFeedSkeleton";
+import SingleFeedSkeleton from "./SingleThreadSkeleton";
 
 interface SingleFeedProps {
   feed?: {

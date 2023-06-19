@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { Editor } from "@components/index";
 import { GET_THREAD } from "@operations/queries";
-import SingleFeed from "@components/Feed/SingleFeed";
+import SingleFeed from "@components/Thread/SingleThread";
 import Head from "next/head";
 import {
   Avatar,

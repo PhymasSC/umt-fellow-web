@@ -20,8 +20,8 @@ import { useSession } from "next-auth/react";
 import { FileWithPath } from "@mantine/dropzone";
 import { useRouter } from "next/router";
 import { notifications } from "@mantine/notifications";
-import RTE from "./RichTextEditor";
-import CommunityPicker from "./CommunityPicker";
+import RTE from "../Form/RichTextEditor";
+import CommunityPicker from "../Form/Picker";
 
 interface Props {
   data?: DATA_TYPE;

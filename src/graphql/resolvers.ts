@@ -957,5 +957,43 @@ export const resolvers = {
 			}
 		},
 
+		addComment: async (
+			_: any,
+			{
+				threadId,
+				userId,
+				content,
+			}: {
+				threadId: string,
+				userId: string,
+				content: string,
+			},
+			{ prisma }: { prisma: PrismaType }
+		) => {
+			try {
+				const comment = await prisma.comment.create({
+					data: {
+						threadId,
+						userId,
+						content,
+					},
+				});
+
+				return {
+					code: 200,
+					success: true,
+					message: "Comment added successfully",
+					comment,
+				};
+			} catch (error: any) {
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "Comment addition failed",
+					comment: null,
+				};
+			}
+		},
+
 	},
 };

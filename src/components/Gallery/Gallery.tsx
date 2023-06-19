@@ -1,4 +1,4 @@
-import ImagePreview from "@components/Comment/ImagePreview";
+import ImagePreview from "@components/Thread/ImagePreview";
 import { Flex, Grid, SimpleGrid, Space, useMantineTheme } from "@mantine/core";
 
 type Props = {

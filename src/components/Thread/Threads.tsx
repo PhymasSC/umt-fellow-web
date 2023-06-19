@@ -1,7 +1,7 @@
 import { Card } from "@mantine/core";
-import SingleFeed from "./SingleFeed";
+import SingleFeed from "./SingleThread";
 import Link from "next/link";
-import SingleFeedSkeleton from "./SingleFeedSkeleton";
+import SingleFeedSkeleton from "./SingleThreadSkeleton";
 
 interface FeedProps {
   feeds: feed[];

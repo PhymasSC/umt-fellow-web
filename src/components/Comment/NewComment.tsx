@@ -7,7 +7,7 @@ import {
   Container,
   Button,
 } from "@mantine/core";
-import RichTextEditor from "./RichTextEditor";
+import RichTextEditor from "../Form/RichTextEditor";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "@mantine/form";

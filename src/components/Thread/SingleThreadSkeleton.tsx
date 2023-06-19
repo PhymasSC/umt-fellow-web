@@ -10,7 +10,7 @@ import {
   Spoiler,
 } from "@mantine/core";
 import { IconChevronUp, IconChevronDown } from "@tabler/icons";
-import { useStyles } from "./SingleFeed.style";
+import { useStyles } from "./SingleThread.style";
 const SingleFeedSkeleton = () => {
   const { classes } = useStyles();
 
