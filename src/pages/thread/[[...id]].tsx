@@ -199,6 +199,17 @@ const ThreadPage: NextPage<ThreadPageProps & CommentProps> = (props) => {
             <Space h="xl" />
             <Divider></Divider>
             <Space h="xl" />
+            {session && (
+              <Comment
+                isReply
+                author={{
+                  name: session?.user.name || "",
+                  image: session?.user.image || "",
+                }}
+              />
+            )}
+            <Space h="xl" />
+
             {comments.length > 0 ? (
               <Card withBorder>
                 {comments.map((comment) => (
@@ -211,16 +222,6 @@ const ThreadPage: NextPage<ThreadPageProps & CommentProps> = (props) => {
               <Center>
                 <Title>No comments yet</Title>
               </Center>
-            )}
-            <Space h="xl" />
-            {session && (
-              <Comment
-                isReply
-                author={{
-                  name: session?.user.name || "",
-                  image: session?.user.image || "",
-                }}
-              />
             )}
           </Grid.Col>
         </Grid>

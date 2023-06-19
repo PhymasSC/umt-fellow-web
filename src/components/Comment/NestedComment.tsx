@@ -1,3 +1,4 @@
+import { Card } from "@mantine/core";
 import { SingleComment } from ".";
 
 type Comment = {
@@ -39,24 +40,46 @@ const NestedComment = (props: CommentProps) => {
     >
       {comment.content}
       {comment.replies.map((child, index) => (
-        <SingleComment
-          key={index}
-          id={child.user.id}
-          name={child.user.name}
-          image={child.user.image}
+        <Card
+          w="99%"
+          sx={(theme) => ({
+            backgroundColor:
+              theme.colorScheme === "dark"
+                ? `${theme.colors.dark[9]}22`
+                : `${theme.colors.gray[0]}22`,
+          })}
+          withBorder
         >
-          {child.content}
-          {child.replies.map((child, index) => (
-            <SingleComment
-              key={index}
-              id={child.user.id}
-              name={child.user.name}
-              image={child.user.image}
-            >
-              {child.content}
-            </SingleComment>
-          ))}
-        </SingleComment>
+          <SingleComment
+            key={index}
+            id={child.user.id}
+            name={child.user.name}
+            image={child.user.image}
+          >
+            {child.content}
+            {child.replies.map((child, index) => (
+              <Card
+                w="100%"
+                sx={(theme) => ({
+                  backgroundColor:
+                    theme.colorScheme === "dark"
+                      ? `${theme.colors.dark[9]}22`
+                      : `${theme.colors.gray[0]}22`,
+                })}
+                withBorder
+              >
+                <SingleComment
+                  key={index}
+                  id={child.user.id}
+                  name={child.user.name}
+                  image={child.user.image}
+                >
+                  {child.content}
+                </SingleComment>
+              </Card>
+            ))}
+          </SingleComment>
+        </Card>
       ))}
     </SingleComment>
   );
