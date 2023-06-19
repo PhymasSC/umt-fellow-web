@@ -1,11 +1,38 @@
 import { MessageList, Chatroom } from "@components/index";
-import { Title, Paper, Flex, Grid, useMantineTheme } from "@mantine/core";
+import {
+  Title,
+  Paper,
+  Flex,
+  Grid,
+  useMantineTheme,
+  AutocompleteItem,
+} from "@mantine/core";
 import { useRouter } from "next/router";
 import { Search } from "@components/index";
+import { useSession } from "next-auth/react";
+
 const Message = () => {
   const router = useRouter();
   const { id } = router.query;
+  const { data: session } = useSession();
   const theme = useMantineTheme();
+
+  const selectRecipient = (item: AutocompleteItem) => {
+    fetch("/api/messages/create-channel", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        senderId: session?.user.id,
+        recipientId: item.id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        router.push(`/message/${data.channelId}`);
+      });
+  };
 
   return (
     <Grid h="calc(100vh - 5rem)" grow>
@@ -30,7 +57,7 @@ const Message = () => {
             <Title order={2} fz="md">
               Messages
             </Title>
-            <Search size="sm" />
+            <Search size="sm" onItemSubmit={selectRecipient} />
             <MessageList />
           </Flex>
         </Paper>

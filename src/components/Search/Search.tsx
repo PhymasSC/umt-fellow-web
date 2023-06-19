@@ -6,19 +6,19 @@ import {
   Text,
   TextInput,
   Loader,
+  AutocompleteItem,
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconMoodCry, IconSearch } from "@tabler/icons";
 import { useQuery } from "@apollo/client";
 import { GET_USERS_BY_NAME } from "@operations/queries";
 import { forwardRef, useState } from "react";
-import MessageButton from "@components/Message/MessageButton";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 
 type SearchProps = {
+  onItemSubmit?: (item: AutocompleteItem) => void;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
+  limit?: number;
 } & React.ComponentPropsWithoutRef<typeof TextInput>;
 
 interface ItemProps extends SelectItemProps {
@@ -28,13 +28,11 @@ interface ItemProps extends SelectItemProps {
   email: string;
 }
 const Search = (props: SearchProps) => {
-  const { placeholder } = props;
+  const { placeholder, onItemSubmit, limit = 5 } = props;
   const [value, setValue] = useState("");
   const debouncedValue = useDebouncedValue(value, 250);
-  const router = useRouter();
-  const { data: session } = useSession();
   const { loading, data, refetch } = useQuery(GET_USERS_BY_NAME("id"), {
-    variables: { name: debouncedValue[0], limit: 5 },
+    variables: { name: debouncedValue[0], limit: limit },
   });
 
   const AutoCompleteItem = forwardRef<HTMLDivElement, ItemProps>(
@@ -58,12 +56,12 @@ const Search = (props: SearchProps) => {
   function buildOptions(item: { id: string; name: string; image: string }) {
     return {
       ...item,
-      value: item.id,
+      value: item.name,
     };
   }
   return (
     <Autocomplete
-      limit={5}
+      limit={limit}
       size={props.size || "md"}
       icon={
         <IconSearch
@@ -80,26 +78,15 @@ const Search = (props: SearchProps) => {
       value={value}
       itemComponent={AutoCompleteItem}
       onItemSubmit={(item) => {
-        fetch("/api/messages/create-channel", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            senderId: session?.user.id,
-            recipientId: item.id,
-          }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            router.push(`/message/${data.channelId}`);
-          });
-        setValue("");
+        if (onItemSubmit) {
+          onItemSubmit(item);
+          setValue("");
+        }
       }}
       filter={(value, item) => true}
       onChange={(val) => {
         setValue(val);
-        refetch({ name: debouncedValue[0], limit: 5 });
+        refetch({ name: debouncedValue[0], limit });
       }}
       rightSection={loading && <Loader size="xs" />}
       nothingFound={

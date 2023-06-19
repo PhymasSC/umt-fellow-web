@@ -3,6 +3,8 @@ import { TextInput, Button, Textarea } from "@mantine/core";
 import { IconTrash } from "@tabler/icons";
 import { UPDATE_COMMUNITY } from "@operations/mutations";
 import ImageInput from "@components/Form/ImageInput";
+import List from "./../Form/List";
+import Search from "@components/Search";
 
 type data = {
   data: {
@@ -80,6 +82,22 @@ const CommunitySettingForm = (props: data) => {
             placeholder={description || "Community Description"}
             value={description}
           />
+        }
+      />
+      <FormLayout
+        layout={"vertical"}
+        label={"Moderators"}
+        description={
+          "Add or remove moderators from the community. Maximum 5 mods."
+        }
+        input={
+          <>
+            <Search
+              onChange={(val) => {
+                console.log(val);
+              }}
+            />
+          </>
         }
       />
 
