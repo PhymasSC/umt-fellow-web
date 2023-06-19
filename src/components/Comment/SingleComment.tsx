@@ -1,22 +1,24 @@
 import { ContentLayout } from "@components/Layout";
 import { Button, Group, Avatar, Space, Text, Tooltip } from "@mantine/core";
 import Link from "next/link";
-
+import dayjs from "dayjs";
 type SingleCommentProps = {
   id: string;
   name: string;
   image: string;
   children: React.ReactNode;
+  created_at: string;
+  updated_at: string;
 };
 
 const SingleComment = (props: SingleCommentProps) => {
-  const { id, name, image, children } = props;
+  const { id, name, image, children, created_at, updated_at } = props;
 
   return (
     <ContentLayout
       vote={<>1</>}
       header={
-        <>
+        <Group spacing="xs">
           <Link href={`/profile/${id}`} passHref>
             <Button
               component="a"
@@ -28,28 +30,27 @@ const SingleComment = (props: SingleCommentProps) => {
               <Group>
                 <Avatar src={image} radius="xl" alt="Avatar" />
                 <Text weight="700">{name}</Text>
-                <Space w="xs" />
               </Group>
             </Button>
           </Link>
+          ·
+          <Tooltip
+            multiline
+            label={`Created at ${dayjs(new Date(created_at)).toDate()}`}
+            withArrow
+            position="top"
+          >
+            <Text color="dimmed">
+              {created_at !== updated_at && "Edited "}
+              {dayjs(new Date(updated_at)).fromNow()}
+            </Text>
+          </Tooltip>
           <Group>
-            <Tooltip
-              multiline
-              label={`Created at a`}
-              // label={`Created at ${dayjs(new Date(created_at)).toDate()}`}
-              withArrow
-              position="top"
-            >
-              <Text color="dimmed">
-                {/* {created_at !== updated_at && "Edited "}
-                    {dayjs(new Date(updated_at)).fromNow()} */}
-              </Text>
-            </Tooltip>
             {/* <FeedSetting author={author} feedId={feed.id} /> */}
           </Group>
-        </>
+        </Group>
       }
-      children={children}
+      children={<>{children}</>}
     />
   );
 };

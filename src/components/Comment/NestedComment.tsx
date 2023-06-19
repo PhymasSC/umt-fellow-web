@@ -1,5 +1,5 @@
 import { Card } from "@mantine/core";
-import { SingleComment } from ".";
+import { CommentControl, SingleComment } from ".";
 
 type Comment = {
   user: {
@@ -8,6 +8,8 @@ type Comment = {
     image: string;
   };
   content: string;
+  created_at: string;
+  updated_at: string;
   replies: {
     user: {
       id: string;
@@ -15,6 +17,8 @@ type Comment = {
       image: string;
     };
     content: string;
+    created_at: string;
+    updated_at: string;
     replies: {
       user: {
         id: string;
@@ -22,6 +26,8 @@ type Comment = {
         image: string;
       };
       content: string;
+      created_at: string;
+      updated_at: string;
     }[];
   }[];
 };
@@ -37,8 +43,11 @@ const NestedComment = (props: CommentProps) => {
       id={comment.user.id}
       name={comment.user.name}
       image={comment.user.image}
+      created_at={comment.created_at}
+      updated_at={comment.updated_at}
     >
       {comment.content}
+      <CommentControl />
       {comment.replies.map((child, index) => (
         <Card
           w="99%"
@@ -55,8 +64,12 @@ const NestedComment = (props: CommentProps) => {
             id={child.user.id}
             name={child.user.name}
             image={child.user.image}
+            created_at={child.created_at}
+            updated_at={child.updated_at}
           >
             {child.content}
+            <CommentControl />
+
             {child.replies.map((child, index) => (
               <Card
                 w="100%"
@@ -73,8 +86,11 @@ const NestedComment = (props: CommentProps) => {
                   id={child.user.id}
                   name={child.user.name}
                   image={child.user.image}
+                  created_at={child.created_at}
+                  updated_at={child.updated_at}
                 >
                   {child.content}
+                  <CommentControl />
                 </SingleComment>
               </Card>
             ))}
