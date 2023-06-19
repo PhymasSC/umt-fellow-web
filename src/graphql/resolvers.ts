@@ -160,7 +160,12 @@ export const resolvers = {
 		getCommunitiesOwnedByUser: async (_: any, { userId }: { userId: string }, { prisma }: { prisma: PrismaType }) => {
 			const communities = await prisma.community.findMany({
 				where: {
-					creatorId: userId,
+					CommunityMember: {
+						every: {
+							userId,
+							role: Role.ADMIN,
+						}
+					}
 				},
 			});
 			return communities;
