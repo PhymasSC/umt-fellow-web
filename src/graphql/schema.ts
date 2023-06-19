@@ -113,7 +113,7 @@ export const typeDefs = gql`
 		user: User!
 		content: String!
 		parentId: String
-		children: [Comment]
+		replies: [Comment]
 		created_at: DateTime
 		updated_at: DateTime
 	}

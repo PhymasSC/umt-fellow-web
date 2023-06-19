@@ -10,7 +10,6 @@ import {
   Avatar,
   Text,
   Group,
-  ActionIcon,
   Grid,
   Spoiler,
   Space,
@@ -19,7 +18,6 @@ import {
   Button,
   TypographyStylesProvider,
 } from "@mantine/core";
-import { IconChevronUp, IconChevronDown } from "@tabler/icons";
 import { Gallery, Typography } from "@components/index";
 import FeedSetting from "./ThreadMenu";
 import { GET_THREAD_UPVOTES_AND_DOWNVOTES } from "@operations/queries";
@@ -27,6 +25,7 @@ import { VOTE_THREAD } from "@operations/mutations";
 import { useStyles } from "./SingleThread.style";
 import { MouseEvent } from "react";
 import SingleFeedSkeleton from "./SingleThreadSkeleton";
+import { VoteButton } from "@components/Button";
 
 interface SingleFeedProps {
   feed?: {
@@ -99,27 +98,20 @@ const SingleFeed: React.FC<SingleFeedProps> = ({ feed, loading }) => {
     <Container className={classes.container} fluid>
       <Grid>
         <Grid.Col span={1}>
-          <Stack align="center" spacing="xs">
-            <ActionIcon
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleVote("UPVOTE");
-              }}
-            >
-              <IconChevronUp />
-            </ActionIcon>
+          <VoteButton
+            onUpvote={(e: MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleVote("UPVOTE");
+            }}
+            onDownvote={(e: MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleVote("DOWNVOTE");
+            }}
+          >
             <Text>{formatter.format(votes)}</Text>
-            <ActionIcon
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleVote("DOWNVOTE");
-              }}
-            >
-              <IconChevronDown />
-            </ActionIcon>
-          </Stack>
+          </VoteButton>
         </Grid.Col>
         <Grid.Col span={11}>
           <Stack>

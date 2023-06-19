@@ -1,6 +1,6 @@
 import { NextPage } from "next";
-import { Editor, NestedComment } from "@components/index";
-import { GET_THREAD } from "@operations/queries";
+import { Editor } from "@components/index";
+import { GET_COMMENTS, GET_THREAD } from "@operations/queries";
 import SingleFeed from "@components/Thread/SingleThread";
 import Head from "next/head";
 import {
@@ -23,6 +23,7 @@ import { useSession } from "next-auth/react";
 import { client } from "@lib/apollo-client";
 import MessageButton from "@components/Message/MessageButton";
 import { IconMessageCircle } from "@tabler/icons";
+import { NestedComment } from "@components/Comment";
 
 type ThreadPageProps = {
   getThreadById: {
@@ -46,13 +47,48 @@ type ThreadPageProps = {
     updated_at: string;
   };
 };
-const ThreadPage: NextPage<ThreadPageProps> = (props) => {
+
+type CommentProps = {
+  getComments: {
+    id: string;
+    user: {
+      id: string;
+      name: string;
+      image: string;
+    };
+    content: string;
+    created_at: string;
+    updated_at: string;
+    replies: {
+      id: string;
+      user: {
+        id: string;
+        name: string;
+        image: string;
+      };
+      content: string;
+      created_at: string;
+      updated_at: string;
+      replies: {
+        id: string;
+        user: {
+          id: string;
+          name: string;
+          image: string;
+        };
+        content: string;
+        created_at: string;
+        updated_at: string;
+      }[];
+    }[];
+  }[];
+};
+const ThreadPage: NextPage<ThreadPageProps & CommentProps> = (props) => {
   const router = useRouter();
   const { id, edit } = router.query;
   const { data: session } = useSession();
-  const { getThreadById: data } = props;
-  console.log(data);
-
+  const { getThreadById: data, getComments: comments } = props;
+  console.log(comments);
   if (id === undefined) {
     return (
       <Container>
@@ -163,11 +199,14 @@ const ThreadPage: NextPage<ThreadPageProps> = (props) => {
             <Space h="xl" />
             <Divider></Divider>
             <Space h="xl" />
-            <Center>
-              <Title>No Replies yet</Title>
-            </Center>
+            {comments.length > 0 ? (
+              comments.map((comment) => <NestedComment data={comment} />)
+            ) : (
+              <Center>
+                <Title>No comments yet</Title>
+              </Center>
+            )}
             <Space h="xl" />
-            <NestedComment />
             {session && (
               <Comment
                 isReply
@@ -178,7 +217,6 @@ const ThreadPage: NextPage<ThreadPageProps> = (props) => {
               />
             )}
           </Grid.Col>
-          <Grid.Col xs={12} md={4}></Grid.Col>
         </Grid>
       </Container>
     </>
@@ -198,8 +236,12 @@ export async function getServerSideProps(context: { params: { id: string } }) {
       query: GET_THREAD,
       variables: { id },
     });
+    const { data: comments } = await client.query({
+      query: GET_COMMENTS,
+      variables: { threadId: id },
+    });
     return {
-      props: data,
+      props: { ...data, ...comments },
     };
   } catch (error) {
     console.log(error);

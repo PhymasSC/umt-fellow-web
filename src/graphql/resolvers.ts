@@ -258,6 +258,7 @@ export const resolvers = {
 					created_at: "desc"
 				}
 			});
+			console.log("test")
 			return comments;
 		},
 		getCommentsByParentId: async (
@@ -273,7 +274,6 @@ export const resolvers = {
 					created_at: "desc"
 				}
 			});
-			console.log(comments)
 			return comments;
 		}
 	},
@@ -434,7 +434,7 @@ export const resolvers = {
 			});
 			return thread;
 		},
-		children: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
+		replies: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
 			const children = await prisma.comment.findMany({
 				where: {
 					parentId: parent.id,

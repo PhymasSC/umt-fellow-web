@@ -244,3 +244,51 @@ query GetMessages($channelId: String!) {
 	}
   }
   `
+
+const COMMENT_FRAGMENT = gql`
+  fragment CommentsField on Comment {
+	id
+	user{
+	  id
+	  name
+	  image
+	}
+	content
+	created_at
+	updated_at
+  }
+`
+
+const COMMENT_RECURSIVE_FRAGMENT = gql`
+  ${COMMENT_FRAGMENT}
+  fragment CommentsRecursive on Comment {
+	...CommentsField
+	replies {
+	  ...CommentsField
+	  replies{
+		...CommentsField
+		replies {
+		  ...CommentsField
+		}
+	  }
+	}
+  }
+`;
+
+export const GET_COMMENTS = gql`
+  ${COMMENT_RECURSIVE_FRAGMENT}
+
+  query GetComments($threadId: String!) {
+	getComments(threadId: $threadId) {
+	  ...CommentsRecursive
+	}
+  }
+`
+
+export const GET_COMMENTS_BY_PARENT_ID = gql`
+  query GetCommentsByParentId($parentId: String!){
+	getCommentsByParentId(parentId: $parentId) {
+	  ...CommentsRecursive
+	}
+  }
+`
