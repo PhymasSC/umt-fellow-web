@@ -200,9 +200,13 @@ const ThreadPage: NextPage<ThreadPageProps & CommentProps> = (props) => {
             <Divider></Divider>
             <Space h="xl" />
             {comments.length > 0 ? (
-              comments.map((comment) => (
-                <NestedComment key={comment.id} data={comment} />
-              ))
+              <Card withBorder>
+                {comments.map((comment) => (
+                  <Card.Section withBorder>
+                    <NestedComment key={comment.id} data={comment} />
+                  </Card.Section>
+                ))}
+              </Card>
             ) : (
               <Center>
                 <Title>No comments yet</Title>
