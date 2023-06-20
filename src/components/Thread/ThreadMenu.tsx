@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { ActionIcon, CopyButton, Group, Menu } from "@mantine/core";
+import { ActionIcon, Anchor, CopyButton, Group, Menu } from "@mantine/core";
 import { DELETE_THREAD } from "@operations/mutations";
 import {
   IconCheck,
@@ -42,13 +42,7 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author, feedId }) => {
   };
 
   return (
-    <Group
-      position="center"
-      onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-    >
+    <Group position="center">
       <Menu>
         <Menu.Target>
           <ActionIcon>
@@ -75,10 +69,7 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author, feedId }) => {
               <Menu.Divider />
             </>
           )}
-          <CopyButton
-            value={router.asPath.split("/")[1] + "/thread/" + feedId}
-            timeout={2000}
-          >
+          <CopyButton value={router.asPath} timeout={2000}>
             {({ copied, copy }) => (
               <Menu.Item
                 icon={copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
@@ -90,6 +81,18 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author, feedId }) => {
               </Menu.Item>
             )}
           </CopyButton>
+
+          <Menu.Item
+            onClick={() =>
+              window.open(
+                `https://www.facebook.com/sharer.php?u=${router.asPath}`,
+                "_blank"
+              )
+            }
+          >
+            Share to Facebook
+          </Menu.Item>
+
           <Menu.Item color="red" icon={<IconFlag size={16} />}>
             Report
           </Menu.Item>
