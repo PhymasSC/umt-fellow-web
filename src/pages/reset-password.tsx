@@ -90,24 +90,23 @@ const ResetPassword: NextPage = () => {
 
     setLoading(true);
 
-    const response = await (
-      await fetch("/api/reset-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token, password: form.values.newPassword }),
-      })
-    ).json();
+    const result = await fetch("/api/reset-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token, password: form.values.newPassword }),
+    });
 
+    const response = await result.json();
     if (response.err) {
       form.setErrors({
         newPassword:
           "The token has expired. Please request a new reset password link to regain access to your account.",
       });
     }
-
     setLoading(false);
+    router.push("/login");
   };
 
   return (

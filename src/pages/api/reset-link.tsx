@@ -25,7 +25,6 @@ export default async function handler(
       },
     },
   });
-
   const hasAccount = !!account;
   const isSocialAccount = !!account?.account[0]?.id;
 
@@ -37,7 +36,7 @@ export default async function handler(
   const token = crypto.randomBytes(20).toString("hex");
   const expires = new Date(Date.now() + 86400000);
 
-  await prisma.resetToken.create({
+  const result = await prisma.resetToken.create({
     data: {
       token,
       expiresAt: expires,

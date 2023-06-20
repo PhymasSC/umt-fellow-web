@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import bcrypt from "bcrypt";
+import bcrypt, { hash } from "bcrypt";
 import prisma from "@lib/prisma";
 
 export default async function handler(
@@ -25,9 +25,8 @@ export default async function handler(
     res.status(200).json({ err: "expired" });
     return;
   }
-
   const hashedPassword = await bcrypt.hash(password, saltRounds);
-  await prisma.user.update({
+  const result = await prisma.user.update({
     where: {
       id: response?.userId,
     },
@@ -42,5 +41,5 @@ export default async function handler(
     },
   });
 
-  res.redirect("/login");
+  res.status(200).json({ message: "success" });
 }
