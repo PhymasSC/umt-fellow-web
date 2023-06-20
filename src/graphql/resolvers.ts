@@ -523,6 +523,17 @@ export const resolvers = {
 		}
 	},
 
+	CommunityRules: {
+		community: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
+			const community = await prisma.community.findFirst({
+				where: {
+					id: parent.community,
+				},
+			});
+			return community;
+		}
+	},
+
 	Mutation: {
 		addUser: async (
 			_: any,
@@ -1092,6 +1103,55 @@ export const resolvers = {
 				};
 			}
 		},
+
+		addCommunityRule: async (
+			_: any,
+			{
+				communityId,
+				rule,
+			}: {
+				communityId: string,
+				rule: {
+					rule: string,
+					description: string,
+				},
+			},
+			{ prisma }: { prisma: PrismaType }
+		) => {
+			try {
+				const communityRulesCount = await prisma.communityRules.count({
+					where: {
+						communityId,
+					},
+				});
+
+				if (communityRulesCount >= 10) throw new Error("Maximum 10 rules allowed")
+
+				const communityRule = await prisma.communityRules.create({
+					data: ({
+						communityId,
+						rule: rule.rule,
+						description: rule.description,
+					}),
+				});
+
+
+				return {
+					code: 200,
+					success: true,
+					message: "Rules added successfully",
+					communityRules: communityRule
+				};
+			} catch (error: any) {
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "Rules addition failed",
+					communityRules: null,
+				};
+			}
+		},
+
 
 		addComment: async (
 			_: any,

@@ -67,6 +67,15 @@ export const typeDefs = gql`
 		updated_at: DateTime
 	}
 
+	type CommunityRules {
+		id: String!
+		community: Community!
+		rule: String!
+		description: String!
+		created_at: DateTime
+		updated_at: DateTime
+	}
+
 	type Thread {
 		id: String!
 		title: String!
@@ -247,6 +256,12 @@ export const typeDefs = gql`
 			userId: String!
 		) : CommunityMemberResponse!
 
+		addCommunityRule (
+			communityId: String!
+			rule: Rule!
+		) : CommunityRulesResponse!
+		
+
 		addComment(
 			threadId: String!
 			userId: String!
@@ -262,6 +277,11 @@ export const typeDefs = gql`
 		url: String
 		isExisting: Boolean!
 		isDeleted: Boolean!
+	}
+
+	input Rule{
+		rule: String!
+		description: String!
 	}
 
 	type UserResponse {
@@ -301,6 +321,13 @@ export const typeDefs = gql`
 		communityMember: CommunityMember
 	}
 
+	type CommunityRulesResponse {
+		code: Int!
+		success: Boolean!
+		message: String!
+		communityRules: CommunityRules
+	}
+	
 	type CommentResponse {
 		code: Int!
 		success: Boolean!
