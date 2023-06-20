@@ -1,9 +1,7 @@
 import { Card, Container, Tabs, Text, Title } from "@mantine/core";
 import { useRouter } from "next/router";
 import AccountSetting from "./AccountSetting";
-import ChatSetting from "./ChatSetting";
 import CommunitySetting from "./CommunitySetting";
-import NotificationSetting from "./NotificationSetting";
 
 interface Setting {
   setting: {
@@ -26,7 +24,12 @@ interface SettingProps {
   }[];
 }
 
-const tabs = ["Account", "Notification", "Community", "Chat & Messaging"];
+const tabs = [
+  "Account",
+  // "Notification",
+  "Community",
+  // "Chat & Messaging"
+];
 
 const Setting: React.FC<Setting> = (props) => {
   const router = useRouter();
@@ -59,9 +62,9 @@ const Setting: React.FC<Setting> = (props) => {
                     {value.description}
                   </Text>
                   {key === "accountSettings" && <AccountSetting />}
-                  {key === "notificationSettings" && <NotificationSetting />}
+                  {/* {key === "notificationSettings" && <NotificationSetting />} */}
                   {key === "communitySettings" && <CommunitySetting />}
-                  {key === "chatSettings" && <ChatSetting />}
+                  {/* {key === "chatSettings" && <ChatSetting />} */}
                 </Tabs.Panel>
               );
             })}
