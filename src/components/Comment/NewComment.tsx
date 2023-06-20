@@ -147,7 +147,6 @@ const Comment = (props: CommentProps) => {
                 content={form.values.description}
                 onUpdate={handleEditorUpdate}
                 placeholder="What's your thoughts?"
-                onClearContext={clearContext}
               />
               <Button mt="md" onClick={submitComment} loading={loading}>
                 Comment

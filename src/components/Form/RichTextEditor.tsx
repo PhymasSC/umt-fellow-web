@@ -30,11 +30,10 @@ interface RTEProps {
   content: Content;
   onUpdate: any;
   placeholder?: string;
-  onClearContext?: any;
 }
 
 const RTE = (props: RTEProps) => {
-  const { content, onUpdate, placeholder, onClearContext } = props;
+  const { content, onUpdate, placeholder } = props;
   const youtubeUrlRef = useRef<HTMLInputElement>(null);
   const editor = useEditor({
     extensions: [
