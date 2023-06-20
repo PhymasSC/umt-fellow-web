@@ -313,6 +313,25 @@ mutation Mutation($communityId: String!, $rules: Rule!) {
   }
 `;
 
+export const UPDATE_COMMUNITY_RULE = gql`
+mutation UpdateCommunityRule($ruleId: String!, $rule: Rule!) {
+	updateCommunityRule(ruleId: $ruleId, rule: $rule) {
+	  success
+	  message
+	}
+  }
+  `;
+
+
+export const DELETE_COMMUNITY_RULE = gql`
+  mutation DeleteCommunityRule($ruleId: String!) {
+	deleteCommunityRule(ruleId: $ruleId) {
+	  success
+	  message
+	}
+  }
+`;
+
 // Comment
 export const ADD_COMMENT = gql`
 mutation Mutation($threadId: String!, $userId: String!, $content: String!, $parentId: String) {

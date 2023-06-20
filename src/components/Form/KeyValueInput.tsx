@@ -9,7 +9,11 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import { ADD_COMMUNITY_RULE } from "@operations/mutations";
+import {
+  ADD_COMMUNITY_RULE,
+  DELETE_COMMUNITY_RULE,
+  UPDATE_COMMUNITY_RULE,
+} from "@operations/mutations";
 import {
   IconAlertCircle,
   IconCheck,
@@ -35,9 +39,13 @@ const Component = (props: {
   _value: string;
   communityId: string;
   ruleId: string;
+  onCreate: (ruleId: string, rule: string, description: string) => void;
+  onDelete: (ruleId: string) => void;
 }) => {
   const [ruleId, setRuleId] = useState(props.ruleId);
   const [addRule] = useMutation(ADD_COMMUNITY_RULE);
+  const [updateRule] = useMutation(UPDATE_COMMUNITY_RULE);
+  const [deleteRule] = useMutation(DELETE_COMMUNITY_RULE);
   const form = useForm({
     initialValues: {
       rule: props._key,
@@ -73,6 +81,22 @@ const Component = (props: {
               color="blue"
               onClick={async () => {
                 if (ruleId !== "") {
+                  const res = await updateRule({
+                    variables: {
+                      ruleId: ruleId,
+                      rules: {
+                        rule: form.values.rule,
+                        description: form.values.description,
+                      },
+                    },
+                  });
+                  notifications.show({
+                    title: "Rule updated",
+                    message: "Rule updated successfully",
+                    color: "green",
+                    icon: <IconCheck />,
+                  });
+
                   return;
                 }
                 const res = await addRule({
@@ -84,23 +108,42 @@ const Component = (props: {
                     },
                   },
                 });
-                setRuleId(res.data.addCommunityRule.id);
+                props.onCreate(
+                  res.data.addCommunityRule.communityRules.id,
+                  form.values.rule,
+                  form.values.description
+                );
+                setRuleId(res.data.addCommunityRule.communityRules.id);
                 notifications.show({
                   title: "Rule added",
                   message: "Rule added successfully",
-                  color: "blue",
+                  color: "green",
                   icon: <IconCheck />,
                 });
               }}
             >
               <IconEditCircle />
             </ActionIcon>
-            <ActionIcon color="red">
+            <ActionIcon
+              color="red"
+              onClick={async () => {
+                if (ruleId === "") return;
+                const res = await deleteRule({
+                  variables: {
+                    ruleId: ruleId,
+                  },
+                });
+                notifications.show({
+                  title: "Rule deleted",
+                  message: "Rule deleted successfully",
+                  color: "green",
+                  icon: <IconCheck />,
+                });
+                props.onDelete(ruleId);
+              }}
+            >
               <IconTrash />
             </ActionIcon>
-            {/* <ActionIcon onClick={remove}>
-              <IconCircleMinus />
-            </ActionIcon> */}
           </Center>
         </Grid.Col>
       </Grid>
@@ -122,6 +165,15 @@ const KeyValueInput: React.FC<KeyValueInputProps> = (props) => {
         color: "orange",
         icon: <IconAlertCircle />,
       });
+
+    if (items.filter((i) => i.id === "").length > 0)
+      return notifications.show({
+        title: "Empty rule",
+        message: "Please fill the empty rule",
+        color: "orange",
+        icon: <IconAlertCircle />,
+      });
+
     return setItems((prev) => [
       ...prev,
       {
@@ -142,6 +194,27 @@ const KeyValueInput: React.FC<KeyValueInputProps> = (props) => {
             _key={item.rule}
             _value={item.description}
             communityId={props.communityId}
+            onCreate={(ruleId, rule, description) => {
+              setItems((prev) =>
+                prev.map((i) => {
+                  if (i.id === "") {
+                    console.log("found");
+                    return {
+                      id: ruleId,
+                      rule: rule,
+                      description: description,
+                    };
+                  }
+                  return i;
+                })
+              );
+            }}
+            onDelete={(ruleId) => {
+              setItems((prev) => prev.filter((i) => i.id !== ruleId));
+
+              if (items.length === 1)
+                setItems([{ id: "", rule: "", description: "" }]);
+            }}
           />
         );
       })}

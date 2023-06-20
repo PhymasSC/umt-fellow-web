@@ -1163,6 +1163,78 @@ export const resolvers = {
 			}
 		},
 
+		updateCommunityRule: async (
+			_: any,
+			{
+				ruleId,
+				rule,
+			}: {
+				ruleId: string,
+				rule: {
+					rule: string,
+					description: string,
+				},
+			},
+			{ prisma }: { prisma: PrismaType }
+		) => {
+			try {
+				const communityRule = await prisma.communityRules.update({
+					where: {
+						id: ruleId,
+					},
+					data: ({
+						rule: rule.rule,
+						description: rule.description,
+					}),
+				});
+				return {
+					code: 200,
+					success: true,
+					message: "Rule updated successfully",
+					communityRules: communityRule
+				};
+			} catch (error: any) {
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "Rule update failed",
+					communityRules: null,
+				};
+			}
+		},
+
+		deleteCommunityRule: async (
+			_: any,
+			{
+				ruleId,
+			}: {
+				ruleId: string,
+			},
+			{ prisma }: { prisma: PrismaType }
+		) => {
+
+			try {
+				const communityRule = await prisma.communityRules.delete({
+					where: {
+						id: ruleId,
+					},
+				});
+				return {
+					code: 200,
+					success: true,
+					message: "Rule deleted successfully",
+					communityRules: communityRule
+				};
+			} catch (error: any) {
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "Rule deletion failed",
+					communityRules: null,
+				};
+			}
+		},
+
 
 		addComment: async (
 			_: any,

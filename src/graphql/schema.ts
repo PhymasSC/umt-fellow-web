@@ -173,7 +173,7 @@ export const typeDefs = gql`
 		getCommunityMember(communityId: String!, userId: String!): CommunityMember!
 
 		getCommunityRules(communityId: String!): [CommunityRules]!
-		
+
 		getChannels(userId: String): [Channel]
 		getChannelParticipants(channelId: String!): [ChannelParticipant]
 		getMessages(channelId: String!): [Message]
@@ -262,7 +262,14 @@ export const typeDefs = gql`
 			communityId: String!
 			rule: Rule!
 		) : CommunityRulesResponse!
-		
+		updateCommunityRule (
+			ruleId: String!
+			rule: Rule!
+		) : CommunityRulesResponse!
+		deleteCommunityRule (
+			ruleId: String!
+		) : CommunityRulesResponse!
+
 
 		addComment(
 			threadId: String!
