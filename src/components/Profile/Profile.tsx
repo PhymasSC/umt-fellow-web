@@ -185,8 +185,6 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 
   const handleFollow = async () => {
     setFollowLoading(true);
-    console.log(session?.user?.id, user.id);
-    console.log(followData);
     if (followData.getFollow) {
       await unfollow({
         variables: {
@@ -363,11 +361,12 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
                   <Grid>
                     {
                       // @ts-ignore
-                      followersData?.getFollowers?.map((data) => {
+                      followersData?.getFollowers?.map((data, index) => {
+                        console.log(data);
                         return (
                           <Link
                             href={`/profile/${data?.follower.id}`}
-                            key={data.id}
+                            key={index}
                             passHref
                           >
                             <Card component="a" mt="md">

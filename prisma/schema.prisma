@@ -66,7 +66,6 @@ model ResetToken {
 }
 
 model Follow {
-  id          String   @id @default(uuid())
   followerId  String   @map("follower_id")
   followingId String   @map("following_id")
   created_at  DateTime @default(now()) @map("created_at")
@@ -74,6 +73,7 @@ model Follow {
   follower    User     @relation("follower", fields: [followerId], references: [id])
   following   User     @relation("following", fields: [followingId], references: [id])
 
+  @@id([followerId, followingId])
   @@unique([followerId, followingId])
   @@index([followerId])
   @@index([followingId])
@@ -113,7 +113,6 @@ model Community {
 }
 
 model CommunityMember {
-  id          String    @id @default(uuid())
   communityId String    @map("community_id")
   userId      String    @map("user_id")
   role        Role      @default(USER)
@@ -122,6 +121,7 @@ model CommunityMember {
   community   Community @relation(fields: [communityId], references: [id])
   user        User      @relation(fields: [userId], references: [id])
 
+  @@id([communityId, userId])
   @@unique([communityId, userId])
   @@index([communityId])
   @@index([userId])
@@ -173,14 +173,14 @@ model Account {
 
 model commentvotes {
   user_id    String
-  thread_id  String
+  comment_id String
   vote       commentvotes_vote
   created_at DateTime          @default(now())
   updated_at DateTime          @default(now())
 
-  @@id([user_id, thread_id])
-  @@unique([user_id, thread_id], map: "commentVotes_user_id_thread_id_key")
-  @@index([thread_id], map: "commentVotes_thread_id_idx")
+  @@id([user_id, comment_id])
+  @@unique([user_id, comment_id])
+  @@index([comment_id], map: "commentVotes_comment_id_idx")
   @@index([user_id], map: "commentVotes_user_id_idx")
 }
 
