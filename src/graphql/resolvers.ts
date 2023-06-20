@@ -346,6 +346,25 @@ export const resolvers = {
 			});
 			return user;
 		},
+		threads: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
+			const threads = await prisma.thread.findMany({
+				where: {
+					communityId: parent.id,
+				},
+			});
+			return threads;
+		},
+		rules: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
+			const rules = await prisma.communityRules.findMany({
+				where: {
+					communityId: parent.id,
+				},
+				orderBy: {
+					rule: "asc"
+				}
+			});
+			return rules;
+		},
 		admin: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
 			const adminId = (await prisma.community.findFirst({
 				where: {

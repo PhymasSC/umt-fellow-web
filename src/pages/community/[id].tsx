@@ -12,15 +12,13 @@ import {
   Tooltip,
   Space,
   TypographyStylesProvider,
+  Accordion,
 } from "@mantine/core";
-import { Comment, Feed, Typography } from "@components/index";
+import { Comment, Feed, Footer } from "@components/index";
 import Link from "next/link";
 import { IconCake } from "@tabler/icons";
 import { useSession } from "next-auth/react";
-import {
-  GET_COMMUNITY_BY_ID,
-  GET_THREADS_BY_COMMUNITY,
-} from "@operations/queries";
+import { GET_COMMUNITY_BY_ID } from "@operations/queries";
 import { client } from "@lib/apollo-client";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
@@ -35,6 +33,24 @@ type CommunityProps = {
     banner: string;
     created_at: string;
     updated_at: string;
+    threads: {
+      id: string;
+      title: string;
+      description: string;
+      images: {}[];
+      tags: null;
+      author: {
+        id: string;
+        name: string;
+        image: string;
+        email: string;
+      };
+    }[];
+    rules: {
+      id: string;
+      rule: string;
+      description: string;
+    }[];
     creatorId: {
       id: string;
       name: string;
@@ -80,16 +96,8 @@ const Profile = ({
 
 const Community: NextPage<CommunityProps> = (props) => {
   const { data } = props;
-  const { loading, data: threadsData } = useQuery(GET_THREADS_BY_COMMUNITY, {
-    variables: { communityId: props.data.id },
-  });
   const { data: session } = useSession();
   const [createdDate, setCreatedDate] = useState("");
-  const router = useRouter();
-  const id =
-    (Array.isArray(router.query.id)
-      ? parseInt(router.query.id[0])
-      : parseInt(router.query.id || "")) || 0;
 
   useEffect(() => {
     setCreatedDate(new Date(data.created_at).toLocaleDateString());
@@ -132,7 +140,7 @@ const Community: NextPage<CommunityProps> = (props) => {
                 <Space h="2em" />
               </>
             )}
-            {threadsData?.getThreadsByCommunity?.length === 0 ? (
+            {data?.threads?.length === 0 ? (
               <Card
                 withBorder
                 sx={{
@@ -155,10 +163,8 @@ const Community: NextPage<CommunityProps> = (props) => {
                 </Text>
               </Card>
             ) : (
-              <Feed
-                feeds={threadsData?.getThreadsByCommunity}
-                loading={loading}
-              />
+              // @ts-ignore
+              <Feed feeds={data.threads} />
             )}
           </Container>
         </Grid.Col>
@@ -220,6 +226,24 @@ const Community: NextPage<CommunityProps> = (props) => {
               <Text>Created on {createdDate}</Text>
             </Group>
           </Card>
+
+          <Card withBorder my="md">
+            <Card.Section withBorder p="md">
+              {data.name}&apos;s rules
+            </Card.Section>
+            <Accordion variant="filled">
+              {data.rules?.map((rule) => (
+                <Accordion.Item value={rule.id}>
+                  <Accordion.Control>
+                    <Text fw="bold">{rule.rule}</Text>
+                  </Accordion.Control>
+                  <Accordion.Panel>{rule.description}</Accordion.Panel>
+                </Accordion.Item>
+              ))}
+            </Accordion>
+          </Card>
+
+          <Footer />
         </Grid.Col>
       </Grid>
     </Container>
@@ -233,7 +257,6 @@ export async function getServerSideProps(context: { params: { id: string } }) {
       query: GET_COMMUNITY_BY_ID(5),
       variables: { id: id },
     });
-
     console.log(res);
     return {
       props: {

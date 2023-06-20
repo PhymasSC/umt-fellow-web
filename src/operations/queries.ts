@@ -139,6 +139,7 @@ query GetCommunities($userId: String) {
 `;
 
 export const GET_COMMUNITY_BY_ID = (limit?: number) => gql`
+${THREAD_FRAGMENT}
 query GetCommunityById($id: String!) {
 	getCommunityById(id: $id) {
 	  id
@@ -146,28 +147,36 @@ query GetCommunityById($id: String!) {
 	  description
 	  avatar
 	  banner
+	  threads {
+		...ThreadFragment
+	  }
+	  rules {
+		id
+		rule
+		description
+	  }
+	  creatorId {
+		  id
+		  name
+		  image
+		}
+		moderators {
+			id
+			name
+			image
+		}
+		admin {
+			id
+			name
+			image
+		}
+		members(limit: ${limit || 5}) {
+			id
+			name
+			image
+		}
 	  created_at
 	  updated_at
-	  creatorId {
-		id
-		name
-		image
-	  }
-	  moderators {
-		id
-		name
-		image
-	  }
-	  admin {
-		id
-		name
-		image
-	  }
-	  members(limit: ${limit || 5}) {
-		id
-		name
-		image
-	  }
 	}
   }
 `;
@@ -198,7 +207,7 @@ query ($userId: String!) {
   }
 `;
 
-export const GET_COMMUNITIES_RULES = gql`
+export const GET_COMMUNITY_RULES = gql`
 query GetCommunityRules($communityId: String!) {
 	getCommunityRules(communityId: $communityId) {
 	  id

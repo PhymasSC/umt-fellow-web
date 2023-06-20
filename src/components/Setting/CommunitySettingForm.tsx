@@ -3,10 +3,9 @@ import { TextInput, Button, Textarea } from "@mantine/core";
 import { IconTrash } from "@tabler/icons";
 import { UPDATE_COMMUNITY } from "@operations/mutations";
 import ImageInput from "@components/Form/ImageInput";
-import List from "./../Form/List";
 import Search from "@components/Search";
 import { useQuery } from "@apollo/client";
-import { GET_COMMUNITIES_RULES } from "@operations/queries";
+import { GET_COMMUNITY_RULES } from "@operations/queries";
 import { useEffect } from "react";
 
 type data = {
@@ -28,7 +27,7 @@ type RuleType = {
 };
 const CommunitySettingForm = (props: data) => {
   const { id, name, description, avatar, banner } = props.data;
-  const { loading, data: rules } = useQuery(GET_COMMUNITIES_RULES, {
+  const { loading, data: rules } = useQuery(GET_COMMUNITY_RULES, {
     variables: { communityId: id },
   });
 

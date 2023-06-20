@@ -51,6 +51,8 @@ export const typeDefs = gql`
 		avatar: String!
 		banner: String!
 		creatorId: User!
+		threads: [Thread]
+		rules: [CommunityRules]
 		admin: User
 		moderators: [User]
 		members(limit: Int): [User]
