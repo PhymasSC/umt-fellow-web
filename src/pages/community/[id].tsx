@@ -258,7 +258,7 @@ const Community: NextPage<CommunityProps> = (props) => {
               )) || (
                 <Accordion variant="filled">
                   {data.rules?.map((rule) => (
-                    <Accordion.Item value={rule.id}>
+                    <Accordion.Item value={rule.id} key={rule.id}>
                       <Accordion.Control>
                         <Text fw="bold">{rule.rule}</Text>
                       </Accordion.Control>
