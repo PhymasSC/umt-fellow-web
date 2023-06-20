@@ -221,6 +221,9 @@ export const resolvers = {
 				where: {
 					communityId
 				},
+				orderBy: {
+					rule: 'asc',
+				}
 			});
 			return rules;
 		},
