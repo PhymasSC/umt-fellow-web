@@ -45,11 +45,16 @@ interface SingleFeedProps {
     id: string;
   };
   loading?: boolean;
+  isStandalone?: boolean;
 }
 
 const formatter = Intl.NumberFormat("en", { notation: "compact" });
 
-const SingleFeed: React.FC<SingleFeedProps> = ({ feed, loading }) => {
+const SingleFeed: React.FC<SingleFeedProps> = ({
+  feed,
+  loading,
+  isStandalone = false,
+}) => {
   const [votes, setVotes] = useState<number>(0);
   const [voteThread] = useMutation(VOTE_THREAD);
   const { classes } = useStyles();
@@ -149,13 +154,21 @@ const SingleFeed: React.FC<SingleFeedProps> = ({ feed, loading }) => {
             <Title size="h3" weight="600">
               {title}
             </Title>
-            <Spoiler maxHeight={200} showLabel="Show more" hideLabel="Hide">
+            {(!isStandalone && (
+              <Spoiler maxHeight={200} showLabel="Show more" hideLabel="Hide">
+                <TypographyStylesProvider>
+                  <Typography>
+                    <div dangerouslySetInnerHTML={{ __html: description }} />
+                  </Typography>
+                </TypographyStylesProvider>
+              </Spoiler>
+            )) || (
               <TypographyStylesProvider>
                 <Typography>
                   <div dangerouslySetInnerHTML={{ __html: description }} />
                 </Typography>
               </TypographyStylesProvider>
-            </Spoiler>
+            )}
             {images.length > 0 && (
               <>
                 <Space h="md" />

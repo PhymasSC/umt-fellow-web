@@ -151,7 +151,7 @@ const ThreadPage: NextPage<ThreadPageProps & CommentProps> = (props) => {
             <Grid>
               <Grid.Col xs={12} lg={8}>
                 <Card sx={{ overflow: "visible" }} withBorder>
-                  <SingleFeed feed={data} loading={false} />
+                  <SingleFeed feed={data} loading={false} isStandalone />
                 </Card>
               </Grid.Col>
               <Grid.Col xs={12} lg={4}>
