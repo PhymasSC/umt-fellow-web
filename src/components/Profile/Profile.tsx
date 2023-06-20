@@ -36,6 +36,9 @@ import {
 } from "@tabler/icons";
 import { useSession } from "next-auth/react";
 import MessageButton from "@components/Message/MessageButton";
+import { useMutation } from "@apollo/client";
+import { FOLLOW_USER } from "@operations/mutations";
+import { useState } from "react";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -97,6 +100,8 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
   const { data: session } = useSession();
   const { classes } = useStyles();
   const { width } = useViewportSize();
+  const [follow] = useMutation(FOLLOW_USER);
+  const [followLoading, setFollowLoading] = useState(false);
 
   const socialMedia = [
     {
@@ -150,6 +155,18 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
       url: `https://dribbble.com/${user.dribbbleLink}`,
     },
   ];
+
+  const handleFollow = async () => {
+    setFollowLoading(true);
+    await follow({
+      variables: {
+        follower: session?.user?.id,
+        following: user.id,
+      },
+    });
+
+    setFollowLoading(false);
+  };
 
   return (
     <Container fluid>
@@ -212,6 +229,8 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
                     variant="light"
                     color="cyan"
                     leftIcon={<IconUserPlus size={15} />}
+                    onClick={handleFollow}
+                    loading={followLoading}
                   >
                     Follow
                   </Button>
@@ -346,7 +365,7 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
             </Card>
             {width < 1200 && (
               <>
-                <Space h={20}></Space>
+                <Space h={20} />
                 <Footer />
               </>
             )}

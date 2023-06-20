@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { USER_FRAGMENT } from "./queries";
 
 // User
 
@@ -342,3 +343,22 @@ mutation Mutation($threadId: String!, $userId: String!, $content: String!, $pare
 	}
   }
 `;
+
+// Follows
+export const FOLLOW_USER = gql`
+${USER_FRAGMENT}
+mutation Mutation($follower: String!, $following: String!) {
+	followUser(followerId: $follower, followingId: $following) {
+	  code
+	  message
+	  follow {
+		follower {
+		  ...UserFragment
+		}
+		following {
+		  ...UserFragment
+		}
+	  }
+	}
+  }
+`

@@ -569,6 +569,25 @@ export const resolvers = {
 		}
 	},
 
+	Follow: {
+		follower: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
+			const follower = await prisma.user.findFirst({
+				where: {
+					id: parent.followerId,
+				},
+			});
+			return follower;
+		},
+		following: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
+			const following = await prisma.user.findFirst({
+				where: {
+					id: parent.followingId,
+				},
+			});
+			return following;
+		}
+	},
+
 	Mutation: {
 		addUser: async (
 			_: any,
@@ -1295,6 +1314,42 @@ export const resolvers = {
 					success: false,
 					message: error.message || "Comment addition failed",
 					comment: null,
+				};
+			}
+		},
+
+		followUser: async (
+			_: any,
+			{
+				followerId,
+				followingId,
+			}: {
+				followerId: string,
+				followingId: string,
+			},
+			{ prisma }: { prisma: PrismaType }
+		) => {
+			try {
+				console.log(followerId, followingId)
+				const follow = await prisma.follow.create({
+					data: {
+						followerId,
+						followingId
+					},
+				});
+
+				return {
+					code: 200,
+					success: true,
+					message: "Followed successfully",
+					follow,
+				};
+			} catch (error: any) {
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "Follow failed",
+					follow: null,
 				};
 			}
 		},

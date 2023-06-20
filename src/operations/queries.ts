@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-const USER_FRAGMENT = gql`
+export const USER_FRAGMENT = gql`
 	fragment UserFragment on User {
 		id
 		name
@@ -9,7 +9,7 @@ const USER_FRAGMENT = gql`
 	}
 `;
 
-const THREAD_FRAGMENT = gql`
+export const THREAD_FRAGMENT = gql`
 	${USER_FRAGMENT}
 	fragment ThreadFragment on Thread {
 		id

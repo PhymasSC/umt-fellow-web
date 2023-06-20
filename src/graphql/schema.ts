@@ -132,6 +132,14 @@ export const typeDefs = gql`
 		updated_at: DateTime
 	}
 	
+	type Follow {
+		id: String!
+		follower: User!
+		following: User!
+		created_at: DateTime
+		updated_at: DateTime
+	}
+
 	enum VoteType {
 		UPVOTE
 		DOWNVOTE
@@ -279,6 +287,11 @@ export const typeDefs = gql`
 			content: String!
 			parentId: String
 		): CommentResponse!
+
+		followUser(
+			followerId: String!
+			followingId: String!
+		): FollowResponse!
 	}
 
 	input Image {
@@ -344,5 +357,12 @@ export const typeDefs = gql`
 		success: Boolean!
 		message: String!
 		comment: Comment
+	}
+
+	type FollowResponse {
+		code: Int!
+		success: Boolean!
+		message: String!
+		follow: Follow
 	}
 `;
