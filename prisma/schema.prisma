@@ -105,6 +105,7 @@ model Community {
   creatorId       String            @map("creator_id")
   creator         User              @relation(fields: [creatorId], references: [id])
   CommunityMember CommunityMember[]
+  CommunityRules  CommunityRules[]
 
   @@index([creatorId])
   @@map("communities")
@@ -124,6 +125,19 @@ model CommunityMember {
   @@index([communityId])
   @@index([userId])
   @@map("community_members")
+}
+
+model CommunityRules {
+  id          String    @id @default(uuid())
+  communityId String    @map("community_id")
+  rule        String
+  description String    @db.Text
+  created_at  DateTime  @default(now()) @map("created_at")
+  updated_at  DateTime  @default(now()) @updatedAt @map("updated_at")
+  community   Community @relation(fields: [communityId], references: [id])
+
+  @@index([communityId])
+  @@map("community_rules")
 }
 
 model Images {
