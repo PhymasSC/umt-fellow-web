@@ -190,6 +190,11 @@ export const typeDefs = gql`
 
 		getComments(threadId: String!): [Comment]
 		getCommentsByParentId(parentId: String!): [Comment]
+
+		getFollowers(userId: String!): [Follow]
+		getFollowings(userId: String!): [Follow]
+		getFollow(userId: String!, followingId: String!): Follow
+
 	}
 
 	type Mutation {
@@ -289,6 +294,11 @@ export const typeDefs = gql`
 		): CommentResponse!
 
 		followUser(
+			followerId: String!
+			followingId: String!
+		): FollowResponse!
+
+		unfollowUser(
 			followerId: String!
 			followingId: String!
 		): FollowResponse!

@@ -1,7 +1,6 @@
 import { NextPage } from "next";
 import { Profile as ProfileComponent } from "@components/index";
 import { GET_THREADS_BY_AUTHOR, GET_USER } from "@operations/queries";
-import { client } from "@lib/apollo-client";
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 

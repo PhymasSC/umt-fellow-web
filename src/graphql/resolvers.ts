@@ -296,6 +296,34 @@ export const resolvers = {
 				}
 			});
 			return comments;
+		},
+
+		getFollowers: async (_: any, { userId }: { userId: string }, { prisma }: { prisma: PrismaType }) => {
+			const followers = await prisma.follow.findMany({
+				where: {
+					followingId: userId
+				},
+			});
+			return followers;
+		},
+
+		getFollowings: async (_: any, { userId }: { userId: string }, { prisma }: { prisma: PrismaType }) => {
+			const followings = await prisma.follow.findMany({
+				where: {
+					followerId: userId
+				},
+			});
+			return followings;
+		},
+
+		getFollow: async (_: any, { followerId, followingId }: { followerId: string, followingId: string }, { prisma }: { prisma: PrismaType }) => {
+			const follow = await prisma.follow.findFirst({
+				where: {
+					followerId,
+					followingId
+				},
+			});
+			return follow;
 		}
 	},
 
@@ -1349,6 +1377,43 @@ export const resolvers = {
 					code: 1,
 					success: false,
 					message: error.message || "Follow failed",
+					follow: null,
+				};
+			}
+		},
+
+		unfollowUser: async (
+			_: any,
+			{
+				followerId,
+				followingId,
+			}: {
+				followerId: string,
+				followingId: string,
+			},
+			{ prisma }: { prisma: PrismaType }
+		) => {
+			try {
+				const follow = await prisma.follow.delete({
+					where: {
+						followerId_followingId: {
+							followerId,
+							followingId
+						}
+					}
+				});
+
+				return {
+					code: 200,
+					success: true,
+					message: "Unfollowed successfully",
+					follow,
+				};
+			} catch (error: any) {
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "Unfollow failed",
 					follow: null,
 				};
 			}

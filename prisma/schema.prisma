@@ -74,6 +74,7 @@ model Follow {
   follower    User     @relation("follower", fields: [followerId], references: [id])
   following   User     @relation("following", fields: [followingId], references: [id])
 
+  @@unique([followerId, followingId])
   @@index([followerId])
   @@index([followingId])
   @@map("follows")

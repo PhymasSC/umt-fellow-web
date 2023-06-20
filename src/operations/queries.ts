@@ -303,3 +303,54 @@ export const GET_COMMENTS_BY_PARENT_ID = gql`
 	}
   }
 `
+
+export const GET_FOLLOWERS = gql`
+${USER_FRAGMENT}
+query GetFollowers($userId: String!) {
+	getFollowers(userId: $userId) {
+		id
+		follower {
+			...UserFragment
+		}
+		following {
+			...UserFragment
+		}
+		created_at
+		updated_at
+	}
+}
+`
+
+export const GET_FOLLOWING = gql`
+${USER_FRAGMENT}
+query GetFollowing($userId: String!) {
+	getFollowing(userId: $userId) {
+		id
+		follower {
+			...UserFragment
+		}
+		following {
+			...UserFragment
+		}
+		created_at
+		updated_at
+	}
+}
+`
+
+export const GET_FOLLOW = gql`
+${USER_FRAGMENT}
+query GetFollow($followerId: String!, $followingId: String!) {
+	getFollow(userId: $followerId, followingId: $followingId) {
+		id
+		follower {
+			...UserFragment
+		}
+		following {
+			...UserFragment
+		}
+		created_at
+		updated_at
+	}
+}
+`

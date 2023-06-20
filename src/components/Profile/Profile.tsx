@@ -33,12 +33,15 @@ import {
   IconBrandYoutube,
   IconCircleCheck,
   IconMessageCircle,
+  IconFriends,
+  IconUserCheck,
 } from "@tabler/icons";
 import { useSession } from "next-auth/react";
 import MessageButton from "@components/Message/MessageButton";
-import { useMutation } from "@apollo/client";
-import { FOLLOW_USER } from "@operations/mutations";
+import { useMutation, useQuery } from "@apollo/client";
+import { FOLLOW_USER, UNFOLLOW_USER } from "@operations/mutations";
 import { useState } from "react";
+import { GET_FOLLOW } from "@operations/queries";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -101,7 +104,19 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
   const { classes } = useStyles();
   const { width } = useViewportSize();
   const [follow] = useMutation(FOLLOW_USER);
+  const [unfollow] = useMutation(UNFOLLOW_USER);
   const [followLoading, setFollowLoading] = useState(false);
+  // const [ isFollowing, setIsFollowing ] = useState(false);
+  const {
+    loading,
+    data: followData,
+    refetch,
+  } = useQuery(GET_FOLLOW, {
+    variables: {
+      followerId: session?.user?.id,
+      followingId: user.id,
+    },
+  });
 
   const socialMedia = [
     {
@@ -158,13 +173,24 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 
   const handleFollow = async () => {
     setFollowLoading(true);
+    if (followData.getFollow) {
+      await unfollow({
+        variables: {
+          followerId: session?.user?.id,
+          followingId: user.id,
+        },
+      });
+      refetch();
+      setFollowLoading(false);
+      return;
+    }
     await follow({
       variables: {
         follower: session?.user?.id,
         following: user.id,
       },
     });
-
+    refetch();
     setFollowLoading(false);
   };
 
@@ -226,15 +252,22 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
               session && session?.user?.id != user.id && (
                 <Group>
                   <Button
-                    variant="light"
-                    color="cyan"
-                    leftIcon={<IconUserPlus size={15} />}
+                    color={followData?.getFollow ? "dark" : "blue"}
+                    leftIcon={
+                      followData?.getFollow ? (
+                        <IconUserCheck size={15} />
+                      ) : (
+                        <IconUserPlus size={15} />
+                      )
+                    }
                     onClick={handleFollow}
                     loading={followLoading}
                   >
-                    Follow
+                    {(followData?.getFollow && "Friend") || "Follow"}
                   </Button>
                   <MessageButton
+                    variant={followData?.getFollow ? "filled" : "outline"}
+                    color={followData?.getFollow ? "blue" : "gray"}
                     component={Button}
                     leftIcon={<IconMessageCircle size={15} />}
                     senderId={session.user.id}

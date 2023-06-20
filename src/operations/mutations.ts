@@ -362,3 +362,21 @@ mutation Mutation($follower: String!, $following: String!) {
 	}
   }
 `
+
+export const UNFOLLOW_USER = gql`
+${USER_FRAGMENT}
+mutation Mutation($followerId: String!, $followingId: String!) {
+	unfollowUser(followerId: $followerId, followingId: $followingId) {
+		code
+		message
+		follow {
+		  follower {
+			...UserFragment
+		  }
+		  following {
+			...UserFragment
+		  }
+		}
+	  }
+	}
+  `
