@@ -341,7 +341,7 @@ query GetFollowing($userId: String!) {
 export const GET_FOLLOW = gql`
 ${USER_FRAGMENT}
 query GetFollow($followerId: String!, $followingId: String!) {
-	getFollow(userId: $followerId, followingId: $followingId) {
+	getFollow(followerId: $followerId, followingId: $followingId) {
 		id
 		follower {
 			...UserFragment

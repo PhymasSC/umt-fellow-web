@@ -5,22 +5,19 @@ import {
   IconBrandFacebook,
   IconBrandLinkedin,
   IconBrandMessenger,
-  IconBrandSnapchat,
   IconBrandTelegram,
-  IconBrandTiktok,
   IconBrandTwitter,
   IconBrandWhatsapp,
-  IconBrandYoutube,
   IconCheck,
   IconCopy,
   IconDotsVertical,
   IconEdit,
-  IconFlag,
   IconTrash,
 } from "@tabler/icons";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 interface FeedSettingProps {
   feedId: string;
@@ -35,7 +32,7 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author, feedId }) => {
   const router = useRouter();
   const [deleteThread] = useMutation(DELETE_THREAD);
   const { data: session } = useSession();
-
+  const url = `https://www.umtfellow.social${router.asPath}`;
   const removeThread = async () => {
     try {
       const res = await deleteThread({
@@ -78,7 +75,7 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author, feedId }) => {
               <Menu.Divider />
             </>
           )}
-          <CopyButton value={window.location.href} timeout={2000}>
+          <CopyButton value={url} timeout={2000}>
             {({ copied, copy }) => (
               <Menu.Item
                 icon={copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
@@ -95,7 +92,7 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author, feedId }) => {
             icon={<IconBrandFacebook size={16} />}
             onClick={() =>
               window.open(
-                `https://www.facebook.com/sharer.php?u=${window.location.href}`,
+                `https://www.facebook.com/sharer.php?u=${url}`,
                 "_blank"
               )
             }
@@ -106,7 +103,7 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author, feedId }) => {
             icon={<IconBrandTwitter size={16} />}
             onClick={() =>
               window.open(
-                `https://twitter.com/intent/tweet?text=${window.location.href}`,
+                `https://twitter.com/intent/tweet?text=${url}`,
                 "_blank"
               )
             }
@@ -118,7 +115,7 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author, feedId }) => {
             icon={<IconBrandLinkedin size={16} />}
             onClick={() =>
               window.open(
-                `https://www.linkedin.com/shareArticle?mini=true&url=${window.location.href}`,
+                `https://www.linkedin.com/shareArticle?mini=true&url=${url}`,
                 "_blank"
               )
             }
@@ -129,10 +126,7 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author, feedId }) => {
           <Menu.Item
             icon={<IconBrandWhatsapp size={16} />}
             onClick={() =>
-              window.open(
-                `https://api.whatsapp.com/send?text=${window.location.href}`,
-                "_blank"
-              )
+              window.open(`https://api.whatsapp.com/send?text=${url}`, "_blank")
             }
           >
             Share to WhatsApp
@@ -141,10 +135,7 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author, feedId }) => {
           <Menu.Item
             icon={<IconBrandMessenger size={16} />}
             onClick={() =>
-              window.open(
-                `https://www.messenger.com/share/?u=${window.location.href}`,
-                "_blank"
-              )
+              window.open(`https://www.messenger.com/share/?u=${url}`, "_blank")
             }
           >
             Share to Messenger
@@ -153,10 +144,7 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author, feedId }) => {
           <Menu.Item
             icon={<IconBrandTelegram size={16} />}
             onClick={() =>
-              window.open(
-                `https://t.me/share/url?url=${window.location.href}`,
-                "_blank"
-              )
+              window.open(`https://t.me/share/url?url=${url}`, "_blank")
             }
           >
             Share to Telegram

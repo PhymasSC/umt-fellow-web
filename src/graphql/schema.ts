@@ -193,7 +193,7 @@ export const typeDefs = gql`
 
 		getFollowers(userId: String!): [Follow]
 		getFollowings(userId: String!): [Follow]
-		getFollow(userId: String!, followingId: String!): Follow
+		getFollow(followerId: String!, followingId: String!): Follow
 
 	}
 

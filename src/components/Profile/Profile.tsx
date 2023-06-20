@@ -17,6 +17,8 @@ import {
   BackgroundImage,
   Flex,
   Anchor,
+  SimpleGrid,
+  Center,
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import {
@@ -41,7 +43,8 @@ import MessageButton from "@components/Message/MessageButton";
 import { useMutation, useQuery } from "@apollo/client";
 import { FOLLOW_USER, UNFOLLOW_USER } from "@operations/mutations";
 import { useState } from "react";
-import { GET_FOLLOW } from "@operations/queries";
+import { GET_FOLLOW, GET_FOLLOWERS } from "@operations/queries";
+import Link from "next/link";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -106,7 +109,16 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
   const [follow] = useMutation(FOLLOW_USER);
   const [unfollow] = useMutation(UNFOLLOW_USER);
   const [followLoading, setFollowLoading] = useState(false);
-  // const [ isFollowing, setIsFollowing ] = useState(false);
+  const {
+    loading: followersLoading,
+    data: followersData,
+    refetch: refetchFollowers,
+  } = useQuery(GET_FOLLOWERS, {
+    variables: {
+      userId: user.id,
+    },
+  });
+
   const {
     loading,
     data: followData,
@@ -173,6 +185,8 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
 
   const handleFollow = async () => {
     setFollowLoading(true);
+    console.log(session?.user?.id, user.id);
+    console.log(followData);
     if (followData.getFollow) {
       await unfollow({
         variables: {
@@ -181,6 +195,7 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
         },
       });
       refetch();
+      refetchFollowers();
       setFollowLoading(false);
       return;
     }
@@ -191,6 +206,7 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
       },
     });
     refetch();
+    refetchFollowers();
     setFollowLoading(false);
   };
 
@@ -339,14 +355,39 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
               </Card>
               <Card sx={{ padding: "2em !important" }}>
                 <Title size="md">Followers</Title>
-                <Space h={30} />
-                <Avatar.Group>
-                  <Avatar src="https://picsum.photos/100" radius="xl" />
-                  <Avatar src="https://picsum.photos/101" radius="xl" />
-                  <Avatar src="https://picsum.photos/102" radius="xl" />
-                  <Avatar src="https://picsum.photos/103" radius="xl" />
-                  <Avatar radius="xl">+2</Avatar>
-                </Avatar.Group>
+                {(followersData?.getFollowers?.length == 0 && (
+                  <Text fs="italic" color="dimmed">
+                    This user has no followers.
+                  </Text>
+                )) || (
+                  <Grid>
+                    {
+                      // @ts-ignore
+                      followersData?.getFollowers?.map((data) => {
+                        return (
+                          <Link
+                            href={`/profile/${data?.follower.id}`}
+                            key={data.id}
+                            passHref
+                          >
+                            <Card component="a" mt="md">
+                              <Avatar
+                                src={data?.follower.image?.replace(
+                                  /\s+/g,
+                                  "%20"
+                                )}
+                                size="xl"
+                              />
+                              <Text fz="xs" fw="bold" mt="xs">
+                                {data?.follower.name}
+                              </Text>
+                            </Card>
+                          </Link>
+                        );
+                      })
+                    }
+                  </Grid>
+                )}
               </Card>
               {socialMedia.filter((social) => social.link).length > 0 && (
                 <Card sx={{ padding: "2em !important" }}>
