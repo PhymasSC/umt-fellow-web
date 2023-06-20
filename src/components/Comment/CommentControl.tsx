@@ -1,5 +1,11 @@
-import { ActionIcon, Button, Group, Stack } from "@mantine/core";
+import { ActionIcon, Button, Group, Menu, Stack } from "@mantine/core";
 import {
+  IconBrandFacebook,
+  IconBrandLinkedin,
+  IconBrandMessenger,
+  IconBrandTelegram,
+  IconBrandTwitter,
+  IconBrandWhatsapp,
   IconFlag3,
   IconMessageCircle,
   IconMessageCircleOff,
@@ -35,14 +41,90 @@ const CommentControl = (props: CommentControlProps) => {
             Replies
           </Button>
         )}
-        <Button variant="default" leftIcon={<IconShare size={18} />}>
-          Share
-        </Button>
-        {session && (
+        <Menu>
+          <Menu.Target>
+            <Button variant="default" leftIcon={<IconShare size={18} />}>
+              Share
+            </Button>
+          </Menu.Target>
+          <Menu.Dropdown>
+            <Menu.Item
+              icon={<IconBrandFacebook size={16} />}
+              onClick={() =>
+                window.open(
+                  `https://www.facebook.com/sharer.php?u=${window.location.href}`,
+                  "_blank"
+                )
+              }
+            >
+              Share to Facebook
+            </Menu.Item>
+            <Menu.Item
+              icon={<IconBrandTwitter size={16} />}
+              onClick={() =>
+                window.open(
+                  `https://twitter.com/intent/tweet?text=${window.location.href}`,
+                  "_blank"
+                )
+              }
+            >
+              Share to Twitter
+            </Menu.Item>
+
+            <Menu.Item
+              icon={<IconBrandLinkedin size={16} />}
+              onClick={() =>
+                window.open(
+                  `https://www.linkedin.com/shareArticle?mini=true&url=${window.location.href}`,
+                  "_blank"
+                )
+              }
+            >
+              Share to LinkedIn
+            </Menu.Item>
+
+            <Menu.Item
+              icon={<IconBrandWhatsapp size={16} />}
+              onClick={() =>
+                window.open(
+                  `https://api.whatsapp.com/send?text=${window.location.href}`,
+                  "_blank"
+                )
+              }
+            >
+              Share to WhatsApp
+            </Menu.Item>
+
+            <Menu.Item
+              icon={<IconBrandMessenger size={16} />}
+              onClick={() =>
+                window.open(
+                  `https://www.messenger.com/share/?u=${window.location.href}`,
+                  "_blank"
+                )
+              }
+            >
+              Share to Messenger
+            </Menu.Item>
+
+            <Menu.Item
+              icon={<IconBrandTelegram size={16} />}
+              onClick={() =>
+                window.open(
+                  `https://t.me/share/url?url=${window.location.href}`,
+                  "_blank"
+                )
+              }
+            >
+              Share to Telegram
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
+        {/* {session && (
           <Button variant="default" leftIcon={<IconFlag3 size={18} />}>
             Report
           </Button>
-        )}
+        )} */}
       </Group>
 
       {commentOpen && (
