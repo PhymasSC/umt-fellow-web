@@ -212,6 +212,19 @@ export const resolvers = {
 			return member;
 		},
 
+		getCommunityRules: async (
+			_: any,
+			{ communityId }: { communityId: string },
+			{ prisma }: { prisma: PrismaType }
+		) => {
+			const rules = await prisma.communityRules.findMany({
+				where: {
+					communityId
+				},
+			});
+			return rules;
+		},
+
 		getChannels: async (_: any, { userId }: { userId: string }, { prisma }: { prisma: PrismaType }) => {
 			const channels = await prisma.channel.findMany({
 				where: {
@@ -1134,8 +1147,6 @@ export const resolvers = {
 						description: rule.description,
 					}),
 				});
-
-
 				return {
 					code: 200,
 					success: true,
