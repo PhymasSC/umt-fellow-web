@@ -301,6 +301,18 @@ mutation DeleteCommunityMember($communityId: String!, $userId: String!) {
 }
 `;
 
+// Community Rules
+export const ADD_COMMUNITY_RULE = gql`
+mutation Mutation($communityId: String!, $rules: Rule!) {
+	addCommunityRule(communityId: $communityId, rule: $rules) {
+	  success
+	  communityRules {
+		id
+	  }
+	}
+  }
+`;
+
 // Comment
 export const ADD_COMMENT = gql`
 mutation Mutation($threadId: String!, $userId: String!, $content: String!, $parentId: String) {

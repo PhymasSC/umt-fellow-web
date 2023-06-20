@@ -198,6 +198,16 @@ query ($userId: String!) {
   }
 `;
 
+export const GET_COMMUNITIES_RULES = gql`
+query GetCommunityRules($communityId: String!) {
+	getCommunityRules(communityId: $communityId) {
+	  id
+	  rule
+	  description
+	}
+  }
+`;
+
 export const GET_CHANNELS = gql`
 query GetChannels($userId: String) {
 	getChannels(userId: $userId) {

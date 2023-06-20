@@ -5,6 +5,9 @@ import { UPDATE_COMMUNITY } from "@operations/mutations";
 import ImageInput from "@components/Form/ImageInput";
 import List from "./../Form/List";
 import Search from "@components/Search";
+import { useQuery } from "@apollo/client";
+import { GET_COMMUNITIES_RULES } from "@operations/queries";
+import { useEffect } from "react";
 
 type data = {
   data: {
@@ -16,9 +19,22 @@ type data = {
   };
 };
 
+type RuleType = {
+  getCommunityRules: {
+    id: string;
+    rule: string;
+    description: string;
+  }[];
+};
 const CommunitySettingForm = (props: data) => {
   const { id, name, description, avatar, banner } = props.data;
+  const { loading, data: rules } = useQuery(GET_COMMUNITIES_RULES, {
+    variables: { communityId: id },
+  });
 
+  useEffect(() => {
+    console.log(rules);
+  }, [rules]);
   return (
     <>
       <FormLayout
@@ -101,12 +117,21 @@ const CommunitySettingForm = (props: data) => {
         }
       />
 
-      <FormLayout
-        layout={"vertical"}
-        label={"Community Rules"}
-        description={"The rules of the community"}
-        input={<KeyValueInput _key="Name" value="Description" />}
-      />
+      {loading || (
+        <FormLayout
+          layout={"vertical"}
+          label={"Community Rules"}
+          description={"The rules of the community"}
+          input={
+            <KeyValueInput
+              _key="Name"
+              value="Description"
+              data={rules.getCommunityRules || []}
+              communityId={id}
+            />
+          }
+        />
+      )}
 
       <FormLayout
         layout={"horizontal"}
