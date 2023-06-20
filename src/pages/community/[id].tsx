@@ -13,6 +13,7 @@ import {
   Space,
   TypographyStylesProvider,
   Accordion,
+  List,
 } from "@mantine/core";
 import { Comment, Feed, Footer } from "@components/index";
 import Link from "next/link";
@@ -231,16 +232,42 @@ const Community: NextPage<CommunityProps> = (props) => {
             <Card.Section withBorder p="md">
               {data.name}&apos;s rules
             </Card.Section>
-            <Accordion variant="filled">
-              {data.rules?.map((rule) => (
-                <Accordion.Item value={rule.id}>
-                  <Accordion.Control>
-                    <Text fw="bold">{rule.rule}</Text>
-                  </Accordion.Control>
-                  <Accordion.Panel>{rule.description}</Accordion.Panel>
-                </Accordion.Item>
-              ))}
-            </Accordion>
+            <Card.Section p="md">
+              {(data.rules.length === 0 && (
+                <Text fw="bold" fs="italic">
+                  This community currently has no rules enforced. Please help us
+                  keep it clean and respectful by following the guidelines
+                  below.
+                  <Text fw="normal">
+                    <List withPadding my="sm">
+                      <List.Item>Be respectful of others.</List.Item>
+                      <List.Item>
+                        Avoid posting spam or offensive content.
+                      </List.Item>
+                      <List.Item>Keep your posts on-topic.</List.Item>
+                      <List.Item>
+                        If you see something that violates the guidelines,
+                        please report it.
+                      </List.Item>
+                    </List>
+                    We are working on adding rules to this community, but in the
+                    meantime, we appreciate your help in keeping it a welcoming
+                    and respectful space for everyone.
+                  </Text>
+                </Text>
+              )) || (
+                <Accordion variant="filled">
+                  {data.rules?.map((rule) => (
+                    <Accordion.Item value={rule.id}>
+                      <Accordion.Control>
+                        <Text fw="bold">{rule.rule}</Text>
+                      </Accordion.Control>
+                      <Accordion.Panel>{rule.description}</Accordion.Panel>
+                    </Accordion.Item>
+                  ))}
+                </Accordion>
+              )}
+            </Card.Section>
           </Card>
 
           <Footer />
