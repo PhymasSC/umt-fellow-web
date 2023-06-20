@@ -196,7 +196,7 @@ const Community: NextPage<CommunityProps> = (props) => {
                 </Text>
                 <Avatar.Group spacing="xs">
                   {data.moderators?.map((moderator) => (
-                    <Profile {...moderator} />
+                    <Profile key={moderator.id} {...moderator} />
                   ))}
                 </Avatar.Group>
               </>
@@ -209,7 +209,7 @@ const Community: NextPage<CommunityProps> = (props) => {
                 </Text>
                 <Avatar.Group spacing="xs">
                   {data.members?.map((member) => (
-                    <Profile {...member} />
+                    <Profile key={member.id} {...member} />
                   ))}
                 </Avatar.Group>
               </>
