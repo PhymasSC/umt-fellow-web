@@ -6,10 +6,12 @@ type ContentLayoutProps = {
   header: React.ReactNode;
   children: React.ReactNode;
   vote: React.ReactNode;
+  onUpvote: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onDownvote: (e: React.MouseEvent<HTMLButtonElement>) => void;
   loading?: boolean;
 };
 const ContentLayout = (props: ContentLayoutProps) => {
-  const { header, children, loading, vote } = props;
+  const { header, children, loading, vote, onUpvote, onDownvote } = props;
 
   if (loading) return <SingleFeedSkeleton />;
 
@@ -23,7 +25,7 @@ const ContentLayout = (props: ContentLayoutProps) => {
     >
       <Grid>
         <Grid.Col span={1}>
-          <VoteButton onUpvote={() => {}} onDownvote={() => {}}>
+          <VoteButton onUpvote={onUpvote} onDownvote={onDownvote}>
             {vote}
           </VoteButton>
         </Grid.Col>

@@ -10,22 +10,55 @@ import {
 } from "@mantine/core";
 import Link from "next/link";
 import dayjs from "dayjs";
+import { useMutation } from "@apollo/client";
+import { VOTE_COMMENT } from "@operations/mutations";
+import { useSession } from "next-auth/react";
 type SingleCommentProps = {
   id: string;
   name: string;
   image: string;
   children: React.ReactNode;
   isAuthor: boolean;
+  commentId: string;
   created_at: string;
   updated_at: string;
 };
 
 const SingleComment = (props: SingleCommentProps) => {
-  const { id, name, image, isAuthor, children, created_at, updated_at } = props;
+  const {
+    id,
+    name,
+    image,
+    isAuthor,
+    children,
+    commentId,
+    created_at,
+    updated_at,
+  } = props;
+  const { data: session } = useSession();
+  const [vote] = useMutation(VOTE_COMMENT);
 
   return (
     <ContentLayout
       vote={<>1</>}
+      onUpvote={async () => {
+        await vote({
+          variables: {
+            commentId: commentId,
+            userId: session?.user?.id,
+            voteType: "UPVOTE",
+          },
+        });
+      }}
+      onDownvote={async () => {
+        await vote({
+          variables: {
+            commentId: commentId,
+            userId: session?.user?.id,
+            voteType: "DOWNVOTE",
+          },
+        });
+      }}
       header={
         <Group spacing="xs">
           <Link href={`/profile/${id}`} passHref>

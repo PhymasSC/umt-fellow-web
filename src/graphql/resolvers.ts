@@ -1419,5 +1419,78 @@ export const resolvers = {
 			}
 		},
 
+		voteComment: async (
+			_: any,
+			{
+				commentId,
+				userId,
+				vote,
+			}: {
+				commentId: string,
+				userId: string,
+				vote: VoteType,
+			},
+			{ prisma }: { prisma: PrismaType }
+		) => {
+			try {
+				// get previous vote
+				const previousVote = await prisma.commentvotes.findFirst({
+					where: {
+						user_id: userId,
+						comment_id: commentId
+					}
+				});
+
+
+				// remove vote if vote type is same as previous vote
+				if (previousVote && previousVote.vote === vote) {
+					await prisma.commentvotes.delete({
+						where: {
+							user_id_comment_id: {
+								comment_id: commentId,
+								user_id: userId
+							}
+						}
+					});
+					return {
+						code: 200,
+						success: true,
+						message: "Comment vote removed successfully",
+						commentVote: null,
+					};
+				}
+
+				const commentVote = await prisma.commentvotes.upsert({
+					where: {
+						user_id_comment_id: {
+							comment_id: commentId,
+							user_id: userId
+						}
+					},
+					update: {
+						vote
+					},
+					create: {
+						comment_id: commentId,
+						user_id: userId,
+						vote
+					}
+				});
+
+				return {
+					code: 200,
+					success: true,
+					message: "Comment voted successfully",
+					commentVote,
+				};
+			} catch (error: any) {
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "Comment vote failed",
+					commentVote: null,
+				};
+			}
+		},
 	},
 };

@@ -74,6 +74,7 @@ const NestedComment = (props: CommentProps) => {
       name={comment.user.name}
       image={comment.user.image}
       isAuthor={comment.user.id === author}
+      commentId={comment.id}
       created_at={comment.created_at}
       updated_at={comment.updated_at}
     >
@@ -104,6 +105,7 @@ const NestedComment = (props: CommentProps) => {
             name={child.user.name}
             image={child.user.image}
             isAuthor={comment.user.id === author}
+            commentId={child.id}
             created_at={child.created_at}
             updated_at={child.updated_at}
           >
@@ -135,6 +137,7 @@ const NestedComment = (props: CommentProps) => {
                   name={child.user.name}
                   image={child.user.image}
                   isAuthor={comment.user.id === author}
+                  commentId={child.id}
                   created_at={child.created_at}
                   updated_at={child.updated_at}
                 >

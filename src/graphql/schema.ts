@@ -114,7 +114,8 @@ export const typeDefs = gql`
 	}
 
 	type Vote {
-		thread: Thread!
+		thread: Thread
+		comment: Comment
 		user: User!
 		vote: VoteType
 		created_at: DateTime
@@ -302,6 +303,12 @@ export const typeDefs = gql`
 			followerId: String!
 			followingId: String!
 		): FollowResponse!
+
+		voteComment(
+			commentId: String!
+			userId: String!
+			vote: VoteType!
+		): VoteResponse!
 	}
 
 	input Image {
@@ -375,4 +382,5 @@ export const typeDefs = gql`
 		message: String!
 		follow: Follow
 	}
+
 `;

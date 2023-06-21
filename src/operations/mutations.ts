@@ -380,3 +380,13 @@ mutation Mutation($followerId: String!, $followingId: String!) {
 	  }
 	}
   `
+
+// Comment Vote
+export const VOTE_COMMENT = gql`
+mutation Mutation($commentId: String!, $userId: String!, $voteType: VoteType!) {
+	voteComment(commentId: $commentId, userId: $userId, vote: $voteType) {
+	  code
+	  message
+	}
+  }
+`;
