@@ -387,6 +387,8 @@ mutation Mutation($commentId: String!, $userId: String!, $voteType: VoteType!) {
 	voteComment(commentId: $commentId, userId: $userId, vote: $voteType) {
 	  code
 	  message
+	  upvotes
+	  downvotes
 	}
   }
 `;

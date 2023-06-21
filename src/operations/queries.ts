@@ -351,3 +351,10 @@ query GetFollow($followerId: String!, $followingId: String!) {
 	}
 }
 `
+
+// Comment Vote
+export const GET_COMMENT_VOTES = gql`
+query Query($commentId: String!) {
+	getCommentUpvotesAndDownvotes(commentId: $commentId)
+  }
+`;

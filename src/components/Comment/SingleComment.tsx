@@ -10,9 +10,10 @@ import {
 } from "@mantine/core";
 import Link from "next/link";
 import dayjs from "dayjs";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { VOTE_COMMENT } from "@operations/mutations";
 import { useSession } from "next-auth/react";
+import { GET_COMMENT_VOTES } from "@operations/queries";
 type SingleCommentProps = {
   id: string;
   name: string;
@@ -37,10 +38,23 @@ const SingleComment = (props: SingleCommentProps) => {
   } = props;
   const { data: session } = useSession();
   const [vote] = useMutation(VOTE_COMMENT);
+  const { loading, data, refetch } = useQuery(GET_COMMENT_VOTES, {
+    variables: {
+      commentId: commentId,
+    },
+  });
 
   return (
     <ContentLayout
-      vote={<>1</>}
+      vote={
+        <>
+          {loading ? (
+            <Text>Loading...</Text>
+          ) : (
+            <>{data.getCommentUpvotesAndDownvotes}</>
+          )}
+        </>
+      }
       onUpvote={async () => {
         await vote({
           variables: {
@@ -49,6 +63,7 @@ const SingleComment = (props: SingleCommentProps) => {
             voteType: "UPVOTE",
           },
         });
+        refetch();
       }}
       onDownvote={async () => {
         await vote({
@@ -58,6 +73,7 @@ const SingleComment = (props: SingleCommentProps) => {
             voteType: "DOWNVOTE",
           },
         });
+        refetch();
       }}
       header={
         <Group spacing="xs">

@@ -324,6 +324,27 @@ export const resolvers = {
 				},
 			});
 			return follow;
+		},
+
+		getCommentUpvotesAndDownvotes: async (_: any, { commentId }: { commentId: string }, { prisma }: { prisma: PrismaType }) => {
+			// get comment upvotes and downvotes count
+			const commentUpvotes = await prisma.commentvotes.count({
+				where: {
+					comment_id: commentId,
+					vote: "UPVOTE"
+				}
+			});
+
+			const commentDownvotes = await prisma.commentvotes.count({
+				where: {
+					comment_id: commentId,
+					vote: "DOWNVOTE"
+				}
+			});
+
+			console.log(commentUpvotes, commentDownvotes)
+
+			return commentUpvotes - commentDownvotes;
 		}
 	},
 
@@ -345,6 +366,15 @@ export const resolvers = {
 			});
 			return user;
 		},
+
+		comment: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
+			const comment = await prisma.comment.findFirst({
+				where: {
+					id: parent.comment_id,
+				},
+			});
+			return comment;
+		}
 	},
 
 	Thread: {
@@ -1452,11 +1482,29 @@ export const resolvers = {
 							}
 						}
 					});
+
+					const data = await prisma.commentvotes.groupBy({
+						by: ["vote"],
+						where: {
+							comment_id: commentId
+						},
+						_count: {
+							_all: true,
+						},
+					});
 					return {
 						code: 200,
 						success: true,
 						message: "Comment vote removed successfully",
 						commentVote: null,
+						upvotes:
+							data[0]?.vote === "UPVOTE"
+								? data[0]?._count._all
+								: data[1]?._count._all || 0,
+						downvotes:
+							data[0]?.vote === "DOWNVOTE"
+								? data[0]?._count._all
+								: data[1]?._count._all || 0,
 					};
 				}
 
@@ -1477,11 +1525,29 @@ export const resolvers = {
 					}
 				});
 
+				const data = await prisma.commentvotes.groupBy({
+					by: ["vote"],
+					where: {
+						comment_id: commentId
+					},
+					_count: {
+						_all: true,
+					},
+				});
+
 				return {
 					code: 200,
 					success: true,
 					message: "Comment voted successfully",
-					commentVote,
+					vote: commentVote,
+					upvotes:
+						data[0]?.vote === "UPVOTE"
+							? data[0]?._count._all
+							: data[1]?._count._all || 0,
+					downvotes:
+						data[0]?.vote === "DOWNVOTE"
+							? data[0]?._count._all
+							: data[1]?._count._all || 0,
 				};
 			} catch (error: any) {
 				return {

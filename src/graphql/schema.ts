@@ -196,6 +196,7 @@ export const typeDefs = gql`
 		getFollowings(userId: String!): [Follow]
 		getFollow(followerId: String!, followingId: String!): Follow
 
+		getCommentUpvotesAndDownvotes(commentId: String!): Int
 	}
 
 	type Mutation {
