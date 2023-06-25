@@ -23,7 +23,6 @@ import { GET_COMMUNITY_BY_ID } from "@operations/queries";
 import { client } from "@lib/apollo-client";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
-import { useQuery } from "@apollo/client";
 
 type CommunityProps = {
   data: {
@@ -128,7 +127,7 @@ const Community: NextPage<CommunityProps> = (props) => {
         />
       </Center>
       <Grid>
-        <Grid.Col span={8}>
+        <Grid.Col md={8}>
           <Container>
             {session && (
               <>
@@ -169,7 +168,7 @@ const Community: NextPage<CommunityProps> = (props) => {
             )}
           </Container>
         </Grid.Col>
-        <Grid.Col span={4}>
+        <Grid.Col md={4}>
           <Card withBorder>
             <Title mb={5}>{data.name || ""}</Title>
             <Title mb={10} order={3} size="sm" color="dimmed">
