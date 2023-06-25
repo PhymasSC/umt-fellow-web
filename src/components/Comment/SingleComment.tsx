@@ -9,6 +9,7 @@ import {
   ActionIcon,
   Menu,
   TypographyStylesProvider,
+  Loader,
 } from "@mantine/core";
 import Link from "next/link";
 import dayjs from "dayjs";
@@ -52,7 +53,7 @@ const SingleComment = (props: SingleCommentProps) => {
       vote={
         <>
           {loading ? (
-            <Text>Loading...</Text>
+            <Loader size="xs" />
           ) : (
             <>{data.getCommentUpvotesAndDownvotes}</>
           )}
@@ -66,6 +67,7 @@ const SingleComment = (props: SingleCommentProps) => {
             voteType: "UPVOTE",
           },
         });
+
         refetch();
       }}
       onDownvote={async () => {
