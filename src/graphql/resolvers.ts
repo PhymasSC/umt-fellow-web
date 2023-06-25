@@ -62,7 +62,7 @@ export const resolvers = {
 		},
 
 		getThreads: async (_: any, __: any, { prisma }: { prisma: PrismaType }) => {
-			const threads = await prisma.thread.findMany({
+			const threads = await prisma.threads.findMany({
 				orderBy: {
 					updated_at: "desc",
 				},
@@ -74,7 +74,7 @@ export const resolvers = {
 			{ authorId }: { authorId: string },
 			{ prisma }: { prisma: PrismaType }
 		) => {
-			const threads = await prisma.thread.findMany({
+			const threads = await prisma.threads.findMany({
 				where: {
 					authorId: authorId,
 				},
@@ -82,7 +82,7 @@ export const resolvers = {
 			return threads;
 		},
 		getThreadById: async (_: any, { id }: { id: string }, { prisma }: { prisma: PrismaType }) => {
-			const thread = await prisma.thread.findFirst({
+			const thread = await prisma.threads.findFirst({
 				where: {
 					id,
 				},
@@ -94,13 +94,13 @@ export const resolvers = {
 			{ communityId }: { communityId: string },
 			{ prisma }: { prisma: PrismaType }
 		) => {
-			const threads = await prisma.thread.findMany({
+			const threads = await prisma.threads.findMany({
 				where: { communityId }
 			});
 			return threads;
 		},
 		getThreadVotes: async (_: any, { threadId }: { threadId: string }, { prisma }: { prisma: PrismaType }) => {
-			const votes = await prisma.threadvotes.findMany({
+			const votes = await prisma.thread_votes.findMany({
 				where: {
 					thread_id: threadId,
 				},
@@ -112,14 +112,14 @@ export const resolvers = {
 			{ threadId }: { threadId: string },
 			{ prisma }: { prisma: PrismaType }
 		) => {
-			const upvotes = await prisma.threadvotes.count({
+			const upvotes = await prisma.thread_votes.count({
 				where: {
 					thread_id: threadId,
 					vote: VoteType.UPVOTE,
 				},
 			});
 
-			const downvotes = await prisma.threadvotes.count({
+			const downvotes = await prisma.thread_votes.count({
 				where: {
 					thread_id: threadId,
 					vote: VoteType.DOWNVOTE,
@@ -328,14 +328,14 @@ export const resolvers = {
 
 		getCommentUpvotesAndDownvotes: async (_: any, { commentId }: { commentId: string }, { prisma }: { prisma: PrismaType }) => {
 			// get comment upvotes and downvotes count
-			const commentUpvotes = await prisma.commentvotes.count({
+			const commentUpvotes = await prisma.commentVotes.count({
 				where: {
 					comment_id: commentId,
 					vote: "UPVOTE"
 				}
 			});
 
-			const commentDownvotes = await prisma.commentvotes.count({
+			const commentDownvotes = await prisma.commentVotes.count({
 				where: {
 					comment_id: commentId,
 					vote: "DOWNVOTE"
@@ -350,7 +350,7 @@ export const resolvers = {
 
 	Vote: {
 		thread: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
-			const thread = await prisma.thread.findFirst({
+			const thread = await prisma.threads.findFirst({
 				where: {
 					id: parent.thread_id,
 				},
@@ -408,7 +408,7 @@ export const resolvers = {
 			return user;
 		},
 		threads: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
-			const threads = await prisma.thread.findMany({
+			const threads = await prisma.threads.findMany({
 				where: {
 					communityId: parent.id,
 				},
@@ -596,7 +596,7 @@ export const resolvers = {
 			return user;
 		},
 		thread: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
-			const thread = await prisma.thread.findFirst({
+			const thread = await prisma.threads.findFirst({
 				where: {
 					id: parent.threadId,
 				},
@@ -791,7 +791,7 @@ export const resolvers = {
 			try {
 				const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-				const thread = await prisma.thread.create({
+				const thread = await prisma.threads.create({
 					data: {
 						title,
 						//@ts-ignore
@@ -856,7 +856,7 @@ export const resolvers = {
 			{ prisma }: { prisma: PrismaType }
 		) => {
 			try {
-				const thread = await prisma.thread.update({
+				const thread = await prisma.threads.update({
 					where: {
 						id,
 					},
@@ -930,7 +930,7 @@ export const resolvers = {
 				});
 				if (images.count > 0)
 					await imagekit.deleteFolder(`/threads/${id}`);
-				const thread = await prisma.thread.delete({
+				const thread = await prisma.threads.delete({
 					where: {
 						id,
 					},
@@ -961,7 +961,7 @@ export const resolvers = {
 			{ prisma }: { prisma: PrismaType }
 		) => {
 			try {
-				const vote = await prisma.threadvotes.upsert({
+				const vote = await prisma.thread_votes.upsert({
 					where: {
 						user_id_thread_id: {
 							thread_id: threadId,
@@ -978,7 +978,7 @@ export const resolvers = {
 						vote: voteType,
 					},
 				});
-				const data = await prisma.threadvotes.groupBy({
+				const data = await prisma.thread_votes.groupBy({
 					by: ["vote"],
 					where: {
 						thread_id: threadId,
@@ -1464,7 +1464,7 @@ export const resolvers = {
 		) => {
 			try {
 				// get previous vote
-				const previousVote = await prisma.commentvotes.findFirst({
+				const previousVote = await prisma.commentVotes.findFirst({
 					where: {
 						user_id: userId,
 						comment_id: commentId
@@ -1474,7 +1474,7 @@ export const resolvers = {
 
 				// remove vote if vote type is same as previous vote
 				if (previousVote && previousVote.vote === vote) {
-					await prisma.commentvotes.delete({
+					await prisma.commentVotes.delete({
 						where: {
 							user_id_comment_id: {
 								comment_id: commentId,
@@ -1483,7 +1483,7 @@ export const resolvers = {
 						}
 					});
 
-					const data = await prisma.commentvotes.groupBy({
+					const data = await prisma.commentVotes.groupBy({
 						by: ["vote"],
 						where: {
 							comment_id: commentId
@@ -1508,7 +1508,7 @@ export const resolvers = {
 					};
 				}
 
-				const commentVote = await prisma.commentvotes.upsert({
+				const commentVote = await prisma.commentVotes.upsert({
 					where: {
 						user_id_comment_id: {
 							comment_id: commentId,
@@ -1525,7 +1525,7 @@ export const resolvers = {
 					}
 				});
 
-				const data = await prisma.commentvotes.groupBy({
+				const data = await prisma.commentVotes.groupBy({
 					by: ["vote"],
 					where: {
 						comment_id: commentId

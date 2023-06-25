@@ -455,33 +455,33 @@ const AccountSetting = () => {
         </Stack>
       ),
     },
-    {
-      label: "Password",
-      description: "Change the password used to log in to your account.",
-      input: (
-        <Input
-          argType="password"
-          component={PasswordInput}
-          mutation={EDIT_USER({ password: true })}
-          variables={{ id: session?.user.id }}
-        />
-      ),
-    },
-    {
-      label: "Delete Account",
-      description: "Permanently delete your account and all associated data",
-      layout: "horizontal",
-      input: (
-        <Button
-          w="100%"
-          variant="outline"
-          color="red"
-          leftIcon={<IconTrash size="1em" />}
-        >
-          Delete Account
-        </Button>
-      ),
-    },
+    // {
+    //   label: "Password",
+    //   description: "Change the password used to log in to your account.",
+    //   input: (
+    //     <Input
+    //       argType="password"
+    //       component={PasswordInput}
+    //       mutation={EDIT_USER({ password: true })}
+    //       variables={{ id: session?.user.id }}
+    //     />
+    //   ),
+    // },
+    // {
+    //   label: "Delete Account",
+    //   description: "Permanently delete your account and all associated data",
+    //   layout: "horizontal",
+    //   input: (
+    //     <Button
+    //       w="100%"
+    //       variant="outline"
+    //       color="red"
+    //       leftIcon={<IconTrash size="1em" />}
+    //     >
+    //       Delete Account
+    //     </Button>
+    //   ),
+    // },
   ];
 
   console.log(session);

@@ -99,7 +99,7 @@ const CommunitySettingForm = (props: data) => {
           />
         }
       />
-      <FormLayout
+      {/* <FormLayout
         layout={"vertical"}
         label={"Moderators"}
         description={
@@ -114,7 +114,7 @@ const CommunitySettingForm = (props: data) => {
             />
           </>
         }
-      />
+      /> */}
 
       {loading || (
         <FormLayout
@@ -132,7 +132,7 @@ const CommunitySettingForm = (props: data) => {
         />
       )}
 
-      <FormLayout
+      {/* <FormLayout
         layout={"horizontal"}
         label={"Delete Community"}
         description={"Delete the community"}
@@ -147,7 +147,7 @@ const CommunitySettingForm = (props: data) => {
             Delete Community
           </Button>
         }
-      />
+      /> */}
     </>
   );
 };

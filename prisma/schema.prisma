@@ -50,8 +50,8 @@ model User {
   Message             Message[]
   ChannelParticipants ChannelParticipants[]
   resetTokens         ResetToken[]
-
-  @@map("users")
+  threadvotes         Thread_votes[]
+  commentvotes        CommentVotes[]
 }
 
 model ResetToken {
@@ -66,7 +66,6 @@ model ResetToken {
 }
 
 model Follow {
-  id          String   @id @default(uuid())
   followerId  String   @map("follower_id")
   followingId String   @map("following_id")
   created_at  DateTime @default(now()) @map("created_at")
@@ -77,22 +76,22 @@ model Follow {
   @@unique([followerId, followingId])
   @@index([followerId])
   @@index([followingId])
-  @@map("follows")
 }
 
 model Comment {
-  id         String   @id @default(uuid())
-  content    String
-  userId     String   @map("user_id")
-  threadId   String   @map("thread_id")
-  parentId   String?  @map("parent_id")
-  created_at DateTime @default(now()) @map("created_at")
-  updated_at DateTime @default(now()) @updatedAt @map("updated_at")
-  user       User     @relation(fields: [userId], references: [id])
+  id           String         @id @default(uuid())
+  content      String
+  userId       String         @map("user_id")
+  threadId     String         @map("thread_id")
+  parentId     String?        @map("parent_id")
+  created_at   DateTime       @default(now()) @map("created_at")
+  updated_at   DateTime       @default(now()) @updatedAt @map("updated_at")
+  user         User           @relation(fields: [userId], references: [id])
+  commentvotes CommentVotes[]
+  Images       Images[]
 
   @@index([threadId])
   @@index([userId])
-  @@map("comments")
 }
 
 model Community {
@@ -109,7 +108,6 @@ model Community {
   CommunityRules  CommunityRules[]
 
   @@index([creatorId])
-  @@map("communities")
 }
 
 model CommunityMember {
@@ -125,7 +123,6 @@ model CommunityMember {
   @@unique([communityId, userId])
   @@index([communityId])
   @@index([userId])
-  @@map("community_members")
 }
 
 model CommunityRules {
@@ -138,18 +135,20 @@ model CommunityRules {
   community   Community @relation(fields: [communityId], references: [id])
 
   @@index([communityId])
-  @@map("community_rules")
 }
 
 model Images {
   id         String   @id
   imageUrl   String   @db.Text
-  threadId   String   @map("thread_id")
+  thread     Threads? @relation(fields: [threadId], references: [id])
+  comment    Comment? @relation(fields: [commentId], references: [id])
+  threadId   String?  @map("thread_id")
+  commentId  String?  @map("comment_id")
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@index([threadId])
-  @@map("images")
+  @@index([commentId])
 }
 
 model Account {
@@ -169,15 +168,17 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
-model commentvotes {
-  id         String            @id @default(uuid())
+model CommentVotes {
+  user       User               @relation(fields: [user_id], references: [id])
+  comment    Comment            @relation(fields: [comment_id], references: [id])
   user_id    String
   comment_id String
-  vote       commentvotes_vote
-  created_at DateTime          @default(now())
-  updated_at DateTime          @default(now())
+  vote       Commentvotes_vote?
+  created_at DateTime           @default(now())
+  updated_at DateTime           @default(now())
 
   @@unique([user_id, comment_id])
   @@index([comment_id], map: "commentVotes_comment_id_idx")
@@ -190,26 +191,32 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
-model thread {
-  id          String      @id @default(uuid())
+model Threads {
+  id          String         @id @default(uuid())
   title       String
-  description String?     @db.LongText
+  description String?        @db.LongText
   authorId    String?
-  flag        thread_flag @default(PUBLIC)
-  created_at  DateTime    @default(now())
-  updated_at  DateTime    @default(now())
+  flag        Thread_flag    @default(PUBLIC)
+  created_at  DateTime       @default(now())
+  updated_at  DateTime       @default(now())
   communityId String?
+  threadvotes Thread_votes[]
+  Images      Images[]
 
   @@index([authorId], map: "Thread_authorId_idx")
   @@index([communityId], map: "Thread_communityId_idx")
 }
 
-model threadvotes {
+model Thread_votes {
+  user       User             @relation(fields: [user_id], references: [id])
+  thread     Threads          @relation(fields: [thread_id], references: [id])
+  vote       Threadvotes_vote
   user_id    String
   thread_id  String
-  vote       threadvotes_vote
   created_at DateTime         @default(now())
   updated_at DateTime         @default(now())
 
@@ -268,17 +275,17 @@ enum Role {
   ADMIN
 }
 
-enum threadvotes_vote {
+enum Threadvotes_vote {
   UPVOTE
   DOWNVOTE
 }
 
-enum commentvotes_vote {
+enum Commentvotes_vote {
   UPVOTE
   DOWNVOTE
 }
 
-enum thread_flag {
+enum Thread_flag {
   PUBLIC
   PRIVATE
   REPORTED

@@ -224,14 +224,14 @@ const Header = ({ links }: HeaderResponsiveProps) => {
                   >
                     <ThemeToggler compact />
                   </Menu.Item> */}
-                  <Menu.Divider />
+                  {/* <Menu.Divider />
                   <Menu.Label>Danger Zone</Menu.Label>
                   <Menu.Item
                     color="red"
                     icon={<IconTrash size={14} stroke={1.5} />}
                   >
                     Delete Account
-                  </Menu.Item>
+                  </Menu.Item> */}
                 </Menu.Dropdown>
               </Menu>
             </>
