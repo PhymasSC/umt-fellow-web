@@ -83,7 +83,7 @@ const NestedComment = (props: CommentProps) => {
       </TypographyStylesProvider>
       <CommentControl
         mutation={{
-          userId: session?.user.id || "",
+          userId: comment.user.id || "",
           threadId: id?.[0] || "",
           parentId: comment.id,
         }}
@@ -114,7 +114,7 @@ const NestedComment = (props: CommentProps) => {
             </TypographyStylesProvider>
             <CommentControl
               mutation={{
-                userId: session?.user.id || "",
+                userId: child.user.id || "",
                 threadId: id?.[0] || "",
                 parentId: child.id,
               }}
@@ -146,7 +146,7 @@ const NestedComment = (props: CommentProps) => {
                   </TypographyStylesProvider>
                   <CommentControl
                     mutation={{
-                      userId: session?.user.id || "",
+                      userId: child.user.id || "",
                       threadId: id?.[0] || "",
                       parentId: child.id,
                     }}

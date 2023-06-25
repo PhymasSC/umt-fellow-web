@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Group, Menu, Stack } from "@mantine/core";
+import { Button, Group, Menu, Stack } from "@mantine/core";
 import {
   IconBrandFacebook,
   IconBrandLinkedin,
@@ -6,7 +6,7 @@ import {
   IconBrandTelegram,
   IconBrandTwitter,
   IconBrandWhatsapp,
-  IconFlag3,
+  IconEdit,
   IconMessageCircle,
   IconMessageCircleOff,
   IconShare,
@@ -120,6 +120,12 @@ const CommentControl = (props: CommentControlProps) => {
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>
+
+        {session && props?.mutation?.userId === session?.user.id && (
+          <Button variant="default" leftIcon={<IconEdit size={18} />}>
+            Edit
+          </Button>
+        )}
         {/* {session && (
           <Button variant="default" leftIcon={<IconFlag3 size={18} />}>
             Report

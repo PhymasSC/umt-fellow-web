@@ -1,13 +1,5 @@
 import { ContentLayout } from "@components/Layout";
-import {
-  Button,
-  Group,
-  Avatar,
-  Space,
-  Text,
-  Tooltip,
-  Badge,
-} from "@mantine/core";
+import { Button, Group, Avatar, Text, Tooltip, Badge } from "@mantine/core";
 import Link from "next/link";
 import dayjs from "dayjs";
 import { useMutation, useQuery } from "@apollo/client";
@@ -103,9 +95,6 @@ const SingleComment = (props: SingleCommentProps) => {
               {dayjs(new Date(updated_at)).fromNow()}
             </Text>
           </Tooltip>
-          <Group>
-            {/* <FeedSetting author={author} feedId={feed.id} /> */}
-          </Group>
         </Group>
       }
     >
