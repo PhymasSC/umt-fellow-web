@@ -121,11 +121,6 @@ const CommentControl = (props: CommentControlProps) => {
           </Menu.Dropdown>
         </Menu>
 
-        {session && props?.mutation?.userId === session?.user.id && (
-          <Button variant="default" leftIcon={<IconEdit size={18} />}>
-            Edit
-          </Button>
-        )}
         {/* {session && (
           <Button variant="default" leftIcon={<IconFlag3 size={18} />}>
             Report

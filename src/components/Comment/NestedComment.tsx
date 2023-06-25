@@ -69,18 +69,7 @@ const NestedComment = (props: CommentProps) => {
   };
 
   return (
-    <SingleComment
-      id={comment.user.id}
-      name={comment.user.name}
-      image={comment.user.image}
-      isAuthor={comment.user.id === author}
-      commentId={comment.id}
-      created_at={comment.created_at}
-      updated_at={comment.updated_at}
-    >
-      <TypographyStylesProvider>
-        <div dangerouslySetInnerHTML={{ __html: comment.content }} />
-      </TypographyStylesProvider>
+    <SingleComment data={comment} author={author}>
       <CommentControl
         mutation={{
           userId: comment.user.id || "",
@@ -88,7 +77,7 @@ const NestedComment = (props: CommentProps) => {
           parentId: comment.id,
         }}
       />
-      {comment.replies.map((child, index) => (
+      {comment.replies.map((child) => (
         <Card
           w="99%"
           key={child.id}
@@ -100,18 +89,7 @@ const NestedComment = (props: CommentProps) => {
           })}
           withBorder
         >
-          <SingleComment
-            id={child.user.id}
-            name={child.user.name}
-            image={child.user.image}
-            isAuthor={child.user.id === author}
-            commentId={child.id}
-            created_at={child.created_at}
-            updated_at={child.updated_at}
-          >
-            <TypographyStylesProvider>
-              <div dangerouslySetInnerHTML={{ __html: child.content }} />
-            </TypographyStylesProvider>
+          <SingleComment data={child} author={author}>
             <CommentControl
               mutation={{
                 userId: child.user.id || "",
@@ -120,7 +98,7 @@ const NestedComment = (props: CommentProps) => {
               }}
             />
 
-            {child.replies.map((child, index) => (
+            {child.replies.map((child) => (
               <Card
                 w="100%"
                 key={child.id}
@@ -132,18 +110,7 @@ const NestedComment = (props: CommentProps) => {
                 })}
                 withBorder
               >
-                <SingleComment
-                  id={child.user.id}
-                  name={child.user.name}
-                  image={child.user.image}
-                  isAuthor={child.user.id === author}
-                  commentId={child.id}
-                  created_at={child.created_at}
-                  updated_at={child.updated_at}
-                >
-                  <TypographyStylesProvider>
-                    <div dangerouslySetInnerHTML={{ __html: child.content }} />
-                  </TypographyStylesProvider>
+                <SingleComment data={child} author={author}>
                   <CommentControl
                     mutation={{
                       userId: child.user.id || "",
@@ -152,7 +119,7 @@ const NestedComment = (props: CommentProps) => {
                     }}
                   />
                   {nestedComment &&
-                    nestedComment.map((child, index) => (
+                    nestedComment.map((child) => (
                       <Card
                         w="100%"
                         key={child.id}

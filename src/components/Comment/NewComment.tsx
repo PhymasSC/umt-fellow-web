@@ -16,7 +16,7 @@ import { notifications } from "@mantine/notifications";
 import { IconAlertTriangle } from "@tabler/icons";
 import { ADD_COMMENT } from "@operations/mutations";
 import { useMutation } from "@apollo/client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const useStyles = createStyles((theme) => ({
   comment: {
