@@ -1151,6 +1151,33 @@ export const resolvers = {
 			}
 		},
 
+		deleteCommunity: async (
+			_: any,
+			{ id }: { id: string },
+			{ prisma }: { prisma: PrismaType }
+		) => {
+			try {
+				const community = await prisma.community.delete({
+					where: {
+						id,
+					},
+				});
+				return {
+					code: 200,
+					success: true,
+					message: "Community deleted successfully",
+					community: community,
+				};
+			} catch (error: any) {
+				return {
+					code: 1,
+					success: false,
+					message: error.message || "Community deletion failed",
+					community: null,
+				};
+			}
+		},
+
 		addCommunityMember: async (
 			_: any,
 			{

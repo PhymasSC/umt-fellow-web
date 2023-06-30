@@ -264,6 +264,7 @@ export const typeDefs = gql`
 			avatar: Image
 			banner: Image
 		) : CommunityResponse!
+		deleteCommunity(id: String!) : CommunityResponse!
 		
 		addCommunityMember(
 			communityId: String!
