@@ -10,15 +10,17 @@ import {
   Text,
   Flex,
 } from "@mantine/core";
-import { IconAlertCircle, IconTrash } from "@tabler/icons";
-import { UPDATE_COMMUNITY } from "@operations/mutations";
+import { IconAlertCircle, IconCheck, IconTrash } from "@tabler/icons";
+import { DELETE_COMMUNITY, UPDATE_COMMUNITY } from "@operations/mutations";
 import ImageInput from "@components/Form/ImageInput";
 import Search from "@components/Search";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { GET_COMMUNITY_RULES } from "@operations/queries";
 import { useEffect, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
+import { useRouter } from "next/router";
 
 type data = {
   data: {
@@ -30,14 +32,8 @@ type data = {
   };
 };
 
-type RuleType = {
-  getCommunityRules: {
-    id: string;
-    rule: string;
-    description: string;
-  }[];
-};
 const CommunitySettingForm = (props: data) => {
+  const router = useRouter();
   const { id, name, description, avatar, banner } = props.data;
   const [opened, { open, close }] = useDisclosure(false);
   const theme = useMantineTheme();
@@ -54,6 +50,7 @@ const CommunitySettingForm = (props: data) => {
     },
   });
   const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteCommunity] = useMutation(DELETE_COMMUNITY);
   const { loading, data: rules } = useQuery(GET_COMMUNITY_RULES, {
     variables: { communityId: id },
   });
@@ -256,6 +253,31 @@ const CommunitySettingForm = (props: data) => {
                   color="red"
                   mt="md"
                   disabled={isDeleting || deleteForm.values.confirm !== name}
+                  onClick={async () => {
+                    setIsDeleting(true);
+                    try {
+                      const a = await deleteCommunity({
+                        variables: { id: id },
+                      });
+                      console.log(a);
+                      notifications.show({
+                        title: "Community deleted",
+                        message: `The community ${name} has been deleted.`,
+                        color: "green",
+                        icon: <IconCheck size={18} />,
+                      });
+                      // router.push("/");
+                    } catch (err: any) {
+                      notifications.show({
+                        title: "An error occurred.",
+                        message: err.message,
+                        color: "red",
+                        icon: <IconAlertCircle size={18} />,
+                      });
+                    } finally {
+                      setIsDeleting(false);
+                    }
+                  }}
                 >
                   Yes I'm sure - Delete Community
                 </Button>

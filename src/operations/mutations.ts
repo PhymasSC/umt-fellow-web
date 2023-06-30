@@ -279,6 +279,19 @@ mutation UpdateCommunity($id: String!
 }
 `;
 
+export const DELETE_COMMUNITY = gql`
+mutation DeleteCommunity($id: String!) {
+	deleteCommunity(id: $id) {
+	  success
+	  message
+	  community {
+		id
+	  }
+	  code
+	}
+  }
+`;
+
 // Community Members
 
 export const ADD_COMMUNITY_MEMBER = gql`
