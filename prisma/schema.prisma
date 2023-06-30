@@ -106,6 +106,7 @@ model Community {
   creator         User              @relation(fields: [creatorId], references: [id])
   CommunityMember CommunityMember[]
   CommunityRules  CommunityRules[]
+  Threads         Threads[]
 
   @@index([creatorId])
 }
@@ -116,8 +117,8 @@ model CommunityMember {
   role        Role      @default(USER)
   created_at  DateTime  @default(now()) @map("created_at")
   updated_at  DateTime  @default(now()) @updatedAt @map("updated_at")
-  community   Community @relation(fields: [communityId], references: [id])
-  user        User      @relation(fields: [userId], references: [id])
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([communityId, userId])
   @@unique([communityId, userId])
@@ -132,7 +133,7 @@ model CommunityRules {
   description String    @db.Text
   created_at  DateTime  @default(now()) @map("created_at")
   updated_at  DateTime  @default(now()) @updatedAt @map("updated_at")
-  community   Community @relation(fields: [communityId], references: [id])
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
 
   @@index([communityId])
 }
@@ -140,8 +141,8 @@ model CommunityRules {
 model Images {
   id         String   @id
   imageUrl   String   @db.Text
-  thread     Threads? @relation(fields: [threadId], references: [id])
-  comment    Comment? @relation(fields: [commentId], references: [id])
+  thread     Threads? @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  comment    Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   threadId   String?  @map("thread_id")
   commentId  String?  @map("comment_id")
   created_at DateTime @default(now()) @map("created_at")
@@ -203,6 +204,7 @@ model Threads {
   flag        Thread_flag    @default(PUBLIC)
   created_at  DateTime       @default(now())
   updated_at  DateTime       @default(now())
+  community   Community?     @relation(fields: [communityId], references: [id], onDelete: Cascade)
   communityId String?
   threadvotes Thread_votes[]
   Images      Images[]
@@ -213,7 +215,7 @@ model Threads {
 
 model Thread_votes {
   user       User             @relation(fields: [user_id], references: [id])
-  thread     Threads          @relation(fields: [thread_id], references: [id])
+  thread     Threads          @relation(fields: [thread_id], references: [id], onDelete: Cascade)
   vote       Threadvotes_vote
   user_id    String
   thread_id  String
