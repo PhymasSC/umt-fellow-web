@@ -290,7 +290,7 @@ const CommunitySettingForm = (props: data) => {
                     }
                   }}
                 >
-                  Yes I'm sure - Delete Community
+                  Yes I&apos;m sure - Delete Community
                 </Button>
               </Modal.Body>
             </Modal>
