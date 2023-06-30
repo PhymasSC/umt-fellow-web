@@ -1062,7 +1062,15 @@ export const resolvers = {
 						creatorId,
 					},
 				});
-				console.log(community)
+
+				await prisma.communityMember.create({
+					data: {
+						communityId: community.id,
+						userId: creatorId,
+						role: Role.ADMIN,
+					},
+				});
+
 				return {
 					code: 200,
 					success: true,

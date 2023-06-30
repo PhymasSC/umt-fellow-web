@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
-import { ADD_COMMUNITY, ADD_COMMUNITY_MEMBER } from "@operations/mutations";
+import { ADD_COMMUNITY } from "@operations/mutations";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -28,7 +28,6 @@ const NewCommunity = () => {
   const [bannerObj, setBannerObj] = useState<FileWithPath>({} as FileWithPath);
   const [loading, setLoading] = useState(false);
   const [addCommunity] = useMutation(ADD_COMMUNITY);
-  const [addCommunityMember] = useMutation(ADD_COMMUNITY_MEMBER);
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -62,24 +61,15 @@ const NewCommunity = () => {
     setLoading(true);
     const avatarBlob = await getBase64(avatarObj).then((res) => res);
     const bannerBlob = await getBase64(bannerObj).then((res) => res);
+    const variables = {
+      name: values.name || "",
+      description: values.description || "",
+      avatar: avatarBlob || "",
+      banner: bannerBlob || "",
+      creatorId: session?.user.id || "",
+    };
 
-    const res = await addCommunity({
-      variables: {
-        name: values.name || "",
-        description: values.description || "",
-        avatar: avatarBlob || "",
-        banner: bannerBlob || "",
-        creatorId: session?.user.id || "",
-      },
-    });
-
-    const follow = await addCommunityMember({
-      variables: {
-        communityId: res.data?.addCommunity.community.id,
-        userId: session?.user.id,
-        role: "ADMIN",
-      },
-    });
+    const res = await addCommunity({ variables });
 
     const communityId = res.data?.addCommunity.community.id;
 
