@@ -15,7 +15,7 @@ import {
 import Link from "next/link";
 import dayjs from "dayjs";
 import { useMutation, useQuery } from "@apollo/client";
-import { VOTE_COMMENT } from "@operations/mutations";
+import { DELETE_COMMENT, VOTE_COMMENT } from "@operations/mutations";
 import { useSession } from "next-auth/react";
 import { GET_COMMENT_VOTES } from "@operations/queries";
 import {
@@ -29,6 +29,7 @@ import {
 } from "@tabler/icons";
 import { useState } from "react";
 import RTE from "@components/Form/RichTextEditor";
+import { notifications } from "@mantine/notifications";
 
 type SingleCommentProps = {
   author: string;
@@ -50,7 +51,9 @@ const SingleComment = (props: SingleCommentProps) => {
   const { data: commentData, author, children } = props;
   const { data: session } = useSession();
   const [isModifying, setIsModifying] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [vote] = useMutation(VOTE_COMMENT);
+  const [deleteComment] = useMutation(DELETE_COMMENT);
   const { loading, data, refetch } = useQuery(GET_COMMENT_VOTES, {
     variables: {
       commentId: commentData.id,
@@ -151,7 +154,40 @@ const SingleComment = (props: SingleCommentProps) => {
                   >
                     Edit comment
                   </Menu.Item>
-                  <Menu.Item color="red" icon={<IconTrash size={18} />}>
+                  <Menu.Item
+                    disabled={isDeleting}
+                    color="red"
+                    icon={<IconTrash size={18} />}
+                    onClick={async () => {
+                      setIsDeleting(true);
+                      const response = await deleteComment({
+                        variables: { commentId: commentData.id },
+                        update: (cache) => {
+                          // @ts-ignore
+                          if (commentData.replies.length === 0)
+                            cache.evict({ id: cache.identify(commentData) });
+                        },
+                      });
+                      if (response.data.deleteComment) {
+                        notifications.show({
+                          title: "Comment deleted",
+                          message: "Your comment has been deleted.",
+                          color: "green",
+                          icon: <IconCircleX size={18} />,
+                        });
+                      } else {
+                        notifications.show({
+                          title: "Error",
+                          message:
+                            "An error occured while deleting your comment.",
+                          color: "red",
+                          icon: <IconAlertCircle size={18} />,
+                        });
+                      }
+
+                      setIsDeleting(false);
+                    }}
+                  >
                     Delete comment
                   </Menu.Item>
                 </Menu.Dropdown>

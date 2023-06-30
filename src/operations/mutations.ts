@@ -373,6 +373,14 @@ mutation Mutation($threadId: String!, $userId: String!, $content: String!, $pare
   }
 `;
 
+export const DELETE_COMMENT = gql`
+${COMMENT_FRAGMENT}
+mutation DeleteComment($commentId: String!) {
+	deleteComment(commentId: $commentId) {
+		...CommentsField
+	}
+  }
+`;
 // Follows
 export const FOLLOW_USER = gql`
 ${USER_FRAGMENT}
