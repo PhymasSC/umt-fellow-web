@@ -1360,19 +1360,9 @@ export const resolvers = {
 					},
 				});
 
-				return {
-					code: 200,
-					success: true,
-					message: "Comment added successfully",
-					comment,
-				};
+				return comment
 			} catch (error: any) {
-				return {
-					code: 1,
-					success: false,
-					message: error.message || "Comment addition failed",
-					comment: null,
-				};
+				return null
 			}
 		},
 

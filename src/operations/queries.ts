@@ -268,7 +268,7 @@ const COMMENT_FRAGMENT = gql`
   }
 `
 
-const COMMENT_RECURSIVE_FRAGMENT = gql`
+export const COMMENT_RECURSIVE_FRAGMENT = gql`
   ${COMMENT_FRAGMENT}
   fragment CommentsRecursive on Comment {
 	...CommentsField

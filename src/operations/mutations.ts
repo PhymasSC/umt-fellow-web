@@ -333,13 +333,42 @@ export const DELETE_COMMUNITY_RULE = gql`
   }
 `;
 
+const COMMENT_FRAGMENT = gql`
+  fragment CommentsField on Comment {
+	id
+	user{
+	  id
+	  name
+	  image
+	}
+	content
+	created_at
+	updated_at
+  }
+`
+
+const COMMENT_RECURSIVE_FRAGMENT = gql`
+  ${COMMENT_FRAGMENT}
+  fragment CommentsRecursive on Comment {
+	...CommentsField
+	replies {
+	  ...CommentsField
+	  replies{
+		...CommentsField
+		replies {
+		  ...CommentsField
+		}
+	  }
+	}
+  }
+`;
+
 // Comment
 export const ADD_COMMENT = gql`
+${COMMENT_RECURSIVE_FRAGMENT}
 mutation Mutation($threadId: String!, $userId: String!, $content: String!, $parentId: String) {
 	addComment(threadId: $threadId, userId: $userId, content: $content, parentId: $parentId) {
-	  code
-	  message
-	  success
+		...CommentsRecursive
 	}
   }
 `;

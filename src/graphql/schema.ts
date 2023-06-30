@@ -293,7 +293,7 @@ export const typeDefs = gql`
 			userId: String!
 			content: String!
 			parentId: String
-		): CommentResponse!
+		): Comment
 
 		followUser(
 			followerId: String!
