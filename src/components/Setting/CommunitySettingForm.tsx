@@ -9,6 +9,7 @@ import {
   Divider,
   Text,
   Flex,
+  Loader,
 } from "@mantine/core";
 import { IconAlertCircle, IconCheck, IconTrash } from "@tabler/icons";
 import { DELETE_COMMUNITY, UPDATE_COMMUNITY } from "@operations/mutations";
@@ -253,13 +254,21 @@ const CommunitySettingForm = (props: data) => {
                   color="red"
                   mt="md"
                   disabled={isDeleting || deleteForm.values.confirm !== name}
+                  leftIcon={isDeleting && <Loader size="xs" />}
                   onClick={async () => {
                     setIsDeleting(true);
                     try {
-                      const a = await deleteCommunity({
+                      await deleteCommunity({
                         variables: { id: id },
+                        update: (cache) => {
+                          cache.evict({
+                            id: cache.identify({
+                              __typename: "Community",
+                              id: id,
+                            }),
+                          });
+                        },
                       });
-                      console.log(a);
                       notifications.show({
                         title: "Community deleted",
                         message: `The community ${name} has been deleted.`,
@@ -276,6 +285,8 @@ const CommunitySettingForm = (props: data) => {
                       });
                     } finally {
                       setIsDeleting(false);
+                      deleteForm.reset();
+                      close();
                     }
                   }}
                 >
