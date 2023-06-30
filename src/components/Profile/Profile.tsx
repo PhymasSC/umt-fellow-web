@@ -212,10 +212,7 @@ const Profile: React.FC<ProfileProps> = (props: ProfileProps) => {
     <Container fluid>
       <Card className={classes.card}>
         <BackgroundImage
-          src={
-            (user.coverImage?.length != 0 && user.coverImage) ||
-            "https://picsum.photos/800/500"
-          }
+          src={(user.coverImage?.length != 0 && user.coverImage) || "/gray.svg"}
           radius="sm"
         >
           <Card.Section

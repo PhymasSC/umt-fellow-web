@@ -106,7 +106,10 @@ const Community: NextPage<CommunityProps> = (props) => {
   return (
     <Container fluid>
       <Image
-        src={`https://ik.imagekit.io/umtfellow/tr:w-1500/${data.banner}`}
+        src={
+          `https://ik.imagekit.io/umtfellow/tr:w-1500/${data.banner}` ||
+          "/gray.svg"
+        }
         alt={data.name}
         width="100%"
         height="30vh"
