@@ -72,7 +72,6 @@ const NestedComment = (props: CommentProps) => {
     <SingleComment data={comment} author={author}>
       <CommentControl
         mutation={{
-          userId: comment.user.id || "",
           threadId: id?.[0] || "",
           parentId: comment.id,
         }}
@@ -92,7 +91,6 @@ const NestedComment = (props: CommentProps) => {
           <SingleComment data={child} author={author}>
             <CommentControl
               mutation={{
-                userId: child.user.id || "",
                 threadId: id?.[0] || "",
                 parentId: child.id,
               }}
@@ -113,7 +111,6 @@ const NestedComment = (props: CommentProps) => {
                 <SingleComment data={child} author={author}>
                   <CommentControl
                     mutation={{
-                      userId: child.user.id || "",
                       threadId: id?.[0] || "",
                       parentId: child.id,
                     }}

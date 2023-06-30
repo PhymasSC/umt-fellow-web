@@ -10,6 +10,7 @@ import {
   Menu,
   TypographyStylesProvider,
   Loader,
+  Flex,
 } from "@mantine/core";
 import Link from "next/link";
 import dayjs from "dayjs";
@@ -17,7 +18,15 @@ import { useMutation, useQuery } from "@apollo/client";
 import { VOTE_COMMENT } from "@operations/mutations";
 import { useSession } from "next-auth/react";
 import { GET_COMMENT_VOTES } from "@operations/queries";
-import { IconDotsVertical, IconEdit, IconSend, IconTrash } from "@tabler/icons";
+import {
+  IconAlertCircle,
+  IconCircleX,
+  IconDotsVertical,
+  IconEdit,
+  IconSend,
+  IconSquareRoundedX,
+  IconTrash,
+} from "@tabler/icons";
 import { useState } from "react";
 import RTE from "@components/Form/RichTextEditor";
 
@@ -60,7 +69,6 @@ const SingleComment = (props: SingleCommentProps) => {
         </>
       }
       onUpvote={async () => {
-        console.log(data);
         let res = await vote({
           variables: {
             commentId: commentData.id,
@@ -68,7 +76,6 @@ const SingleComment = (props: SingleCommentProps) => {
             voteType: "UPVOTE",
           },
         });
-        console.log(res);
         refetch();
       }}
       onDownvote={async () => {
@@ -83,21 +90,32 @@ const SingleComment = (props: SingleCommentProps) => {
       }}
       header={
         <Group spacing="xs">
-          <Link href={`/profile/${commentData.user.id}`} passHref>
-            <Button
-              component="a"
-              variant="subtle"
-              h={50}
-              color="gray"
-              sx={{ color: "inherit", textDecoration: "none" }}
-            >
-              <Group>
-                <Avatar src={commentData.user.image} radius="xl" alt="Avatar" />
-                <Text weight="700">{commentData.user.name}</Text>
-              </Group>
-            </Button>
-          </Link>
-          {commentData.user.id === author && (
+          {(commentData.user && (
+            <Link href={`/profile/${commentData.user.id}`} passHref>
+              <Button
+                component="a"
+                variant="subtle"
+                h={50}
+                color="gray"
+                sx={{ color: "inherit", textDecoration: "none" }}
+              >
+                <Group>
+                  <Avatar
+                    src={commentData.user.image}
+                    radius="xl"
+                    alt="Avatar"
+                  />
+                  <Text weight="700">{commentData.user.name}</Text>
+                </Group>
+              </Button>
+            </Link>
+          )) || (
+            <Group>
+              <Avatar src="" radius="xl" alt="Avatar" />
+              <Text fs="italic">[Deleted]</Text>
+            </Group>
+          )}
+          {commentData.user && commentData.user.id === author && (
             <Badge color="yellow">Author</Badge>
           )}
           ·
@@ -110,30 +128,35 @@ const SingleComment = (props: SingleCommentProps) => {
             position="top"
           >
             <Text color="dimmed">
-              {commentData.created_at !== commentData.updated_at && "Edited "}
+              {(commentData.created_at !== commentData.updated_at &&
+                !commentData.user &&
+                "Removed ") ||
+                "Edited "}
               {dayjs(new Date(commentData.updated_at)).fromNow()}
             </Text>
           </Tooltip>
-          {session && session.user.id === commentData.user.id && (
-            <Menu>
-              <Menu.Target>
-                <ActionIcon>
-                  <IconDotsVertical size={18} />
-                </ActionIcon>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item
-                  icon={<IconEdit size={18} />}
-                  onClick={() => setIsModifying(!isModifying)}
-                >
-                  Edit comment
-                </Menu.Item>
-                <Menu.Item color="red" icon={<IconTrash size={18} />}>
-                  Delete comment
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          )}
+          {session &&
+            commentData.user &&
+            session.user.id === commentData.user.id && (
+              <Menu>
+                <Menu.Target>
+                  <ActionIcon>
+                    <IconDotsVertical size={18} />
+                  </ActionIcon>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item
+                    icon={<IconEdit size={18} />}
+                    onClick={() => setIsModifying(!isModifying)}
+                  >
+                    Edit comment
+                  </Menu.Item>
+                  <Menu.Item color="red" icon={<IconTrash size={18} />}>
+                    Delete comment
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            )}
         </Group>
       }
     >
@@ -142,11 +165,19 @@ const SingleComment = (props: SingleCommentProps) => {
           <RTE content={commentData.content} onUpdate={() => {}} />
           <Button rightIcon={<IconSend size={16} />}>Edit</Button>
         </>
-      )) || (
-        <TypographyStylesProvider>
-          <div dangerouslySetInnerHTML={{ __html: commentData.content }} />
-        </TypographyStylesProvider>
-      )}
+      )) ||
+        (commentData.user && (
+          <TypographyStylesProvider>
+            <div dangerouslySetInnerHTML={{ __html: commentData.content }} />
+          </TypographyStylesProvider>
+        )) || (
+          <Flex align="center" gap="sm">
+            <IconSquareRoundedX size={18} color="gray" />
+            <Text fs="italic" color="dimmed">
+              [{commentData.content}]
+            </Text>
+          </Flex>
+        )}
       {children}
     </ContentLayout>
   );

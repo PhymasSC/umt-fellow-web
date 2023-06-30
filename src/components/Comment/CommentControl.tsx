@@ -6,7 +6,6 @@ import {
   IconBrandTelegram,
   IconBrandTwitter,
   IconBrandWhatsapp,
-  IconEdit,
   IconMessageCircle,
   IconMessageCircleOff,
   IconShare,
@@ -17,7 +16,6 @@ import Comment from "./NewComment";
 
 type CommentControlProps = {
   mutation: {
-    userId: string;
     threadId: string;
     parentId?: string;
   };
@@ -135,7 +133,6 @@ const CommentControl = (props: CommentControlProps) => {
             image: session?.user.image || "",
           }}
           mutation={{
-            userId: props?.mutation?.userId,
             threadId: props?.mutation?.threadId,
             parentId: props.mutation?.parentId || "",
           }}

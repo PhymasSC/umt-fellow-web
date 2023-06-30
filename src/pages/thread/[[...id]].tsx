@@ -211,13 +211,14 @@ const ThreadPage: NextPage<ThreadPageProps & CommentProps> = (props) => {
                   image: session?.user.image || "",
                 }}
                 mutation={{
-                  userId: session?.user.id || "",
                   threadId: data?.id || "",
                 }}
               />
             )}
             <Space h="xl" />
-
+            {comments &&
+              comments.getComments.length > 0 &&
+              console.log(comments)}
             {comments && comments.getComments.length > 0 ? (
               <Card withBorder>
                 {

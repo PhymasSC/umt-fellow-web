@@ -125,7 +125,7 @@ export const typeDefs = gql`
 	type Comment {
 		id: String!
 		thread: Thread!
-		user: User!
+		user: User
 		content: String!
 		parentId: String
 		replies: [Comment]
@@ -293,6 +293,10 @@ export const typeDefs = gql`
 			userId: String!
 			content: String!
 			parentId: String
+		): Comment
+
+		deleteComment(
+			commentId: String!
 		): Comment
 
 		followUser(

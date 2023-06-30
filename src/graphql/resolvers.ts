@@ -279,9 +279,9 @@ export const resolvers = {
 					created_at: "desc"
 				}
 			});
-			console.log("test")
 			return comments;
 		},
+
 		getCommentsByParentId: async (
 			_: any,
 			{ parentId }: { parentId: string },
@@ -588,6 +588,8 @@ export const resolvers = {
 
 	Comment: {
 		user: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
+			console.log(parent.userId)
+			if (parent.userId === "") return null
 			const user = await prisma.user.findFirst({
 				where: {
 					id: parent.userId,
@@ -1361,6 +1363,46 @@ export const resolvers = {
 				});
 
 				return comment
+			} catch (error: any) {
+				return null
+			}
+		},
+
+		deleteComment: async (
+			_: any,
+			{
+				commentId,
+			}: {
+				commentId: string,
+			},
+			{ prisma }: { prisma: PrismaType }
+		) => {
+			try {
+				// Check if the comment has any children
+				const comment = await prisma.comment.findFirst({
+					where: {
+						parentId: commentId,
+					},
+				});
+
+				// If the comment has children, update the comment
+				// else delete the comment
+				if (comment) {
+					return await prisma.comment.update({
+						where: {
+							id: commentId,
+						},
+						data: {
+							userId: "",
+							content: "The comment has been deleted",
+							updated_at: new Date(),
+						},
+					});
+				}
+
+				return await prisma.comment.delete({ where: { id: commentId, } });
+
+
 			} catch (error: any) {
 				return null
 			}

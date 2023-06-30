@@ -18,6 +18,7 @@ import { ADD_COMMENT } from "@operations/mutations";
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { COMMENT_RECURSIVE_FRAGMENT } from "@operations/queries";
+import { useSession } from "next-auth/react";
 
 const useStyles = createStyles((theme) => ({
   comment: {
@@ -46,7 +47,6 @@ interface CommentProps {
     image: string;
   };
   mutation?: {
-    userId: string;
     threadId: string;
     parentId?: string;
   };
@@ -58,6 +58,7 @@ const Comment = (props: CommentProps) => {
   const router = useRouter();
   const [addComment] = useMutation(ADD_COMMENT);
   const [loading, setLoading] = useState(false);
+  const { data: session } = useSession();
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -105,7 +106,7 @@ const Comment = (props: CommentProps) => {
 
     setLoading(true);
     const variables = {
-      userId: props?.mutation?.userId,
+      userId: session?.user?.id,
       threadId: props?.mutation?.threadId,
       content: form.values.description,
       parentId: props.mutation?.parentId || "",
