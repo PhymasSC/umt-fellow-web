@@ -24,6 +24,7 @@ import { client } from "@lib/apollo-client";
 import MessageButton from "@components/Message/MessageButton";
 import { IconMessageCircle } from "@tabler/icons";
 import { NestedComment } from "@components/Comment";
+import { useQuery } from "@apollo/client";
 
 type ThreadPageProps = {
   getThreadById: {
@@ -87,8 +88,11 @@ const ThreadPage: NextPage<ThreadPageProps & CommentProps> = (props) => {
   const router = useRouter();
   const { id, edit } = router.query;
   const { data: session } = useSession();
-  const { getThreadById: data, getComments: comments } = props;
-  console.log(comments);
+  const { getThreadById: data } = props;
+  const { data: comments } = useQuery(GET_COMMENTS, {
+    variables: { threadId: id?.[0] },
+  });
+
   if (id === undefined) {
     return (
       <Container>
@@ -214,17 +218,20 @@ const ThreadPage: NextPage<ThreadPageProps & CommentProps> = (props) => {
             )}
             <Space h="xl" />
 
-            {comments.length > 0 ? (
+            {comments && comments.getComments.length > 0 ? (
               <Card withBorder>
-                {comments.map((comment) => (
-                  <Card.Section key={comment.id} withBorder>
-                    <NestedComment
-                      key={comment.id}
-                      data={comment}
-                      author={data.author.id}
-                    />
-                  </Card.Section>
-                ))}
+                {
+                  //@ts-ignore
+                  comments.getComments.map((comment) => (
+                    <Card.Section key={comment.id} withBorder>
+                      <NestedComment
+                        key={comment.id}
+                        data={comment}
+                        author={data.author.id}
+                      />
+                    </Card.Section>
+                  ))
+                }
               </Card>
             ) : (
               <Center>
@@ -251,12 +258,8 @@ export async function getServerSideProps(context: { params: { id: string } }) {
       query: GET_THREAD,
       variables: { id },
     });
-    const { data: comments } = await client.query({
-      query: GET_COMMENTS,
-      variables: { threadId: id },
-    });
     return {
-      props: { ...data, ...comments },
+      props: { ...data },
     };
   } catch (error) {
     console.log(error);

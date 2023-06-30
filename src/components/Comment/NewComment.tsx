@@ -17,6 +17,7 @@ import { IconAlertTriangle } from "@tabler/icons";
 import { ADD_COMMENT } from "@operations/mutations";
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
+import { GET_COMMENTS } from "@operations/queries";
 
 const useStyles = createStyles((theme) => ({
   comment: {
@@ -55,7 +56,9 @@ const Comment = (props: CommentProps) => {
   const { author, isReply } = props;
   const { classes } = useStyles();
   const router = useRouter();
-  const [addComment] = useMutation(ADD_COMMENT);
+  const [addComment] = useMutation(ADD_COMMENT, {
+    refetchQueries: [GET_COMMENTS],
+  });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
@@ -103,14 +106,14 @@ const Comment = (props: CommentProps) => {
     }
 
     setLoading(true);
-    const response = await addComment({
-      variables: {
-        userId: props?.mutation?.userId,
-        threadId: props?.mutation?.threadId,
-        content: form.values.description,
-        parentId: props.mutation?.parentId || "",
-      },
-    });
+    const variables = {
+      userId: props?.mutation?.userId,
+      threadId: props?.mutation?.threadId,
+      content: form.values.description,
+      parentId: props.mutation?.parentId || "",
+    };
+
+    const response = await addComment({ variables });
     form.setValues({
       description: "",
       plainDescription: "",
