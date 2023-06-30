@@ -60,14 +60,15 @@ const SingleComment = (props: SingleCommentProps) => {
         </>
       }
       onUpvote={async () => {
-        await vote({
+        console.log(data);
+        let res = await vote({
           variables: {
             commentId: commentData.id,
             userId: session?.user?.id,
             voteType: "UPVOTE",
           },
         });
-
+        console.log(res);
         refetch();
       }}
       onDownvote={async () => {

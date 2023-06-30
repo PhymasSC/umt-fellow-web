@@ -236,7 +236,7 @@ const Editor: React.FC<Props> = ({ data }) => {
               required
               {...form.getInputProps("title")}
             />
-            <MultiSelect
+            {/* <MultiSelect
               placeholder="Select tags (Optional)"
               data={[]}
               icon={<IconHash size={14} />}
@@ -251,7 +251,7 @@ const Editor: React.FC<Props> = ({ data }) => {
               // 	return item;
               // }}
               {...form.getInputProps("tags")}
-            />
+            /> */}
             <RTE
               content={form.values.description}
               onUpdate={({ editor }) =>
