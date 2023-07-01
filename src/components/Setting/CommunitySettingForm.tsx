@@ -237,7 +237,9 @@ const CommunitySettingForm = (props: data) => {
       <FormLayout
         layout={"horizontal"}
         label={"Transfer Ownership"}
-        description={""}
+        description={
+          "Transfer ownership of the community to another moderator."
+        }
         input={
           <Button
             fullWidth
@@ -254,7 +256,7 @@ const CommunitySettingForm = (props: data) => {
         layout={"horizontal"}
         label={"Delete Community"}
         description={
-          "Activate this setting to transition a community into an archived state. Once archived, the community will no longer be actively participatory, but users can still view its content and history. It is an ideal option for preserving valuable discussions while limiting further interactions such as joining or posting new content."
+          "By deleting the community, you will lose all the data associated with it. This action is irreversible."
         }
         input={
           <>
