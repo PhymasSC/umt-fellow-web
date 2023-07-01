@@ -13,7 +13,12 @@ import {
   Card,
   Table,
 } from "@mantine/core";
-import { IconAlertCircle, IconCheck, IconTrash } from "@tabler/icons";
+import {
+  IconAlertCircle,
+  IconArrowsTransferUp,
+  IconCheck,
+  IconTrash,
+} from "@tabler/icons";
 import { DELETE_COMMUNITY, UPDATE_COMMUNITY } from "@operations/mutations";
 import ImageInput from "@components/Form/ImageInput";
 import Search from "@components/Search";
@@ -228,6 +233,23 @@ const CommunitySettingForm = (props: data) => {
           </Button>
         }
       /> */}
+      <Divider color="red" label="Dangerous zone" my="md" />
+      <FormLayout
+        layout={"horizontal"}
+        label={"Transfer Ownership"}
+        description={""}
+        input={
+          <Button
+            fullWidth
+            type="reset"
+            color="orange"
+            variant="light"
+            leftIcon={<IconArrowsTransferUp size={16} />}
+          >
+            Transfer Ownership
+          </Button>
+        }
+      />
       <FormLayout
         layout={"horizontal"}
         label={"Delete Community"}
