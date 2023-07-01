@@ -158,16 +158,18 @@ export const resolvers = {
 			return community;
 		},
 		getCommunitiesOwnedByUser: async (_: any, { userId }: { userId: string }, { prisma }: { prisma: PrismaType }) => {
+			// get community where user is admin in community member entity
 			const communities = await prisma.community.findMany({
 				where: {
 					CommunityMember: {
-						every: {
+						some: {
 							userId,
-							role: Role.ADMIN,
+							role: Role.ADMIN
 						}
 					}
-				},
+				}
 			});
+			console.log(communities)
 			return communities;
 		},
 		getCommunitiesFollowedByUser: async (_: any, { userId }: { userId: string }, { prisma }: { prisma: PrismaType }) => {
