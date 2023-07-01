@@ -161,8 +161,8 @@ const Community: NextPage<CommunityProps> = (props) => {
                   variant="gradient"
                   gradient={{ from: "indigo", to: "cyan", deg: 45 }}
                 >
-                  Let&apos;s get this forum started! Start a thread and see who
-                  joins in.{" "}
+                  Let&apos;s get this community started! Start a thread and see
+                  who joins in.{" "}
                 </Text>
               </Card>
             ) : (

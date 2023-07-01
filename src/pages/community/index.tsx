@@ -14,8 +14,13 @@ import { useDisclosure } from "@mantine/hooks";
 import { getSession, useSession, GetSessionParams } from "next-auth/react";
 import { useRouter } from "next/router";
 import { client } from "@lib/apollo-client";
-import { GET_COMMUNITIES } from "@operations/queries";
+import {
+  GET_COMMUNITIES,
+  GET_COMMUNITIES_FOLLOWED_BY_USER,
+} from "@operations/queries";
 import { NextPage } from "next";
+import { useQuery } from "@apollo/client";
+import { useEffect } from "react";
 
 type CommunitiesProps = {
   communities: {
@@ -36,7 +41,15 @@ const Communities: NextPage<CommunitiesProps> = ({ communities }) => {
   const theme = useMantineTheme();
   const { data: session } = useSession();
   const router = useRouter();
+  // const { loading, error, data } = useQuery(GET_COMMUNITIES_FOLLOWED_BY_USER, {
+  //   variables: {
+  //     userId: session?.user?.id || "",
+  //   },
+  // });
 
+  // useEffect(() => {
+  //   console.log(data);
+  // }, [data]);
   return (
     <Container fluid>
       {session && (
@@ -114,7 +127,6 @@ export const getServerSideProps = async (ctx: GetSessionParams) => {
         userId: user?.id || "",
       },
     });
-
     return {
       props: {
         communities: data.getCommunities,

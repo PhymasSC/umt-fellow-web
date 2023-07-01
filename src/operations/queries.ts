@@ -203,6 +203,7 @@ query ($userId: String!) {
 	  name
 	  avatar
 	  description
+	  isJoined
 	}
   }
 `;

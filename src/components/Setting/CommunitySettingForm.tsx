@@ -11,7 +11,6 @@ import {
   Flex,
   Loader,
   Card,
-  Table,
 } from "@mantine/core";
 import {
   IconAlertCircle,
@@ -21,19 +20,16 @@ import {
 } from "@tabler/icons";
 import { DELETE_COMMUNITY, UPDATE_COMMUNITY } from "@operations/mutations";
 import ImageInput from "@components/Form/ImageInput";
-import Search from "@components/Search";
 import { useMutation, useQuery } from "@apollo/client";
 import {
-  GET_COMMUNITY_MEMBERS,
   GET_COMMUNITY_MEMBERS_BY_NAME,
   GET_COMMUNITY_MODERATORS,
   GET_COMMUNITY_RULES,
 } from "@operations/queries";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import { useRouter } from "next/router";
 import TableSelection from "@components/Form/Table";
 import CMSearch from "@components/Search/CMSearch";
 import { Role } from "@prisma/client";
@@ -118,9 +114,6 @@ const CommunitySettingForm = (props: data) => {
     variables: { communityId: id },
   });
 
-  useEffect(() => {
-    console.log(rules);
-  }, [rules]);
   return (
     <>
       <FormLayout
@@ -206,18 +199,30 @@ const CommunitySettingForm = (props: data) => {
               }}
             />
             <Card withBorder mt="md">
-              <TableSelection
-                data={
-                  (moderators && moderators.getCommunityModerators) || [
-                    {
-                      id: "1",
-                      avatar:
-                        "https://images.unsplash.com/photo-1630841539293-bd20634c5d72?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
-                      name: "Jeremy Footviewer",
-                    },
-                  ]
-                }
-              />{" "}
+              {moderators && moderators.getCommunityModerators.length > 0 ? (
+                <TableSelection
+                  data={
+                    (moderators && moderators.getCommunityModerators) || [
+                      {
+                        id: "1",
+                        avatar:
+                          "https://images.unsplash.com/photo-1630841539293-bd20634c5d72?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
+                        name: "Jeremy Footviewer",
+                      },
+                    ]
+                  }
+                />
+              ) : (
+                <Card>
+                  <Text>
+                    There is no moderators yet for{" "}
+                    <Text fw="bold" span>
+                      {name}
+                    </Text>{" "}
+                    community.
+                  </Text>
+                </Card>
+              )}
             </Card>
           </>
         }

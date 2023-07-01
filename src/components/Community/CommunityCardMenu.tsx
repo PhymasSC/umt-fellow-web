@@ -1,5 +1,10 @@
 import { Menu, ActionIcon, Button, Group } from "@mantine/core";
-import { IconPencil, IconTrash, IconDotsVertical } from "@tabler/icons";
+import {
+  IconPencil,
+  IconTrash,
+  IconDotsVertical,
+  IconAlertCircle,
+} from "@tabler/icons";
 import { useSession } from "next-auth/react";
 import { MouseEvent, useState } from "react";
 import {
@@ -8,7 +13,11 @@ import {
 } from "@operations/mutations";
 import { useMutation } from "@apollo/client";
 import Link from "next/link";
-import { GET_COMMUNITIES } from "@operations/queries";
+import {
+  GET_COMMUNITIES,
+  GET_COMMUNITIES_FOLLOWED_BY_USER,
+} from "@operations/queries";
+import { notifications } from "@mantine/notifications";
 
 const CommunityCardMenu: React.FC<{
   communityId: string;
@@ -36,8 +45,8 @@ const CommunityCardMenu: React.FC<{
           if (e.defaultPrevented) return;
           e.preventDefault();
           setLoading(true);
-          if (!isJoined) {
-            await addCommunityMember({
+          if (!joined) {
+            let res = await addCommunityMember({
               variables: {
                 communityId: communityId,
                 userId: session?.user.id,
@@ -45,20 +54,30 @@ const CommunityCardMenu: React.FC<{
             });
             setJoined(!joined);
           } else {
-            await deleteCommunityMember({
+            let res = await deleteCommunityMember({
               variables: {
                 communityId: communityId,
                 userId: session?.user.id,
               },
-              refetchQueries: [
-                {
-                  query: GET_COMMUNITIES,
-                  variables: { userId: session?.user.id },
-                },
-              ],
             });
-            setJoined(!joined);
+            console.log(res);
+            if (res && res?.data?.leaveCommunity === null) {
+              notifications.show({
+                title: "Invalid Action",
+                message: "Admins cannot leave the community",
+                color: "red",
+                icon: <IconAlertCircle size={18} />,
+              });
+            } else {
+              notifications.show({
+                title: "Success",
+                message: "You have left the community",
+                color: "green",
+              });
+              setJoined(!joined);
+            }
           }
+
           setLoading(false);
         }}
         loading={loading}

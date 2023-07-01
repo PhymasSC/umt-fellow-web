@@ -295,24 +295,36 @@ mutation DeleteCommunity($id: String!) {
 // Community Members
 
 export const ADD_COMMUNITY_MEMBER = gql`
-  	mutation AddCommunityMember($communityId: String!, $userId: String!, $role: Role) {
-	addCommunityMember(communityId: $communityId, userId: $userId, role: $role) {
-		code
-		success
-		message
+mutation JoinCommunity($communityId: String!, $userId: String!) {
+	joinCommunity(communityId: $communityId, userId: $userId) {
+		id
+		name
+		description
+		avatar
+		banner
+		creatorId {
+			id 
+		}
+		isJoined
 	}
-}
+  }
 `;
 
 
 export const DELETE_COMMUNITY_MEMBER = gql`
-mutation DeleteCommunityMember($communityId: String!, $userId: String!) {
-	deleteCommunityMember(communityId: $communityId, userId: $userId) {
-		code
-		success
-		message
+mutation LeaveCommunity($communityId: String!, $userId: String!) {
+	leaveCommunity(communityId: $communityId, userId: $userId) {
+		id
+		name
+		description
+		avatar
+		banner
+		creatorId {
+			id 
+		}
+		isJoined
 	}
-}
+  }
 `;
 
 // Community Rules

@@ -183,8 +183,22 @@ export const resolvers = {
 				}
 			});
 
+			const communitiesWithJoinStatus = await Promise.all(
+				communities.map(async (community) => {
+					const communityMember = await prisma.communityMember.findFirst({
+						where: {
+							communityId: community.id,
+							userId,
+						},
+					});
+					return {
+						...community,
+						isJoined: !!communityMember,
+					};
+				})
+			);
 			console.log(communities)
-			return communities;
+			return communitiesWithJoinStatus;
 		},
 
 		getCommunityMembers: async (
@@ -1224,7 +1238,7 @@ export const resolvers = {
 			}
 		},
 
-		addCommunityMember: async (
+		joinCommunity: async (
 			_: any,
 			{
 				communityId,
@@ -1238,6 +1252,12 @@ export const resolvers = {
 			{ prisma }: { prisma: PrismaType }
 		) => {
 			try {
+				const community = await prisma.community.findFirst({
+					where: {
+						id: communityId,
+					},
+				});
+
 				const member = await prisma.communityMember.create({
 					data: {
 						communityId,
@@ -1246,23 +1266,13 @@ export const resolvers = {
 					},
 				});
 
-				return {
-					code: 200,
-					success: true,
-					message: "Member added successfully",
-					communityMember: member,
-				};
+				return { ...community, isJoined: true }
 			} catch (error: any) {
-				return {
-					code: 1,
-					success: false,
-					message: error.message || "Member addition failed",
-					member: null,
-				};
+				return null;
 			}
 		},
 
-		deleteCommunityMember: async (
+		leaveCommunity: async (
 			_: any,
 			{
 				communityId,
@@ -1274,28 +1284,39 @@ export const resolvers = {
 			{ prisma }: { prisma: PrismaType }
 		) => {
 			try {
+				const community = await prisma.community.findFirst({
+					where: {
+						CommunityMember: {
+							some: {
+								communityId,
+								userId,
+							},
+						}
+					}
+				})
+
+				const role = await prisma.communityMember.findFirst({
+					where: {
+						communityId,
+						userId,
+					},
+				})
+
+				if (!role || role.role === Role.ADMIN) return null
+
 				const member = await prisma.communityMember.delete({
 					where: {
 						communityId_userId: {
 							communityId,
 							userId,
 						},
+
 					},
 				});
 
-				return {
-					code: 200,
-					success: true,
-					message: "Member deleted successfully",
-					communityMember: member,
-				};
+				return { ...community, isJoined: false }
 			} catch (error: any) {
-				return {
-					code: 1,
-					success: false,
-					message: error.message || "Member deletion failed",
-					member: null,
-				};
+				return null
 			}
 		},
 
