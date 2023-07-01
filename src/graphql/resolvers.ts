@@ -206,6 +206,44 @@ export const resolvers = {
 			return members;
 		},
 
+		getCommunityMembersByName: async (
+			_: any,
+			{ communityId, name, role, limit, offset }: { communityId: string, name: string, role: Role, limit: number, offset: number },
+			{ prisma }: { prisma: PrismaType }
+		) => {
+			const members = await prisma.communityMember.findMany({
+				where: {
+					communityId,
+					user: {
+						name: {
+							contains: name,
+						}
+					},
+					role: {
+						in: role || [Role.ADMIN, Role.MODERATOR, Role.USER]
+					}
+				},
+				take: limit,
+				skip: offset,
+			});
+			console.log(members)
+			return members;
+		},
+
+		getCommunityModerators: async (
+			_: any,
+			{ communityId }: { communityId: string },
+			{ prisma }: { prisma: PrismaType }
+		) => {
+			const moderators = await prisma.communityMember.findMany({
+				where: {
+					communityId,
+					role: Role.MODERATOR
+				}
+			});
+			return moderators;
+		},
+
 		getCommunityMember: async (
 			_: any,
 			{ communityId, userId }: { communityId: string, userId: string },

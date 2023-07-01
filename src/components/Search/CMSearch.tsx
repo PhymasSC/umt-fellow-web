@@ -11,8 +11,7 @@ import {
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconMoodCry, IconSearch } from "@tabler/icons";
 import { useQuery } from "@apollo/client";
-import { forwardRef, useEffect, useState } from "react";
-import { GET_COMMUNITY_MEMBERS } from "@operations/queries";
+import { forwardRef, useState } from "react";
 
 type SearchProps = {
   query: any;
@@ -41,9 +40,8 @@ const Search = (props: SearchProps) => {
   } = props;
   const [value, setValue] = useState("");
   const debouncedValue = useDebouncedValue(value, 250);
-  console.log({ ...queryVar });
   const { loading, data, refetch } = useQuery(query, {
-    variables: { ...queryVar },
+    variables: { ...queryVar, name: debouncedValue[0], limit: limit },
   });
   // const { loading, data, refetch } = useQuery(GET_USERS_BY_NAME("id"), {
   //   variables: { name: debouncedValue[0], limit: limit },
@@ -112,7 +110,7 @@ const Search = (props: SearchProps) => {
           No users found
         </Group>
       }
-      data={(data && data.getCommunityMembers.map(buildOptions)) || []}
+      data={(data && data.getCommunityMembersByName.map(buildOptions)) || []}
     />
   );
 };

@@ -182,6 +182,8 @@ export const typeDefs = gql`
 
 		getCommunityMembers(communityId: String!, role: [Role], limit: Int, offset: Int): [CommunityMember]!
 		getCommunityMember(communityId: String!, userId: String!): CommunityMember!
+		getCommunityMembersByName(communityId: String!, name: String!, role: [Role], limit: Int, offset: Int): [CommunityMember]!
+		getCommunityModerators(communityId: String!, limit: Int, offset: Int): [CommunityMember]!
 
 		getCommunityRules(communityId: String!): [CommunityRules]!
 

@@ -25,6 +25,7 @@ import Search from "@components/Search";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   GET_COMMUNITY_MEMBERS,
+  GET_COMMUNITY_MEMBERS_BY_NAME,
   GET_COMMUNITY_RULES,
 } from "@operations/queries";
 import { useEffect, useState } from "react";
@@ -195,7 +196,7 @@ const CommunitySettingForm = (props: data) => {
                 console.log(val);
               }}
               placeholder="Search for members"
-              query={GET_COMMUNITY_MEMBERS}
+              query={GET_COMMUNITY_MEMBERS_BY_NAME}
               queryVar={{
                 communityId: id,
                 role: Role.USER,

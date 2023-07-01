@@ -221,6 +221,31 @@ query GetCommunityMembers($communityId: String!, $role: [Role], $limit: Int, $of
   }
 `;
 
+export const GET_COMMUNITY_MEMBERS_BY_NAME = gql`
+query GetCommunityMembersByName($communityId: String!, $name: String!, $role: [Role], $limit: Int, $offset: Int) {
+	getCommunityMembersByName(communityId: $communityId, name: $name, role: $role, limit: $limit, offset: $offset) {
+	  userId {
+		id 
+		image 
+		name
+	  }
+	}
+  }
+`;
+
+export const GET_COMMUNITY_MODERATORS = gql`
+query GetCommunityModerators($communityId: String!) {
+	getCommunityModerators(communityId: $communityId) {
+	  userId {
+		id
+		image
+		name
+	  }
+	  created_at
+	}
+  }
+`;
+
 export const GET_COMMUNITY_RULES = gql`
 query GetCommunityRules($communityId: String!) {
 	getCommunityRules(communityId: $communityId) {
