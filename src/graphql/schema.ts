@@ -180,7 +180,7 @@ export const typeDefs = gql`
 		getCommunitiesOwnedByUser(userId: String!): [Community]
 		getCommunitiesFollowedByUser(userId: String!): [Community]
 
-		getCommunityMembers(communityId: String!): [CommunityMember]!
+		getCommunityMembers(communityId: String!, role: [Role], limit: Int, offset: Int): [CommunityMember]!
 		getCommunityMember(communityId: String!, userId: String!): CommunityMember!
 
 		getCommunityRules(communityId: String!): [CommunityRules]!

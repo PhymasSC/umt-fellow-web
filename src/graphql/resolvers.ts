@@ -189,14 +189,20 @@ export const resolvers = {
 
 		getCommunityMembers: async (
 			_: any,
-			{ communityId }: { communityId: string },
+			{ communityId, role, limit, offset }: { communityId: string, role?: [Role], limit: number, offset: number },
 			{ prisma }: { prisma: PrismaType }
 		) => {
 			const members = await prisma.communityMember.findMany({
 				where: {
-					communityId
+					communityId,
+					role: {
+						in: role || [Role.ADMIN, Role.MODERATOR, Role.USER]
+					}
 				},
+				take: limit,
+				skip: offset,
 			});
+			console.log(members)
 			return members;
 		},
 

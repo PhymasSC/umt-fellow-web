@@ -23,13 +23,18 @@ import { DELETE_COMMUNITY, UPDATE_COMMUNITY } from "@operations/mutations";
 import ImageInput from "@components/Form/ImageInput";
 import Search from "@components/Search";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_COMMUNITY_RULES } from "@operations/queries";
+import {
+  GET_COMMUNITY_MEMBERS,
+  GET_COMMUNITY_RULES,
+} from "@operations/queries";
 import { useEffect, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import TableSelection from "@components/Form/Table";
+import CMSearch from "@components/Search/CMSearch";
+import { Role } from "@prisma/client";
 
 type data = {
   data: {
@@ -185,9 +190,15 @@ const CommunitySettingForm = (props: data) => {
         }
         input={
           <>
-            <Search
+            <CMSearch
               onChange={(val) => {
                 console.log(val);
+              }}
+              placeholder="Search for members"
+              query={GET_COMMUNITY_MEMBERS}
+              queryVar={{
+                communityId: id,
+                role: Role.USER,
               }}
             />
             <Card withBorder mt="md">
