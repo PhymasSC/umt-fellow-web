@@ -123,14 +123,16 @@ const CommunityCardMenu: React.FC<{
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
-            <Link href={`/setting?t=3&id=${communityId}`}>
+            <Link href={`/setting?t=2&id=${communityId}`}>
               <Menu.Item icon={<IconPencil size={14} />} component="a">
                 Edit Community
               </Menu.Item>
             </Link>
-            <Menu.Item icon={<IconTrash size={14} />} color="red">
-              Delete Community
-            </Menu.Item>
+            <Link href={`/setting?t=2&id=${communityId}`}>
+              <Menu.Item icon={<IconTrash size={14} />} color="red">
+                Delete Community
+              </Menu.Item>
+            </Link>
           </Menu.Dropdown>
         </Menu>
       )}
