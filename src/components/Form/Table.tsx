@@ -1,38 +1,44 @@
-import {
-  Table,
-  ScrollArea,
-  Group,
-  Avatar,
-  Text,
-  ActionIcon,
-  Button,
-} from "@mantine/core";
-import { IconEditCircle, IconTrash } from "@tabler/icons";
+import { Table, ScrollArea, Group, Avatar, Text, Button } from "@mantine/core";
 import Link from "next/link";
 
 interface TableSelectionProps {
   data: {
-    avatar: string;
-    name: string;
-    id: string;
+    userId: {
+      image: string;
+      name: string;
+      id: string;
+    };
+    created_at: string | number | Date;
   }[];
 }
 
 const TableSelection = ({ data }: TableSelectionProps) => {
   const rows = data.map((item) => {
+    console.log(item);
     return (
-      <tr key={item.id}>
+      <tr key={item.userId.id}>
         <td>
           <Group spacing="sm">
-            <Link href={`/profile/${item.id}`} passHref>
-              <Avatar size={26} src={item.avatar} radius={26} component="a" />
+            <Link href={`/profile/${item.userId.id}`} passHref>
+              <Avatar
+                size={26}
+                src={item.userId.image}
+                radius={26}
+                component="a"
+              />
             </Link>
             <Text size="sm" weight={500}>
-              {item.name}
+              {item.userId.name}
             </Text>
           </Group>
         </td>
-        <td>row</td>
+        <td>
+          {new Date(item.created_at).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </td>
 
         <td>
           <Group spacing="xs">

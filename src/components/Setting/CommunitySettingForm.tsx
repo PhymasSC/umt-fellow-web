@@ -26,6 +26,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import {
   GET_COMMUNITY_MEMBERS,
   GET_COMMUNITY_MEMBERS_BY_NAME,
+  GET_COMMUNITY_MODERATORS,
   GET_COMMUNITY_RULES,
 } from "@operations/queries";
 import { useEffect, useState } from "react";
@@ -93,7 +94,6 @@ const example = {
 };
 
 const CommunitySettingForm = (props: data) => {
-  const router = useRouter();
   const { id, name, description, avatar, banner } = props.data;
   const [opened, { open, close }] = useDisclosure(false);
   const theme = useMantineTheme();
@@ -111,6 +111,9 @@ const CommunitySettingForm = (props: data) => {
   });
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteCommunity] = useMutation(DELETE_COMMUNITY);
+  const { data: moderators } = useQuery(GET_COMMUNITY_MODERATORS, {
+    variables: { communityId: id },
+  });
   const { loading, data: rules } = useQuery(GET_COMMUNITY_RULES, {
     variables: { communityId: id },
   });
@@ -203,7 +206,18 @@ const CommunitySettingForm = (props: data) => {
               }}
             />
             <Card withBorder mt="md">
-              <TableSelection data={example.data} />{" "}
+              <TableSelection
+                data={
+                  (moderators && moderators.getCommunityModerators) || [
+                    {
+                      id: "1",
+                      avatar:
+                        "https://images.unsplash.com/photo-1630841539293-bd20634c5d72?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
+                      name: "Jeremy Footviewer",
+                    },
+                  ]
+                }
+              />{" "}
             </Card>
           </>
         }
