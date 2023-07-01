@@ -4,6 +4,7 @@ import {
   IconTrash,
   IconDotsVertical,
   IconAlertCircle,
+  IconCheck,
 } from "@tabler/icons";
 import { useSession } from "next-auth/react";
 import { MouseEvent, useState } from "react";
@@ -52,6 +53,22 @@ const CommunityCardMenu: React.FC<{
                 userId: session?.user.id,
               },
             });
+
+            if (res && res?.data?.addCommunityMember === null) {
+              notifications.show({
+                title: "Invalid Action",
+                message: "You are already a member of this community",
+                color: "red",
+                icon: <IconAlertCircle size={18} />,
+              });
+            } else {
+              notifications.show({
+                title: "Success Join",
+                message: "You have joined the community",
+                color: "green",
+                icon: <IconCheck size={18} />,
+              });
+            }
             setJoined(!joined);
           } else {
             let res = await deleteCommunityMember({
@@ -60,7 +77,7 @@ const CommunityCardMenu: React.FC<{
                 userId: session?.user.id,
               },
             });
-            console.log(res);
+
             if (res && res?.data?.leaveCommunity === null) {
               notifications.show({
                 title: "Invalid Action",
@@ -70,9 +87,10 @@ const CommunityCardMenu: React.FC<{
               });
             } else {
               notifications.show({
-                title: "Success",
+                title: "Success Leave",
                 message: "You have left the community",
                 color: "green",
+                icon: <IconCheck size={18} />,
               });
               setJoined(!joined);
             }
