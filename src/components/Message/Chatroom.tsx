@@ -11,6 +11,7 @@ import {
   ScrollArea,
   Tooltip,
   Divider,
+  Container,
 } from "@mantine/core";
 import { IconSend } from "@tabler/icons";
 import BubbleGroup from "./BubbleGroup";
@@ -124,28 +125,38 @@ const Chatroom = () => {
         <Flex gap="md">
           <Avatar.Group>
             {(participants &&
-              participants.getChannelParticipants.map((participant: any) => {
-                if (participant.user.id === session?.user.id) return null;
-                return (
-                  <Link href={`/profile/${participant.user.id}`} passHref>
-                    <Avatar
-                      radius="xl"
-                      size="md"
-                      src={participant.user.image}
-                      component="a"
-                    />
-                  </Link>
-                );
-              })) || <Avatar radius="xl" size="md" src={""} />}
+              participants.getChannelParticipants.map(
+                (participant: any, index: number) => {
+                  if (participant.user.id === session?.user.id) return null;
+                  return (
+                    <Link
+                      key={index}
+                      href={`/profile/${participant.user.id}`}
+                      passHref
+                    >
+                      <Avatar
+                        radius="xl"
+                        size="md"
+                        src={participant.user.image}
+                        component="a"
+                      />
+                    </Link>
+                  );
+                }
+              )) || <Avatar radius="xl" size="md" src={""} />}
           </Avatar.Group>
           <Flex direction="column" justify="center" gap="0">
-            <Title order={1} size="h6" fw={500}>
-              {participants &&
-                participants.getChannelParticipants.map((participant: any) => {
+            {participants &&
+              participants.getChannelParticipants.map(
+                (participant: any, index: number) => {
                   if (participant.user.id === session?.user.id) return null;
-                  return participant.user.name;
-                })}
-            </Title>
+                  return (
+                    <Title key={index} order={1} size="h6" fw={500}>
+                      {participant.user.name}
+                    </Title>
+                  );
+                }
+              )}
           </Flex>
         </Flex>
 
@@ -166,7 +177,7 @@ const Chatroom = () => {
                     });
                   }, 100);
                   return (
-                    <>
+                    <Container key={index} w="100%" fluid>
                       {
                         // if the message is first in the group, show divider
                         index === 0 && (
@@ -204,7 +215,6 @@ const Chatroom = () => {
                         )
                       }
                       <BubbleGroup
-                        key={index}
                         name={message.name}
                         profileUrl={`/profile/${message.senderId}`}
                         profileImage={message.profileImage}
@@ -230,18 +240,19 @@ const Chatroom = () => {
                           </Text>
                         </Flex>
                       </BubbleGroup>
-                    </>
+                    </Container>
                   );
                 })
               ) : (
                 <>
                   {participants &&
                     participants.getChannelParticipants.map(
-                      (participant: any) => {
+                      (participant: any, index: number) => {
                         if (participant.user.id === session?.user.id)
                           return null;
                         return (
                           <Flex
+                            key={index}
                             direction="column"
                             align="center"
                             gap="md"
