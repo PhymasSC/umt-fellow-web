@@ -19,14 +19,11 @@ import { useSession } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import Bubble from "./Bubble";
-import {
-  GET_CHANNEL_PARTICIPANTS,
-  GET_MESSAGES,
-  GET_USER,
-} from "@operations/queries";
+import { GET_CHANNEL_PARTICIPANTS, GET_MESSAGES } from "@operations/queries";
 import { useQuery } from "@apollo/client";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { useForm } from "@mantine/form";
 
 type Msg = {
   name: string;
@@ -52,6 +49,17 @@ const Chatroom = () => {
       limit: 5,
     },
   });
+  const msgForm = useForm({
+    initialValues: {
+      message: "",
+    },
+    validate: (values) => {
+      const errors = {};
+      if (values.message.trim() === "")
+        msgForm.setErrors({ message: "Message cannot be empty" });
+      return errors;
+    },
+  });
 
   const [channel, ably] = useChannel(
     `channel-${router.query.id?.[0] as string}`,
@@ -61,8 +69,7 @@ const Chatroom = () => {
   );
 
   const sendMessage = async () => {
-    const msg = document.getElementById("message") as HTMLInputElement;
-
+    if (msgForm.errors.message) return;
     try {
       const response = await fetch("/api/messages/create-message", {
         method: "POST",
@@ -72,14 +79,14 @@ const Chatroom = () => {
         body: JSON.stringify({
           senderId: session?.user.id,
           channelId: router.query.id?.[0],
-          content: msg.value,
+          content: msgForm.values.message,
           profileImage: session?.user.image,
           name: session?.user.name,
         }),
       });
 
       if (response.ok) {
-        msg.value = "";
+        msgForm.setValues({ message: "" });
       } else {
         console.error("Failed to send message");
       }
@@ -278,11 +285,13 @@ const Chatroom = () => {
                 color="blue"
                 size="md"
                 radius="xs"
+                disabled={msgForm.values.message.trim() === ""}
                 onClick={sendMessage}
               >
                 <IconSend size={20} />
               </ActionIcon>
             }
+            {...msgForm.getInputProps("message")}
           />
         </Flex>
       </Flex>
