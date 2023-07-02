@@ -7,6 +7,9 @@ import {
   Title,
   Textarea,
   Divider,
+  Modal,
+  useMantineTheme,
+  List,
 } from "@mantine/core";
 import {
   IconBrandDribbble,
@@ -19,15 +22,19 @@ import {
   IconBrandTiktok,
   IconBrandTwitter,
   IconBrandYoutube,
+  IconCircleKey,
   IconOutbound,
   IconTrash,
 } from "@tabler/icons";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@apollo/client";
 import { GET_USER } from "@operations/queries";
-import { Input, NumberInput, FormLayout } from "../Form";
+import { Input, NumberInput, FormLayout, NewPassword } from "../Form";
 import { EDIT_USER } from "@operations/mutations";
 import ImageInput from "@components/Form/ImageInput";
+import { useDisclosure } from "@mantine/hooks";
+import { useForm } from "@mantine/form";
+import { PASSWORD_PATTERN } from "@constants/regex";
 
 type USER_TYPE = {
   id: string;
@@ -57,7 +64,6 @@ const AccountSetting = () => {
   const { data: session, update } = useSession();
   const {
     data,
-    loading,
   }: { data: { getUser: USER_TYPE } | undefined; loading: boolean } = useQuery(
     GET_USER(`
       coverImage
@@ -85,7 +91,17 @@ const AccountSetting = () => {
       },
     }
   );
+  const [passwordOpened, { open: passwordOpen, close: passwordClose }] =
+    useDisclosure(false);
+  const theme = useMantineTheme();
   const userData: USER_TYPE | undefined = data?.getUser;
+  const passwordForm = useForm({
+    initialValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
 
   const configuration: {
     label: string | React.ReactNode;
@@ -458,18 +474,6 @@ const AccountSetting = () => {
       ),
     },
     {
-      label: "Password",
-      description: "Change the password used to log in to your account.",
-      input: (
-        <Input
-          argType="password"
-          component={PasswordInput}
-          mutation={EDIT_USER({ password: true })}
-          variables={{ id: session?.user.id }}
-        />
-      ),
-    },
-    {
       label: "Export Data",
       description: "Export all of your data from the site.",
       layout: "horizontal",
@@ -482,6 +486,122 @@ const AccountSetting = () => {
         >
           Export Data
         </Button>
+      ),
+    },
+    {
+      label: "Password",
+      description: "Change the password used to log in to your account.",
+      layout: "horizontal",
+      input: (
+        <>
+          <Modal
+            title="Change your password"
+            opened={passwordOpened}
+            onClose={passwordClose}
+            overlayProps={{
+              color:
+                theme.colorScheme === "dark"
+                  ? theme.colors.dark[9]
+                  : theme.colors.gray[2],
+              opacity: 0.55,
+              blur: 3,
+            }}
+            centered
+            size="lg  "
+          >
+            <Modal.Body>
+              To change your password, please follow these steps:
+              <List>
+                <List.Item>
+                  Enter your current password, followed by your new password and
+                  confirm the new password.
+                </List.Item>
+                <List.Item>
+                  Make sure to choose a strong and unique password.
+                </List.Item>
+              </List>
+              <Divider my="md" />
+              <form
+                onSubmit={passwordForm.onSubmit((val) => {
+                  if (val.currentPassword === val.newPassword)
+                    return passwordForm.setFieldError(
+                      "newPassword",
+                      "New password cannot be the same as your current password"
+                    );
+                  if (val.newPassword !== val.confirmPassword)
+                    return passwordForm.setFieldError(
+                      "confirmPassword",
+                      "Passwords do not match"
+                    );
+
+                  console.log(val);
+                })}
+              >
+                <FormLayout
+                  layout="horizontal"
+                  label="Current Password"
+                  description="Enter your current password"
+                  input={
+                    <PasswordInput
+                      {...passwordForm.getInputProps("currentPassword")}
+                    />
+                  }
+                />
+                <FormLayout
+                  layout="horizontal"
+                  label="New Password"
+                  description="Choose a new password"
+                  input={
+                    //@ts-ignore
+                    <NewPassword
+                      form={passwordForm}
+                      argName="newPassword"
+                      {...passwordForm.getInputProps("newPassword")}
+                    />
+                  }
+                />
+                <FormLayout
+                  layout="horizontal"
+                  label="Current Password"
+                  description="Re-enter your new password to confirm"
+                  input={
+                    <PasswordInput
+                      {...passwordForm.getInputProps("confirmPassword")}
+                    />
+                  }
+                />
+                <Button
+                  variant="default"
+                  fullWidth
+                  mt="md"
+                  type="submit"
+                  disabled={
+                    !PASSWORD_PATTERN.test(passwordForm.values.newPassword) ||
+                    !PASSWORD_PATTERN.test(
+                      passwordForm.values.confirmPassword
+                    ) ||
+                    !PASSWORD_PATTERN.test(
+                      passwordForm.values.currentPassword
+                    ) ||
+                    passwordForm.values.newPassword !==
+                      passwordForm.values.confirmPassword
+                  }
+                >
+                  Change password
+                </Button>
+              </form>
+            </Modal.Body>
+          </Modal>
+          <Button
+            variant="light"
+            color="indigo"
+            fullWidth
+            leftIcon={<IconCircleKey size="1em" />}
+            onClick={passwordOpen}
+          >
+            Change Password
+          </Button>
+        </>
       ),
     },
     {

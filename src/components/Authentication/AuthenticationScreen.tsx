@@ -1,3 +1,4 @@
+import { NewPassword } from "@components/Form";
 import {
   Anchor,
   Button,
@@ -66,14 +67,26 @@ const AuthenticationScreen = ({
             {...form.getInputProps("email")}
           />
 
-          <PasswordInput
-            required
-            label="Password"
-            type="password"
-            icon={<IconLock size={14} />}
-            placeholder="Your password"
-            {...form.getInputProps("password")}
-          />
+          {(screen === "login" && (
+            <PasswordInput
+              required
+              label="Password"
+              type="password"
+              icon={<IconLock size={14} />}
+              placeholder="Your password"
+              {...form.getInputProps("password")}
+            />
+          )) || (
+            // @ts-ignore
+            <NewPassword
+              required
+              label="Password"
+              type="password"
+              form={form}
+              argName="password"
+              {...form.getInputProps("password")}
+            />
+          )}
 
           {screen === "login" && (
             <Anchor
