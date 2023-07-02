@@ -10,6 +10,7 @@ import {
   ActionIcon,
   ScrollArea,
   Tooltip,
+  Divider,
 } from "@mantine/core";
 import { IconSend } from "@tabler/icons";
 import BubbleGroup from "./BubbleGroup";
@@ -166,6 +167,15 @@ const Chatroom = () => {
                   }, 100);
                   return (
                     <>
+                      {
+                        // if the message is first in the group, show divider
+                        index === 0 && (
+                          <Divider
+                            label={"There are no more previous messages"}
+                            labelPosition="center"
+                          />
+                        )
+                      }
                       {
                         // if the message is 10 minutes older than the previous message, show the timestamp
                         (dayjs(message.timestamp).diff(
