@@ -1,3 +1,4 @@
+import Footer from "@components/Footer";
 import { Card, Container, Tabs, Text, Title } from "@mantine/core";
 import { useRouter } from "next/router";
 import AccountSetting from "./AccountSetting";
@@ -44,6 +45,7 @@ const Setting: React.FC<Setting> = (props) => {
   return (
     <>
       <Card
+        mb="md"
         sx={(theme) => ({
           backgroundColor:
             theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
@@ -71,6 +73,8 @@ const Setting: React.FC<Setting> = (props) => {
           </Container>
         </Tabs>
       </Card>
+
+      <Footer />
     </>
   );
 };

@@ -6,6 +6,7 @@ import {
   PasswordInput,
   Title,
   Textarea,
+  Divider,
 } from "@mantine/core";
 import {
   IconBrandDribbble,
@@ -18,6 +19,7 @@ import {
   IconBrandTiktok,
   IconBrandTwitter,
   IconBrandYoutube,
+  IconOutbound,
   IconTrash,
 } from "@tabler/icons";
 import { useSession } from "next-auth/react";
@@ -455,33 +457,48 @@ const AccountSetting = () => {
         </Stack>
       ),
     },
-    // {
-    //   label: "Password",
-    //   description: "Change the password used to log in to your account.",
-    //   input: (
-    //     <Input
-    //       argType="password"
-    //       component={PasswordInput}
-    //       mutation={EDIT_USER({ password: true })}
-    //       variables={{ id: session?.user.id }}
-    //     />
-    //   ),
-    // },
-    // {
-    //   label: "Delete Account",
-    //   description: "Permanently delete your account and all associated data",
-    //   layout: "horizontal",
-    //   input: (
-    //     <Button
-    //       w="100%"
-    //       variant="outline"
-    //       color="red"
-    //       leftIcon={<IconTrash size="1em" />}
-    //     >
-    //       Delete Account
-    //     </Button>
-    //   ),
-    // },
+    {
+      label: "Password",
+      description: "Change the password used to log in to your account.",
+      input: (
+        <Input
+          argType="password"
+          component={PasswordInput}
+          mutation={EDIT_USER({ password: true })}
+          variables={{ id: session?.user.id }}
+        />
+      ),
+    },
+    {
+      label: "Export Data",
+      description: "Export all of your data from the site.",
+      layout: "horizontal",
+      input: (
+        <Button
+          w="100%"
+          variant="default"
+          color="red"
+          leftIcon={<IconOutbound size="1em" />}
+        >
+          Export Data
+        </Button>
+      ),
+    },
+    {
+      label: "Delete Account",
+      description: "Permanently delete your account and all associated data",
+      layout: "horizontal",
+      input: (
+        <Button
+          w="100%"
+          variant="light"
+          color="red"
+          leftIcon={<IconTrash size="1em" />}
+        >
+          Delete Account
+        </Button>
+      ),
+    },
   ];
 
   console.log(session);
@@ -489,13 +506,16 @@ const AccountSetting = () => {
     <Stack>
       {configuration.map((config, index) => {
         return (
-          <FormLayout
-            key={index}
-            layout={config.layout || "vertical"}
-            label={config.label}
-            description={config.description}
-            input={config.input}
-          />
+          <>
+            {config.label === "Export Data" && <Divider label="Operation" />}
+            <FormLayout
+              key={index}
+              layout={config.layout || "vertical"}
+              label={config.label}
+              description={config.description}
+              input={config.input}
+            />
+          </>
         );
       })}
     </Stack>
