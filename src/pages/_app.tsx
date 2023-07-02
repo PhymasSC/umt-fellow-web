@@ -66,7 +66,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
         />
         <meta
           property="og:image"
-          content="https://www.umtfellow.social/logo.png"
+          content="https://www.umtfellow.social/favicon.ico"
         />
 
         <meta name="twitter:card" content="summary_large_image" />
@@ -79,7 +79,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
         />
         <meta
           name="twitter:image"
-          content="https://www.umtfellow.social/logo.png"
+          content="https://www.umtfellow.social/favicon.ico"
         />
       </Head>
 
