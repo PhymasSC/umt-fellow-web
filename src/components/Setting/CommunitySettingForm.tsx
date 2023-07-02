@@ -289,8 +289,8 @@ const CommunitySettingForm = (props: data) => {
           </Button>
         }
       /> */}
-      <Divider color="red" label="Dangerous zone" my="md" />
-      <FormLayout
+      <Divider color="red" label="Danger zone" my="md" />
+      {/* <FormLayout
         layout={"horizontal"}
         label={"Transfer Ownership"}
         description={
@@ -307,7 +307,7 @@ const CommunitySettingForm = (props: data) => {
             Transfer Ownership
           </Button>
         }
-      />
+      /> */}
       <FormLayout
         layout={"horizontal"}
         label={"Delete Community"}
