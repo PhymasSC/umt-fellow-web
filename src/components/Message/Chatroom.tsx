@@ -195,6 +195,7 @@ const Chatroom = () => {
                           }
                         >
                           <Bubble
+                            maw={"400px"}
                             timestamp={message.timestamp}
                             message={message.content}
                             sx={(theme) => ({

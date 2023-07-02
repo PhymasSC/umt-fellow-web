@@ -11,7 +11,7 @@ const Bubble = (props: BubbleProps) => {
   dayjs.extend(calendar);
 
   return (
-    <Paper px="xs" py={6} radius="lg" {...rest}>
+    <Paper px="md" py={7} radius="lg" {...rest}>
       <Text fz="sm">
         {message.split("\n").map((line, index) => (
           <span key={index}>
