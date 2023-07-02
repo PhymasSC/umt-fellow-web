@@ -188,7 +188,7 @@ export const typeDefs = gql`
 		getCommunityRules(communityId: String!): [CommunityRules]!
 
 		getChannels(userId: String): [Channel]
-		getChannelParticipants(channelId: String!): [ChannelParticipant]
+		getChannelParticipants(channelId: String!, limit: Int, offset: Int): [ChannelParticipant]
 		getMessages(channelId: String!): [Message]
 
 		getComments(threadId: String!): [Comment]

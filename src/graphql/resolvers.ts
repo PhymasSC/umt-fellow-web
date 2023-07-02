@@ -306,13 +306,15 @@ export const resolvers = {
 
 		getChannelParticipants: async (
 			_: any,
-			{ channelId }: { channelId: string },
+			{ channelId, limit, offset }: { channelId: string, limit: number, offset: number },
 			{ prisma }: { prisma: PrismaType }
 		) => {
 			const participants = await prisma.channelParticipants.findMany({
 				where: {
 					channelId
 				},
+				take: limit,
+				skip: offset,
 			});
 			return participants;
 		},

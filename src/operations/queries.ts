@@ -279,6 +279,17 @@ query GetChannels($userId: String) {
   }
 `
 
+export const GET_CHANNEL_PARTICIPANTS = gql`
+${USER_FRAGMENT}
+query GetChannelParticipants($channelId: String!, $limit: Int, $offset: Int) {
+	getChannelParticipants(channelId: $channelId, limit: $limit, offset: $offset) {
+	  user {
+		...UserFragment
+	  }
+	}
+  }
+`;
+
 export const GET_MESSAGES = gql`
 query GetMessages($channelId: String!) {
 	getMessages(channelId: $channelId) {
