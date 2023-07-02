@@ -1,10 +1,4 @@
-import {
-  DefaultProps,
-  Paper,
-  PaperStylesParams,
-  Text,
-  Tooltip,
-} from "@mantine/core";
+import { DefaultProps, Paper, PaperStylesParams, Text } from "@mantine/core";
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
 
@@ -18,21 +12,14 @@ const Bubble = (props: BubbleProps) => {
 
   return (
     <Paper px="xs" py={6} radius="lg" {...rest}>
-      <Tooltip
-        label={<Text fz="xs">{dayjs(timestamp).calendar()}</Text>}
-        position="left"
-        bg="#000000bb"
-        offset={10}
-      >
-        <Text fz="sm">
-          {message.split("\n").map((line, index) => (
-            <span key={index}>
-              {line}
-              <br />
-            </span>
-          ))}
-        </Text>
-      </Tooltip>
+      <Text fz="sm">
+        {message.split("\n").map((line, index) => (
+          <span key={index}>
+            {line}
+            <br />
+          </span>
+        ))}
+      </Text>
     </Paper>
   );
 };

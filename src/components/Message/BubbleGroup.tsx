@@ -30,9 +30,7 @@ const BubbleGroup = ({
           </Link>
         </span>
       </Tooltip>
-      <Flex direction="column" align={isRecipient ? "flex-end" : "flex-start"}>
-        {children}
-      </Flex>
+      {children}
     </Flex>
   );
 };

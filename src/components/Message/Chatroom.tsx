@@ -9,6 +9,7 @@ import {
   Textarea,
   ActionIcon,
   ScrollArea,
+  Tooltip,
 } from "@mantine/core";
 import { IconSend } from "@tabler/icons";
 import BubbleGroup from "./BubbleGroup";
@@ -20,6 +21,7 @@ import { useRouter } from "next/router";
 import Bubble from "./Bubble";
 import { GET_MESSAGES } from "@operations/queries";
 import { useQuery } from "@apollo/client";
+import dayjs from "dayjs";
 
 type Msg = {
   name: string;
@@ -142,21 +144,44 @@ const Chatroom = () => {
                     profileImage={message.profileImage}
                     isRecipient={message.senderId === session?.user.id}
                   >
-                    <Bubble
-                      timestamp={message.timestamp}
-                      message={message.content}
-                      sx={(theme) => ({
-                        wordBreak: "break-word",
-                        backgroundColor:
-                          theme.colorScheme === "dark"
-                            ? theme.colors.blue[1]
-                            : theme.colors.blue[6],
-                        color:
-                          theme.colorScheme === "dark"
-                            ? theme.colors.gray[9]
-                            : theme.colors.gray[1],
-                      })}
-                    />
+                    <Flex
+                      align="flex-end"
+                      gap="xs"
+                      direction={
+                        message.senderId === session?.user.id
+                          ? "row-reverse"
+                          : "row"
+                      }
+                    >
+                      <Bubble
+                        timestamp={message.timestamp}
+                        message={message.content}
+                        sx={(theme) => ({
+                          wordBreak: "break-word",
+                          backgroundColor:
+                            theme.colorScheme === "dark"
+                              ? theme.colors.blue[1]
+                              : theme.colors.blue[6],
+                          color:
+                            theme.colorScheme === "dark"
+                              ? theme.colors.gray[9]
+                              : theme.colors.gray[1],
+                        })}
+                      />
+                      <Tooltip
+                        label={
+                          <Text fz="xs">
+                            {dayjs(message.timestamp).calendar()}
+                          </Text>
+                        }
+                        bg="#000000bb"
+                        offset={10}
+                      >
+                        <Text size="xs" color="dimmed">
+                          {dayjs(message.timestamp).format("h:mm A")}
+                        </Text>
+                      </Tooltip>
+                    </Flex>
                   </BubbleGroup>
                 );
               })}

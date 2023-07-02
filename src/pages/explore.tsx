@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
 import { APP_NAME } from "@constants/metadata";
-import { Feed } from "@components/index";
+import { Feed, Footer } from "@components/index";
 import { useQuery } from "@apollo/client";
 import { GET_THREADS } from "@operations/queries";
 import { Container, Grid, Flex, Skeleton } from "@mantine/core";
@@ -25,9 +25,10 @@ const Explore: NextPage = () => {
       >
         <Grid>
           <Container>
-            <Flex mih={50} gap="md" direction="column" wrap="wrap">
+            <Flex mih={50} mb="md" gap="md" direction="column" wrap="wrap">
               <Feed feeds={data?.getThreads} loading={loading} />
             </Flex>
+            <Footer />
           </Container>
         </Grid>
       </Container>
