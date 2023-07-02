@@ -204,19 +204,9 @@ const Chatroom = () => {
                         >
                           <Bubble
                             maw={"400px"}
+                            isRecipient={message.senderId === session?.user.id}
                             timestamp={message.timestamp}
                             message={message.content}
-                            sx={(theme) => ({
-                              wordBreak: "break-word",
-                              backgroundColor:
-                                theme.colorScheme === "dark"
-                                  ? theme.colors.blue[1]
-                                  : theme.colors.blue[6],
-                              color:
-                                theme.colorScheme === "dark"
-                                  ? theme.colors.gray[9]
-                                  : theme.colors.gray[1],
-                            })}
                           />
                           <Text size="xs" color="dimmed">
                             {dayjs(message.timestamp).format("h:mm A")}

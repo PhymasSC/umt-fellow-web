@@ -1,6 +1,5 @@
 import { Flex, Avatar, Tooltip } from "@mantine/core";
 import Link from "next/link";
-import Bubble from "./Bubble";
 
 type BubbleProps = {
   children: React.ReactNode;
