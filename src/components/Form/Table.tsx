@@ -1,7 +1,23 @@
-import { Table, ScrollArea, Group, Avatar, Text, Button } from "@mantine/core";
+import { useMutation } from "@apollo/client";
+import {
+  Table,
+  ScrollArea,
+  Group,
+  Avatar,
+  Text,
+  Button,
+  Modal,
+  useMantineTheme,
+  List,
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
+import { REMOVE_MODERATOR } from "@operations/mutations";
+import { IconCheck } from "@tabler/icons";
 import Link from "next/link";
 
 interface TableSelectionProps {
+  communityId: string;
   data: {
     userId: {
       image: string;
@@ -12,9 +28,44 @@ interface TableSelectionProps {
   }[];
 }
 
-const TableSelection = ({ data }: TableSelectionProps) => {
+const TableSelection = (props: TableSelectionProps) => {
+  const { data, communityId } = props;
+  const theme = useMantineTheme();
+  const [removeModerator] = useMutation(REMOVE_MODERATOR);
+  const [opened, { open, close }] = useDisclosure(false);
+
   const rows = data.map((item) => {
-    console.log(item);
+    const removeHandler = async () => {
+      const res = await removeModerator({
+        variables: {
+          communityId: communityId,
+          userId: item.userId.id,
+        },
+        update: (cache) => {
+          cache.evict({ fieldName: "getCommunityModerators" });
+        },
+      });
+
+      console.log(res);
+      if (res.data.removeModerator) {
+        notifications.show({
+          title: "Success",
+          message: `${item.userId.name} has been removed as a moderator`,
+          color: "green",
+          icon: <IconCheck size={18} />,
+        });
+      } else {
+        notifications.show({
+          title: "Error",
+          message: `There was an error removing ${item.userId.name} as a moderator`,
+          color: "red",
+          icon: <IconCheck size={18} />,
+        });
+      }
+
+      close();
+    };
+
     return (
       <tr key={item.userId.id}>
         <td>
@@ -42,7 +93,44 @@ const TableSelection = ({ data }: TableSelectionProps) => {
 
         <td>
           <Group spacing="xs">
-            <Button variant="light" color="red">
+            <Modal
+              opened={opened}
+              onClose={close}
+              size="lg"
+              title={<Text fw="bold">Delete Moderator</Text>}
+              overlayProps={{
+                color:
+                  theme.colorScheme === "dark"
+                    ? theme.colors.dark[9]
+                    : theme.colors.gray[2],
+                opacity: 0.55,
+                blur: 3,
+              }}
+              centered
+            >
+              <Modal.Body>
+                Are you sure you want to delete{" "}
+                <Text fw="bold" span>
+                  {item.userId.name}
+                </Text>{" "}
+                as a moderator?
+                <List>
+                  <List.Item>
+                    This user will no longer have the ability to remove comments
+                    or threads in the community.
+                  </List.Item>
+                </List>
+                Click{" "}
+                <Text fw="bold" span>
+                  Delete
+                </Text>{" "}
+                as moderator to confirm.
+                <Button color="red" mt="md" onClick={removeHandler} fullWidth>
+                  Delete
+                </Button>
+              </Modal.Body>
+            </Modal>
+            <Button variant="light" color="red" onClick={open}>
               Remove as moderator
             </Button>{" "}
           </Group>

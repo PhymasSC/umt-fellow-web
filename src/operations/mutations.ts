@@ -327,6 +327,33 @@ mutation LeaveCommunity($communityId: String!, $userId: String!) {
   }
 `;
 
+// Moderators
+export const ADD_MODERATOR = gql`
+mutation AddModerator($communityId: String!, $userId: String!) {
+	addModerator(communityId: $communityId, userId: $userId) {
+		userId {
+			id
+			image
+			name
+		  }
+		  created_at
+	}
+  }
+`;
+
+export const REMOVE_MODERATOR = gql`
+mutation RemoveModerator($communityId: String!, $userId: String!) {
+	removeModerator(communityId: $communityId, userId: $userId) {
+		userId {
+			id
+			image
+			name
+		  }
+		  created_at
+	}
+  }
+`;
+
 // Community Rules
 export const ADD_COMMUNITY_RULE = gql`
 mutation Mutation($communityId: String!, $rules: Rule!) {

@@ -1238,6 +1238,56 @@ export const resolvers = {
 			}
 		},
 
+		addModerator: async (
+			_: any,
+			{ communityId, userId, }: { communityId: string, userId: string, },
+			{ prisma }: { prisma: PrismaType }
+		) => {
+			try {
+
+				const member = await prisma.communityMember.update({
+					where: {
+						communityId_userId: {
+							communityId,
+							userId,
+						},
+					},
+					data: {
+						role: Role.MODERATOR,
+					},
+				});
+
+				return member
+			} catch (error: any) {
+				return null;
+			}
+		},
+
+		removeModerator: async (
+			_: any,
+			{ communityId, userId, }: { communityId: string, userId: string, },
+			{ prisma }: { prisma: PrismaType }
+		) => {
+			try {
+
+				const member = await prisma.communityMember.update({
+					where: {
+						communityId_userId: {
+							communityId,
+							userId,
+						},
+					},
+					data: {
+						role: Role.USER,
+					},
+				});
+
+				return member
+			} catch (error: any) {
+				return null;
+			}
+		},
+
 		joinCommunity: async (
 			_: any,
 			{

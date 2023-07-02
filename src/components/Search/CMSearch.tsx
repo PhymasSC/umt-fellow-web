@@ -68,7 +68,6 @@ const Search = (props: SearchProps) => {
   function buildOptions(item: {
     userId: { id: string; name: string; image: string };
   }) {
-    console.log(item);
     return {
       ...item.userId,
       value: item.userId.name,
@@ -93,6 +92,7 @@ const Search = (props: SearchProps) => {
       value={value}
       itemComponent={AutoCompleteItem}
       onItemSubmit={(item) => {
+        console.log(item);
         if (onItemSubmit) {
           onItemSubmit(item);
           setValue("");

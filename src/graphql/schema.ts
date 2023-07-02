@@ -268,6 +268,15 @@ export const typeDefs = gql`
 		) : CommunityResponse!
 		deleteCommunity(id: String!) : CommunityResponse!
 		
+		addModerator(
+			communityId: String!
+			userId: String!
+		) : CommunityMember
+		removeModerator(
+			communityId: String!
+			userId: String!
+		) : CommunityMember
+
 		joinCommunity(
 			communityId: String!
 			userId: String!

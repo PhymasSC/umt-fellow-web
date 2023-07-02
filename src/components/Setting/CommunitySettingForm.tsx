@@ -18,7 +18,12 @@ import {
   IconCheck,
   IconTrash,
 } from "@tabler/icons";
-import { DELETE_COMMUNITY, UPDATE_COMMUNITY } from "@operations/mutations";
+import {
+  ADD_MODERATOR,
+  DELETE_COMMUNITY,
+  REMOVE_MODERATOR,
+  UPDATE_COMMUNITY,
+} from "@operations/mutations";
 import ImageInput from "@components/Form/ImageInput";
 import { useMutation, useQuery } from "@apollo/client";
 import {
@@ -113,6 +118,8 @@ const CommunitySettingForm = (props: data) => {
   const { loading, data: rules } = useQuery(GET_COMMUNITY_RULES, {
     variables: { communityId: id },
   });
+  const [addModerator] = useMutation(ADD_MODERATOR);
+  const [removeModerator] = useMutation(REMOVE_MODERATOR);
 
   return (
     <>
@@ -197,20 +204,38 @@ const CommunitySettingForm = (props: data) => {
                 communityId: id,
                 role: Role.USER,
               }}
+              onItemSubmit={async (item) => {
+                const res = await addModerator({
+                  variables: {
+                    communityId: id,
+                    userId: item.id,
+                  },
+                  update: (cache, { data }) => {
+                    const existing: any = cache.readQuery({
+                      query: GET_COMMUNITY_MODERATORS,
+                      variables: { communityId: id },
+                    });
+
+                    const newModerator = data?.addModerator;
+                    cache.writeQuery({
+                      query: GET_COMMUNITY_MODERATORS,
+                      variables: { communityId: id },
+                      data: {
+                        getCommunityModerators: [
+                          ...(existing?.getCommunityModerators || []),
+                          newModerator,
+                        ],
+                      },
+                    });
+                  },
+                });
+              }}
             />
             <Card withBorder mt="md">
               {moderators && moderators.getCommunityModerators.length > 0 ? (
                 <TableSelection
-                  data={
-                    (moderators && moderators.getCommunityModerators) || [
-                      {
-                        id: "1",
-                        avatar:
-                          "https://images.unsplash.com/photo-1630841539293-bd20634c5d72?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
-                        name: "Jeremy Footviewer",
-                      },
-                    ]
-                  }
+                  communityId={id}
+                  data={(moderators && moderators.getCommunityModerators) || []}
                 />
               ) : (
                 <Card>
