@@ -62,6 +62,10 @@ interface ErrorTypes {
 }
 
 const errorTypes: ErrorTypes = {
+  OAuthCreateAccount: {
+    title: "Error",
+    message: "Failed to create an account with this provider.",
+  },
   OAUTH_GET_ACCESS_TOKEN_ERROR: { title: "Error", message: "Please try again" },
   OAUTH_V1_GET_ACCESS_TOKEN_ERROR: {
     title: "Error",
