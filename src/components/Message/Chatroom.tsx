@@ -10,6 +10,7 @@ import {
   ActionIcon,
   ScrollArea,
   Tooltip,
+  Divider,
 } from "@mantine/core";
 import { IconSend } from "@tabler/icons";
 import BubbleGroup from "./BubbleGroup";
@@ -137,52 +138,76 @@ const Chatroom = () => {
                   });
                 }, 100);
                 return (
-                  <BubbleGroup
-                    key={index}
-                    name={message.name}
-                    profileUrl={`/profile/${message.senderId}`}
-                    profileImage={message.profileImage}
-                    isRecipient={message.senderId === session?.user.id}
-                  >
-                    <Flex
-                      align="flex-end"
-                      gap="xs"
-                      direction={
-                        message.senderId === session?.user.id
-                          ? "row-reverse"
-                          : "row"
-                      }
-                    >
-                      <Bubble
-                        timestamp={message.timestamp}
-                        message={message.content}
-                        sx={(theme) => ({
-                          wordBreak: "break-word",
-                          backgroundColor:
-                            theme.colorScheme === "dark"
-                              ? theme.colors.blue[1]
-                              : theme.colors.blue[6],
-                          color:
-                            theme.colorScheme === "dark"
-                              ? theme.colors.gray[9]
-                              : theme.colors.gray[1],
-                        })}
-                      />
-                      <Tooltip
-                        label={
-                          <Text fz="xs">
-                            {dayjs(message.timestamp).calendar()}
-                          </Text>
-                        }
-                        bg="#000000bb"
-                        offset={10}
-                      >
-                        <Text size="xs" color="dimmed">
-                          {dayjs(message.timestamp).format("h:mm A")}
+                  <>
+                    {
+                      // if the message is one hour older than the previous message, show the timestamp
+                      (dayjs(message.timestamp).diff(
+                        messages[index - 1]?.timestamp,
+                        "hour"
+                      ) >= 1 ||
+                        index === 0) && (
+                        <Text align="center" size="xs" fw="bold" color="dimmed">
+                          {dayjs(message.timestamp).format(
+                            // check if the message was sent today
+                            dayjs(message.timestamp).isSame(dayjs(), "day")
+                              ? "hh:mm A"
+                              : // check if the message was sent in the last 7 days
+                              dayjs(message.timestamp).isAfter(
+                                  dayjs().subtract(7, "day")
+                                )
+                              ? "ddd hh:mm A"
+                              : "DD/MM/YYYY hh:mm A"
+                          )}
                         </Text>
-                      </Tooltip>
-                    </Flex>
-                  </BubbleGroup>
+                      )
+                    }
+                    <BubbleGroup
+                      key={index}
+                      name={message.name}
+                      profileUrl={`/profile/${message.senderId}`}
+                      profileImage={message.profileImage}
+                      isRecipient={message.senderId === session?.user.id}
+                    >
+                      <Flex
+                        align="flex-end"
+                        gap="xs"
+                        direction={
+                          message.senderId === session?.user.id
+                            ? "row-reverse"
+                            : "row"
+                        }
+                      >
+                        <Bubble
+                          timestamp={message.timestamp}
+                          message={message.content}
+                          sx={(theme) => ({
+                            wordBreak: "break-word",
+                            backgroundColor:
+                              theme.colorScheme === "dark"
+                                ? theme.colors.blue[1]
+                                : theme.colors.blue[6],
+                            color:
+                              theme.colorScheme === "dark"
+                                ? theme.colors.gray[9]
+                                : theme.colors.gray[1],
+                          })}
+                        />
+                        <Tooltip
+                          label={
+                            <Text fz="xs">
+                              {dayjs(message.timestamp).calendar()}
+                            </Text>
+                          }
+                          bg="#000000bb"
+                          offset={10}
+                        >
+                          <Text size="xs" color="dimmed">
+                            {dayjs(message.timestamp).format("h:mm A")}
+                          </Text>
+                        </Tooltip>
+                      </Flex>
+                    </BubbleGroup>
+                  </>
                 );
               })}
             </Flex>
