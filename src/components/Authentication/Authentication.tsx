@@ -6,6 +6,8 @@ import { PASSWORD_PATTERN } from "@constants/regex";
 import AuthenticationScreen from "./AuthenticationScreen";
 import ResetPasswordScreen from "./ResetPasswordScreen";
 import OTPScreen from "./OTPScreen";
+import { GET_USER } from "@operations/queries";
+import { useLazyQuery } from "@apollo/client";
 
 type AuthScreens = "login" | "register" | "forgotPassword" | "otp";
 
@@ -21,6 +23,7 @@ const Authentication = ({
 }: AuthProps) => {
   const [screen, setScreen] = useState<AuthScreens>(defaultPage);
   const [error, setError] = useState("");
+  const [getUser] = useLazyQuery(GET_USER(""));
 
   const form = useForm({
     initialValues: {
@@ -59,6 +62,19 @@ const Authentication = ({
       });
     } else if (screen === "register") {
       if (hasErrors) {
+        return;
+      }
+
+      const isUserExist = await getUser({
+        variables: {
+          email: form.values.email,
+        },
+      });
+      if (isUserExist.data !== null) {
+        form.setFieldError(
+          "email",
+          "Email already registered. Please login instead."
+        );
         return;
       }
       setScreen("otp");

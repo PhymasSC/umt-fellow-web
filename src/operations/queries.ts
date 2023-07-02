@@ -50,8 +50,8 @@ export const GET_USERS_LIMIT_OFFSET = gql`
 export const GET_USER = (fields: any) => gql`
 	${USER_FRAGMENT}
 
-	query getUser($id: String!) {
-		getUser(id: $id) {
+	query getUser($id: String, $email: String) {
+		getUser(id: $id, email: $email) {
 			...UserFragment
 			${fields}
 		}

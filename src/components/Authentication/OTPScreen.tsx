@@ -3,7 +3,7 @@ import { Flex, PinInput, Text } from "@mantine/core";
 import { ADD_USER } from "@operations/mutations";
 import dayjs from "dayjs";
 import { signIn } from "next-auth/react";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 type OTPScreenProps = {
@@ -43,6 +43,7 @@ const OTPScreen = (props: OTPScreenProps) => {
         },
       }),
     });
+    console.log(sendmail);
   };
 
   useEffect(() => {
@@ -90,14 +91,15 @@ const OTPScreen = (props: OTPScreenProps) => {
                 password: props.password,
               },
             });
-
+            console.log(response);
             if (response.data.addUser.code === 200) {
-              signIn("credentials", {
+              const res = await signIn("credentials", {
                 email: props.email,
                 password: props.password,
                 callbackUrl: "/",
                 // redirect: false,
               });
+              console.log(res);
             } else {
               router.push({
                 pathname: "/auth/register",

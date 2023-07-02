@@ -25,10 +25,11 @@ export const resolvers = {
 	DateTime: GraphQLDateTime,
 
 	Query: {
-		getUser: async (_: any, { id }: { id: string }, { prisma }: { prisma: PrismaType }) => {
+		getUser: async (_: any, { id, email }: { id: string, email: string }, { prisma }: { prisma: PrismaType }) => {
 			const user = await prisma.user.findFirst({
 				where: {
 					id,
+					email
 				},
 			});
 			return user;

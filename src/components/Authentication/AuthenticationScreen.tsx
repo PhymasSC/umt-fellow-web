@@ -49,6 +49,7 @@ const AuthenticationScreen = ({
           {screen === "register" && (
             <TextInput
               required
+              type="text"
               label="Name"
               icon={<IconIdBadge size={14} />}
               placeholder="Your username"
@@ -59,6 +60,7 @@ const AuthenticationScreen = ({
           <TextInput
             required
             label="Email"
+            type="email"
             icon={<IconAt size={14} />}
             placeholder="Your email"
             {...form.getInputProps("email")}
@@ -67,6 +69,7 @@ const AuthenticationScreen = ({
           <PasswordInput
             required
             label="Password"
+            type="password"
             icon={<IconLock size={14} />}
             placeholder="Your password"
             {...form.getInputProps("password")}
