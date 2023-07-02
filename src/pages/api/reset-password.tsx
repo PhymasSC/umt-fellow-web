@@ -11,35 +11,69 @@ export default async function handler(
     return;
   }
   const saltRounds = 10;
-  const { token, password } = req.body;
+  const {
+    token,
+    password,
+    isForgot = true,
+    userId,
+    currentPassword,
+  } = req.body;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-  const response = await prisma.resetToken.findFirst({
+  if (isForgot) {
+    const response = await prisma.resetToken.findFirst({
+      where: {
+        token: token,
+      },
+    });
+    const isExpired = (response?.expiresAt || new Date()) < new Date();
+    if (isExpired) {
+      res.status(200).json({ err: "expired" });
+      return;
+    }
+    const result = await prisma.user.update({
+      where: {
+        id: response?.userId,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+    await prisma.resetToken.delete({
+      where: {
+        id: response?.id,
+      },
+    });
+    return res.status(200).json({ message: "success" });
+  }
+
+  const userPassword = await prisma.user.findFirst({
     where: {
-      token: token,
+      id: userId,
+    },
+    select: {
+      password: true,
     },
   });
 
-  const isExpired = (response?.expiresAt || new Date()) < new Date();
+  const isMatch = await bcrypt.compare(
+    currentPassword,
+    userPassword?.password || ""
+  );
 
-  if (isExpired) {
-    res.status(200).json({ err: "expired" });
+  console.log(isMatch);
+  if (!isMatch) {
+    res.status(200).json({ err: "Password does not match" });
     return;
   }
-  const hashedPassword = await bcrypt.hash(password, saltRounds);
   const result = await prisma.user.update({
     where: {
-      id: response?.userId,
+      id: userId,
     },
     data: {
       password: hashedPassword,
     },
   });
 
-  await prisma.resetToken.delete({
-    where: {
-      id: response?.id,
-    },
-  });
-
-  res.status(200).json({ message: "success" });
+  return res.status(200).json({ message: "success" });
 }

@@ -22,6 +22,7 @@ import {
   IconBrandTiktok,
   IconBrandTwitter,
   IconBrandYoutube,
+  IconCheck,
   IconCircleKey,
   IconOutbound,
   IconTrash,
@@ -35,6 +36,7 @@ import ImageInput from "@components/Form/ImageInput";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { PASSWORD_PATTERN } from "@constants/regex";
+import { notifications } from "@mantine/notifications";
 
 type USER_TYPE = {
   id: string;
@@ -522,7 +524,7 @@ const AccountSetting = () => {
               </List>
               <Divider my="md" />
               <form
-                onSubmit={passwordForm.onSubmit((val) => {
+                onSubmit={passwordForm.onSubmit(async (val) => {
                   if (val.currentPassword === val.newPassword)
                     return passwordForm.setFieldError(
                       "newPassword",
@@ -534,7 +536,36 @@ const AccountSetting = () => {
                       "Passwords do not match"
                     );
 
-                  console.log(val);
+                  const variables = {
+                    currentPassword: val.currentPassword,
+                    password: val.newPassword,
+                    userId: session?.user.id,
+                    isForgot: false,
+                  };
+
+                  const res = await fetch("/api/reset-password", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(variables),
+                  });
+
+                  res.json().then((res) => {
+                    if (res.err)
+                      return passwordForm.setFieldError(
+                        "currentPassword",
+                        res.err
+                      );
+                    passwordForm.reset();
+                    passwordClose();
+                    notifications.show({
+                      title: "Password changed",
+                      message: "Your password has been changed successfully",
+                      color: "teal",
+                      icon: <IconCheck size="1.25rem" />,
+                    });
+                  });
                 })}
               >
                 <FormLayout
