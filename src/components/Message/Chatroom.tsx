@@ -26,6 +26,7 @@ import {
 } from "@operations/queries";
 import { useQuery } from "@apollo/client";
 import dayjs from "dayjs";
+import Link from "next/link";
 
 type Msg = {
   name: string;
@@ -118,7 +119,14 @@ const Chatroom = () => {
               participants.getChannelParticipants.map((participant: any) => {
                 if (participant.user.id === session?.user.id) return null;
                 return (
-                  <Avatar radius="xl" size="md" src={participant.user.image} />
+                  <Link href={`/profile/${participant.user.id}`} passHref>
+                    <Avatar
+                      radius="xl"
+                      size="md"
+                      src={participant.user.image}
+                      component="a"
+                    />
+                  </Link>
                 );
               })) || <Avatar radius="xl" size="md" src={""} />}
           </Avatar.Group>
@@ -141,7 +149,7 @@ const Chatroom = () => {
             viewportRef={viewport}
           >
             <Flex direction="column" gap="md">
-              {messages &&
+              {messages && messages.length > 0 ? (
                 messages.map((message, index) => {
                   setTimeout(() => {
                     viewport?.current?.scrollTo({
@@ -152,11 +160,11 @@ const Chatroom = () => {
                   return (
                     <>
                       {
-                        // if the message is one hour older than the previous message, show the timestamp
+                        // if the message is 10 minutes older than the previous message, show the timestamp
                         (dayjs(message.timestamp).diff(
                           messages[index - 1]?.timestamp,
-                          "hour"
-                        ) >= 1 ||
+                          "minute"
+                        ) >= 10 ||
                           index === 0) && (
                           <Text
                             align="center"
@@ -217,7 +225,44 @@ const Chatroom = () => {
                       </BubbleGroup>
                     </>
                   );
-                })}
+                })
+              ) : (
+                <>
+                  {participants &&
+                    participants.getChannelParticipants.map(
+                      (participant: any) => {
+                        if (participant.user.id === session?.user.id)
+                          return null;
+                        return (
+                          <Flex
+                            direction="column"
+                            align="center"
+                            gap="md"
+                            mt="md"
+                          >
+                            <Link
+                              href={`/profile/${participant.user.id}`}
+                              passHref
+                            >
+                              <Avatar
+                                component="a"
+                                radius="xl"
+                                size="lg"
+                                src={participant.user.image}
+                              />
+                            </Link>
+                            <Text fw="bold">{participant.user.name}</Text>
+                            <Text color="dimmed" size="sm">
+                              You have no conversation with{" "}
+                              {participant.user.name} before. Let&apos;s send a
+                              message to get the conversation started!{" "}
+                            </Text>
+                          </Flex>
+                        );
+                      }
+                    )}
+                </>
+              )}
             </Flex>
           </ScrollArea>
         </Card>
