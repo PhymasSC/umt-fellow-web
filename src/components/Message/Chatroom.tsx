@@ -209,19 +209,9 @@ const Chatroom = () => {
                                   : theme.colors.gray[1],
                             })}
                           />
-                          <Tooltip
-                            label={
-                              <Text fz="xs">
-                                {/* {dayjs(message.timestamp).calendar()} */}
-                              </Text>
-                            }
-                            bg="#000000bb"
-                            offset={10}
-                          >
-                            <Text size="xs" color="dimmed">
-                              {dayjs(message.timestamp).format("h:mm A")}
-                            </Text>
-                          </Tooltip>
+                          <Text size="xs" color="dimmed">
+                            {dayjs(message.timestamp).format("h:mm A")}
+                          </Text>
                         </Flex>
                       </BubbleGroup>
                     </>
