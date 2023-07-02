@@ -47,7 +47,7 @@
 		"next-env.d.ts",
 		"**/*.ts",
 		"**/*.tsx"
-, "src/pages/middleware.js"	],
+, "src/pages/middleware.js", "next.config.js", "next-sitemap.js"	],
 	"exclude": [
 		"node_modules"
 	]

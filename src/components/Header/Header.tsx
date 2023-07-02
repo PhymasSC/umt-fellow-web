@@ -29,10 +29,7 @@ import { signOut, useSession } from "next-auth/react";
 import {
   IconChevronDown,
   IconLogout,
-  IconMoon,
   IconSettings,
-  IconSun,
-  IconTrash,
   IconUser,
 } from "@tabler/icons";
 
