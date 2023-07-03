@@ -135,10 +135,11 @@ const AuthenticationScreen = ({
 
       <Divider label="Or continue with" labelPosition="center" my="lg" />
 
-      <Group grow>
+      <Group grow mb="md" mt="md" spacing="xl">
         <Tooltip
           transitionProps={{ transition: "pop", duration: 300 }}
           label="Google"
+          position="bottom"
           withArrow
         >
           <Button
@@ -156,26 +157,7 @@ const AuthenticationScreen = ({
               width={20}
               height={20}
             />
-          </Button>
-        </Tooltip>
-        <Tooltip
-          transitionProps={{ transition: "pop", duration: 300 }}
-          label="Facebook"
-          withArrow
-        >
-          <Button
-            sx={{ width: 80, height: 80 }}
-            variant="default"
-            onClick={() => {
-              signIn("facebook", { callbackUrl: "/" });
-            }}
-          >
-            <Image
-              src={"https://authjs.dev/img/providers/facebook-dark.svg"}
-              alt="Facebook"
-              width={20}
-              height={20}
-            />
+            <Text ml={10}>Continue with Google</Text>
           </Button>
         </Tooltip>
       </Group>

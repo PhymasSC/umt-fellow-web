@@ -2,7 +2,6 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialProvider from "next-auth/providers/credentials";
-import RedditProvider from "next-auth/providers/reddit"
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@lib/prisma";
 import bcrypt from "bcrypt";
@@ -17,15 +16,6 @@ export const authOptions: NextAuthOptions = {
 		FacebookProvider({
 			clientId: process.env.FACEBOOK_CLIENT_ID || "",
 			clientSecret: process.env.FACEBOOK_CLIENT_SECRET || "",
-		}),
-		RedditProvider({
-			clientId: process.env.REDDIT_CLIENT_ID,
-			clientSecret: process.env.REDDIT_CLIENT_SECRET,
-			authorization: {
-				params: {
-					duration: 'permanent',
-				},
-			},
 		}),
 		CredentialProvider({
 			type: "credentials",
@@ -75,8 +65,8 @@ export const authOptions: NextAuthOptions = {
 		},
 	},
 	session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60, updateAge: 24 * 60 * 60 },
-	// pages: {
-	// 	signIn: "/login",
-	// },
+	pages: {
+		signIn: "/login",
+	},
 };
 export default NextAuth(authOptions);
