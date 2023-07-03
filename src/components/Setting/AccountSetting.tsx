@@ -12,7 +12,7 @@ import {
   List,
   TypographyStylesProvider,
   Grid,
-  Checkbox,
+  Loader,
 } from "@mantine/core";
 import {
   IconBrandDribbble,
@@ -27,8 +27,8 @@ import {
   IconBrandYoutube,
   IconCheck,
   IconCircleKey,
+  IconDownload,
   IconOutbound,
-  IconTrash,
 } from "@tabler/icons";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@apollo/client";
@@ -46,7 +46,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { PASSWORD_PATTERN } from "@constants/regex";
 import { notifications } from "@mantine/notifications";
-import ImageCheckboxes from "@components/Form/ImageCheckbox";
+import { useState } from "react";
 
 type USER_TYPE = {
   id: string;
@@ -103,6 +103,7 @@ const AccountSetting = () => {
       },
     }
   );
+  const [exportLoading, setExportLoading] = useState(false);
   const [passwordOpened, { open: passwordOpen, close: passwordClose }] =
     useDisclosure(false);
   const [dyiOpened, { open: dyiOpen, close: dyiClose }] = useDisclosure(false);
@@ -556,6 +557,8 @@ const AccountSetting = () => {
                     userId: session?.user.id,
                     ...val,
                   };
+
+                  setExportLoading(true);
                   const response = await fetch("/api/dyi", {
                     method: "POST",
                     headers: {
@@ -583,6 +586,15 @@ const AccountSetting = () => {
 
                     // Clean up the temporary URL object
                     URL.revokeObjectURL(anchorElement.href);
+                    setExportLoading(false);
+                    notifications.show({
+                      title: "Download started",
+                      message: "Your data download has started.",
+                      color: "teal",
+                      icon: <IconDownload size="1em" />,
+                    });
+
+                    dyiClose();
                   } else {
                     // Handle the error response from the server
                     const errorResponse = await response.json();
@@ -653,7 +665,13 @@ const AccountSetting = () => {
                     />
                   </Grid.Col>
                 </Grid>
-                <Button variant="subtle" mt="md" type="submit">
+                <Button
+                  variant="subtle"
+                  mt="md"
+                  type="submit"
+                  disabled={exportLoading}
+                  rightIcon={exportLoading && <Loader size="xs" />}
+                >
                   Request download
                 </Button>
               </form>
