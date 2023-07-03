@@ -4,6 +4,8 @@ import { gql } from "@apollo/client";
 import fs from "fs";
 import path from "path";
 import archiver from "archiver";
+import os from "os";
+
 
 // Fetch user data
 async function fetchUserData(userId: string) {
@@ -251,9 +253,13 @@ async function fetchVotesData(userId: string) {
 
 // Write data to file
 function writeToFile(data: any, fileName: string, folderName: string) {
-    const directoryPath = path.join(process.cwd(), folderName);
-    fs.mkdirSync(directoryPath, { recursive: true });
+    const tempDir = fs.realpathSync(os.tmpdir());
+    const directoryPath = path.join(tempDir, folderName);
     const filePath = path.join(directoryPath, `${fileName}.json`);
+
+    // Create the directory if it doesn't exist
+    if (!fs.existsSync(directoryPath)) fs.mkdirSync(directoryPath, { recursive: true });
+
     fs.writeFileSync(filePath, JSON.stringify(data));
 }
 
@@ -280,14 +286,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const output = fs.createWriteStream(zipFilePath);
         archive.pipe(output);
 
+        const tempDir = fs.realpathSync(os.tmpdir());
+
+        // Fetch and export data for each selected category
         // Fetch and export data for each selected category
         for (const category of categories) {
             if (req.body[category.name]) {
                 const data = await category.fetchFn(userId);
                 writeToFile(data, category.name, category.name);
-                archive.append(fs.createReadStream(path.join(process.cwd(), `${category.name}/${category.name}.json`)), { name: `${category.name}/${category.fileName}` });
+                archive.append(fs.createReadStream(path.join(tempDir, category.name, `${category.name}.json`)), {
+                    name: `${category.name}/${category.fileName}`
+                });
             }
         }
+
 
 
         // Finalize the ZIP archive
