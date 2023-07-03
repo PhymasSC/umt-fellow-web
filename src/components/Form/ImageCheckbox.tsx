@@ -69,7 +69,7 @@ const ImageCheckbox = ({
   const { classes, cx } = useStyles({ checked: value });
 
   return (
-    <Tooltip label={description} withArrow multiline bg="#333333aa">
+    <Tooltip label={description} withArrow multiline>
       <UnstyledButton
         {...others}
         onClick={() => handleChange(!value)}

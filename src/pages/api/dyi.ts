@@ -300,8 +300,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
 
-
-
         // Finalize the ZIP archive
         archive.finalize();
 
