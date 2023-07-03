@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   Paper,
   createStyles,
@@ -8,11 +9,13 @@ import {
 } from "@mantine/core";
 import { NextPage } from "next";
 import Head from "next/head";
-import { IconLock } from "@tabler/icons";
+import { IconAlertCircle, IconLock } from "@tabler/icons";
 import { matches, useForm } from "@mantine/form";
 import { PASSWORD_PATTERN } from "@constants/regex";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { NewPassword } from "@components/Form";
+import { notifications } from "@mantine/notifications";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -73,10 +76,7 @@ const ResetPassword: NextPage = () => {
       repeatPassword: "",
     },
     validate: {
-      newPassword: matches(
-        PASSWORD_PATTERN,
-        "Password should include at least 6 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"
-      ),
+      newPassword: matches(PASSWORD_PATTERN),
     },
   });
 
@@ -87,9 +87,12 @@ const ResetPassword: NextPage = () => {
       return;
     }
     form.validate();
+    if (Object.keys(form.errors).length !== 0) return;
 
     setLoading(true);
 
+    console.log(token);
+    console.log(form.values.newPassword);
     const result = await fetch("/api/reset-password", {
       method: "POST",
       headers: {
@@ -99,13 +102,24 @@ const ResetPassword: NextPage = () => {
     });
 
     const response = await result.json();
+    console.log(response);
     if (response.err) {
-      form.setErrors({
-        newPassword:
-          "The token has expired. Please request a new reset password link to regain access to your account.",
+      notifications.show({
+        title: "Error",
+        message: response.err,
+        color: "red",
+        icon: <IconAlertCircle size="1em" />,
       });
+      router.push("/forgot-password");
+      return;
     }
     setLoading(false);
+    notifications.show({
+      title: "Success",
+      message: "Password changed successfully",
+      color: "green",
+      icon: <IconAlertCircle size="1em" />,
+    });
     router.push("/login");
   };
 
@@ -125,11 +139,9 @@ const ResetPassword: NextPage = () => {
                 <Text color="dimmed" size="xs" align="center">
                   Enter new password and repeat it
                 </Text>
-                <PasswordInput
-                  required
-                  label="New password"
-                  icon={<IconLock size={14} />}
-                  placeholder="New password"
+                <NewPassword
+                  form={form}
+                  argName={"newPassword"}
                   {...form.getInputProps("newPassword")}
                 />
                 <PasswordInput

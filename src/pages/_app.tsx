@@ -91,7 +91,8 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
                     padding:
                       router.pathname === "/register" ||
                       router.pathname === "/login" ||
-                      router.pathname === "/reset-password"
+                      router.pathname === "/reset-password" ||
+                      router.pathname === "/forgot-password"
                         ? "0em"
                         : "md",
                     [theme.fn.smallerThan("sm")]: {

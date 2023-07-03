@@ -28,6 +28,7 @@ const ResetPasswordScreen = ({ form, setScreen }: ResetPasswordScreenProps) => {
     }
 
     setLoading(true);
+
     const response: {
       token: string;
       email: string;

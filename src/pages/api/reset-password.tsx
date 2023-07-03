@@ -26,9 +26,19 @@ export default async function handler(
         token: token,
       },
     });
+    if (!response) {
+      res.status(200).json({
+        err: "Token does not exist! Please file a new password request.",
+      });
+      return;
+    }
     const isExpired = (response?.expiresAt || new Date()) < new Date();
     if (isExpired) {
-      res.status(200).json({ err: "expired" });
+      res
+        .status(200)
+        .json({
+          err: "The token had expired! Please file a new password request.",
+        });
       return;
     }
     const result = await prisma.user.update({
