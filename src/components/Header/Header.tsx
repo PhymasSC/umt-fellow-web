@@ -44,7 +44,6 @@ const Header = ({ links }: HeaderResponsiveProps) => {
   const [active, setActive] = useState(links[0].link);
   const [modalOpened, setModalOpened] = useState(false);
   const { classes, cx } = useStyles();
-  const pinned = useHeadroom({ fixedAt: 120 });
   const closeModal = () => {
     setModalOpened(false);
   };
@@ -74,15 +73,7 @@ const Header = ({ links }: HeaderResponsiveProps) => {
   ));
 
   return (
-    <H
-      className={classes.root}
-      height={HEADER_HEIGHT}
-      fixed={true}
-      sx={{
-        transform: `translate3d(0, ${pinned ? 0 : rem(-110)}, 0)`,
-        transition: "transform 700ms ease",
-      }}
-    >
+    <H className={classes.root} height={HEADER_HEIGHT} fixed={true}>
       <Container px="xs" size="xl" className={classes.header}>
         {/* Modal */}
         <Modal
