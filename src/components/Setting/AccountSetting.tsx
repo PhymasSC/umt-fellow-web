@@ -13,6 +13,8 @@ import {
   TypographyStylesProvider,
   Grid,
   Loader,
+  Checkbox,
+  Tooltip,
 } from "@mantine/core";
 import {
   IconBrandDribbble,
@@ -665,6 +667,11 @@ const AccountSetting = () => {
                     />
                   </Grid.Col>
                 </Grid>
+                <Divider label="Format" mt="md" />
+                <Checkbox label="raw (.json)" checked mt="md" />
+                <Tooltip label="Not supported currenlty">
+                  <Checkbox label="pretty (.html)" checked={false} mt="md" />
+                </Tooltip>
                 <Button
                   variant="subtle"
                   mt="md"
@@ -672,7 +679,7 @@ const AccountSetting = () => {
                   disabled={exportLoading}
                   rightIcon={exportLoading && <Loader size="xs" />}
                 >
-                  Request download
+                  Request download (.zip)
                 </Button>
               </form>
             </Modal.Body>
