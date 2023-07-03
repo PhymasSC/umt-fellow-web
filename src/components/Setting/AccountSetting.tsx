@@ -115,6 +115,16 @@ const AccountSetting = () => {
       confirmPassword: "",
     },
   });
+  const dyiForm = useForm({
+    initialValues: {
+      account: true,
+      follows: true,
+      threads: true,
+      messages: true,
+      comments: true,
+      votes: true,
+    },
+  });
 
   const configuration: {
     label: string | React.ReactNode;
@@ -540,7 +550,46 @@ const AccountSetting = () => {
                 of data associated with your account.
               </TypographyStylesProvider>
               <Divider my="md" label="Pick information" />
-              <form>
+              <form
+                onSubmit={dyiForm.onSubmit(async (val) => {
+                  const variables = {
+                    userId: session?.user.id,
+                    ...val,
+                  };
+                  const response = await fetch("/api/dyi", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(variables),
+                  });
+
+                  if (response.ok) {
+                    // Extract the filename from the response headers
+                    const contentDisposition = response.headers.get(
+                      "Content-Disposition"
+                    );
+                    const filename =
+                      contentDisposition?.split("filename=")[1] || "";
+
+                    // Read the response as a blob
+                    const blob = await response.blob();
+
+                    // Create a temporary anchor element to initiate the file download
+                    const anchorElement = document.createElement("a");
+                    anchorElement.href = URL.createObjectURL(blob);
+                    anchorElement.download = filename;
+                    anchorElement.click();
+
+                    // Clean up the temporary URL object
+                    URL.revokeObjectURL(anchorElement.href);
+                  } else {
+                    // Handle the error response from the server
+                    const errorResponse = await response.json();
+                    console.error("Export data failed:", errorResponse.error);
+                  }
+                })}
+              >
                 <Grid>
                   <Grid.Col sm={6}>
                     <ImageCheckbox
@@ -550,6 +599,7 @@ const AccountSetting = () => {
                       }
                       image={"/user-male--v3.png"}
                       defaultChecked={true}
+                      {...dyiForm.getInputProps("account")}
                     />
                   </Grid.Col>
                   <Grid.Col sm={6}>
@@ -560,6 +610,7 @@ const AccountSetting = () => {
                       }
                       image={"/contacts.png"}
                       defaultChecked={true}
+                      {...dyiForm.getInputProps("follows")}
                     />
                   </Grid.Col>
                   <Grid.Col sm={6}>
@@ -568,6 +619,7 @@ const AccountSetting = () => {
                       description={"Download all threads you had posted."}
                       image={"/news.png"}
                       defaultChecked={true}
+                      {...dyiForm.getInputProps("threads")}
                     />
                   </Grid.Col>
                   <Grid.Col sm={6}>
@@ -578,6 +630,7 @@ const AccountSetting = () => {
                       }
                       image={"/speech-bubble--v1.png"}
                       defaultChecked={true}
+                      {...dyiForm.getInputProps("messages")}
                     />
                   </Grid.Col>
 
@@ -587,6 +640,7 @@ const AccountSetting = () => {
                       description={"Download all comments you had posted."}
                       image={"/comments.png"}
                       defaultChecked={true}
+                      {...dyiForm.getInputProps("comments")}
                     />
                   </Grid.Col>
                   <Grid.Col sm={6}>
@@ -595,10 +649,11 @@ const AccountSetting = () => {
                       description={"Download all votes you had posted."}
                       image={"/thumb-up--v1.png"}
                       defaultChecked={true}
+                      {...dyiForm.getInputProps("votes")}
                     />
                   </Grid.Col>
                 </Grid>
-                <Button variant="subtle" mt="md">
+                <Button variant="subtle" mt="md" type="submit">
                   Request download
                 </Button>
               </form>
@@ -761,21 +816,21 @@ const AccountSetting = () => {
         </>
       ),
     },
-    {
-      label: "Delete Account",
-      description: "Permanently delete your account and all associated data",
-      layout: "horizontal",
-      input: (
-        <Button
-          w="100%"
-          variant="light"
-          color="red"
-          leftIcon={<IconTrash size="1em" />}
-        >
-          Delete Account
-        </Button>
-      ),
-    },
+    // {
+    //   label: "Delete Account",
+    //   description: "Permanently delete your account and all associated data",
+    //   layout: "horizontal",
+    //   input: (
+    //     <Button
+    //       w="100%"
+    //       variant="light"
+    //       color="red"
+    //       leftIcon={<IconTrash size="1em" />}
+    //     >
+    //       Delete Account
+    //     </Button>
+    //   ),
+    // },
   ];
 
   console.log(session);

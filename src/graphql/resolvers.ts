@@ -129,6 +129,18 @@ export const resolvers = {
 
 			return [upvotes, downvotes];
 		},
+		getThreadsVotedByUser: async (_: any, { userId }: { userId: string }, { prisma }: { prisma: PrismaType }) => {
+			const threads = await prisma.threads.findMany({
+				where: {
+					threadvotes: {
+						some: {
+							user_id: userId,
+						},
+					}
+				}
+			});
+			return threads;
+		},
 
 		getCommunities: async (_: any, { userId }: { userId?: string }, { prisma }: { prisma: PrismaType }) => {
 			const communities = await prisma.community.findMany();
@@ -357,6 +369,36 @@ export const resolvers = {
 				orderBy: {
 					created_at: "desc"
 				}
+			});
+			return comments;
+		},
+
+		getCommentsByUserId: async (_: any, { userId }: { userId: string }, { prisma }: { prisma: PrismaType }) => {
+			const comments = await prisma.comment.findMany({
+				where: {
+					userId
+				},
+				orderBy: [
+					{ threadId: "desc" },
+					{ created_at: "desc" }
+				]
+			});
+			return comments;
+		},
+
+		getCommentsVotedByUser: async (_: any, { userId }: { userId: string }, { prisma }: { prisma: PrismaType }) => {
+			const comments = await prisma.comment.findMany({
+				where: {
+					commentvotes: {
+						some: {
+							user_id: userId
+						}
+					}
+				},
+				orderBy: [
+					{ threadId: "desc" },
+					{ created_at: "desc" }
+				]
 			});
 			return comments;
 		},

@@ -174,6 +174,7 @@ export const typeDefs = gql`
 		getThreadsByCommunity(communityId: String!): [Thread]
 		getThreadVotes(threadId: String!): [Vote]
 		getThreadUpvotesAndDownvotes(threadId: String!): [Int]!
+		getThreadsVotedByUser(userId: String!): [Thread]
 
 		getCommunities(userId: String): [Community]
 		getCommunityById(id: String!): Community
@@ -193,6 +194,8 @@ export const typeDefs = gql`
 
 		getComments(threadId: String!): [Comment]
 		getCommentsByParentId(parentId: String!): [Comment]
+		getCommentsByUserId(userId: String!): [Comment]
+		getCommentsVotedByUser(userId: String!): [Comment]
 
 		getFollowers(userId: String!): [Follow]
 		getFollowings(userId: String!): [Follow]
