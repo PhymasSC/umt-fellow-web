@@ -669,9 +669,14 @@ const AccountSetting = () => {
                 </Grid>
                 <Divider label="Format" mt="md" />
                 <Checkbox label="raw (.json)" checked mt="md" />
-                <Tooltip label="Not supported currenlty">
-                  <Checkbox label="pretty (.html)" checked={false} mt="md" />
-                </Tooltip>
+                {/* <Tooltip label="Not supported currenlty">
+                  <Checkbox
+                    label="pretty (.html)"
+                    checked={false}
+                    mt="md"
+                    disabled
+                  />
+                </Tooltip> */}
                 <Button
                   variant="subtle"
                   mt="md"
