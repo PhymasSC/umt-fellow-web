@@ -10,6 +10,9 @@ import {
   Modal,
   useMantineTheme,
   List,
+  TypographyStylesProvider,
+  Grid,
+  Checkbox,
 } from "@mantine/core";
 import {
   IconBrandDribbble,
@@ -30,13 +33,20 @@ import {
 import { useSession } from "next-auth/react";
 import { useQuery } from "@apollo/client";
 import { GET_USER } from "@operations/queries";
-import { Input, NumberInput, FormLayout, NewPassword } from "../Form";
+import {
+  Input,
+  NumberInput,
+  FormLayout,
+  NewPassword,
+  ImageCheckbox,
+} from "../Form";
 import { EDIT_USER } from "@operations/mutations";
 import ImageInput from "@components/Form/ImageInput";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { PASSWORD_PATTERN } from "@constants/regex";
 import { notifications } from "@mantine/notifications";
+import ImageCheckboxes from "@components/Form/ImageCheckbox";
 
 type USER_TYPE = {
   id: string;
@@ -95,6 +105,7 @@ const AccountSetting = () => {
   );
   const [passwordOpened, { open: passwordOpen, close: passwordClose }] =
     useDisclosure(false);
+  const [dyiOpened, { open: dyiOpen, close: dyiClose }] = useDisclosure(false);
   const theme = useMantineTheme();
   const userData: USER_TYPE | undefined = data?.getUser;
   const passwordForm = useForm({
@@ -476,18 +487,133 @@ const AccountSetting = () => {
       ),
     },
     {
-      label: "Export Data",
-      description: "Export all of your data from the site.",
+      label: "Download your information",
+      description:
+        "This feature allows you to download a copy of your data from the social forum. By downloading your information, you can have a personal backup and gain insights into your activities on the platform.",
       layout: "horizontal",
       input: (
-        <Button
-          w="100%"
-          variant="default"
-          color="red"
-          leftIcon={<IconOutbound size="1em" />}
-        >
-          Export Data
-        </Button>
+        <>
+          <Modal
+            title="Download your information"
+            opened={dyiOpened}
+            onClose={dyiClose}
+            overlayProps={{
+              color:
+                theme.colorScheme === "dark"
+                  ? theme.colors.dark[9]
+                  : theme.colors.gray[2],
+              opacity: 0.55,
+              blur: 3,
+            }}
+            centered
+            size="xl"
+          >
+            <Modal.Body>
+              <TypographyStylesProvider>
+                By initiating the download, you can:
+                <List>
+                  <List.Item>
+                    Obtain a comprehensive copy of your data from the social
+                    forum.
+                  </List.Item>
+                  <List.Item>
+                    Access a personal backup of your information.
+                  </List.Item>
+                  <List.Item>
+                    Explore your activities, posts, comments, and likes in
+                    detail. We ensure the security and privacy of your
+                    information throughout the download process.
+                  </List.Item>
+                  <List.Item>
+                    Gain insights into your interactions and contributions on
+                    the platform.
+                  </List.Item>
+                  <List.Item>
+                    Keep an archive of your social forum presence.
+                  </List.Item>
+                  <List.Item>
+                    Enjoy greater control over your personal information.
+                  </List.Item>
+                  <List.Item>Preserve your valuable data securely.</List.Item>
+                </List>
+                The download process may take some time, depending on the volume
+                of data associated with your account.
+              </TypographyStylesProvider>
+              <Divider my="md" label="Pick information" />
+              <form>
+                <Grid>
+                  <Grid.Col sm={6}>
+                    <ImageCheckbox
+                      title={"Account"}
+                      description={
+                        "Download the information about who you follow and who follows you."
+                      }
+                      image={"/user-male--v3.png"}
+                      defaultChecked={true}
+                    />
+                  </Grid.Col>
+                  <Grid.Col sm={6}>
+                    <ImageCheckbox
+                      title={"Follows"}
+                      description={
+                        "Download the information about who you follow and who follows you."
+                      }
+                      image={"/contacts.png"}
+                      defaultChecked={true}
+                    />
+                  </Grid.Col>
+                  <Grid.Col sm={6}>
+                    <ImageCheckbox
+                      title={"Threads"}
+                      description={"Download all threads you had posted."}
+                      image={"/news.png"}
+                      defaultChecked={true}
+                    />
+                  </Grid.Col>
+                  <Grid.Col sm={6}>
+                    <ImageCheckbox
+                      title={"Messages"}
+                      description={
+                        "Download all messages you had sent and received."
+                      }
+                      image={"/speech-bubble--v1.png"}
+                      defaultChecked={true}
+                    />
+                  </Grid.Col>
+
+                  <Grid.Col sm={6}>
+                    <ImageCheckbox
+                      title={"Comments"}
+                      description={"Download all comments you had posted."}
+                      image={"/comments.png"}
+                      defaultChecked={true}
+                    />
+                  </Grid.Col>
+                  <Grid.Col sm={6}>
+                    <ImageCheckbox
+                      title={"Votes"}
+                      description={"Download all votes you had posted."}
+                      image={"/thumb-up--v1.png"}
+                      defaultChecked={true}
+                    />
+                  </Grid.Col>
+                </Grid>
+                <Button variant="subtle" mt="md">
+                  Request download
+                </Button>
+              </form>
+            </Modal.Body>
+          </Modal>
+          <Button
+            w="100%"
+            variant="default"
+            color="red"
+            leftIcon={<IconOutbound size="1em" />}
+            onClick={dyiOpen}
+          >
+            Request download
+          </Button>
+        </>
       ),
     },
     {
@@ -658,7 +784,9 @@ const AccountSetting = () => {
       {configuration.map((config, index) => {
         return (
           <>
-            {config.label === "Export Data" && <Divider label="Operation" />}
+            {config.label === "Download your information" && (
+              <Divider label="Manage your data" />
+            )}
             <FormLayout
               key={index}
               layout={config.layout || "vertical"}
