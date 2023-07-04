@@ -17,6 +17,7 @@ import {
   Tooltip,
   Button,
   TypographyStylesProvider,
+  Badge,
 } from "@mantine/core";
 import { Gallery, Typography } from "@components/index";
 import FeedSetting from "./ThreadMenu";
@@ -93,8 +94,16 @@ const SingleFeed: React.FC<SingleFeedProps> = ({
 
   if (!feed || loading) return <SingleFeedSkeleton />;
 
-  const { title, author, created_at, updated_at, description, id, images } =
-    feed;
+  const {
+    title,
+    author,
+    created_at,
+    updated_at,
+    description,
+    id,
+    images,
+    community,
+  } = feed;
   const handleVote = async (type: string) => {
     const res = await voteThread({
       variables: {
@@ -132,21 +141,35 @@ const SingleFeed: React.FC<SingleFeedProps> = ({
         <Grid.Col span={11}>
           <Stack>
             <Group position="apart">
-              <Link href={`/profile/${author.id}`} passHref>
-                <Button
-                  component="a"
-                  variant="subtle"
-                  h={50}
-                  color="gray"
-                  sx={{ color: "inherit", textDecoration: "none" }}
-                >
-                  <Group>
-                    <Avatar src={author.image} radius="xl" alt="Avatar" />
-                    <Text weight="700">{author.name}</Text>
-                    <Space w="xs" />
-                  </Group>
-                </Button>
-              </Link>
+              <Group position="apart">
+                <Link href={`/profile/${author.id}`} passHref>
+                  <Button
+                    component="a"
+                    variant="subtle"
+                    h={50}
+                    color="gray"
+                    sx={{ color: "inherit", textDecoration: "none" }}
+                  >
+                    <Group>
+                      <Avatar src={author.image} radius="xl" alt="Avatar" />
+                      <Text weight="700">{author.name}</Text>
+                    </Group>
+                  </Button>
+                </Link>
+                {community && community.admin.id === author.id && (
+                  <Badge color="red" variant="light">
+                    Admin
+                  </Badge>
+                )}
+                {community &&
+                  community.moderators.some(
+                    (moderator) => moderator.id === author.id
+                  ) && (
+                    <Badge color="indigo" variant="light">
+                      Moderator
+                    </Badge>
+                  )}
+              </Group>
               <Group>
                 <Tooltip
                   multiline

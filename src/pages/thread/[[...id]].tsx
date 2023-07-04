@@ -271,6 +271,7 @@ const ThreadPage: NextPage<ThreadPageProps & CommentProps> = (props) => {
                         key={comment.id}
                         data={comment}
                         author={data.author.id}
+                        community={data.community}
                       />
                     </Card.Section>
                   ))

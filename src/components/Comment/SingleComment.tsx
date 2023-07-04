@@ -51,11 +51,22 @@ type SingleCommentProps = {
     created_at: string;
     updated_at: string;
   };
+  community: {
+    id: string;
+    name: string;
+    avatar: string;
+    moderators: {
+      id: string;
+    }[];
+    admin: {
+      id: string;
+    };
+  };
   children: React.ReactNode;
 };
 
 const SingleComment = (props: SingleCommentProps) => {
-  const { data: commentData, author, children } = props;
+  const { data: commentData, author, community, children } = props;
   const { data: session } = useSession();
   const [isModifying, setIsModifying] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -147,24 +158,33 @@ const SingleComment = (props: SingleCommentProps) => {
       header={
         <Group spacing="xs">
           {(commentData.user && (
-            <Link href={`/profile/${commentData.user.id}`} passHref>
-              <Button
-                component="a"
-                variant="subtle"
-                h={50}
-                color="gray"
-                sx={{ color: "inherit", textDecoration: "none" }}
-              >
-                <Group>
-                  <Avatar
-                    src={commentData.user.image}
-                    radius="xl"
-                    alt="Avatar"
-                  />
-                  <Text weight="700">{commentData.user.name}</Text>
-                </Group>
-              </Button>
-            </Link>
+            <Group spacing="apart">
+              <Link href={`/profile/${commentData.user.id}`} passHref>
+                <Button
+                  component="a"
+                  variant="subtle"
+                  h={50}
+                  color="gray"
+                  sx={{ color: "inherit", textDecoration: "none" }}
+                >
+                  <Group>
+                    <Avatar
+                      src={commentData.user.image}
+                      radius="xl"
+                      alt="Avatar"
+                    />
+                    <Text weight="700">{commentData.user.name}</Text>
+                  </Group>
+                </Button>
+              </Link>
+              {community && community?.admin.id === commentData.user.id && (
+                <Badge color="red">Admin</Badge>
+              )}
+              {community &&
+                community?.moderators.find(
+                  (mod) => mod.id === commentData.user.id
+                ) && <Badge color="indigo">Moderator</Badge>}
+            </Group>
           )) || (
             <Group>
               <Avatar src="" radius="xl" alt="Avatar" />

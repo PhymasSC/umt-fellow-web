@@ -1,5 +1,4 @@
-import { Anchor, Card, Loader, TypographyStylesProvider } from "@mantine/core";
-import { useSession } from "next-auth/react";
+import { Anchor, Card, Loader } from "@mantine/core";
 import { useRouter } from "next/router";
 import { CommentControl, SingleComment } from ".";
 import { GET_COMMENTS_BY_PARENT_ID } from "@operations/queries";
@@ -43,10 +42,21 @@ type Comment = {
 type CommentProps = {
   data: Comment;
   author: string;
+  community: {
+    id: string;
+    name: string;
+    avatar: string;
+    moderators: {
+      id: string;
+    }[];
+    admin: {
+      id: string;
+    };
+  };
 };
 
 const NestedComment = (props: CommentProps) => {
-  const { data: comment, author } = props;
+  const { data: comment, author, community } = props;
   const router = useRouter();
   const { id } = router.query;
   const [nestedComment, setNestedComment] = useState<Comment[]>([]);
@@ -68,7 +78,7 @@ const NestedComment = (props: CommentProps) => {
   };
 
   return (
-    <SingleComment data={comment} author={author}>
+    <SingleComment data={comment} author={author} community={community}>
       <CommentControl
         mutation={{
           threadId: id?.[0] || "",
@@ -87,7 +97,7 @@ const NestedComment = (props: CommentProps) => {
           })}
           withBorder
         >
-          <SingleComment data={child} author={author}>
+          <SingleComment data={child} author={author} community={community}>
             <CommentControl
               mutation={{
                 threadId: id?.[0] || "",
@@ -107,7 +117,11 @@ const NestedComment = (props: CommentProps) => {
                 })}
                 withBorder
               >
-                <SingleComment data={child} author={author}>
+                <SingleComment
+                  data={child}
+                  author={author}
+                  community={community}
+                >
                   <CommentControl
                     mutation={{
                       threadId: id?.[0] || "",
@@ -127,7 +141,11 @@ const NestedComment = (props: CommentProps) => {
                         })}
                         withBorder
                       >
-                        <NestedComment data={child} author={author} />
+                        <NestedComment
+                          data={child}
+                          author={author}
+                          community={community}
+                        />
                       </Card>
                     ))}
                   {!expanded &&
