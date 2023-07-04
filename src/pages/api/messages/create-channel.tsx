@@ -24,18 +24,23 @@ export default async function handler(
   });
 
   if (existingChannel) {
+    console.log("Test");
     return res.status(200).json({ channelId: existingChannel.id });
   }
-  let channel = await prisma.channel.create({
-    data: {
-      isGroup: false,
-      ChannelParticipants: {
-        createMany: {
-          data: [{ userId: senderId }, { userId: recipientId }],
+  try {
+    let channel = await prisma.channel.create({
+      data: {
+        isGroup: false,
+        ChannelParticipants: {
+          createMany: {
+            data: [{ userId: senderId }, { userId: recipientId }],
+          },
         },
       },
-    },
-  });
+    });
 
-  return res.status(200).json({ channelId: channel.id });
+    return res.status(200).json({ channelId: channel.id });
+  } catch (err) {
+    return res.status(500).json({ error: "You cannot chat with yourself!" });
+  }
 }

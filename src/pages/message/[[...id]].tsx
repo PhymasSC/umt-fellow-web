@@ -10,6 +10,8 @@ import {
 import { useRouter } from "next/router";
 import { Search } from "@components/index";
 import { useSession } from "next-auth/react";
+import { notifications } from "@mantine/notifications";
+import { IconAlertCircle } from "@tabler/icons";
 
 const Message = () => {
   const router = useRouter();
@@ -17,8 +19,8 @@ const Message = () => {
   const { data: session } = useSession();
   const theme = useMantineTheme();
 
-  const selectRecipient = (item: AutocompleteItem) => {
-    fetch("/api/messages/create-channel", {
+  const selectRecipient = async (item: AutocompleteItem) => {
+    const response = await fetch("/api/messages/create-channel", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -27,11 +29,19 @@ const Message = () => {
         senderId: session?.user.id,
         recipientId: item.id,
       }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        router.push(`/message/${data.channelId}`);
+    });
+
+    if (!response.ok) {
+      notifications.show({
+        title: "Error",
+        message: "You cannot chat with yourself!",
+        color: "red",
+        icon: <IconAlertCircle size="1em" />,
       });
+      return;
+    }
+    const data = await response.json();
+    router.push(`/message/${data.channelId}`);
   };
 
   return (
