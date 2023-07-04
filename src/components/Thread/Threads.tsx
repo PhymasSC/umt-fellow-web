@@ -19,6 +19,17 @@ interface feed {
     id: string;
     imageUrl: string;
   }[];
+  community: {
+    id: string;
+    name: string;
+    avatar: string;
+    moderators: {
+      id: string;
+    }[];
+    admin: {
+      id: string;
+    };
+  };
   created_at: string;
   updated_at: string;
   description: string;
