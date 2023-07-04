@@ -71,7 +71,6 @@ const AuthenticationScreen = ({
             <PasswordInput
               required
               label="Password"
-              type="password"
               icon={<IconLock size={14} />}
               placeholder="Your password"
               {...form.getInputProps("password")}
@@ -81,7 +80,6 @@ const AuthenticationScreen = ({
             <NewPassword
               required
               label="Password"
-              type="password"
               form={form}
               argName="password"
               {...form.getInputProps("password")}
