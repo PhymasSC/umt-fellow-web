@@ -131,10 +131,9 @@ const SingleComment = (props: SingleCommentProps) => {
             position="top"
           >
             <Text color="dimmed">
-              {(commentData.created_at !== commentData.updated_at &&
-                !commentData.user &&
-                "Removed ") ||
-                "Edited "}
+              {commentData.created_at !== commentData.updated_at
+                ? (!commentData.user && "Removed ") || "Edited "
+                : ""}
               {dayjs(new Date(commentData.updated_at)).fromNow()}
             </Text>
           </Tooltip>
