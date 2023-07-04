@@ -27,7 +27,7 @@ const Home: NextPage = () => {
                 }}
               />
             )}
-            {(data?.getThreads.length === 0 && (
+            {(data && data?.getThreads.length === 0 && (
               <Card
                 withBorder
                 sx={{
@@ -49,7 +49,12 @@ const Home: NextPage = () => {
                   joins in.{" "}
                 </Text>
               </Card>
-            )) || <Feed feeds={data?.getThreads} loading={loading} />}
+            )) || (
+              <Feed
+                feeds={(data && data?.getThreads) || []}
+                loading={loading}
+              />
+            )}
           </Flex>
         </Grid.Col>
         <Grid.Col xs={12} lg={4}>

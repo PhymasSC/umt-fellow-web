@@ -123,7 +123,6 @@ const ThreadPage: NextPage<ThreadPageProps & CommentProps> = (props) => {
       </Container>
     );
   }
-  if (data == null) router.push("/404");
   // View mode
   return (
     <>
@@ -303,6 +302,10 @@ export async function getServerSideProps(context: { params: { id: string } }) {
       variables: { id },
     });
     console.log(data);
+    if (!data.getThreadById)
+      return {
+        notFound: true,
+      };
     return {
       props: { ...data },
     };
