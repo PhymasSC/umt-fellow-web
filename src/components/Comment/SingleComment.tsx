@@ -15,11 +15,16 @@ import {
 import Link from "next/link";
 import dayjs from "dayjs";
 import { useMutation, useQuery } from "@apollo/client";
-import { DELETE_COMMENT, VOTE_COMMENT } from "@operations/mutations";
+import {
+  DELETE_COMMENT,
+  UPDATE_COMMENT,
+  VOTE_COMMENT,
+} from "@operations/mutations";
 import { useSession } from "next-auth/react";
 import { GET_COMMENT_VOTES } from "@operations/queries";
 import {
   IconAlertCircle,
+  IconCheck,
   IconCircleX,
   IconDotsVertical,
   IconEdit,
@@ -30,6 +35,8 @@ import {
 import { useState } from "react";
 import RTE from "@components/Form/RichTextEditor";
 import { notifications } from "@mantine/notifications";
+import { useForm } from "@mantine/form";
+import { Editor } from "@tiptap/react";
 
 type SingleCommentProps = {
   author: string;
@@ -53,13 +60,59 @@ const SingleComment = (props: SingleCommentProps) => {
   const [isModifying, setIsModifying] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [vote] = useMutation(VOTE_COMMENT);
+  const [updateComment] = useMutation(UPDATE_COMMENT);
   const [deleteComment] = useMutation(DELETE_COMMENT);
   const { loading, data, refetch } = useQuery(GET_COMMENT_VOTES, {
     variables: {
       commentId: commentData.id,
     },
   });
+  const form = useForm({
+    initialValues: {
+      content: commentData.content,
+      plainContent: commentData.content,
+    },
+  });
 
+  const handleEditorUpdate = ({ editor }: { editor: Editor }) => {
+    form.setFieldValue("content", editor.getHTML());
+    form.setFieldValue("plainContent", editor.getText());
+  };
+
+  const submitHandler = async () => {
+    if (form.values.plainContent.trim() === "") {
+      notifications.show({
+        title: "Error",
+        message: "Comment cannot be empty.",
+        color: "red",
+        icon: <IconAlertCircle size="1em" />,
+      });
+      return;
+    }
+    setIsModifying(true);
+    try {
+      await updateComment({
+        variables: {
+          commentId: commentData.id,
+          content: form.values.content,
+        },
+      });
+      notifications.show({
+        title: "Comment updated",
+        message: "Your comment has been updated.",
+        color: "teal",
+        icon: <IconCheck size="1em" />,
+      });
+      setIsModifying(false);
+    } catch (err: any) {
+      notifications.show({
+        title: "Error",
+        message: err.message,
+        color: "red",
+      });
+      setIsModifying(false);
+    }
+  };
   return (
     <ContentLayout
       vote={
@@ -197,8 +250,10 @@ const SingleComment = (props: SingleCommentProps) => {
     >
       {(isModifying && (
         <>
-          <RTE content={commentData.content} onUpdate={() => {}} />
-          <Button rightIcon={<IconSend size={16} />}>Edit</Button>
+          <RTE content={form.values.content} onUpdate={handleEditorUpdate} />
+          <Button rightIcon={<IconSend size={16} />} onClick={submitHandler}>
+            Edit
+          </Button>
         </>
       )) ||
         (commentData.user && (

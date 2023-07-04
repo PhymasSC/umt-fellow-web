@@ -1564,6 +1564,33 @@ export const resolvers = {
 				return null
 			}
 		},
+		updateComment: async (
+			_: any,
+			{
+				commentId,
+				content,
+			}: {
+				commentId: string,
+				content: string,
+			},
+			{ prisma }: { prisma: PrismaType }
+		) => {
+			try {
+				const comment = await prisma.comment.update({
+					where: {
+						id: commentId,
+					},
+					data: {
+						content,
+						updated_at: new Date(),
+					},
+				});
+
+				return comment
+			} catch (error: any) {
+				return null
+			}
+		},
 
 		deleteComment: async (
 			_: any,

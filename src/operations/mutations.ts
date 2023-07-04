@@ -425,6 +425,15 @@ mutation Mutation($threadId: String!, $userId: String!, $content: String!, $pare
   }
 `;
 
+export const UPDATE_COMMENT = gql`
+mutation UpdateComment($commentId: String!, $content: String!) {
+	updateComment(commentId: $commentId, content: $content) {
+	  id
+	  content
+	}
+  }
+`;
+
 export const DELETE_COMMENT = gql`
 ${COMMENT_FRAGMENT}
 mutation DeleteComment($commentId: String!) {

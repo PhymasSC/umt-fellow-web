@@ -309,7 +309,10 @@ export const typeDefs = gql`
 			content: String!
 			parentId: String
 		): Comment
-
+		updateComment(
+			commentId: String!
+			content: String!
+		): Comment
 		deleteComment(
 			commentId: String!
 		): Comment

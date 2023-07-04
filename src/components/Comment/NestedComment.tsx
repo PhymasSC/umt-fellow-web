@@ -47,7 +47,6 @@ type CommentProps = {
 
 const NestedComment = (props: CommentProps) => {
   const { data: comment, author } = props;
-  const { data: session } = useSession();
   const router = useRouter();
   const { id } = router.query;
   const [nestedComment, setNestedComment] = useState<Comment[]>([]);
