@@ -501,6 +501,18 @@ export const resolvers = {
 			});
 			return images;
 		},
+		community: async (parent: any, _: any, { prisma }: { prisma: PrismaType }) => {
+			const community = await prisma.community.findFirst({
+				where: {
+					Threads: {
+						some: {
+							id: parent.id,
+						},
+					}
+				},
+			});
+			return community;
+		}
 	},
 
 	Community: {

@@ -86,6 +86,7 @@ export const typeDefs = gql`
 		tags: [String]
 		author: User
 		flag: Flag
+		community: Community
 		created_at: DateTime
 		updated_at: DateTime
 	}

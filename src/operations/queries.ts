@@ -82,6 +82,17 @@ export const GET_THREAD = gql`
 	query GetThreadById($id: String!) {
 		getThreadById(id: $id) {
 			...ThreadFragment
+			community {
+				id
+				avatar
+				name
+				moderators {
+				  id
+				}
+				admin {
+				  id
+				}
+			  }
 		}
 	}
 `;

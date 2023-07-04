@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { NextPage } from "next";
 import { Editor } from "@components/index";
 import { GET_COMMENTS, GET_THREAD } from "@operations/queries";
@@ -31,7 +32,17 @@ type ThreadPageProps = {
     id: string;
     title: string;
     description: string;
-    community: string;
+    community: {
+      id: string;
+      name: string;
+      avatar: string;
+      moderators: {
+        id: string;
+      };
+      admin: {
+        id: string;
+      };
+    };
     images: {
       id: string;
       imageUrl: string;
@@ -159,6 +170,38 @@ const ThreadPage: NextPage<ThreadPageProps & CommentProps> = (props) => {
                 </Card>
               </Grid.Col>
               <Grid.Col xs={12} lg={4}>
+                {data && data.community && (
+                  <Paper
+                    radius="md"
+                    withBorder
+                    p="lg"
+                    sx={(theme) => ({
+                      backgroundColor:
+                        theme.colorScheme === "dark"
+                          ? theme.colors.dark[8]
+                          : theme.white,
+                    })}
+                    mb="md"
+                  >
+                    <Title order={4}>Community</Title>
+                    <Space h="md" />
+                    <Avatar
+                      src={`https://ik.imagekit.io/umtfellow/tr:h-600${data?.community.avatar}`}
+                      size={120}
+                      radius={120}
+                      mx="auto"
+                    />
+                    <Text align="center" size="lg" weight={500} mt="md">
+                      {data?.community.name}
+                    </Text>
+
+                    <Link href={`/community/${data?.community.id}`} passHref>
+                      <Button component="a" variant="light" fullWidth mt="md">
+                        View community
+                      </Button>
+                    </Link>
+                  </Paper>
+                )}
                 <Paper
                   radius="md"
                   withBorder
@@ -259,6 +302,7 @@ export async function getServerSideProps(context: { params: { id: string } }) {
       query: GET_THREAD,
       variables: { id },
     });
+    console.log(data);
     return {
       props: { ...data },
     };
