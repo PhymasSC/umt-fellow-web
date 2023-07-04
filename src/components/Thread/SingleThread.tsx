@@ -39,6 +39,17 @@ interface SingleFeedProps {
       id: string;
       imageUrl: string;
     }[];
+    community: {
+      id: string;
+      name: string;
+      avatar: string;
+      moderators: {
+        id: string;
+      }[];
+      admin: {
+        id: string;
+      };
+    };
     created_at: string;
     updated_at: string;
     description: string;
@@ -148,7 +159,11 @@ const SingleFeed: React.FC<SingleFeedProps> = ({
                     {dayjs(new Date(updated_at)).fromNow()}
                   </Text>
                 </Tooltip>
-                <FeedSetting author={author} feedId={feed.id} />
+                <FeedSetting
+                  author={author}
+                  feedId={feed.id}
+                  community={feed.community}
+                />
               </Group>
             </Group>
             <Title size="h3" weight="600">

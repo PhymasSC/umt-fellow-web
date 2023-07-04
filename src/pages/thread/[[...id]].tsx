@@ -38,7 +38,7 @@ type ThreadPageProps = {
       avatar: string;
       moderators: {
         id: string;
-      };
+      }[];
       admin: {
         id: string;
       };
@@ -244,7 +244,7 @@ const ThreadPage: NextPage<ThreadPageProps & CommentProps> = (props) => {
             </Grid>
 
             <Space h="xl" />
-            <Divider></Divider>
+            <Divider />
             <Space h="xl" />
             {session && (
               <Comment

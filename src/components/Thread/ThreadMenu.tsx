@@ -17,7 +17,6 @@ import {
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 
 interface FeedSettingProps {
   feedId: string;
@@ -26,9 +25,24 @@ interface FeedSettingProps {
     name: string;
     image: string;
   };
+  community: {
+    id: string;
+    name: string;
+    avatar: string;
+    moderators: {
+      id: string;
+    }[];
+    admin: {
+      id: string;
+    };
+  };
 }
 
-const FeedSetting: React.FC<FeedSettingProps> = ({ author, feedId }) => {
+const FeedSetting: React.FC<FeedSettingProps> = ({
+  author,
+  feedId,
+  community,
+}) => {
   const router = useRouter();
   const [deleteThread] = useMutation(DELETE_THREAD);
   const { data: session } = useSession();
@@ -69,7 +83,20 @@ const FeedSetting: React.FC<FeedSettingProps> = ({ author, feedId }) => {
                   Edit thread
                 </Menu.Item>
               </Link>
-              <Menu.Item icon={<IconTrash size={16} />} onClick={removeThread}>
+            </>
+          )}
+          {(session?.user.id === author.id ||
+            (community && community.admin.id === session?.user.id) ||
+            (community &&
+              community.moderators.find(
+                (moderator) => moderator.id === session?.user.id
+              ))) && (
+            <>
+              <Menu.Item
+                icon={<IconTrash size={16} />}
+                onClick={removeThread}
+                color="red"
+              >
                 Delete thread
               </Menu.Item>
               <Menu.Divider />
