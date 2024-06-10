@@ -7,9 +7,9 @@ generator client {
 // }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -80,7 +80,7 @@ model Follow {
 
 model Comment {
   id           String         @id @default(uuid())
-  content      String         @db.LongText
+  content      String         @db.Text
   userId       String         @map("user_id")
   threadId     String         @map("thread_id")
   parentId     String         @map("parent_id")
@@ -199,7 +199,7 @@ model Session {
 model Threads {
   id          String         @id @default(uuid())
   title       String
-  description String?        @db.LongText
+  description String?        @db.Text
   authorId    String?
   flag        Thread_flag    @default(PUBLIC)
   created_at  DateTime       @default(now())
