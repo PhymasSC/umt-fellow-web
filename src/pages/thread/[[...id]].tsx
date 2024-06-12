@@ -127,7 +127,8 @@ const ThreadPage: NextPage<ThreadPageProps & CommentProps> = (props) => {
   return (
     <>
       <Head>
-        <title>{data?.title} | UMT Fellow</title>
+        <title>{data?.title}</title>
+        {/* <title>{data?.title} | UMT Fellow</title> */}
         <meta
           property="og:url"
           content={`https://www.umtfellow.social${router.asPath}`}

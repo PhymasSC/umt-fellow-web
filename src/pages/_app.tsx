@@ -22,6 +22,7 @@ import { Notifications } from "@mantine/notifications";
 import { configureAbly } from "@ably-labs/react-hooks";
 import { DefaultSeo } from "next-seo";
 import SEOConfig from "./../constants/next-seo.config";
+import "./../styles/global.css";
 
 const prefix = process.env.API_ROOT || "";
 const clientId =
