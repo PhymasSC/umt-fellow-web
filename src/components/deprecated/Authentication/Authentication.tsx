@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { useForm, isEmail, matches, hasLength } from "@mantine/form";
 import { Paper, PaperProps } from "@mantine/core";

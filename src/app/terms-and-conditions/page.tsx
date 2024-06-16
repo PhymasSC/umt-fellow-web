@@ -1,25 +1,20 @@
-import { NextPage } from "next";
-import { Card, Container, Title } from "@mantine/core";
-import { Typography } from "@/components/index";
+import { Typography } from "@/components/ui/typography";
+import { Text } from "@/components/ui/text";
 import Link from "next/link";
-const TermsAndConditions: NextPage = () => {
+
+const TermsAndConditions = () => {
   return (
-    <Container>
-      <Card
-        shadow="sm"
-        sx={{ padding: "4em !important" }}
-        radius="md"
-        withBorder
-      >
+    <div className="p-4 mx-auto max-w-7xl">
+      <div className="p-16 border border-gray-200 rounded-md shadow-sm">
         <Typography>
-          <Title>Terms and Conditions</Title>
+          <h1>Terms and Conditions</h1>
           <h5>Updated on Dec 5, 2022</h5>
-          <p>Welcome to UMT Fellow!</p>
+          <Text className="mb-4">Welcome to UMT Fellow!</Text>
 
           <p>
             These terms and conditions outline the rules and regulations for the
             use of UMT Fellow&apos;s Website, located at{" "}
-            <Link href="/">https://umt-fellow.vercel.app/</Link>.
+            <Link href="/test">https://umt-fellow.vercel.app/</Link>.
           </p>
 
           <p>
@@ -339,8 +334,8 @@ const TermsAndConditions: NextPage = () => {
             loss or damage of any nature.
           </p>
         </Typography>
-      </Card>
-    </Container>
+      </div>
+    </div>
   );
 };
 

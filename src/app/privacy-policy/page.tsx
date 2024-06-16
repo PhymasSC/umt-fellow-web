@@ -1,15 +1,9 @@
-import { Footer, Typography } from "@/components/index";
-import { Container, Card, Space } from "@mantine/core";
-import { NextPage } from "next";
-const PrivacyPolicy: NextPage = () => {
+import { Typography } from "@/components/ui/typography";
+
+const PrivacyPolicy = () => {
   return (
-    <Container>
-      <Card
-        shadow="sm"
-        sx={{ padding: "4em !important" }}
-        radius="md"
-        withBorder
-      >
+    <div className="p-4 mx-auto max-w-7xl">
+      <div className="p-16 border border-gray-200 rounded-md shadow-sm">
         <Typography>
           <h1>Privacy Policy</h1>
           <p>Last updated: December 05, 2022</p>
@@ -572,10 +566,8 @@ const PrivacyPolicy: NextPage = () => {
             <li>By email: umt-fellow@gmail.com</li>
           </ul>
         </Typography>
-      </Card>
-      <Space h="xl" />
-      <Footer />
-    </Container>
+      </div>
+    </div>
   );
 };
 
