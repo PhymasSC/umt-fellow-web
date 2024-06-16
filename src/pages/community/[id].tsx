@@ -15,12 +15,12 @@ import {
   Accordion,
   List,
 } from "@mantine/core";
-import { Comment, Feed, Footer } from "@components/index";
+import { Comment, Feed, Footer } from "@/components/index";
 import Link from "next/link";
 import { IconCake } from "@tabler/icons";
 import { useSession } from "next-auth/react";
-import { GET_COMMUNITY_BY_ID } from "@operations/queries";
-import { client } from "@lib/apollo-client";
+import { GET_COMMUNITY_BY_ID } from "@/operations/queries";
+import { client } from "@/lib/apollo-client";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 

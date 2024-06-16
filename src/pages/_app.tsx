@@ -10,20 +10,25 @@ import {
 import { useRouter } from "next/router";
 import { getCookie, setCookies } from "cookies-next";
 import { GetServerSidePropsContext } from "next";
-import { Header } from "@components/index";
 import { useState } from "react";
-import { APP_NAME } from "@constants/metadata";
-import { PRIMARY_COLOR, PRIMARY_COLOR_SHADE } from "@constants/colors";
-import { LINKS } from "@constants/pages";
+import { APP_NAME } from "@/constants/metadata";
+import { PRIMARY_COLOR, PRIMARY_COLOR_SHADE } from "@/constants/colors";
+import { LINKS } from "@/constants/pages";
 import { SessionProvider } from "next-auth/react";
 import { ApolloProvider } from "@apollo/client";
-import { client } from "@lib/apollo-client";
+import { client } from "@/lib/apollo-client";
 import { Notifications } from "@mantine/notifications";
 import { configureAbly } from "@ably-labs/react-hooks";
 import { DefaultSeo } from "next-seo";
+import { Header } from "@/components/header";
 import SEOConfig from "./../constants/next-seo.config";
 import "./../styles/global.css";
+import { Inter } from "next/font/google";
 
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+});
 const prefix = process.env.API_ROOT || "";
 const clientId =
   Math.random().toString(36).substring(2, 15) +
@@ -130,8 +135,10 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
                     },
                   })}
                 />
-                <Notifications />
-                <Component {...pageProps} />
+                <main className={inter.className}>
+                  <Notifications />
+                  <Component {...pageProps} />
+                </main>
               </AppShell>
             </MantineProvider>
           </ColorSchemeProvider>

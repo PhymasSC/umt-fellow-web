@@ -1,5 +1,5 @@
 import Ably from "ably/promises";
-import prisma from "@lib/prisma";
+import prisma from "@/lib/prisma";
 import type { NextApiRequest, NextApiResponse } from "next/types";
 
 export default async function handler(

@@ -1,10 +1,10 @@
-import { Feed } from "@components/index";
+import { Feed } from "@/components/index";
 import { Card, Flex, Grid, Text } from "@mantine/core";
-import { Footer, Comment } from "@components/index";
+import { Footer, Comment } from "@/components/index";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@apollo/client";
-import { GET_THREADS } from "@operations/queries";
+import { GET_THREADS } from "@/operations/queries";
 import { useEffect } from "react";
 
 const Home: NextPage = () => {

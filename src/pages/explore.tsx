@@ -1,10 +1,10 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
-import { APP_NAME } from "@constants/metadata";
-import { Feed, Footer } from "@components/index";
+import { APP_NAME } from "@/constants/metadata";
+import { Feed, Footer } from "@/components/index";
 import { useQuery } from "@apollo/client";
-import { GET_THREADS } from "@operations/queries";
+import { GET_THREADS } from "@/operations/queries";
 import { Container, Grid, Flex, Skeleton } from "@mantine/core";
 
 const Explore: NextPage = () => {

@@ -1,4 +1,4 @@
-import { CommunityList, NewCommunity } from "@components/index";
+import { CommunityList, NewCommunity } from "@/components/index";
 import {
   Button,
   Container,
@@ -13,11 +13,11 @@ import { IconPlus } from "@tabler/icons";
 import { useDisclosure } from "@mantine/hooks";
 import { getSession, useSession, GetSessionParams } from "next-auth/react";
 import { useRouter } from "next/router";
-import { client } from "@lib/apollo-client";
+import { client } from "@/lib/apollo-client";
 import {
   GET_COMMUNITIES,
   GET_COMMUNITIES_FOLLOWED_BY_USER,
-} from "@operations/queries";
+} from "@/operations/queries";
 import { NextPage } from "next";
 import { useQuery } from "@apollo/client";
 import { useEffect } from "react";

@@ -1,4 +1,4 @@
-import { MessageList, Chatroom } from "@components/index";
+import { MessageList, Chatroom } from "@/components/index";
 import {
   Title,
   Paper,
@@ -8,7 +8,7 @@ import {
   AutocompleteItem,
 } from "@mantine/core";
 import { useRouter } from "next/router";
-import { Search } from "@components/index";
+import { Search } from "@/components/index";
 import { useSession } from "next-auth/react";
 import { notifications } from "@mantine/notifications";
 import { IconAlertCircle } from "@tabler/icons";

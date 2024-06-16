@@ -1,54 +1,63 @@
 {
-	"compilerOptions": {
-		"target": "es2017",
-		"lib": [
-			"dom",
-			"dom.iterable",
-			"esnext"
-		],
-		"allowJs": true,
-		"skipLibCheck": true,
-		"strict": true,
-		"forceConsistentCasingInFileNames": true,
-		"noEmit": true,
-		"esModuleInterop": true,
-		"module": "esnext",
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"jsx": "preserve",
-		"incremental": true,
-		"baseUrl": ".",
-		"paths": {
-			"@components*": [
-				"src/components*"
-			],
-			"@utils*": [
-				"src/utils*"
-			],
-			"@lib*": [
-				"src/lib*"
-			],
-			"@gql*": [
-				"src/graphql*"
-			],
-			"@generated*": [
-				"src/generated*"
-			],
-			"@constants*": [
-				"src/constants*"
-			],
-			"@operations*": [
-				"src/operations*"
-			]
-		}
-	},
-	"include": [
-		"next-env.d.ts",
-		"**/*.ts",
-		"**/*.tsx"
-, "src/pages/middleware.js", "next.config.js", "next-sitemap.js"	],
-	"exclude": [
-		"node_modules"
-	]
+  "compilerOptions": {
+    "target": "es2017",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/components*": [
+        "src/components*"
+      ],
+      "@/utils*": [
+        "src/utils*"
+      ],
+      "@/lib*": [
+        "src/lib*"
+      ],
+      "@/gql*": [
+        "src/graphql*"
+      ],
+      "@/generated*": [
+        "src/generated*"
+      ],
+      "@/constants*": [
+        "src/constants*"
+      ],
+      "@/operations*": [
+        "src/operations*"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/pages/middleware.js",
+    "next.config.js",
+    "next-sitemap.js",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

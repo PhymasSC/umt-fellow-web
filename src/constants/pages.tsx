@@ -11,6 +11,7 @@ export const LINKS = [
   { link: "/explore", label: "Explore", icon: <IconWorld /> },
   { link: "/community", label: "Community", icon: <IconSocial /> },
   { link: "/message", label: "Message", icon: <IconMessageCircle /> },
+  { link: "/test", label: "Test", icon: <IconMessageCircle /> },
   // {
   // 	link: "/notification",
   // 	label: "Notification",

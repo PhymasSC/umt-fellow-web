@@ -1,8 +1,8 @@
 // @ts-nocheck
 import { NextPage } from "next";
-import { Editor } from "@components/index";
-import { GET_COMMENTS, GET_THREAD } from "@operations/queries";
-import SingleFeed from "@components/Thread/SingleThread";
+import { Editor } from "@/components/index";
+import { GET_COMMENTS, GET_THREAD } from "@/operations/queries";
+import SingleFeed from "@/components/deprecated/Thread/SingleThread";
 import Head from "next/head";
 import {
   Avatar,
@@ -18,13 +18,13 @@ import {
   Center,
 } from "@mantine/core";
 import Link from "next/link";
-import { Comment } from "@components/index";
+import { Comment } from "@/components/index";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { client } from "@lib/apollo-client";
-import MessageButton from "@components/Message/MessageButton";
+import { client } from "@/lib/apollo-client";
+import MessageButton from "@/components/deprecated/Message/MessageButton";
 import { IconMessageCircle } from "@tabler/icons";
-import { NestedComment } from "@components/Comment";
+import { NestedComment } from "@/components/deprecated/Comment";
 import { useQuery } from "@apollo/client";
 
 type ThreadPageProps = {

@@ -16,7 +16,7 @@ import {
   IconBrandYoutube,
   IconBrandInstagram,
 } from "@tabler/icons";
-import { Footer } from "@components/index";
+import { Footer } from "@/components/index";
 import { NextPage } from "next";
 
 const useStyles = createStyles((theme) => ({

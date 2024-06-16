@@ -1,5 +1,5 @@
 import { Paper, createStyles } from "@mantine/core";
-import { Authentication } from "@components/index";
+import { Authentication } from "@/components/index";
 import { NextPage } from "next";
 import Head from "next/head";
 import { notifications } from "@mantine/notifications";

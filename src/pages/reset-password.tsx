@@ -11,10 +11,10 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { IconAlertCircle, IconLock } from "@tabler/icons";
 import { matches, useForm } from "@mantine/form";
-import { PASSWORD_PATTERN } from "@constants/regex";
+import { PASSWORD_PATTERN } from "@/constants/regex";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { NewPassword } from "@components/Form";
+import { NewPassword } from "@/components/deprecated/Form";
 import { notifications } from "@mantine/notifications";
 
 const useStyles = createStyles((theme) => ({

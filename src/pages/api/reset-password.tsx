@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt, { hash } from "bcrypt";
-import prisma from "@lib/prisma";
+import prisma from "@/lib/prisma";
 
 export default async function handler(
   req: NextApiRequest,
@@ -34,11 +34,9 @@ export default async function handler(
     }
     const isExpired = (response?.expiresAt || new Date()) < new Date();
     if (isExpired) {
-      res
-        .status(200)
-        .json({
-          err: "The token had expired! Please file a new password request.",
-        });
+      res.status(200).json({
+        err: "The token had expired! Please file a new password request.",
+      });
       return;
     }
     const result = await prisma.user.update({
